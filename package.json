@@ -1,0 +1,52 @@
+{
+  "name": "aieditorvideo",
+  "version": "0.1.0",
+  "private": true,
+  "author": {
+    "name": "Mohit Yadav",
+    "email": "mohit@mohitya.dev",
+    "url": "https://mohitya.dev"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.209",
+    "@remotion/cli": "4.0.209",
+    "@remotion/google-fonts": "4.0.209",
+    "@remotion/lambda": "4.0.209",
+    "@remotion/paths": "4.0.209",
+    "@remotion/player": "4.0.209",
+    "@remotion/shapes": "4.0.209",
+    "@remotion/tailwind": "4.0.209",
+    "clsx": "^2.1.0",
+    "next": "^13.4.13",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "4.0.209",
+    "tailwind-merge": "^2.2.2",
+    "zod": "3.22.3"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config": "4.0.209",
+    "@types/node": "18.7.23",
+    "@types/react": "18.3.1",
+    "@types/react-dom": "18.3.0",
+    "@types/web": "^0.0.143",
+    "autoprefixer": "^10.4.18",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.43.0",
+    "eslint-config-next": "^13.4.13",
+    "postcss": "^8.4.36",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "remotion": "remotion studio",
+    "render": "remotion render",
+    "deploy": "node deploy.mjs"
+  },
+  "packageManager": "pnpm@9.1.2"
+}
