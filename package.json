@@ -22,6 +22,7 @@
     "react-dom": "^18.2.0",
     "remotion": "4.0.209",
     "tailwind-merge": "^2.2.2",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "zod": "3.22.3"
   },
   "devDependencies": {
@@ -46,7 +47,9 @@
     "lint": "eslint .",
     "remotion": "remotion studio",
     "render": "remotion render",
-    "deploy": "node deploy.mjs"
+    "deploy": "node deploy.mjs",
+    "check-types": "tsc --noEmit",
+    "ui": "pnpm dlx shadcn-ui@latest add "
   },
   "packageManager": "pnpm@9.1.2"
 }
