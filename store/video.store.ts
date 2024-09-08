@@ -3,12 +3,12 @@ import { immer } from "zustand/middleware/immer";
 import { devtools } from "zustand/middleware";
 import {
   StoreType,
-  DUMMY_NESTED_PROJECT,
   LiteSequenceItemType,
   LayerId,
   TransitionItemType,
 } from "../types/timeline.types";
 import { binarySearch, calculateOffset } from "../utils/timeline.utils";
+import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
 
 const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/immer", never]]>(
   devtools(
