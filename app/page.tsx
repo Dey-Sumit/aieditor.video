@@ -1,13 +1,17 @@
 "use client";
 
-import type { NextPage } from "next";
+import Hero from "~/components/hero-section";
 
-const Home: NextPage = () => {
+export default function Home() {
   return (
-    <div>
-      <div className="max-w-screen-md m-auto mb-5"></div>
+    <div className="bg-black p-10">
+      <nav className="fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b border-gray-800 px-8 py-6 text-white backdrop-blur-md">
+        <div className="text-sm font-semibold">aieditor.video</div>
+        <div className="text-md text-gray-100">Coming Soon</div>
+      </nav>
+      <main>
+        <Hero />
+      </main>
     </div>
   );
-};
-
-export default Home;
+}
