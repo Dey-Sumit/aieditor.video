@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { CompositionProps } from "./constants";
+import { NestedCompositionPropsSchema } from "./timeline.types";
 
 export const RenderRequest = z.object({
   id: z.string(),
-  inputProps: CompositionProps,
+  inputProps: NestedCompositionPropsSchema,
 });
 
 export const ProgressRequest = z.object({

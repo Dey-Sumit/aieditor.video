@@ -1,0 +1,7 @@
+export const TIMELINE = {
+  MAX_TIMELINE_DURATION: 60 * 30,
+  PLAY_HEAD_WIDTH: 4,
+  MAX_PLACEHOLDER_FRAMES: 3 * 30, // 5 seconds at 30fps
+  LAYER_HEIGHT_IN_PX: 32,
+  TIME_LAYER_RIGHT_OFFSET: 16,
+} as const;

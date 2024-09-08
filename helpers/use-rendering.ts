@@ -1,7 +1,6 @@
-import { z } from "zod";
 import { useCallback, useMemo, useState } from "react";
 import { getProgress, renderVideo } from "../lambda/api";
-import { CompositionProps } from "../types/constants";
+import { NestedCompositionType } from "~/types/timeline.types";
 
 export type State =
   | {
@@ -35,10 +34,7 @@ const wait = async (milliSeconds: number) => {
   });
 };
 
-export const useRendering = (
-  id: string,
-  inputProps: z.infer<typeof CompositionProps>,
-) => {
+export const useRendering = (id: string, inputProps: NestedCompositionType) => {
   const [state, setState] = useState<State>({
     status: "init",
   });
