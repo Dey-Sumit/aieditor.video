@@ -81,6 +81,7 @@ const SequenceRenderer: React.FC<{
               name={nestedItem.id}
               key={nestedItem.id}
               durationInFrames={nestedItem.sequenceDuration}
+              offset={nestedItem.offset}
             >
               <SequenceRenderer
                 liteItem={nestedItem}
@@ -115,6 +116,7 @@ const NestedSequenceComposition = (props: NestedCompositionProjectType["props"])
                 key={item.id}
                 durationInFrames={item.sequenceDuration}
                 name={item.id}
+                offset={item.offset}
               >
                 <SequenceRenderer
                   liteItem={item}

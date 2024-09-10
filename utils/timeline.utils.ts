@@ -4,25 +4,6 @@ import {
   NestedCompositionProjectType,
 } from "~/types/timeline.types";
 
-export const getItemStyle = (type: string) => {
-  switch (type) {
-    case "audio":
-      return "bg-blue-500 border-blue-600 ";
-    case "caption":
-      return "bg-green-600 border-green-600";
-    case "text":
-      return "bg-yellow-600/60 border-yellow-600";
-    case "video":
-      return "bg-pink-600/60 border-pink-600 ";
-    case "image":
-      return "bg-purple-600 border-purple-600/70 ";
-    case "preset":
-      return "bg-gray-200 border-indigo-500 border-dashed border ";
-    default:
-      return "bg-gray-600 border-gray-600";
-  }
-};
-
 export const LAYERS_IN_ORDER: {
   label: string;
   id: LayerId;

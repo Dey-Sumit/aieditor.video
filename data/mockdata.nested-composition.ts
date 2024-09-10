@@ -32,60 +32,20 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       },
       layerForeground: {
         liteItems: [
-          {
-            sequenceType: "preset",
-            id: "id-preset",
+          /* {
+            sequenceType: "standalone",
+            id: "id-text-1",
             offset: 0,
             sequenceDuration: 600,
             effectiveDuration: 570,
             startFrame: 0,
-            liteItems: [
-              {
-                id: "id-like",
-                sequenceType: "standalone",
-                contentType: "text",
-                sequenceDuration: 200,
-                effectiveDuration: 170,
-                offset: 0,
-                transition: {
-                  outgoing: {
-                    id: "transition-0",
-                    duration: 15,
-                  },
-                },
-                startFrame: 0,
-              },
-              {
-                id: "id-share",
-                sequenceType: "standalone",
-                contentType: "text",
-                sequenceDuration: 200,
-                offset: 0,
-                transition: {
-                  incoming: {
-                    id: "transition-0",
-                    duration: 15,
-                  },
-                },
-                startFrame: 170,
-                effectiveDuration: 200,
-              },
-              {
-                id: "id-subscribe",
-                sequenceType: "standalone",
-                contentType: "text",
-                sequenceDuration: 200,
-                offset: 0,
-                startFrame: 370,
-                effectiveDuration: 200,
-              },
-            ],
             transition: {
               outgoing: {
                 id: "transition-1",
                 duration: 15,
               },
             },
+            contentType: "text",
           },
           {
             id: "id-info",
@@ -101,7 +61,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
               },
             },
             startFrame: 570, // adjusted the startFrame as per transition
-          },
+          }, */
         ],
       },
     },
@@ -229,3 +189,230 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
     },
   },
 };
+// export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
+//   id: "id-dummy",
+//   title: "Dummy Project",
+//   props: {
+//     compositionMetaData: {
+//       width: 720,
+//       height: 1080,
+//       fps: 30,
+//       duration: 900,
+//       compositionId: "new-dynamic-composition",
+//     },
+//     layers: {
+//       layerBackground: {
+//         liteItems: [
+//           {
+//             id: "id-real-madrid",
+//             sequenceType: "standalone",
+//             contentType: "image",
+//             sequenceDuration: 800,
+//             offset: 0,
+//             startFrame: 0,
+//             effectiveDuration: 800,
+//           },
+//         ],
+//       },
+//       layerMiddle: {
+//         liteItems: [],
+//       },
+//       layerForeground: {
+//         liteItems: [
+//           {
+//             sequenceType: "preset",
+//             id: "id-preset",
+//             offset: 0,
+//             sequenceDuration: 600,
+//             effectiveDuration: 570,
+//             startFrame: 0,
+//             liteItems: [
+//               {
+//                 id: "id-like",
+//                 sequenceType: "standalone",
+//                 contentType: "text",
+//                 sequenceDuration: 200,
+//                 effectiveDuration: 170,
+//                 offset: 0,
+//                 transition: {
+//                   outgoing: {
+//                     id: "transition-0",
+//                     duration: 15,
+//                   },
+//                 },
+//                 startFrame: 0,
+//               },
+//               {
+//                 id: "id-share",
+//                 sequenceType: "standalone",
+//                 contentType: "text",
+//                 sequenceDuration: 200,
+//                 offset: 0,
+//                 transition: {
+//                   incoming: {
+//                     id: "transition-0",
+//                     duration: 15,
+//                   },
+//                 },
+//                 startFrame: 170,
+//                 effectiveDuration: 200,
+//               },
+//               {
+//                 id: "id-subscribe",
+//                 sequenceType: "standalone",
+//                 contentType: "text",
+//                 sequenceDuration: 200,
+//                 offset: 0,
+//                 startFrame: 370,
+//                 effectiveDuration: 200,
+//               },
+//             ],
+//             transition: {
+//               outgoing: {
+//                 id: "transition-1",
+//                 duration: 15,
+//               },
+//             },
+//           },
+//           {
+//             id: "id-info",
+//             sequenceType: "standalone",
+//             contentType: "text",
+//             sequenceDuration: 200,
+//             effectiveDuration: 200,
+//             offset: 600,
+//             transition: {
+//               incoming: {
+//                 id: "transition-2",
+//                 duration: 15,
+//               },
+//             },
+//             startFrame: 570, // adjusted the startFrame as per transition
+//           },
+//         ],
+//       },
+//     },
+//     sequenceItems: {
+//       layerForeground: {
+//         "id-like": {
+//           id: "id-like",
+//           type: "text",
+//           layerId: "layerForeground",
+//           editableProps: {
+//             styles: {
+//               container: {
+//                 flex: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 backgroundColor: "rgba(255, 0, 0, 0.3)",
+//               },
+//               element: {
+//                 fontSize: "70px",
+//                 fontWeight: "bold",
+//                 color: "white",
+//               },
+//             },
+//             text: "Like.",
+//           },
+//         },
+//         "id-share": {
+//           id: "id-share",
+//           type: "text",
+//           layerId: "layerForeground",
+//           editableProps: {
+//             text: "Share.",
+//             styles: {
+//               container: {
+//                 flex: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 backgroundColor: "rgba(0, 255, 0, 0.3)",
+//               },
+//               element: {
+//                 fontSize: "70px",
+//                 fontWeight: "bold",
+//                 color: "white",
+//               },
+//             },
+//           },
+//         },
+//         "id-subscribe": {
+//           id: "id-subscribe",
+//           type: "text",
+//           layerId: "layerForeground",
+//           editableProps: {
+//             text: "Subscribe.",
+//             styles: {
+//               container: {
+//                 flex: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 backgroundColor: "rgba(0, 0, 0, 0.5)",
+//               },
+//               element: {
+//                 fontSize: "70px",
+//                 fontWeight: "bold",
+//                 color: "white",
+//               },
+//             },
+//           },
+//         },
+//         "id-info": {
+//           id: "id-info",
+//           type: "text",
+//           layerId: "layerForeground",
+//           editableProps: {
+//             text: htmlString,
+//             styles: {
+//               container: {
+//                 flex: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//               },
+//               element: {
+//                 backgroundColor: "white",
+//                 padding: "12px",
+//                 fontSize: "50px",
+//                 borderRadius: 10,
+//               },
+//             },
+//           },
+//         },
+//       },
+//       layerBackground: {
+//         "id-real-madrid": {
+//           id: "id-real-madrid",
+//           type: "image",
+//           layerId: "layerBackground",
+//           editableProps: {
+//             imageUrl: staticFile("/sample-images/real-madrid.jpg"),
+//             styles: {
+//               container: {},
+//               element: {
+//                 objectFit: "cover",
+//               },
+//               overlay: {
+//                 backgroundColor: "black",
+//                 opacity: 0.5,
+//               },
+//             },
+//           },
+//         },
+//       },
+//       layerMiddle: {},
+//     },
+//     transitions: {
+//       "transition-0": {
+//         id: "transition-0",
+//         type: "fade",
+//         duration: 60,
+//         properties: {
+//           easing: "linear",
+//         },
+//         fromSequenceId: "id-like",
+//         toSequenceId: "id-share",
+//         fromSequenceIndex: 0,
+//       },
+//     },
+//   },
+// };

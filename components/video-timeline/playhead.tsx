@@ -20,8 +20,8 @@ const PlayHead = () => {
       onDrag={handlePlayheadDrag}
       dragHandleClassName="playhead-handle"
     >
-      <div className="absolute -top-4 left-0 flex h-full w-full flex-col items-center rounded-xl">
-        <div className="playhead-handle size-4 cursor-move rounded-full border border-indigo-500 bg-indigo-700" />
+      <div className="absolute -top-4 left-0 flex h-full w-full flex-col items-center rounded-xl ">
+        <div className="playhead-handle cursor-grab size-4  rounded-full border border-indigo-500 bg-indigo-700" />
         <div className="h-full w-full border border-indigo-700 bg-indigo-600" />
       </div>
     </Rnd>

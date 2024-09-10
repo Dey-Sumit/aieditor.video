@@ -8,8 +8,24 @@ import { ArrowRightLeft } from "lucide-react";
 import { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import { getItemStyle } from "~/utils/timeline.utils";
-
+export const getItemStyle = (type: string) => {
+  switch (type) {
+    case "audio":
+      return "bg-blue-500 border-blue-600 ";
+    case "caption":
+      return "bg-green-600 border-green-600";
+    case "text":
+      return "bg-yellow-600/60 border-yellow-600";
+    case "video":
+      return "bg-pink-600/60 border-pink-600 ";
+    case "image":
+      return "bg-purple-600 border-purple-600/70 ";
+    case "preset":
+      return "bg-gray-200 border-indigo-500 border-dashed border ";
+    default:
+      return "bg-gray-600 border-gray-600";
+  }
+};
 const SequenceItem = ({
   item,
   layerId,
