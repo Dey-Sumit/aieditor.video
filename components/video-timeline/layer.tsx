@@ -7,6 +7,7 @@ import useVideoStore from "~/store/video.store";
 import { LayerId } from "~/types/timeline.types";
 import SequenceItem from "./sequence-item";
 import AddItemPlaceholder from "./add-item-placeholder";
+import AddItemContextMenu from "./add-item-context-menu";
 
 const { LAYER_HEIGHT_IN_PX } = TIMELINE;
 interface LayerProps {
@@ -52,14 +53,16 @@ const HoverLayer: React.FC<HoverLayerProps> = React.memo(({ layerId, pixelsPerFr
 
   return (
     <>
-      {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
+      <AddItemContextMenu layerId={layerId}>
+        {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
 
-      <div className="absolute inset-0" {...mouseEventHandlers} />
-      {/* -------------------------- Item adding placeholder for handing clicks and hover -------------------------- */}
+        <div className="absolute inset-0" {...mouseEventHandlers} />
+        {/* -------------------------- Item adding placeholder for handing clicks and hover -------------------------- */}
 
-      {hoverInfo && !isPointWithinItem(hoverInfo.startX) && (
-        <AddItemPlaceholder startX={hoverInfo.startX} width={hoverInfo.width} />
-      )}
+        {hoverInfo && !isPointWithinItem(hoverInfo.startX) && (
+          <AddItemPlaceholder startX={hoverInfo.startX} width={hoverInfo.width} />
+        )}
+      </AddItemContextMenu>
     </>
   );
 });

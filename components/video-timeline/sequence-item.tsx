@@ -21,11 +21,12 @@ export const getItemStyle = (type: string) => {
     case "image":
       return "bg-purple-600 border-purple-600/70 ";
     case "preset":
-      return "bg-gray-200 border-indigo-500 border-dashed border ";
+      return "bg-gray-200 border-indigo-500 border-dashed pr-[2px] border  ";
     default:
       return "bg-gray-600 border-gray-600";
   }
 };
+
 const SequenceItem = ({
   item,
   layerId,
@@ -206,7 +207,7 @@ const PresetItem = ({
             enableResizing={false}
             dragAxis="x"
             className={cn(
-              "box-border cursor-pointer select-none rounded-sm border-2 hover:opacity-90 focus:bg-yellow-800",
+              "box-border cursor-pointer select-none  rounded-sm border-2 hover:opacity-90 focus:bg-yellow-800",
               getItemStyle(
                 item.sequenceType === "standalone" ? item.contentType : item.sequenceType
               )

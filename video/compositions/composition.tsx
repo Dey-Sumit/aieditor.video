@@ -27,6 +27,8 @@ const SafeHTMLRenderer = ({ html }: { html: string }) => {
 const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({ item }) => {
   switch (item.type) {
     case "text":
+      console.log(item.editableProps?.text);
+
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
           <div style={item.editableProps?.styles?.element}>
@@ -56,6 +58,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({ item }
     case "video":
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
+          <AbsoluteFill className="bg-black/30" />
           <video src={item.editableProps.videoUrl} style={item.editableProps?.styles?.element} />
         </AbsoluteFill>
       );

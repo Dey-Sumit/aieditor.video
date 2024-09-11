@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, StoreApi } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { devtools } from "zustand/middleware";
 import {
@@ -9,6 +9,11 @@ import {
 } from "../types/timeline.types";
 import { binarySearch, calculateOffset } from "../utils/timeline.utils";
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
+
+/**
+ * Custom hook for managing video store state.
+ * @returns {StoreType} The video store state and actions.
+ */
 
 const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/immer", never]]>(
   devtools(
@@ -37,14 +42,12 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
 
           const liteItem: LiteSequenceItemType = {
             id: newItem.id,
-
             startFrame: newItem.startFrame,
             effectiveDuration: newItem.effectiveDuration,
             sequenceDuration: newItem.sequenceDuration,
             offset: newItem.offset,
-            contentType: "text",
+            contentType: "text", // TODO : hardcoded for now
             sequenceType: "standalone",
-            // TODO : the transition will be null while adding the item
           };
 
           // Use the binary search utility function
@@ -68,7 +71,7 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           if (!state.props.sequenceItems[layerId]) {
             state.props.sequenceItems[layerId] = {};
           }
-          //@ts-ignore : TODO : fix this
+
           state.props.sequenceItems[layerId][newItem.id] = {
             id: newItem.id,
             layerId: layerId,
@@ -83,9 +86,10 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
                 element: {
                   color: "white",
                   fontSize: "80px",
+                  fontFamily: "serif",
                 },
               },
-              text: "Hellooo",
+              text: "Hello",
             },
 
             type: "text",
@@ -166,18 +170,18 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
             // Remove incoming transition if it exists
             if (currentItem.transition?.incoming) {
               if (prevItem) {
-                // Update the previous item
-                // prevItem.transition.outgoing = null; // TODO : fix this
+                delete prevItem?.transition?.outgoing;
                 prevItem.sequenceDuration = prevItem.effectiveDuration;
               }
-              // updatedItem.transition.incoming = null;
+              delete currentItem.transition?.incoming;
             }
 
             // Remove outgoing transition if it exists
             if (currentItem.transition?.outgoing && nextItem) {
               // Update the next item
-              // nextItem.transition.incoming = null;// TODO : fix this
-              // updatedItem.transition.outgoing = null;
+
+              delete nextItem.transition?.incoming;
+              delete updatedItem.transition?.outgoing;
               updatedItem.sequenceDuration = updatedItem.effectiveDuration;
             }
           }
