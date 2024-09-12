@@ -20,9 +20,9 @@ function AddItemContextMenu({
   children: React.ReactNode;
   layerId: LayerId;
 }) {
-  const { addSequenceItemToLayer } = useVideoStore();
+  const { addSequenceItemToLayer, addPresetToLayer } = useVideoStore();
 
-  const addPreset = (presetName: "END_SCREEN_PRESET" | "BRUT_FOREGROUND") => {
+  const addPreset = (presetName: "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND") => {
     // END_SCREEN_PRESET
     console.log(presetName);
   };
@@ -57,7 +57,9 @@ function AddItemContextMenu({
         <ContextMenuSub>
           <ContextMenuSubTrigger>Presets</ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-48">
-            <ContextMenuItem onClick={() => addPreset("END_SCREEN_PRESET")}>
+            <ContextMenuItem
+              onClick={() => addPresetToLayer("layerForeground", "BRUT_END_SCREEN_PRESET")}
+            >
               Brut End Screen
             </ContextMenuItem>
             <ContextMenuItem onClick={() => addPreset("BRUT_FOREGROUND")}>
@@ -72,9 +74,9 @@ function AddItemContextMenu({
         <ContextMenuSub>
           <ContextMenuSubTrigger>Last Added Presets</ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-48">
-            <ContextMenuItem onClick={() => addPreset("END_SCREEN_PRESET")}>
+            {/* <ContextMenuItem onClick={() => addPreset("END_SCREEN_PRESET")}>
               Brut End Screen
-            </ContextMenuItem>
+            </ContextMenuItem> */}
           </ContextMenuSubContent>
         </ContextMenuSub>
       </ContextMenuContent>

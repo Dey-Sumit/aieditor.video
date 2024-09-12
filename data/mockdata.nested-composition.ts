@@ -2,7 +2,7 @@ import { staticFile } from "remotion";
 import { NestedCompositionProjectType } from "~/types/timeline.types";
 const htmlString = `<div aria-expanded="false"><div contenteditable="true" translate="no" class="tiptap ProseMirror prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full" tabindex="0"><p>This is great...</p><p><strong><s><u>hello</u></s></strong></p><p>hi</p><p>this is great, <strong><mark data-color="purple" style="background-color: purple; color: inherit">seriously</mark></strong></p></div><div draggable="true" data-drag-handle="" class="drag-handle" style="left: 13px; top: 105px;"></div></div><div></div>`;
 
-export const DUMMY_NESTED_PROJECT_WITH_SOME_DATA: NestedCompositionProjectType = {
+export const DUMMY_NESTED_PROJECT_WITH_END_SCREEN_PRESET_ADDED: NestedCompositionProjectType = {
   id: "id-dummy",
   title: "Dummy Project",
   props: {
@@ -313,7 +313,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 420, // 14 * 30
+      duration: 600, // 6 * 30
       compositionId: "new-dynamic-composition",
     },
     layers: {

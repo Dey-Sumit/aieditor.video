@@ -6,9 +6,11 @@ import {
   LiteSequenceItemType,
   LayerId,
   TransitionItemType,
+  FullSequenceItemType,
 } from "../types/timeline.types";
 import { binarySearch, calculateOffset } from "../utils/timeline.utils";
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
+import { END_SCREEN_PRESET } from "~/video/preset";
 
 /**
  * Custom hook for managing video store state.
@@ -433,6 +435,53 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           console.log(
             `Added ${position} transition ${newTransitionId} to item ${itemId} in layer ${layerId}`
           );
+        });
+      },
+
+      addPresetToLayer: (layerId, presetName) => {
+        set((state: StoreType) => {
+          const layer = state.props.layers[layerId];
+          if (!layer) {
+            console.warn(`Layer ${layerId} not found`);
+            return;
+          }
+          let preset = END_SCREEN_PRESET;
+
+          // switch (presetName) {
+          //   case "BRUT_END_SCREEN_PRESET":
+          //     break;
+          //   default:
+          //     console.warn(`Unknown preset: ${presetName}`);
+          //     return;
+          // }
+
+          // Calculate the start frame for the preset
+          const lastItem = layer.liteItems[layer.liteItems.length - 1];
+          const startFrame = lastItem ? lastItem.startFrame + lastItem.effectiveDuration : 0;
+
+          // Adjust the preset's liteLevel
+          const adjustedLiteLevel: LiteSequenceItemType = {
+            ...preset.liteLevel,
+            startFrame,
+            offset: 0,
+          };
+
+          // Add the preset's liteLevel to the layer
+          layer.liteItems.push(adjustedLiteLevel);
+
+          // Merge the preset's sequenceItems into the store
+          if (!state.props.sequenceItems[layerId]) {
+            state.props.sequenceItems[layerId] = {};
+          }
+
+          Object.entries(preset.sequenceItems).forEach(([itemId, item]) => {
+            state.props.sequenceItems[layerId][itemId] = {
+              ...item,
+              layerId,
+            };
+          });
+
+          console.log(`Added ${presetName} preset to layer ${layerId}`);
         });
       },
     })),

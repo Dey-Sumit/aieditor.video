@@ -1,5 +1,24 @@
+import { FullSequenceItemType, LiteSequenceItemType } from "~/types/timeline.types";
+
+type Preset = {
+  liteLevel: Omit<
+    Extract<
+      LiteSequenceItemType,
+      {
+        sequenceType: "preset";
+      }
+    >,
+    "offset" | "startFrame"
+  > & {
+    offset: "VAR_OFFSET";
+    startFrame: "VAR_START_FRAME";
+  };
+  sequenceItems: {
+    [key: string]: FullSequenceItemType;
+  };
+};
 /* ------------------------ Brut End Screen Preset ----------------------- */
-export const END_SCREEN_PRESET = {
+export const END_SCREEN_PRESET: Preset = {
   liteLevel: {
     sequenceType: "preset",
     effectiveDuration: 60,
@@ -11,28 +30,28 @@ export const END_SCREEN_PRESET = {
       {
         sequenceType: "standalone",
         id: "id-like",
-        offset: 0,
         sequenceDuration: 20,
         effectiveDuration: 20,
-        startFrame: 0,
+        startFrame: 360,
+        offset: 0,
         contentType: "text",
       },
       {
         sequenceType: "standalone",
         id: "id-share",
         offset: 0,
+        startFrame: 380,
         sequenceDuration: 20,
         effectiveDuration: 20,
-        startFrame: 0,
         contentType: "text",
       },
       {
         sequenceType: "standalone",
         id: "id-subscribe",
         offset: 0,
+        startFrame: 400, // TODO : hardcoded
         sequenceDuration: 20,
         effectiveDuration: 20,
-        startFrame: 0,
         contentType: "text",
       },
     ],

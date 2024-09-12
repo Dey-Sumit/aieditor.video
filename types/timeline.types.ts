@@ -162,6 +162,10 @@ type StoreActions = {
     frameDelta: number,
     direction: "left" | "right"
   ) => void;
+  addPresetToLayer: (
+    layerId: LayerId,
+    presetName: "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND"
+  ) => void;
 };
 
 export type StoreType = NestedCompositionProjectType & StoreActions;
