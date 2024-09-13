@@ -27,8 +27,6 @@ const SafeHTMLRenderer = ({ html }: { html: string }) => {
 const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({ item }) => {
   switch (item.type) {
     case "text":
-      console.log(item.editableProps?.text);
-
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
           <div style={item.editableProps?.styles?.element}>

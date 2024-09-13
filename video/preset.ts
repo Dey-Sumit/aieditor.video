@@ -15,6 +15,7 @@ type Preset = {
   };
   sequenceItems: {
     [key: string]: FullSequenceItemType;
+
   };
 };
 /* ------------------------ Brut End Screen Preset ----------------------- */
@@ -55,6 +56,15 @@ export const END_SCREEN_PRESET: Preset = {
         contentType: "text",
       },
     ],
+    // write the best code
+    
+
+
+
+
+    
+
+
   },
 
   sequenceItems: {
@@ -124,4 +134,7 @@ export const END_SCREEN_PRESET: Preset = {
       },
     },
   },
+
 };
+
+

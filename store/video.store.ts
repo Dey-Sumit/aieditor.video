@@ -139,6 +139,8 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
       },
 
       updateSequenceItemInLayer: (layerId, itemId, updates) => {
+        console.log({ updates });
+
         set((state: StoreType) => {
           // Step 1: Locate the layer and item
           const layer = state.props.layers[layerId];
@@ -166,6 +168,7 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
             ...updates,
             startFrame: updates.startFrame + (currentItem.transition?.incoming?.duration || 0),
           };
+          console.log({ updatedItem });
 
           // Step 4: Handle transition removal if the item has moved
           if (updatedItem.startFrame !== currentItem.startFrame) {
@@ -208,20 +211,13 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
 
           // Update the offset of the current item
           updatedItem.offset = calculateOffset(newPrevItem, updatedItem);
+          console.log("updatedItem.offset", updatedItem.offset);
 
           // Update next item's offset if it exists
           if (newNextItem) {
             newNextItem.offset = calculateOffset(updatedItem, newNextItem);
           }
-
-          // Step 9: Update the full sequence item if needed
-          // if (state.props.sequenceItems[layerId]?.[itemId]) {
-          //   state.props.sequenceItems[layerId][itemId] = {
-          //     ...state.props.sequenceItems[layerId][itemId],
-          //     ...updates,
-          //     offset: updatedItem.offset,
-          //   };
-          // }
+          console.log("newNextItem.offset", newNextItem?.offset);
 
           console.log(`Updated sequence item ${itemId} in layer ${layerId}`);
         });
@@ -317,7 +313,9 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
 
       /* ------------------------------ CRUD operation of Transitions  ----------------------------- */
       updateTransitionInLayer: (layerId, transition, updates) => {},
+
       removeTransitionFromLayer: (layerId, transitionId) => {},
+
       addTransitionToLayer: (
         layerId: LayerId,
         itemId: string,
@@ -438,36 +436,30 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
         });
       },
 
-      addPresetToLayer: (layerId, presetName) => {
+      addPresetToLayer: (layerId, presetDetails) => {
         set((state: StoreType) => {
           const layer = state.props.layers[layerId];
           if (!layer) {
             console.warn(`Layer ${layerId} not found`);
             return;
           }
-          let preset = END_SCREEN_PRESET;
+          let preset = { ...END_SCREEN_PRESET };
+          const { offset, startFrame } = presetDetails;
+          console.log({ offset });
 
-          // switch (presetName) {
-          //   case "BRUT_END_SCREEN_PRESET":
-          //     break;
-          //   default:
-          //     console.warn(`Unknown preset: ${presetName}`);
-          //     return;
-          // }
+          // Generate a random suffix for the key
+          const randomSuffix = Math.random().toString(36).substring(2, 8);
 
-          // Calculate the start frame for the preset
-          const lastItem = layer.liteItems[layer.liteItems.length - 1];
-          const startFrame = lastItem ? lastItem.startFrame + lastItem.effectiveDuration : 0;
+          // Update the key in liteLevel with the random suffix
+          preset.liteLevel.id = `${preset.liteLevel.id}-${randomSuffix}`;
 
-          // Adjust the preset's liteLevel
-          const adjustedLiteLevel: LiteSequenceItemType = {
+          const liteSequenceItem: LiteSequenceItemType = {
             ...preset.liteLevel,
             startFrame,
-            offset: 0,
+            offset,
           };
-
           // Add the preset's liteLevel to the layer
-          layer.liteItems.push(adjustedLiteLevel);
+          layer.liteItems.push(liteSequenceItem);
 
           // Merge the preset's sequenceItems into the store
           if (!state.props.sequenceItems[layerId]) {
@@ -481,7 +473,7 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
             };
           });
 
-          console.log(`Added ${presetName} preset to layer ${layerId}`);
+          console.log(`Added ${presetDetails} preset to layer ${layerId}`);
         });
       },
     })),

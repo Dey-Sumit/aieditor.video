@@ -323,10 +323,10 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             id: "id-train-window-smash",
             sequenceType: "standalone",
             contentType: "video",
-            sequenceDuration: 420,
+            sequenceDuration: 600,
             offset: 0,
             startFrame: 0,
-            effectiveDuration: 420,
+            effectiveDuration: 600,
           },
         ],
       },
@@ -336,7 +336,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       layerForeground: {
         liteItems: [
           /* ------------------------ Brut Foreground Preset ----------------------- */
-          {
+          /*           {
             sequenceType: "preset",
             id: "id-preset-foreground",
             effectiveDuration: 360,
@@ -364,7 +364,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
               },
             ],
           },
-
+ */
           /* {
             sequenceType: "standalone",
             id: "id-text-1",

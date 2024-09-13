@@ -154,6 +154,13 @@ export function calculatePlaceholderDuration(
   duration: number,
   MAX_PLACEHOLDER_DURATION_IN_FRAMES: number
 ): PlaceholderDuration {
+  console.log("calculatePlaceholderDuration", {
+    liteItems,
+    startFrame,
+    duration,
+    MAX_PLACEHOLDER_DURATION_IN_FRAMES,
+  });
+
   const { prevItem, nextItem } = findNearestSequences(liteItems, startFrame);
 
   // Calculate the earliest possible start frame

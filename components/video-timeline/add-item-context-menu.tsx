@@ -9,19 +9,17 @@ import {
   ContextMenuSubTrigger,
   ContextMenuSubContent,
 } from "~/components/ui/context-menu";
-import useVideoStore from "~/store/video.store";
-import { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
-import { END_SCREEN_PRESET } from "~/video/preset";
+import { useSequenceAddition } from "~/hooks/use-video-timeline";
+import { LayerId } from "~/types/timeline.types";
 
 function AddItemContextMenu({
   children,
-  layerId,
+  onPresetAdd,
 }: {
   children: React.ReactNode;
   layerId: LayerId;
+  onPresetAdd: ReturnType<typeof useSequenceAddition>["mouseEventHandlers"]["onClick"];
 }) {
-  const { addSequenceItemToLayer, addPresetToLayer } = useVideoStore();
-
   const addPreset = (presetName: "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND") => {
     // END_SCREEN_PRESET
     console.log(presetName);
@@ -30,7 +28,7 @@ function AddItemContextMenu({
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
-      <ContextMenuContent className="mb-4 w-64 ">
+      <ContextMenuContent className="mb-4 w-64 bg-white/90">
         <ContextMenuItem className="text-xs" onClick={() => console.log("add text")}>
           Add Text
           <ContextMenuShortcut>T</ContextMenuShortcut>
@@ -58,7 +56,12 @@ function AddItemContextMenu({
           <ContextMenuSubTrigger>Presets</ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-48">
             <ContextMenuItem
-              onClick={() => addPresetToLayer("layerForeground", "BRUT_END_SCREEN_PRESET")}
+              onClick={(e) =>
+                onPresetAdd(e, {
+                  sequenceType: "preset",
+                  presetName: "BRUT_END_SCREEN_PRESET",
+                })
+              }
             >
               Brut End Screen
             </ContextMenuItem>

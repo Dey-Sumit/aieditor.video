@@ -45,7 +45,6 @@ const SequenceItem = ({
    -  without transition : seq1 0 to 120: duration 120 frames, seq2 120 to 210 : duration 90 frames
    - with transition of 30 frames : seq1 0 to (120+15 outgoing) 135: duration 135 frames, seq2 135(120+15 incoming) to 210 : duration 75 frames
   */
-  console.log("sequence-item renders", item.id);
 
   const x = (item.startFrame + (item.transition?.incoming?.duration || 0)) * pixelsPerFrame;
 
@@ -56,12 +55,12 @@ const SequenceItem = ({
     pixelsPerFrame;
 
   const onDragStart = () => {
-    console.log("onDragStart");
+    
     setDraggingLayerId(layerId);
   };
 
   const onDragStop: ComponentProps<typeof Rnd>["onDragStop"] = (e, d) => {
-    console.log("onDragStop", d.x);
+
     if (d.x !== x) throttledItemDrag(layerId, item.id, d.x);
     setDraggingLayerId(null);
   };
@@ -73,7 +72,7 @@ const SequenceItem = ({
     delta,
     position
   ) => {
-    console.log("onResizeStop");
+    
     const frameDelta = Math.floor(delta.width / pixelsPerFrame);
 
     if (direction === "left" && frameDelta > item.offset) {
@@ -179,8 +178,6 @@ const PresetItem = ({
   layerId: LayerId;
   pixelsPerFrame: number;
 }) => {
-  console.log("PresetItem renders", liteItems);
-
   return (
     <>
       {liteItems.map((item) => {
