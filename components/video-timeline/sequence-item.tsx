@@ -21,7 +21,7 @@ export const getItemStyle = (type: string) => {
     case "image":
       return "bg-purple-600 border-purple-600/70 ";
     case "preset":
-      return "bg-gray-200 border-yellow-800 border ";
+      return "bg-gray-200 border-yellow-900 border mouse-grab ";
     default:
       return "bg-gray-600 border-gray-600";
   }
@@ -106,8 +106,8 @@ const SequenceItem = ({
         bottom: false,
         bottomLeft: false,
         bottomRight: false,
-        left: true,
-        right: true,
+        left: item.sequenceType !== "preset",
+        right: item.sequenceType !== "preset",
         top: false,
         topLeft: false,
         topRight: false,
@@ -118,8 +118,8 @@ const SequenceItem = ({
       onResizeStop={onResizeStop}
       className={cn(
         "box-border cursor-pointer  border-2  hover:opacity-90 focus:bg-yellow-800 rounded-[3px]",
-        getItemStyle(item.sequenceType === "standalone" ? item.contentType : item.sequenceType),
-        activeSeqItem?.itemId === item.id && "border-blue-400"
+        getItemStyle(item.sequenceType === "standalone" ? item.contentType : item.sequenceType)
+        // activeSeqItem?.itemId === item.id && "border-blue-400"
       )}
       dragGrid={[pixelsPerFrame, 0]}
     >
@@ -192,7 +192,7 @@ const PresetItem = ({
             <div
               key={item.id}
               className={cn(
-                " h-full cursor-pointer select-none rounded-sm border-2 hover:opacity-90",
+                " h-full cursor-pointer select-none rounded-sm border ",
                 getItemStyle(
                   item.sequenceType === "standalone" ? item.contentType : item.sequenceType
                 )

@@ -41,7 +41,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({ item }
     case "image":
       return (
         <AbsoluteFill>
-          <AbsoluteFill className="bg-black/70" />
+          <AbsoluteFill className="" />
           <Img
             src={item.editableProps.imageUrl}
             style={{

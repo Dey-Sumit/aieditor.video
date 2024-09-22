@@ -136,7 +136,10 @@ export type newPresetDetails = Omit<
 type StoreActions = {
   loadProject: (project: NestedCompositionProjectType) => void;
   updateProject: (updates: Partial<NestedCompositionProjectType>) => void;
-  addSequenceItemToLayer: (layerId: LayerId, item: LiteSequenceItemType) => void;
+  addSequenceItemToLayer: (
+    layerId: LayerId,
+    item: Extract<LiteSequenceItemType, { sequenceType: "standalone" }>
+  ) => void;
   removeSequenceItemFromLayer: (layerId: LayerId, itemId: string) => void;
   updateSequenceItemInLayer: (
     layerId: LayerId,

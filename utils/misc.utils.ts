@@ -8,9 +8,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 type SequencePrefix = ["s", ContentType];
+type PresetPrefix = ["p", "preset"];
 type TransitionPrefix = ["t", "slide" | "fade" | "wipe" | "dissolve" | string];
-type ProjectPrefix = ["p"];
-type Prefix = SequencePrefix | TransitionPrefix | ProjectPrefix;
+type Prefix = SequencePrefix | TransitionPrefix | PresetPrefix;
 
 export const genId = (...prefixes: Prefix): string => {
   return `${prefixes.join("-")}-${uuid()}`;

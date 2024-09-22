@@ -8,7 +8,7 @@ import {
   TransitionItemType,
   FullSequenceItemType,
 } from "../types/timeline.types";
-import { binarySearch, calculateOffset } from "../utils/timeline.utils";
+import { binarySearch, calculateOffset, defaultContentProps } from "../utils/timeline.utils";
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
 import { END_SCREEN_PRESET } from "~/video/preset";
 
@@ -34,7 +34,7 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
       },
 
       /* ------------------------------ CRUD operation of Timeline  ----------------------------- */
-      addSequenceItemToLayer: (layerId, newItem) => {
+      addSequenceItemToLayer: (layerId, newSeqLiteItem) => {
         set((state: StoreType) => {
           const layer = state.props.layers[layerId];
           if (!layer) {
@@ -42,31 +42,21 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
             return;
           }
 
-          const liteItem: LiteSequenceItemType = {
-            id: newItem.id,
-            startFrame: newItem.startFrame,
-            effectiveDuration: newItem.effectiveDuration,
-            sequenceDuration: newItem.sequenceDuration,
-            offset: newItem.offset,
-            contentType: "text", // TODO : hardcoded for now
-            sequenceType: "standalone",
-          };
-
           // Use the binary search utility function
           const insertIndex = binarySearch(
             layer.liteItems,
-            liteItem.startFrame,
+            newSeqLiteItem.startFrame,
             (item) => item.startFrame
           );
 
           // Insert the new item
-          layer.liteItems.splice(insertIndex, 0, liteItem);
+          layer.liteItems.splice(insertIndex, 0, newSeqLiteItem);
 
           // Update only the offset of the next lite item
           const nextItem = layer.liteItems[insertIndex + 1];
           if (nextItem) {
             nextItem.offset =
-              nextItem.startFrame - (liteItem.startFrame + liteItem.effectiveDuration);
+              nextItem.startFrame - (newSeqLiteItem.startFrame + newSeqLiteItem.effectiveDuration);
           }
 
           // Add to detailed items
@@ -74,30 +64,16 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
             state.props.sequenceItems[layerId] = {};
           }
 
-          state.props.sequenceItems[layerId][newItem.id] = {
-            id: newItem.id,
-            layerId: layerId,
-            editableProps: {
-              styles: {
-                container: {
-                  // random bg color
-                  backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                element: {
-                  color: "white",
-                  fontSize: "80px",
-                  fontFamily: "serif",
-                },
-              },
-              text: "Hello",
-            },
+          // Get default props based on content type
+          const defaultProps = defaultContentProps[newSeqLiteItem.contentType];
 
-            type: "text",
+          state.props.sequenceItems[layerId][newSeqLiteItem.id] = {
+            id: newSeqLiteItem.id,
+            layerId: layerId,
+            ...defaultProps,
           };
 
-          console.log(`Added sequence item ${newItem.id} to layer ${layerId}`);
+          console.log(`Added sequence item ${newSeqLiteItem.id} to layer ${layerId}`);
         });
       },
 

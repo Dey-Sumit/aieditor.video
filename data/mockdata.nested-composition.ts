@@ -348,7 +348,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
                 id: "id-like",
                 sequenceDuration: 20,
                 effectiveDuration: 20,
-                startFrame: 83,
+                startFrame: 83, // This does not really matter . as when it's under a preset, it's start frame is adjusted as per the width
                 offset: 0,
                 contentType: "text",
               },

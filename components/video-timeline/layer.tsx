@@ -64,7 +64,6 @@ const HoverLayer: React.FC<HoverLayerProps> = React.memo(({ layerId, pixelsPerFr
           onClick={(e) => {
             onClick(e, {
               sequenceType: "standalone",
-              contentType: "text",
             });
           }}
         />

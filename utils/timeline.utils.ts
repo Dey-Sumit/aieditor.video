@@ -1,4 +1,6 @@
+import { staticFile } from "remotion";
 import {
+  FullSequenceItemType,
   LayerId,
   LiteSequenceItemType,
   NestedCompositionProjectType,
@@ -184,3 +186,78 @@ export function calculatePlaceholderDuration(
     adjustedStartFrame,
   };
 }
+
+// Default props for different content types
+export const defaultContentProps: Record<string, Omit<FullSequenceItemType, "id" | "layerId">> = {
+  text: {
+    type: "text",
+    editableProps: {
+      styles: {
+        container: {
+          backgroundColor: "#000000",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        element: {
+          color: "white",
+          fontSize: "80px",
+          fontFamily: "serif",
+        },
+      },
+      text: "Hello",
+    },
+  },
+  image: {
+    type: "image",
+    editableProps: {
+      styles: {
+        container: {
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        element: {
+          objectFit: "contain",
+          width: "100%",
+          height: "100%",
+        },
+      },
+      imageUrl: staticFile("/sample-images/cave.jpg"),
+    },
+  },
+  video: {
+    type: "video",
+    editableProps: {
+      styles: {
+        container: {
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        element: {
+          objectFit: "contain",
+          width: "100%",
+          height: "100%",
+        },
+      },
+      videoUrl: "https://example.com/placeholder-video.mp4",
+    },
+  },
+  // audio: {
+  //   type: "audio",
+  //   editableProps: {
+  //     styles: {
+  //       container: {
+  //         backgroundColor: "#f0f0f0",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //       },
+  //       element: {
+  //         width: "100%",
+  //       },
+  //     },
+  //     audioUrl: "https://example.com/placeholder-audio.mp3",
+  //   },
+  // },
+};
+
+// Function to generate a random background color
+const getRandomBackgroundColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;

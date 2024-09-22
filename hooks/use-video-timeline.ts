@@ -168,10 +168,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
   const lastHoverInfoRef = useRef<HoverInfo | null>(null);
 
-  const newItemType = "text";
-  // useEditingStore((state) =>
-  //   layerId === "layerBackground" ? "audio" : state.newItemType,
-  // ) || "text";
+  const selectedNewItemType = useEditingStore((state) => state.newItemType);
 
   const { draggingLayerId } = useTimeline();
 
@@ -241,7 +238,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
       newItemType:
         | {
             sequenceType: "standalone";
-            contentType: ContentType;
+            contentType?: ContentType;
           }
         | {
             sequenceType: "preset";
@@ -263,20 +260,22 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
 
       console.log({ adjustedStartFrame, placeholderDuration });
 
-      const newItemId = genId("s", "dummy");
       if (newItemType.sequenceType === "standalone") {
+        const contentType = newItemType.contentType || selectedNewItemType;
+        const newItemId = genId("s", contentType);
         addSequenceItemToLayer(layerId, {
           id: newItemId,
           sequenceType: "standalone",
-          contentType: "text", // TODO : hardcoded for now
+          contentType,
           startFrame: adjustedStartFrame,
           effectiveDuration: placeholderDuration,
           sequenceDuration: placeholderDuration, // Assuming no transitions initially
           offset: offsetFrames ?? 0,
         });
-        setActiveSeqItem(layerId, newItemId, newItemType.contentType);
+        setActiveSeqItem(layerId, newItemId, contentType);
       } else {
         console.log("add preset");
+        const newItemId = genId("p", "preset");
         addPresetToLayer(layerId, {
           id: newItemId,
           startFrame: adjustedStartFrame,
@@ -288,7 +287,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         });
       }
     },
-    [layerId, addSequenceItemToLayer, setActiveSeqItem, addPresetToLayer]
+    [layerId, addSequenceItemToLayer, setActiveSeqItem, addPresetToLayer, selectedNewItemType]
   );
 
   const mouseEventHandlers = useMemo(
