@@ -313,7 +313,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 600, // 6 * 30
+      duration: 600,
       compositionId: "new-dynamic-composition",
     },
     layers: {
@@ -335,66 +335,43 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       },
       layerForeground: {
         liteItems: [
-          /* ------------------------ Brut Foreground Preset ----------------------- */
-          /*           {
+          {
             sequenceType: "preset",
-            id: "id-preset-foreground",
-            effectiveDuration: 360,
-            sequenceDuration: 360,
-            offset: 0,
-            startFrame: 0,
+            effectiveDuration: 60,
+            sequenceDuration: 60,
+            id: "id-preset-end-screen-8jekku",
+            offset: 83,
+            startFrame: 83,
             liteItems: [
               {
                 sequenceType: "standalone",
-                id: "id-brand",
-                offset: -360,
-                sequenceDuration: 360,
-                effectiveDuration: 360,
-                startFrame: 0,
+                id: "id-like",
+                sequenceDuration: 20,
+                effectiveDuration: 20,
+                startFrame: 83,
+                offset: 0,
                 contentType: "text",
               },
               {
                 sequenceType: "standalone",
-                id: "id-date",
-                offset: -360,
-                sequenceDuration: 120,
-                effectiveDuration: 120,
-                startFrame: 0,
+                id: "id-share",
+                offset: 0,
+                startFrame: 93,
+                sequenceDuration: 30,
+                effectiveDuration: 30,
+                contentType: "text",
+              },
+              {
+                sequenceType: "standalone",
+                id: "id-subscribe",
+                offset: 0,
+                startFrame: 123,
+                sequenceDuration: 20,
+                effectiveDuration: 20,
                 contentType: "text",
               },
             ],
           },
- */
-          /* {
-            sequenceType: "standalone",
-            id: "id-text-1",
-            offset: 0,
-            sequenceDuration: 600,
-            effectiveDuration: 570,
-            startFrame: 0,
-            transition: {
-              outgoing: {
-                id: "transition-1",
-                duration: 15,
-              },
-            },
-            contentType: "text",
-          },
-          {
-            id: "id-info",
-            sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 200,
-            effectiveDuration: 200,
-            offset: 600,
-            transition: {
-              incoming: {
-                id: "transition-2",
-                duration: 15,
-              },
-            },
-            startFrame: 570, // adjusted the startFrame as per transition
-          }, */
         ],
       },
     },
@@ -419,7 +396,6 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             },
           },
         },
-
         "id-date": {
           id: "id-date",
           layerId: "layerForeground",
@@ -439,14 +415,11 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             },
           },
         },
-
-        /* 
-        "id-info": {
-          id: "id-info",
+        "id-like": {
+          id: "id-like",
           type: "text",
           layerId: "layerForeground",
           editableProps: {
-            text: htmlString,
             styles: {
               container: {
                 flex: "flex",
@@ -454,14 +427,54 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
                 justifyContent: "center",
               },
               element: {
-                backgroundColor: "white",
-                padding: "12px",
-                fontSize: "50px",
-                borderRadius: 10,
+                fontSize: "70px",
+                fontWeight: "bold",
+                color: "white",
+              },
+            },
+            text: "Like.",
+          },
+        },
+        "id-share": {
+          id: "id-share",
+          type: "text",
+          layerId: "layerForeground",
+          editableProps: {
+            text: "Share.",
+            styles: {
+              container: {
+                flex: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              },
+              element: {
+                fontSize: "70px",
+                fontWeight: "bold",
+                color: "white",
               },
             },
           },
-        }, */
+        },
+        "id-subscribe": {
+          id: "id-subscribe",
+          type: "text",
+          layerId: "layerForeground",
+          editableProps: {
+            text: "Subscribe.",
+            styles: {
+              container: {
+                flex: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              },
+              element: {
+                fontSize: "70px",
+                fontWeight: "bold",
+                color: "white",
+              },
+            },
+          },
+        },
       },
       layerBackground: {
         "id-train-window-smash": {

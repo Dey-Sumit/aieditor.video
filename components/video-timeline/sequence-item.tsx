@@ -21,7 +21,7 @@ export const getItemStyle = (type: string) => {
     case "image":
       return "bg-purple-600 border-purple-600/70 ";
     case "preset":
-      return "bg-gray-200 border-indigo-500 border-dashed pr-[2px] border  ";
+      return "bg-gray-200 border-yellow-800 border ";
     default:
       return "bg-gray-600 border-gray-600";
   }
@@ -55,12 +55,10 @@ const SequenceItem = ({
     pixelsPerFrame;
 
   const onDragStart = () => {
-    
     setDraggingLayerId(layerId);
   };
 
   const onDragStop: ComponentProps<typeof Rnd>["onDragStop"] = (e, d) => {
-
     if (d.x !== x) throttledItemDrag(layerId, item.id, d.x);
     setDraggingLayerId(null);
   };
@@ -72,7 +70,6 @@ const SequenceItem = ({
     delta,
     position
   ) => {
-    
     const frameDelta = Math.floor(delta.width / pixelsPerFrame);
 
     if (direction === "left" && frameDelta > item.offset) {
@@ -120,7 +117,7 @@ const SequenceItem = ({
       onDragStart={onDragStart}
       onResizeStop={onResizeStop}
       className={cn(
-        "box-border cursor-pointer rounded-md border-2 pl-px hover:opacity-90 focus:bg-yellow-800",
+        "box-border cursor-pointer  border-2  hover:opacity-90 focus:bg-yellow-800 rounded-[3px]",
         getItemStyle(item.sequenceType === "standalone" ? item.contentType : item.sequenceType),
         activeSeqItem?.itemId === item.id && "border-blue-400"
       )}
@@ -132,8 +129,8 @@ const SequenceItem = ({
         itemId={item.id}
         transition={item.transition}
       >
-        <button
-          className="relative flex h-full w-full items-center justify-center truncate px-2 text-sm font-medium text-white"
+        <div
+          className="relative flex h-full w-full items-center  justify-center truncate px-0 text-sm  font-medium text-white"
           onClick={(e) => {
             e.stopPropagation();
             setActiveSeqItem(layerId, item.id, "text"); // TODO : Fix this
@@ -148,7 +145,7 @@ const SequenceItem = ({
           ) : (
             item.id.slice(0, 6)
           )}
-        </button>
+        </div>
 
         {/* --------------------------- Transition Element --------------------------- */}
         {item.transition?.incoming && (
@@ -178,6 +175,39 @@ const PresetItem = ({
   layerId: LayerId;
   pixelsPerFrame: number;
 }) => {
+  if (1 === 1)
+    return (
+      <div className=" w-full h-full flex">
+        {liteItems.map((item) => {
+          console.log(item);
+
+          const x = (item.startFrame + (item.transition?.incoming?.duration || 0)) * pixelsPerFrame;
+          const width =
+            (item.sequenceDuration -
+              (item.transition?.incoming?.duration || 0) -
+              (item.transition?.outgoing?.duration || 0)) *
+            pixelsPerFrame;
+
+          return (
+            <div
+              key={item.id}
+              className={cn(
+                " h-full cursor-pointer select-none rounded-sm border-2 hover:opacity-90",
+                getItemStyle(
+                  item.sequenceType === "standalone" ? item.contentType : item.sequenceType
+                )
+              )}
+              style={{
+                // transform: `translateX(${x}px)`,
+                // transform: `translate(${x}px, 1px)`,
+                width: `${width}px`,
+              }}
+            ></div>
+          );
+        })}
+      </div>
+    );
+
   return (
     <>
       {liteItems.map((item) => {
@@ -204,16 +234,16 @@ const PresetItem = ({
             enableResizing={false}
             dragAxis="x"
             className={cn(
-              "box-border cursor-pointer select-none  rounded-sm border-2 hover:opacity-90 focus:bg-yellow-800",
+              "box-border cursor-pointer !bg-red-950 select-none rounded-sm border-2 hover:opacity-90  focus:bg-yellow-800",
               getItemStyle(
                 item.sequenceType === "standalone" ? item.contentType : item.sequenceType
               )
             )}
             dragGrid={[1, 0]}
           >
-            {item.id}
+            {item.id.slice(0, 1)}
             {/* --------------------------- Transition Element --------------------------- */}
-            {item.transition?.incoming && (
+            {/* {item.transition?.incoming && (
               <button
                 className="absolute left-0 top-0 z-10 flex h-full select-none items-center justify-center rounded-[4px] border border-green-200 bg-gradient-to-r from-green-500/80 to-green-500/80"
                 style={{
@@ -223,7 +253,7 @@ const PresetItem = ({
               >
                 <ArrowRightLeft size={16} className="-ml-1 text-white" />
               </button>
-            )}
+            )} */}
           </Rnd>
         );
       })}
