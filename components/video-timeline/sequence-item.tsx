@@ -179,9 +179,6 @@ const PresetItem = ({
     return (
       <div className=" w-full h-full flex">
         {liteItems.map((item) => {
-          console.log(item);
-
-          const x = (item.startFrame + (item.transition?.incoming?.duration || 0)) * pixelsPerFrame;
           const width =
             (item.sequenceDuration -
               (item.transition?.incoming?.duration || 0) -

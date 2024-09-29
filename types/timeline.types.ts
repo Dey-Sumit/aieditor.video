@@ -141,7 +141,7 @@ type StoreActions = {
     item: Extract<LiteSequenceItemType, { sequenceType: "standalone" }>
   ) => void;
   removeSequenceItemFromLayer: (layerId: LayerId, itemId: string) => void;
-  updateSequenceItemInLayer: (
+  updateSequenceItemPositionInLayer: (
     layerId: LayerId,
     itemId: string,
     updates: Pick<LiteSequenceItemType, "startFrame">

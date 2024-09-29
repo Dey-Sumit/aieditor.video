@@ -77,7 +77,7 @@ const useTimelineInteractions = (
 
 const useItemDrag = (
   pixelsPerFrame: number,
-  updateSequenceItemInLayer: StoreType["updateSequenceItemInLayer"]
+  updateSequenceItemPositionInLayer: StoreType["updateSequenceItemPositionInLayer"]
 ) => {
   const {
     props: { layers },
@@ -100,18 +100,17 @@ const useItemDrag = (
         const otherEndFrame = liteItem.startFrame + liteItem.effectiveDuration;
         return newStartFrame < otherEndFrame && newEndFrame > liteItem.startFrame;
       });
-      console.log({ hasCollision });
 
       if (!hasCollision) {
         // Only update the store if it's significantly different from the last update
         if (Math.abs(newStartFrame - item.startFrame) >= 1) {
-          updateSequenceItemInLayer(layerId, itemId, {
+          updateSequenceItemPositionInLayer(layerId, itemId, {
             startFrame: newStartFrame,
           });
         }
       }
     },
-    [layers, pixelsPerFrame, updateSequenceItemInLayer]
+    [layers, pixelsPerFrame, updateSequenceItemPositionInLayer]
   );
 
   // Use a more aggressive throttle for drag operations
@@ -119,7 +118,7 @@ const useItemDrag = (
 };
 
 export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
-  const { props, updateSequenceItemInLayer, updateSequenceItemDuration } = useVideoStore();
+  const { props, updateSequenceItemPositionInLayer, updateSequenceItemDuration } = useVideoStore();
   const {
     compositionMetaData: { duration: durationInFrames },
   } = props!;
@@ -138,7 +137,7 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
     setPlayheadPosition
   );
 
-  const throttledItemDrag = useItemDrag(pixelsPerFrame, updateSequenceItemInLayer);
+  const throttledItemDrag = useItemDrag(pixelsPerFrame, updateSequenceItemPositionInLayer);
 
   const throttledItemResize = useItemResize(pixelsPerFrame, updateSequenceItemDuration);
 
@@ -209,7 +208,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         duration,
         MAX_PLACEHOLDER_DURATION_IN_FRAMES
       );
-      console.log({ placeholderInfo });
       const newHoverInfo = {
         layerId,
         startFrame: placeholderInfo.adjustedStartFrame,
@@ -227,8 +225,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
   const throttledMouseMove = useThrottle(handleBackgroundLayerMouseMove, 20);
 
   const handleMouseLeave = useCallback(() => {
-    console.log("handleMouseLeave");
-
     setHoverInfo(null);
   }, []);
 
@@ -245,8 +241,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
             presetName: PresetName;
           }
     ) => {
-      console.log("handleAddNewItem called");
-
       if (!lastHoverInfoRef.current) {
         console.error("hoverInfo is null, cannot add new item");
         return;
@@ -257,8 +251,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         durationInFrames: placeholderDuration,
         offsetFrames,
       } = lastHoverInfoRef.current;
-
-      console.log({ adjustedStartFrame, placeholderDuration });
 
       if (newItemType.sequenceType === "standalone") {
         const contentType = newItemType.contentType || selectedNewItemType;
@@ -274,7 +266,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         });
         setActiveSeqItem(layerId, newItemId, contentType);
       } else {
-        console.log("add preset");
         const newItemId = genId("p", "preset");
         addPresetToLayer(layerId, {
           id: newItemId,
