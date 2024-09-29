@@ -2,11 +2,12 @@
 import React from "react";
 import { useSequenceAddition } from "~/hooks/use-video-timeline";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
-import { selectliteItems } from "~/store/reselector/video-store.reselector";
+import { selectLiteItems } from "~/store/reselector/video-store.reselector";
 import useVideoStore from "~/store/video.store";
 import { LayerId } from "~/types/timeline.types";
 import SequenceItem from "./sequence-item";
 import AddItemPlaceholder from "./add-item-placeholder";
+import AddItemContextMenu from "./add-item-context-menu";
 
 const { LAYER_HEIGHT_IN_PX } = TIMELINE;
 interface LayerProps {
@@ -15,7 +16,7 @@ interface LayerProps {
 }
 
 const Layer: React.FC<LayerProps> = React.memo(({ layerId, pixelsPerFrame }) => {
-  const liteItems = useVideoStore((state) => selectliteItems(state, layerId));
+  const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
 
   return (
     <div className="group relative" style={{ height: LAYER_HEIGHT_IN_PX }}>
@@ -45,21 +46,33 @@ interface HoverLayerProps {
 }
 
 const HoverLayer: React.FC<HoverLayerProps> = React.memo(({ layerId, pixelsPerFrame }) => {
-  const { hoverInfo, mouseEventHandlers, isPointWithinItem } = useSequenceAddition(
-    layerId,
-    pixelsPerFrame
-  );
+  const {
+    hoverInfo,
+    mouseEventHandlers: { onMouseMove, onMouseLeave, onClick },
+    isPointWithinItem,
+  } = useSequenceAddition(layerId, pixelsPerFrame);
 
   return (
     <>
-      {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
+      <AddItemContextMenu layerId={layerId} onPresetAdd={onClick}>
+        {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
 
-      <div className="absolute inset-0" {...mouseEventHandlers} />
-      {/* -------------------------- Item adding placeholder for handing clicks and hover -------------------------- */}
+        <div
+          className="absolute inset-0"
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+          onClick={(e) => {
+            onClick(e, {
+              sequenceType: "standalone",
+            });
+          }}
+        />
+        {/* -------------------------- Item adding placeholder for handing clicks and hover -------------------------- */}
 
-      {hoverInfo && !isPointWithinItem(hoverInfo.startX) && (
-        <AddItemPlaceholder startX={hoverInfo.startX} width={hoverInfo.width} />
-      )}
+        {hoverInfo && !isPointWithinItem(hoverInfo.startX) && (
+          <AddItemPlaceholder startX={hoverInfo.startX} width={hoverInfo.width} />
+        )}
+      </AddItemContextMenu>
     </>
   );
 });

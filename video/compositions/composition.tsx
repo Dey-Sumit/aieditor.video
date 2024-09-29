@@ -1,5 +1,5 @@
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
-import { AbsoluteFill, Img } from "remotion";
+import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
 import DOMPurify from "dompurify";
 
 import { slide } from "@remotion/transitions/slide";
@@ -41,7 +41,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({ item }
     case "image":
       return (
         <AbsoluteFill>
-          <AbsoluteFill className="bg-black/70" />
+          <AbsoluteFill className="" />
           <Img
             src={item.editableProps.imageUrl}
             style={{
@@ -56,7 +56,11 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({ item }
     case "video":
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
-          <video src={item.editableProps.videoUrl} style={item.editableProps?.styles?.element} />
+          <AbsoluteFill className="bg-black/30" />
+          <OffthreadVideo
+            src={item.editableProps.videoUrl}
+            style={item.editableProps?.styles?.element}
+          />
         </AbsoluteFill>
       );
     // case "audio":

@@ -56,6 +56,7 @@ export type TextEditablePropsType = Extract<
   FullSequenceItemType,
   { type: "text" }
 >["editableProps"];
+export type ContentType = "dummy" | "text" | "image" | "video" | "audio";
 
 export type LiteSequenceItemType = {
   id: string;
@@ -76,7 +77,7 @@ export type LiteSequenceItemType = {
 } & (
   | {
       sequenceType: "standalone";
-      contentType: "dummy" | "text" | "image" | "video" | "audio";
+      contentType: ContentType;
     }
   | {
       sequenceType: "preset";
@@ -124,13 +125,23 @@ export type NestedCompositionProjectType = {
 };
 
 export type LayerId = "layerBackground" | "layerMiddle" | "layerForeground";
+export type PresetName = "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND";
+export type newPresetDetails = Omit<
+  Extract<LiteSequenceItemType, { sequenceType: "preset" }>,
+  "liteItems"
+> & {
+  name: PresetName;
+};
 
 type StoreActions = {
   loadProject: (project: NestedCompositionProjectType) => void;
   updateProject: (updates: Partial<NestedCompositionProjectType>) => void;
-  addSequenceItemToLayer: (layerId: LayerId, item: LiteSequenceItemType) => void;
+  addSequenceItemToLayer: (
+    layerId: LayerId,
+    item: Extract<LiteSequenceItemType, { sequenceType: "standalone" }>
+  ) => void;
   removeSequenceItemFromLayer: (layerId: LayerId, itemId: string) => void;
-  updateSequenceItemInLayer: (
+  updateSequenceItemPositionInLayer: (
     layerId: LayerId,
     itemId: string,
     updates: Pick<LiteSequenceItemType, "startFrame">
@@ -151,7 +162,7 @@ type StoreActions = {
   updateTextEditableProps: (
     layerId: LayerId,
     itemId: string,
-    updates: any // TODO : Fix the anys
+    updates: any // TODO : Fix this
   ) => void;
   updateImageEditableProps: (layerId: LayerId, itemId: string, updates: any) => void;
   updateAudioEditableProps: (layerId: LayerId, itemId: string, updates: any) => void;
@@ -162,6 +173,7 @@ type StoreActions = {
     frameDelta: number,
     direction: "left" | "right"
   ) => void;
+  addPresetToLayer: (layerId: LayerId, newPreset: newPresetDetails) => void;
 };
 
 export type StoreType = NestedCompositionProjectType & StoreActions;

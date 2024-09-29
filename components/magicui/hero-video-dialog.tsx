@@ -98,12 +98,12 @@ export default function HeroVideoDialog({
   return (
     <div
       className={cn(
-        "relative h-full overflow-hidden rounded-[inherit] border-2 border-gray-700 shadow-2xl",
+        "relative h-full overflow-hidden rounded-[inherit] border-2 border-gray-800 shadow-2xl",
         className,
       )}
     >
       <div
-        className="group relative cursor-pointer"
+        className="group relative h-full cursor-pointer"
         onClick={() => setIsVideoOpen(true)}
       >
         <img
@@ -111,7 +111,7 @@ export default function HeroVideoDialog({
           alt={thumbnailAlt}
           // width={1920}
           // height={1080}
-          className="max-h-full w-full rounded-md shadow-lg transition-all duration-200 ease-out group-hover:brightness-[0.8]"
+          className="max-h-full w-full rounded-md object-cover shadow-lg transition-all duration-200 ease-out group-hover:brightness-[0.8]"
         />
         <div className="absolute inset-0 flex scale-[0.9] items-center justify-center rounded-2xl transition-all duration-200 ease-out group-hover:scale-100">
           <div className="flex size-28 items-center justify-center rounded-full bg-primary/10 backdrop-blur-md">

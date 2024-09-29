@@ -21,11 +21,12 @@ export const getItemStyle = (type: string) => {
     case "image":
       return "bg-purple-600 border-purple-600/70 ";
     case "preset":
-      return "bg-gray-200 border-indigo-500 border-dashed border ";
+      return "bg-gray-200 border-yellow-900 border mouse-grab ";
     default:
       return "bg-gray-600 border-gray-600";
   }
 };
+
 const SequenceItem = ({
   item,
   layerId,
@@ -44,7 +45,6 @@ const SequenceItem = ({
    -  without transition : seq1 0 to 120: duration 120 frames, seq2 120 to 210 : duration 90 frames
    - with transition of 30 frames : seq1 0 to (120+15 outgoing) 135: duration 135 frames, seq2 135(120+15 incoming) to 210 : duration 75 frames
   */
-  console.log("sequence-item renders", item.id);
 
   const x = (item.startFrame + (item.transition?.incoming?.duration || 0)) * pixelsPerFrame;
 
@@ -55,12 +55,10 @@ const SequenceItem = ({
     pixelsPerFrame;
 
   const onDragStart = () => {
-    console.log("onDragStart");
     setDraggingLayerId(layerId);
   };
 
   const onDragStop: ComponentProps<typeof Rnd>["onDragStop"] = (e, d) => {
-    console.log("onDragStop", d.x);
     if (d.x !== x) throttledItemDrag(layerId, item.id, d.x);
     setDraggingLayerId(null);
   };
@@ -72,7 +70,6 @@ const SequenceItem = ({
     delta,
     position
   ) => {
-    console.log("onResizeStop");
     const frameDelta = Math.floor(delta.width / pixelsPerFrame);
 
     if (direction === "left" && frameDelta > item.offset) {
@@ -109,8 +106,8 @@ const SequenceItem = ({
         bottom: false,
         bottomLeft: false,
         bottomRight: false,
-        left: true,
-        right: true,
+        left: item.sequenceType !== "preset",
+        right: item.sequenceType !== "preset",
         top: false,
         topLeft: false,
         topRight: false,
@@ -120,9 +117,9 @@ const SequenceItem = ({
       onDragStart={onDragStart}
       onResizeStop={onResizeStop}
       className={cn(
-        "box-border cursor-pointer rounded-md border-2 pl-px hover:opacity-90 focus:bg-yellow-800",
-        getItemStyle(item.sequenceType === "standalone" ? item.contentType : item.sequenceType),
-        activeSeqItem?.itemId === item.id && "border-blue-400"
+        "box-border cursor-pointer  border-2  hover:opacity-90 focus:bg-yellow-800 rounded-[3px]",
+        getItemStyle(item.sequenceType === "standalone" ? item.contentType : item.sequenceType)
+        // activeSeqItem?.itemId === item.id && "border-blue-400"
       )}
       dragGrid={[pixelsPerFrame, 0]}
     >
@@ -132,8 +129,8 @@ const SequenceItem = ({
         itemId={item.id}
         transition={item.transition}
       >
-        <button
-          className="relative flex h-full w-full items-center justify-center truncate px-2 text-sm font-medium text-white"
+        <div
+          className="relative flex h-full w-full items-center  justify-center truncate px-0 text-sm  font-medium text-white"
           onClick={(e) => {
             e.stopPropagation();
             setActiveSeqItem(layerId, item.id, "text"); // TODO : Fix this
@@ -148,7 +145,7 @@ const SequenceItem = ({
           ) : (
             item.id.slice(0, 6)
           )}
-        </button>
+        </div>
 
         {/* --------------------------- Transition Element --------------------------- */}
         {item.transition?.incoming && (
@@ -178,7 +175,35 @@ const PresetItem = ({
   layerId: LayerId;
   pixelsPerFrame: number;
 }) => {
-  console.log("PresetItem renders", liteItems);
+  if (1 === 1)
+    return (
+      <div className=" w-full h-full flex">
+        {liteItems.map((item) => {
+          const width =
+            (item.sequenceDuration -
+              (item.transition?.incoming?.duration || 0) -
+              (item.transition?.outgoing?.duration || 0)) *
+            pixelsPerFrame;
+
+          return (
+            <div
+              key={item.id}
+              className={cn(
+                " h-full cursor-pointer select-none rounded-sm border ",
+                getItemStyle(
+                  item.sequenceType === "standalone" ? item.contentType : item.sequenceType
+                )
+              )}
+              style={{
+                // transform: `translateX(${x}px)`,
+                // transform: `translate(${x}px, 1px)`,
+                width: `${width}px`,
+              }}
+            ></div>
+          );
+        })}
+      </div>
+    );
 
   return (
     <>
@@ -206,16 +231,16 @@ const PresetItem = ({
             enableResizing={false}
             dragAxis="x"
             className={cn(
-              "box-border cursor-pointer select-none rounded-sm border-2 hover:opacity-90 focus:bg-yellow-800",
+              "box-border cursor-pointer !bg-red-950 select-none rounded-sm border-2 hover:opacity-90  focus:bg-yellow-800",
               getItemStyle(
                 item.sequenceType === "standalone" ? item.contentType : item.sequenceType
               )
             )}
             dragGrid={[1, 0]}
           >
-            {item.id}
+            {item.id.slice(0, 1)}
             {/* --------------------------- Transition Element --------------------------- */}
-            {item.transition?.incoming && (
+            {/* {item.transition?.incoming && (
               <button
                 className="absolute left-0 top-0 z-10 flex h-full select-none items-center justify-center rounded-[4px] border border-green-200 bg-gradient-to-r from-green-500/80 to-green-500/80"
                 style={{
@@ -225,7 +250,7 @@ const PresetItem = ({
               >
                 <ArrowRightLeft size={16} className="-ml-1 text-white" />
               </button>
-            )}
+            )} */}
           </Rnd>
         );
       })}

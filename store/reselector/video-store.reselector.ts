@@ -83,7 +83,7 @@ export const selectTransitionItemsByIds = createSelector(
 );
  */
 // New selector for liteItems
-export const selectliteItems = createSelector(
+export const selectLiteItems = createSelector(
   [selectLayerById],
   (layer): LiteSequenceItemType[] => layer?.liteItems || []
 );

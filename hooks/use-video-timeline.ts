@@ -5,7 +5,7 @@ import useThrottle from "./use-throttle";
 
 import { useTimeline } from "~/context/useTimeline";
 import useVideoStore from "~/store/video.store";
-import { LayerId, StoreType } from "~/types/timeline.types";
+import { ContentType, LayerId, PresetName, StoreType } from "~/types/timeline.types";
 import { useEditingStore } from "~/store/editing.store";
 import { calculatePlaceholderDuration } from "~/utils/timeline.utils";
 import { genId } from "~/utils/misc.utils";
@@ -77,7 +77,7 @@ const useTimelineInteractions = (
 
 const useItemDrag = (
   pixelsPerFrame: number,
-  updateSequenceItemInLayer: StoreType["updateSequenceItemInLayer"]
+  updateSequenceItemPositionInLayer: StoreType["updateSequenceItemPositionInLayer"]
 ) => {
   const {
     props: { layers },
@@ -100,18 +100,17 @@ const useItemDrag = (
         const otherEndFrame = liteItem.startFrame + liteItem.effectiveDuration;
         return newStartFrame < otherEndFrame && newEndFrame > liteItem.startFrame;
       });
-      console.log({ hasCollision });
 
       if (!hasCollision) {
         // Only update the store if it's significantly different from the last update
         if (Math.abs(newStartFrame - item.startFrame) >= 1) {
-          updateSequenceItemInLayer(layerId, itemId, {
+          updateSequenceItemPositionInLayer(layerId, itemId, {
             startFrame: newStartFrame,
           });
         }
       }
     },
-    [layers, pixelsPerFrame, updateSequenceItemInLayer]
+    [layers, pixelsPerFrame, updateSequenceItemPositionInLayer]
   );
 
   // Use a more aggressive throttle for drag operations
@@ -119,7 +118,7 @@ const useItemDrag = (
 };
 
 export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
-  const { props, updateSequenceItemInLayer, updateSequenceItemDuration } = useVideoStore();
+  const { props, updateSequenceItemPositionInLayer, updateSequenceItemDuration } = useVideoStore();
   const {
     compositionMetaData: { duration: durationInFrames },
   } = props!;
@@ -138,7 +137,7 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
     setPlayheadPosition
   );
 
-  const throttledItemDrag = useItemDrag(pixelsPerFrame, updateSequenceItemInLayer);
+  const throttledItemDrag = useItemDrag(pixelsPerFrame, updateSequenceItemPositionInLayer);
 
   const throttledItemResize = useItemResize(pixelsPerFrame, updateSequenceItemDuration);
 
@@ -166,11 +165,9 @@ interface HoverInfo {
 
 export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
+  const lastHoverInfoRef = useRef<HoverInfo | null>(null);
 
-  const newItemType = "text";
-  // useEditingStore((state) =>
-  //   layerId === "layerBackground" ? "audio" : state.newItemType,
-  // ) || "text";
+  const selectedNewItemType = useEditingStore((state) => state.newItemType);
 
   const { draggingLayerId } = useTimeline();
 
@@ -179,6 +176,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
   const duration = useVideoStore((state) => state.props.compositionMetaData.duration);
   const addSequenceItemToLayer = useVideoStore((state) => state.addSequenceItemToLayer);
   const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
+  const addPresetToLayer = useVideoStore((state) => state.addPresetToLayer);
 
   const isPointWithinItem = useCallback(
     (x: number): boolean => {
@@ -210,15 +208,16 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         duration,
         MAX_PLACEHOLDER_DURATION_IN_FRAMES
       );
-
-      setHoverInfo({
+      const newHoverInfo = {
         layerId,
         startFrame: placeholderInfo.adjustedStartFrame,
         durationInFrames: placeholderInfo.duration,
         offsetFrames: placeholderInfo.offsetFrames,
         startX: placeholderInfo.adjustedStartFrame * pixelsPerFrame,
         width: placeholderInfo.duration * pixelsPerFrame,
-      });
+      };
+      setHoverInfo(newHoverInfo);
+      lastHoverInfoRef.current = newHoverInfo;
     },
     [liteItems, layerId, duration, pixelsPerFrame, isPointWithinItem, draggingLayerId]
   );
@@ -230,41 +229,56 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
   }, []);
 
   const handleAddNewItem = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const startFrame = Math.floor(x / pixelsPerFrame);
+    (
+      e: React.MouseEvent<HTMLDivElement>,
+      newItemType:
+        | {
+            sequenceType: "standalone";
+            contentType?: ContentType;
+          }
+        | {
+            sequenceType: "preset";
+            presetName: PresetName;
+          }
+    ) => {
+      if (!lastHoverInfoRef.current) {
+        console.error("hoverInfo is null, cannot add new item");
+        return;
+      }
 
-      const { adjustedStartFrame, duration: placeholderDuration } = calculatePlaceholderDuration(
-        liteItems,
-        startFrame,
-        duration,
-        MAX_PLACEHOLDER_DURATION_IN_FRAMES
-      );
-
-      const newItemId = genId("s", newItemType);
-
-      addSequenceItemToLayer(layerId, {
-        id: newItemId,
-        sequenceType: "standalone",
-        contentType: "text", // TODO : hardcoded for now
+      const {
         startFrame: adjustedStartFrame,
-        effectiveDuration: placeholderDuration,
-        sequenceDuration: placeholderDuration, // Assuming no transitions initially
-        offset: hoverInfo?.offsetFrames ?? 0,
-      });
-      setActiveSeqItem(layerId, newItemId, newItemType);
+        durationInFrames: placeholderDuration,
+        offsetFrames,
+      } = lastHoverInfoRef.current;
+
+      if (newItemType.sequenceType === "standalone") {
+        const contentType = newItemType.contentType || selectedNewItemType;
+        const newItemId = genId("s", contentType);
+        addSequenceItemToLayer(layerId, {
+          id: newItemId,
+          sequenceType: "standalone",
+          contentType,
+          startFrame: adjustedStartFrame,
+          effectiveDuration: placeholderDuration,
+          sequenceDuration: placeholderDuration, // Assuming no transitions initially
+          offset: offsetFrames ?? 0,
+        });
+        setActiveSeqItem(layerId, newItemId, contentType);
+      } else {
+        const newItemId = genId("p", "preset");
+        addPresetToLayer(layerId, {
+          id: newItemId,
+          startFrame: adjustedStartFrame,
+          sequenceDuration: placeholderDuration,
+          effectiveDuration: placeholderDuration,
+          offset: offsetFrames ?? 0,
+          name: "BRUT_END_SCREEN_PRESET",
+          sequenceType: "preset",
+        });
+      }
     },
-    [
-      layerId,
-      addSequenceItemToLayer,
-      pixelsPerFrame,
-      hoverInfo?.offsetFrames,
-      duration,
-      setActiveSeqItem,
-      newItemType,
-      liteItems,
-    ]
+    [layerId, addSequenceItemToLayer, setActiveSeqItem, addPresetToLayer, selectedNewItemType]
   );
 
   const mouseEventHandlers = useMemo(
@@ -280,6 +294,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
     hoverInfo,
     isPointWithinItem,
     mouseEventHandlers,
+    handleAddNewItem,
   };
 }
 //TODO:  not using this hook, the code of the hooks can be better
