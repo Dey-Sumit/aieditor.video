@@ -1,4 +1,4 @@
-import { create, StoreApi } from "zustand";
+import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { devtools } from "zustand/middleware";
 import {
@@ -131,7 +131,6 @@ const useVideoStore = create<
         });
       },
 
-      // TODO : handle transition case
       updateSequenceItemPositionInLayer: (layerId, itemId, updates) => {
         set((state: StoreType) => {
           const layer = state.props.layers[layerId];
@@ -171,6 +170,30 @@ const useVideoStore = create<
           const startUpdateIndex = Math.min(oldIndex, futureNewIndex);
           const endUpdateIndex = Math.max(oldIndex, futureNewIndex);
 
+          if (updatedItem.transition?.incoming) {
+            const prevItemBeforeChange = layer.liteItems[startUpdateIndex - 1];
+            if (prevItemBeforeChange) {
+              delete prevItemBeforeChange?.transition?.outgoing;
+              prevItemBeforeChange.effectiveDuration =
+                prevItemBeforeChange.sequenceDuration;
+            }
+            delete updatedItem.transition?.incoming;
+          }
+
+          // Remove outgoing transition if it exists
+          if (updatedItem.transition?.outgoing) {
+            const nextItem = layer.liteItems[endUpdateIndex + 1];
+            // Update the next item
+            if (!nextItem) {
+              return;
+            }
+
+            delete nextItem.transition?.incoming;
+            delete updatedItem.transition?.outgoing;
+            updatedItem.effectiveDuration = updatedItem.sequenceDuration;
+          }
+
+          // TODO : i dont think we need to update the offsets for all affected items, we can just update the offsets for the items that are affected by the transition eg. the next item
           // Update offsets for all affected items
           for (let i = startUpdateIndex; i <= endUpdateIndex; i++) {
             const currentItem = layer.liteItems[i];
