@@ -27,11 +27,65 @@ export const LAYERS_IN_ORDER: {
 // Utility function to calculate offset between two items
 export function calculateOffset(
   prev: LiteSequenceItemType | null,
-  current: LiteSequenceItemType
+  current: LiteSequenceItemType,
 ): number {
   if (!prev) return current.startFrame;
   return current.startFrame - (prev.startFrame + prev.effectiveDuration);
 }
+
+/**
+ * Calculates the old and new indices for an item in an array based on an updated start frame.
+ *
+ * @param items - Array of sequence items
+ * @param itemId - ID of the item to update
+ * @param updatedStartFrame - New start frame for the item
+ * @returns Object containing oldIndex and futureNewIndex
+ */
+export const calculateItemIndices = (
+  items: Array<{
+    id: string;
+    startFrame: number;
+    effectiveDuration: number;
+  }>,
+  itemId: string,
+  updatedStartFrame: number,
+): { oldIndex: number; futureNewIndex: number } => {
+  const oldIndex = items.findIndex((item) => item.id === itemId);
+  console.log(JSON.stringify({ oldIndex, itemId, updatedStartFrame, items }));
+
+  if (oldIndex === -1) {
+    throw new Error("Item not found");
+  }
+
+  const itemToUpdate = items[oldIndex];
+  const updatedEndFrame = updatedStartFrame + itemToUpdate.effectiveDuration;
+
+  let futureNewIndex = oldIndex;
+
+  // Handle cases where the item is moved earlier in the timeline
+  for (let i = 0; i < oldIndex; i++) {
+    const currentItem = items[i];
+    const currentEndFrame =
+      currentItem.startFrame + currentItem.effectiveDuration;
+
+    if (updatedStartFrame < currentEndFrame) {
+      futureNewIndex = i;
+      break;
+    }
+  }
+
+  // Handle cases where the item is moved later in the timeline
+  for (let i = oldIndex + 1; i < items.length; i++) {
+    const currentItem = items[i];
+
+    if (updatedEndFrame <= currentItem.startFrame) {
+      break;
+    }
+    futureNewIndex = i;
+  }
+
+  return { oldIndex, futureNewIndex };
+};
 
 /* export const calculateLayerDuration = (items: SequenceItem[]): number => {
   if (items.length === 0) return 0;
@@ -92,7 +146,7 @@ export function calculateOffset(
 // Helper function to find nearest sequences
 export function findNearestSequences(
   liteItems: LiteSequenceItemType[],
-  startFrame: number
+  startFrame: number,
 ): {
   prevItem: LiteSequenceItemType | null;
   nextItem: LiteSequenceItemType | null;
@@ -117,8 +171,13 @@ export function findNearestSequences(
 export function binarySearch<T>(
   arr: T[],
   searchValue: number,
-  getCompareValue: (item: T) => number
+  getCompareValue: (item: T) => number,
 ): number {
+  console.log(
+    "binarySearch",
+    JSON.stringify({ arr, searchValue, getCompareValue }),
+  );
+
   let low = 0;
   let high = arr.length;
 
@@ -138,7 +197,7 @@ export function canAddTransition(
   layerId: LayerId,
   itemId: string,
   position: "incoming" | "outgoing",
-  state: NestedCompositionProjectType
+  state: NestedCompositionProjectType,
 ) {
   // Implementation to check if a transition can be added
   // This would check for the existence of adjacent items and their offsets
@@ -154,12 +213,14 @@ export function calculatePlaceholderDuration(
   liteItems: LiteSequenceItemType[],
   startFrame: number,
   duration: number,
-  MAX_PLACEHOLDER_DURATION_IN_FRAMES: number
+  MAX_PLACEHOLDER_DURATION_IN_FRAMES: number,
 ): PlaceholderDuration {
   const { prevItem, nextItem } = findNearestSequences(liteItems, startFrame);
 
   // Calculate the earliest possible start frame
-  const earliestStartFrame = prevItem ? prevItem.startFrame + prevItem.effectiveDuration : 0;
+  const earliestStartFrame = prevItem
+    ? prevItem.startFrame + prevItem.effectiveDuration
+    : 0;
 
   // Adjust the start frame if it's before the earliest possible start
   const adjustedStartFrame = Math.max(startFrame, earliestStartFrame);
@@ -171,7 +232,10 @@ export function calculatePlaceholderDuration(
   const availableDuration = latestEndFrame - adjustedStartFrame;
 
   // Cap the duration at MAX_PLACEHOLDER_DURATION if needed
-  const finalDuration = Math.min(availableDuration, MAX_PLACEHOLDER_DURATION_IN_FRAMES);
+  const finalDuration = Math.min(
+    availableDuration,
+    MAX_PLACEHOLDER_DURATION_IN_FRAMES,
+  );
 
   return {
     duration: finalDuration,
@@ -181,7 +245,10 @@ export function calculatePlaceholderDuration(
 }
 
 // Default props for different content types
-export const defaultContentProps: Record<string, Omit<FullSequenceItemType, "id" | "layerId">> = {
+export const defaultContentProps: Record<
+  string,
+  Omit<FullSequenceItemType, "id" | "layerId">
+> = {
   text: {
     type: "text",
     editableProps: {
@@ -253,4 +320,5 @@ export const defaultContentProps: Record<string, Omit<FullSequenceItemType, "id"
 };
 
 // Function to generate a random background color
-const getRandomBackgroundColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+const getRandomBackgroundColor = () =>
+  `#${Math.floor(Math.random() * 16777215).toString(16)}`;

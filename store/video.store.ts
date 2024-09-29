@@ -6,9 +6,13 @@ import {
   LiteSequenceItemType,
   LayerId,
   TransitionItemType,
-  FullSequenceItemType,
 } from "../types/timeline.types";
-import { binarySearch, calculateOffset, defaultContentProps } from "../utils/timeline.utils";
+import {
+  binarySearch,
+  calculateOffset,
+  defaultContentProps,
+  calculateItemIndices,
+} from "../utils/timeline.utils";
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
 import { END_SCREEN_PRESET } from "~/video/preset";
 
@@ -17,7 +21,10 @@ import { END_SCREEN_PRESET } from "~/video/preset";
  * @returns {StoreType} The video store state and actions.
  */
 
-const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/immer", never]]>(
+const useVideoStore = create<
+  StoreType,
+  [["zustand/devtools", never], ["zustand/immer", never]]
+>(
   devtools(
     immer((set) => ({
       ...DUMMY_NESTED_PROJECT,
@@ -46,7 +53,7 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           const insertIndex = binarySearch(
             layer.liteItems,
             newSeqLiteItem.startFrame,
-            (item) => item.startFrame
+            (item) => item.startFrame,
           );
 
           // Insert the new item
@@ -56,7 +63,8 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           const nextItem = layer.liteItems[insertIndex + 1];
           if (nextItem) {
             nextItem.offset =
-              nextItem.startFrame - (newSeqLiteItem.startFrame + newSeqLiteItem.effectiveDuration);
+              nextItem.startFrame -
+              (newSeqLiteItem.startFrame + newSeqLiteItem.effectiveDuration);
           }
 
           // Add to detailed items
@@ -67,13 +75,16 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           // Get default props based on content type
           const defaultProps = defaultContentProps[newSeqLiteItem.contentType];
 
+          //@ts-ignore
           state.props.sequenceItems[layerId][newSeqLiteItem.id] = {
             id: newSeqLiteItem.id,
             layerId: layerId,
             ...defaultProps,
           };
 
-          console.log(`Added sequence item ${newSeqLiteItem.id} to layer ${layerId}`);
+          console.log(
+            `Added sequence item ${newSeqLiteItem.id} to layer ${layerId}`,
+          );
         });
       },
 
@@ -85,10 +96,14 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
             return;
           }
 
-          const itemIndex = layer.liteItems.findIndex((item) => item.id === itemId);
+          const itemIndex = layer.liteItems.findIndex(
+            (item) => item.id === itemId,
+          );
 
           if (itemIndex === -1) {
-            console.warn(`Sequence item ${itemId} not found in layer ${layerId}`);
+            console.warn(
+              `Sequence item ${itemId} not found in layer ${layerId}`,
+            );
             return;
           }
 
@@ -98,10 +113,12 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           // Adjust the offset of the next item if it exists
           if (itemIndex < layer.liteItems.length) {
             const nextItem = layer.liteItems[itemIndex];
-            const prevItem = itemIndex > 0 ? layer.liteItems[itemIndex - 1] : null;
+            const prevItem =
+              itemIndex > 0 ? layer.liteItems[itemIndex - 1] : null;
 
             nextItem.offset = prevItem
-              ? nextItem.startFrame - (prevItem.startFrame + prevItem.effectiveDuration)
+              ? nextItem.startFrame -
+                (prevItem.startFrame + prevItem.effectiveDuration)
               : nextItem.startFrame;
           }
 
@@ -114,79 +131,45 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
         });
       },
 
+      // TODO : handle transition case
       updateSequenceItemPositionInLayer: (layerId, itemId, updates) => {
-        console.log({ updates });
-
         set((state: StoreType) => {
-          // Step 1: Locate the layer and item
           const layer = state.props.layers[layerId];
           if (!layer) {
             console.warn(`Layer ${layerId} not found`);
             return;
           }
 
-          const liteItemIndex = layer.liteItems.findIndex((item) => item.id === itemId);
-          console.log({ liteItemIndex });
+          const { oldIndex, futureNewIndex } = calculateItemIndices(
+            layer.liteItems,
+            itemId,
+            updates.startFrame,
+          );
 
-          if (liteItemIndex === -1) {
-            console.warn(`Item ${itemId} not found in layer ${layerId}`);
+          console.log({ oldIndex, futureNewIndex });
+
+          const draggedItem = layer.liteItems[oldIndex];
+
+          // If the position hasn't changed, do nothing
+          if (updates.startFrame === draggedItem.startFrame) {
             return;
           }
 
-          // Step 2: Get references to the current, previous, and next items
-          const draggedItem = layer.liteItems[liteItemIndex];
-          console.log({ draggedItem });
-          // Step 3: Create the updated item
+          // Create the updated item
           const updatedItem = {
             ...draggedItem,
-            ...updates,
-            startFrame: updates.startFrame + (draggedItem.transition?.incoming?.duration || 0),
+            startFrame: updates.startFrame,
           };
-          // if startFrame is not changed, then do nothing
-          if (updatedItem.startFrame === draggedItem.startFrame) return;
 
-          const prevItem = liteItemIndex > 0 ? layer.liteItems[liteItemIndex - 1] : null;
-          const nextItem =
-            liteItemIndex < layer.liteItems.length - 1 ? layer.liteItems[liteItemIndex + 1] : null;
+          // Remove the item from its current position
+          layer.liteItems.splice(oldIndex, 1);
 
-          console.log({ updatedItem });
-
-          /*           // Step 4: Handle transition removal if the item has moved
-          // Remove incoming transition if it exists
-          if (draggedItem.transition?.incoming) {
-            if (prevItem) {
-              delete prevItem?.transition?.outgoing;
-              prevItem.sequenceDuration = prevItem.effectiveDuration;
-            }
-            delete draggedItem.transition?.incoming;
-          }
-
-          // Remove outgoing transition if it exists
-          if (draggedItem.transition?.outgoing && nextItem) {
-            // Update the next item
-
-            delete nextItem.transition?.incoming;
-            delete updatedItem.transition?.outgoing;
-            updatedItem.sequenceDuration = updatedItem.effectiveDuration;
-          } */
-
-          // Step 5: Remove the item from its current position
-          layer.liteItems.splice(liteItemIndex, 1);
-
-          // After finding the new index
-          const originalIndex = liteItemIndex;
-          // Step 6: Find the new position for the item
-          const newIndex = binarySearch(
-            layer.liteItems,
-            updatedItem.startFrame,
-            (item) => item.startFrame
-          );
-
-          console.log({ newIndex });
+          // Insert the item at its new position
+          layer.liteItems.splice(futureNewIndex, 0, updatedItem);
 
           // Determine the range of items that need updating
-          const startUpdateIndex = Math.min(originalIndex, newIndex);
-          const endUpdateIndex = Math.max(originalIndex, newIndex);
+          const startUpdateIndex = Math.min(oldIndex, futureNewIndex);
+          const endUpdateIndex = Math.max(oldIndex, futureNewIndex);
 
           // Update offsets for all affected items
           for (let i = startUpdateIndex; i <= endUpdateIndex; i++) {
@@ -262,7 +245,9 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
 
           const layer = state.props.layers[layerId]!;
 
-          const itemIndex = layer.liteItems.findIndex((item) => item.id === itemId)!;
+          const itemIndex = layer.liteItems.findIndex(
+            (item) => item.id === itemId,
+          )!;
 
           const item = layer.liteItems[itemIndex];
           const nextItem = layer.liteItems[itemIndex + 1];
@@ -288,7 +273,8 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           // Update the next item's offset if it exists
           if (nextItem) {
             // TODO : might need to handle the transition case
-            nextItem.offset = nextItem.startFrame - (item.startFrame + item.effectiveDuration);
+            nextItem.offset =
+              nextItem.startFrame - (item.startFrame + item.effectiveDuration);
           }
 
           console.log(`Updated item ${itemId} in layer ${layerId}:`);
@@ -303,7 +289,7 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
       addTransitionToLayer: (
         layerId: LayerId,
         itemId: string,
-        position: "incoming" | "outgoing"
+        position: "incoming" | "outgoing",
       ) => {
         set((state: StoreType) => {
           const layer = state.props.layers[layerId];
@@ -312,7 +298,9 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
             return;
           }
 
-          const itemIndex = layer.liteItems.findIndex((item) => item.id === itemId);
+          const itemIndex = layer.liteItems.findIndex(
+            (item) => item.id === itemId,
+          );
 
           if (itemIndex === -1) {
             console.warn(`Item ${itemId} not found in layer ${layerId}`);
@@ -321,7 +309,10 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
 
           const newTransitionId = `t-${Date.now()}`;
           const transitionDuration = 30; // Total transition duration
-          const defaultTransition: Omit<TransitionItemType, "fromSequenceIndex"> = {
+          const defaultTransition: Omit<
+            TransitionItemType,
+            "fromSequenceIndex"
+          > = {
             id: newTransitionId,
             type: "wipe",
             duration: transitionDuration,
@@ -360,7 +351,8 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
               defaultTransition.toSequenceId = itemId;
 
               // Update effective duration of previous item
-              prevItem.effectiveDuration = prevItem.sequenceDuration - transitionDuration;
+              prevItem.effectiveDuration =
+                prevItem.sequenceDuration - transitionDuration;
             }
           } else if (position === "outgoing") {
             if (itemIndex < layer.liteItems.length - 1) {
@@ -390,13 +382,15 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
               defaultTransition.toSequenceId = nextItem.id;
 
               // Update effective duration of current item
-              currentItem.effectiveDuration = currentItem.sequenceDuration - transitionDuration;
+              currentItem.effectiveDuration =
+                currentItem.sequenceDuration - transitionDuration;
             }
           }
 
           // Propagate startFrame changes to all subsequent items
           if (transitionDuration > 0) {
-            const startIndex = position === "incoming" ? itemIndex + 1 : itemIndex + 2; // from the next element, TODO : I think this step can be improved , as we are already upadting one adjacent element in the prev step, and that step can be removed.
+            const startIndex =
+              position === "incoming" ? itemIndex + 1 : itemIndex + 2; // from the next element, TODO : I think this step can be improved , as we are already upadting one adjacent element in the prev step, and that step can be removed.
             for (let i = startIndex; i < layer.liteItems.length; i++) {
               layer.liteItems[i].startFrame -= transitionDuration;
             }
@@ -415,7 +409,7 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
           }; */
 
           console.log(
-            `Added ${position} transition ${newTransitionId} to item ${itemId} in layer ${layerId}`
+            `Added ${position} transition ${newTransitionId} to item ${itemId} in layer ${layerId}`,
           );
         });
       },
@@ -463,8 +457,8 @@ const useVideoStore = create<StoreType, [["zustand/devtools", never], ["zustand/
     })),
     {
       name: "VideoStore",
-    }
-  )
+    },
+  ),
 );
 
 export default useVideoStore;

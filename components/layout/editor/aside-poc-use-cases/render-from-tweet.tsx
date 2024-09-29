@@ -9,7 +9,12 @@ import {
 } from "~/components/ui/dialog";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { Card, CardHeader, CardTitle, CardDescription } from "~/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "~/components/ui/card";
 import { Twitter } from "lucide-react";
 import { useState } from "react";
 import { TooltipButton } from "~/components/ui/custom/tool-tip-button";
@@ -88,7 +93,9 @@ const RenderFromTweet: React.FC = () => {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{step === 1 ? "Enter Tweet Link" : "Choose Style"}</DialogTitle>
+            <DialogTitle>
+              {step === 1 ? "Enter Tweet Link" : "Choose Style"}
+            </DialogTitle>
             <DialogDescription>
               {step === 1
                 ? "Paste the link to the tweet you want to render."
