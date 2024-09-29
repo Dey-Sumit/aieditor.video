@@ -7,8 +7,8 @@ import HeroVideoDialog from "~/components/magicui/hero-video-dialog";
 
 export default function Hero() {
   return (
-    <div className="relative w-full bg-black pt-10 text-white md:pt-24">
-      <div className="fixed inset-x-0 top-20 h-[30vh] md:h-[60vh]">
+    <div className="relative w-full pt-20 text-white md:pt-24">
+      <div className="fixed inset-x-0 top-20 h-[20vh] md:h-[60vh]">
         <Particles
           className="h-full w-full"
           quantity={100}
@@ -20,7 +20,7 @@ export default function Hero() {
       <div className="container mx-auto flex min-h-screen flex-col items-center justify-start px-2 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-y-4 text-center sm:gap-y-8">
           <div className="flex flex-col gap-y-3">
-            <h1 className="text-3xl font-bold md:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="text-4xl font-bold md:text-5xl lg:text-6xl xl:text-7xl">
               Make Videos in Seconds
             </h1>
 
@@ -49,10 +49,11 @@ export default function Hero() {
         <div
           className={cn(
             "relative my-8 flex h-[180px] flex-col items-center justify-center rounded-xl backdrop-blur-lg sm:my-12 sm:h-[350px] md:my-16 md:h-[450px] lg:h-[550px] xl:h-[650px]",
-            "before:absolute before:left-0 before:top-0 before:z-[-1] before:h-full before:w-full before:[background-image:linear-gradient(to_bottom,red,blue,transparent_40%)] before:[filter:blur(160px)]",
+            "before:absolute before:left-0 before:top-0 before:z-[-1] before:h-full before:w-full before:[background-image:linear-gradient(to_bottom,red,blue)] before:[filter:blur(160px)] md:before:[background-image:linear-gradient(to_bottom,red,blue,transparent_40%)]",
+            // "before:animate-gradient-fade-in before:opacity-0",
           )}
         >
-          {/* <div className="h-full w-full"></div> */}
+          {/* <div className="h-full w-[300px] md:w-[900px]"></div> */}
           <HeroVideoDialog
             // className="block dark:hidden"
             animationStyle="from-center"
