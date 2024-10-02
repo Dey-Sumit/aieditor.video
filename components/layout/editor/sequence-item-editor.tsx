@@ -49,4 +49,3 @@ const SequenceItemEditor: React.FC = () => {
 };
 
 export default SequenceItemEditor;
-//

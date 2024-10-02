@@ -1,21 +1,21 @@
 import React from "react";
+import AsideNew from "~/components/layout/editor-new/aside";
 
 const SIDE_NAVBAR_WIDTH = "4rem";
 const NAVBAR_ITEM_CONTENT_WIDTH = "20rem";
 const TIMELINE_HEIGHT = "12rem";
 const PROJECT_HEADER_HEIGHT = "52px";
 
-const Layout = () => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen">
       {/* -------------------- side navbar -------------------- */}
-      <div
-        className="overflow-y-scroll overscroll-contain bg-green-500 pb-10"
+      <aside
+        className="overflow-y-scroll overscroll-contain pb-10"
         style={{ width: SIDE_NAVBAR_WIDTH }}
       >
-        <div className="h-screen"></div>
-        <div className="h-screen"></div>
-      </div>
+        <AsideNew />
+      </aside>
 
       {/* -------------------- navbar item content -------------------- */}
       <div
@@ -25,8 +25,9 @@ const Layout = () => {
           paddingBottom: TIMELINE_HEIGHT,
         }}
       >
-        <div className="h-[52px] bg-red-800"></div>
-        <div className="h-screen"></div>
+        {/* <div className="h-[52px] bg-red-800"></div>
+        <div className="h-screen"></div> */}
+        {children}
       </div>
 
       {/* -------------------- timeline -------------------- */}

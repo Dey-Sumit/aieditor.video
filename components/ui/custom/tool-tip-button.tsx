@@ -1,6 +1,11 @@
-import { FC, ReactNode, ComponentProps } from "react";
-import { Button } from "~/components/ui/button";
-import { TooltipTrigger, TooltipContent, Tooltip, TooltipProvider } from "~/components/ui/tooltip";
+import { FC, ReactNode, ComponentProps, ReactElement } from "react";
+import { Button, ButtonProps } from "~/components/ui/button";
+import {
+  TooltipTrigger,
+  TooltipContent,
+  Tooltip,
+  TooltipProvider,
+} from "~/components/ui/tooltip";
 
 interface TooltipButtonProps {
   icon: ReactNode;
@@ -8,7 +13,11 @@ interface TooltipButtonProps {
   buttonProps?: ComponentProps<typeof Button>;
 }
 
-export const TooltipButton: FC<TooltipButtonProps> = ({ icon, toolTipContent, buttonProps }) => (
+export const TooltipButton: FC<TooltipButtonProps> = ({
+  icon,
+  toolTipContent,
+  buttonProps,
+}) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
@@ -22,3 +31,32 @@ export const TooltipButton: FC<TooltipButtonProps> = ({ icon, toolTipContent, bu
     </Tooltip>
   </TooltipProvider>
 );
+
+// // Updated interface for TooltipButton2Props
+// interface TooltipButton2Props {
+//   children: React.ReactElement<ButtonProps, typeof Button>;
+//   toolTipContent: string;
+// }
+
+// // Proper comment for the function
+// /**
+//  * TooltipButton2 component that wraps a Button with a tooltip.
+//  * @param {Object} props - The component props.
+//  * @param {ReactElement<ComponentProps<typeof Button>>} props.children - The Button component to be wrapped.
+//  * @param {string} props.toolTipContent - The content to be displayed in the tooltip.
+//  * @returns {JSX.Element} A Button wrapped with a tooltip.
+//  */
+
+// export const TooltipButton2 = ({
+//   children,
+//   toolTipContent,
+// }: TooltipButton2Props) => (
+//   <TooltipProvider>
+//     <Tooltip>
+//       <TooltipTrigger asChild>{children}</TooltipTrigger>
+//       <TooltipContent side="right" sideOffset={5}>
+//         {toolTipContent}
+//       </TooltipContent>
+//     </Tooltip>
+//   </TooltipProvider>
+// );
