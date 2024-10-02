@@ -29,13 +29,7 @@ const SequenceItemEditor: React.FC = () => {
     activeSeqItem &&
     activeSeqItem.itemType === "text" && (
       <AnimatePresence>
-        <motion.div
-          className="h-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-        >
+        <motion.div className="h-full border-4 border-amber-600">
           {activeSeqItem?.itemType === "text" && (
             <SequenceItemEditorText
               initialData={
@@ -47,7 +41,7 @@ const SequenceItemEditor: React.FC = () => {
               onCancel={handleCancel}
             />
           )}
-          {activeSeqItem?.itemType === "image" && <SequenceItemEditorImage />}
+          {/* {activeSeqItem?.itemType === "image" && <SequenceItemEditorImage />} */}
         </motion.div>
       </AnimatePresence>
     )

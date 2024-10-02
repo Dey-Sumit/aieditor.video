@@ -107,16 +107,16 @@ const SequenceItemEditorText: React.FC<SequenceItemEditorTextProps> = ({
   };
 
   return (
-    <div className="relative border-l bg-gray-100 p-2 shadow-xl">
+    <div className="relative h-[calc(100vh-20vh-70px)] border-2 border-l border-red-500 bg-gray-100 p-2">
       <div
-        className="h-[calc(100vh-70px)] overflow-y-auto"
+        className="h-full"
         style={{
           overscrollBehavior: "contain",
         }}
       >
-        <div className="h-screen bg-yellow-800"></div>
+        {/* <div className="h-screen bg-yellow-800"></div> */}
         <form className="space-y-6 pb-20">
-          <Editor initialValue={htmlStringWithBg} />
+          {/* <Editor initialValue={htmlStringWithBg} /> */}
 
           {/* Custom CSS Inputs */}
           {/* {["container", "element", "overlay"].map((styleType) => (
@@ -147,7 +147,7 @@ const SequenceItemEditorText: React.FC<SequenceItemEditorTextProps> = ({
           {/* Sticky Save and Cancel Buttons */}
         </form>
       </div>
-      <div
+      {/* <div
         className={`sticky bottom-0 left-0 right-0 flex justify-end space-x-2 border-t p-4 transition-all`}
       >
         <Button type="button" variant="outline" size="sm" onClick={onCancel}>
@@ -156,7 +156,7 @@ const SequenceItemEditorText: React.FC<SequenceItemEditorTextProps> = ({
         <Button type="submit" size="sm">
           Save Changes
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };
