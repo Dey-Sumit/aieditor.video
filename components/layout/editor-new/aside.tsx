@@ -30,8 +30,13 @@ const AsideNew = () => {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b p-2">
-        <TooltipButton
+      <div
+        className="border-b p-2"
+        style={{
+          height: "52px",
+        }}
+      >
+        {/* <TooltipButton
           icon={<TriangleIcon className="size-5 fill-foreground" />}
           toolTipContent="Home"
           buttonProps={{
@@ -41,7 +46,7 @@ const AsideNew = () => {
               handleNavigation("home");
             },
           }}
-        />
+        /> */}
       </div>
       <nav className="grid gap-4 p-2">
         <TooltipButton

@@ -16,11 +16,11 @@ const VideoTimeline = () => {
   const { containerRef, handleTimelineClick, pixelsPerFrame } = useTimeline();
 
   return (
-    <div className="pr-2">
+    <div className="flex h-full flex-col justify-end">
       <Toolbar />
-      <div className="relative flex rounded-sm bg-gray-100">
+      <div className="relative flex">
         {/* ----- left section of the timeline: includes name,helper buttons, etc ----*/}
-        <div className="w-32 flex-shrink-0 divide-y divide-gray-300 bg-gray-200">
+        <div className="w-32 flex-shrink-0 divide-y divide-gray-800 border-r">
           {/* ------------------------- FAKE DIV FOR TIME LAYER ------------------------  */}
           <div style={{ height: `${LAYER_HEIGHT_IN_PX}px` }} />
 

@@ -1,38 +1,16 @@
 "use client";
+
 import { ErrorFallback, Player, PlayerRef } from "@remotion/player";
 import { useRef } from "react";
 import { AbsoluteFill } from "remotion";
-import { Aside } from "~/components/layout/editor/aside";
-import { Header } from "~/components/layout/editor/header";
-import SequenceItemEditor from "~/components/layout/editor/sequence-item-editor";
 import VideoTimeline from "~/components/video-timeline/VideoTImeline";
 import { VideoTimelineProvider } from "~/context/useTimeline";
 import useVideoStore from "~/store/video.store";
 import { NestedCompositionPropsSchema } from "~/types/timeline.types";
 import NestedSequenceComposition from "~/video/compositions/composition";
 
-const EditorLayoutPage = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="flex h-screen w-full pl-[56px]">
-      <Aside />
-      <div className="flex-1">
-        <Header />
-
-        <div className="relative grid h-full w-full grid-cols-7 gap-4">
-          <div className="col-span-2 h-screen">{children}</div>
-          <div className="col-span-3 flex flex-col gap-y-6">
-            <VideoAndTimeline />
-          </div>
-          <div className="col-span-2 h-screen">
-            <SequenceItemEditor />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default EditorLayoutPage;
+const SIDE_NAVBAR_WIDTH = "4rem";
+const TIMELINE_HEIGHT = "12rem";
 
 const VideoAndTimeline = () => {
   const playerRef = useRef<PlayerRef>(null);
@@ -40,9 +18,15 @@ const VideoAndTimeline = () => {
 
   return (
     <>
-      <VideoPreview playerRef={playerRef} />
+      <div className="h-full">
+        <VideoPreview playerRef={playerRef} />
+      </div>
+      {/* -------------------- timeline -------------------- */}
 
-      <div className="fixed bottom-2 left-[56px] right-0">
+      <div
+        className="fixed bottom-0 right-0 border-t bg-background"
+        style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_HEIGHT }}
+      >
         {props && (
           <VideoTimelineProvider playerRef={playerRef}>
             <VideoTimeline />
@@ -64,7 +48,7 @@ const VideoPreview = ({
     return <div>Loading project...</div>;
   }
   return (
-    <div className="relative flex h-full max-h-[65vh] flex-col rounded-xl bg-muted/50 lg:col-span-2">
+    <>
       <Player
         component={NestedSequenceComposition}
         durationInFrames={props.compositionMetaData.duration}
@@ -73,7 +57,10 @@ const VideoPreview = ({
         compositionWidth={props.compositionMetaData.width}
         style={{
           width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0,0,0,0.6)",
         }}
+        className=""
         controls
         autoPlay={false}
         loop
@@ -83,7 +70,7 @@ const VideoPreview = ({
         schema={NestedCompositionPropsSchema}
         inputProps={props}
       />
-    </div>
+    </>
   );
 };
 
@@ -100,3 +87,5 @@ const errorFallback: ErrorFallback = ({ error }) => {
     </AbsoluteFill>
   );
 };
+
+export default VideoAndTimeline;

@@ -1,7 +1,12 @@
 import React from "react";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import {
   MousePointer2,
   Type,
@@ -127,13 +132,15 @@ export const Toolbar: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <div className="flex items-center justify-end space-x-1 rounded-md bg-background p-1 shadow-sm">
+      <div className="flex items-center justify-end space-x-1 bg-background p-1 shadow-sm">
         <div>
           <p>{currentFrame}</p>
         </div>
         {toolbarCategories.map((category, categoryIndex) => (
           <React.Fragment key={category.name}>
-            {categoryIndex > 0 && <Separator orientation="vertical" className="h-8" />}
+            {categoryIndex > 0 && (
+              <Separator orientation="vertical" className="h-8" />
+            )}
             <div className="flex items-center space-x-1">
               {category.items.map((item) => (
                 <Tooltip key={item.label}>
@@ -143,8 +150,8 @@ export const Toolbar: React.FC = () => {
                       size="icon"
                       onClick={item.onClick}
                       className={cn(
-                        "h-8 w-8 hover:bg-gray-300",
-                        newItemType === item.label.toLowerCase() && "bg-gray-300"
+                        "h-8 w-8",
+                        newItemType === item.label.toLowerCase() && "bg-muted",
                       )}
                     >
                       {item.icon}
