@@ -18,7 +18,7 @@ const EditorLayoutPage = ({ children }: { children: React.ReactNode }) => {
       <div className="flex-1">
         <Header />
 
-        <div className="relative grid h-full w-full grid-cols-7 gap-4 p-2">
+        <div className="relative grid h-full w-full grid-cols-7 gap-4 ">
           <div className="col-span-2 h-screen">{children}</div>
           <div className="col-span-3 flex flex-col gap-y-6">
             <VideoAndTimeline />

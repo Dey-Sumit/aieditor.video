@@ -6,6 +6,7 @@
     "name": "Sumit Dey"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@pavlobu/zustand": "4.1.4-4",
     "@radix-ui/react-context-menu": "^2.2.1",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -37,6 +38,7 @@
     "novel": "^0.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
     "react-rnd": "^10.4.12",
     "remotion": "4.0.209",
     "reselect": "^5.1.1",

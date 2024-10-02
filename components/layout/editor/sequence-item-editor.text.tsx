@@ -1,140 +1,164 @@
-// "use client";
-// import { CardFooter } from "~/components/ui/card";
-// import { Label } from "~/components/ui/label";
-// import {
-//   Select,
-//   SelectTrigger,
-//   SelectValue,
-//   SelectContent,
-//   SelectItem,
-// } from "~/components/ui/select";
-// import { Slider } from "~/components/ui/slider";
-// import { Textarea } from "~/components/ui/textarea";
-// import { Button } from "~/components/ui/button";
-// import { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { TextEditablePropsType } from "~/types/timeline.types";
+import { htmlStringWithBg } from "~/components/novel/page";
+import Editor from "~/components/novel/editor/advanced-editor";
 
-// import { Separator } from "~/components/ui/separator";
-// import { useVideoStore } from "~/zustand/video-store";
-// import { TextSequenceType } from "~/types/store.types";
-// import { useEditingStore } from "~/zustand/editing-store";
-// export const SequenceItemEditorText = () => {
-//   const updateTextEditableProps = useVideoStore(
-//     (state) => state.updateTextEditableProps,
-//   );
-//   const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
+// Define the schema for form validation
+const formSchema = z.object({
+  text: z.string().min(1, "Text is required"),
+  fontSize: z.number().min(1, "Font size must be at least 1"),
+  fontWeight: z.enum([
+    "normal",
+    "bold",
+    "100",
+    "200",
+    "300",
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+    "900",
+  ]),
+  color: z
+    .string()
+    .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid color format"),
+  customCssContainer: z.string(),
+  customCssElement: z.string(),
+  customCssOverlay: z.string(),
+});
 
-//   const activeSeqItem = useVideoStore(
-//     (state) =>
-//       state.props.sequenceItems["content-layer-1"]?.[activeSeqItemLite.itemId]!,
-//   ) as TextSequenceType;
+type FormData = z.infer<typeof formSchema>;
 
-//   const [text, setText] = useState(activeSeqItem?.editableProps.content || "");
-//   const [classNames, setClassnames] = useState(
-//     activeSeqItem?.editableProps?.classNames || "",
-//   );
+interface SequenceItemEditorTextProps {
+  initialData: TextEditablePropsType;
+  onSave: (data: TextEditablePropsType) => void;
+  onCancel: () => void;
+}
 
-//   useEffect(() => {
-//     setText(activeSeqItem?.editableProps?.content || "");
-//     setClassnames(activeSeqItem?.editableProps?.classNames || "");
-//   }, [activeSeqItem?.editableProps]);
+const SequenceItemEditorText: React.FC<SequenceItemEditorTextProps> = ({
+  initialData,
+  onSave,
+  onCancel,
+}) => {
+  console.log({ initialData });
 
-//   const handleApply = () => {
-//     updateTextEditableProps("content-layer-1", activeSeqItem.id, {
-//       content: text,
-//       classNames: classNames,
-//     });
-//   };
+  const [isSticky, setIsSticky] = useState(false);
 
-//   return (
-//     <div className="flex flex-col gap-4">
-//       <div className="grid gap-2">
-//         <Label htmlFor="font">Font</Label>
-//         <Select name="font">
-//           <SelectTrigger>
-//             <SelectValue placeholder="Select font" />
-//           </SelectTrigger>
-//           <SelectContent>
-//             <SelectItem value="Arial">Arial</SelectItem>
-//             <SelectItem value="Times New Roman">Times New Roman</SelectItem>
-//             <SelectItem value="Verdana">Verdana</SelectItem>
-//             <SelectItem value="Georgia">Georgia</SelectItem>
-//             <SelectItem value="Roboto">Roboto</SelectItem>
-//             <SelectItem value="Open Sans">Open Sans</SelectItem>
-//           </SelectContent>
-//         </Select>
-//       </div>
-//       <div className="grid gap-2">
-//         <Label htmlFor="size">Font Size</Label>
-//         <Slider
-//           id="size"
-//           defaultValue={[16]}
-//           min={8}
-//           max={72}
-//           step={1}
-//           className="[&>span:first-child]:h-2 [&>span:first-child]:bg-primary [&>span:first-child_span]:bg-primary [&_[role=slider]:focus-visible]:scale-105 [&_[role=slider]:focus-visible]:ring-0 [&_[role=slider]:focus-visible]:ring-offset-0 [&_[role=slider]:focus-visible]:transition-transform [&_[role=slider]]:h-4 [&_[role=slider]]:w-4 [&_[role=slider]]:border-0 [&_[role=slider]]:bg-primary"
-//         />
-//       </div>
-//       <div className="grid gap-2">
-//         <Label htmlFor="color">Color</Label>
-//         <div />
-//       </div>
-//       <div className="grid gap-2">
-//         <Label htmlFor="text">Text</Label>
-//         <Textarea
-//           id="text"
-//           rows={3}
-//           placeholder="Enter your text"
-//           value={text}
-//           onChange={(e) => setText(e.target.value)}
-//         />
-//       </div>
-//       <div className="grid gap-2">
-//         <Label htmlFor="x">X Position</Label>
-//         <Slider
-//           id="x"
-//           defaultValue={[0]}
-//           min={0}
-//           max={100}
-//           step={1}
-//           className="[&>span:first-child]:h-2 [&>span:first-child]:bg-primary [&>span:first-child_span]:bg-primary [&_[role=slider]:focus-visible]:scale-105 [&_[role=slider]:focus-visible]:ring-0 [&_[role=slider]:focus-visible]:ring-offset-0 [&_[role=slider]:focus-visible]:transition-transform [&_[role=slider]]:h-4 [&_[role=slider]]:w-4 [&_[role=slider]]:border-0 [&_[role=slider]]:bg-primary"
-//         />
-//       </div>
-//       <div className="grid gap-2">
-//         <Label htmlFor="y">Y Position</Label>
-//         <Slider
-//           id="y"
-//           defaultValue={[0]}
-//           min={0}
-//           max={100}
-//           step={1}
-//           className="[&>span:first-child]:h-2 [&>span:first-child]:bg-primary [&>span:first-child_span]:bg-primary [&_[role=slider]:focus-visible]:scale-105 [&_[role=slider]:focus-visible]:ring-0 [&_[role=slider]:focus-visible]:ring-offset-0 [&_[role=slider]:focus-visible]:transition-transform [&_[role=slider]]:h-4 [&_[role=slider]]:w-4 [&_[role=slider]]:border-0 [&_[role=slider]]:bg-primary"
-//         />
-//       </div>
-//       <Separator orientation="horizontal" />
-//       <div className="grid gap-2">
-//         <Label htmlFor="text">Yo Coder : add tailwind classNames</Label>
-//         <Textarea
-//           id="text"
-//           rows={3}
-//           placeholder="Tailwind classes"
-//           value={classNames}
-//           onChange={(e) => setClassnames(e.target.value)}
-//         />
-//       </div>
-//       <CardFooter>
-//         <Button className="ml-auto" onClick={handleApply}>
-//           Apply
-//         </Button>
-//       </CardFooter>
-//     </div>
-//   );
-// };
+  // const {
+  //   control,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm<FormData>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     text: initialData.text,
+  //     fontSize: initialData.styles.element.fontSize as number,
+  //     fontWeight: initialData.styles.element
+  //       .fontWeight as FormData["fontWeight"],
+  //     color: initialData.styles.element.color as string,
+  //     customCssContainer: JSON.stringify(initialData.styles.container, null, 2),
+  //     customCssElement: JSON.stringify(initialData.styles.element, null, 2),
+  //     customCssOverlay: JSON.stringify(
+  //       initialData.styles.overlay || {},
+  //       null,
+  //       2,
+  //     ),
+  //   },
+  // });
 
-const SequenceItemEditorText = () => {
+  const onSubmit = (data: FormData) => {
+    // Transform form data back to TextEditablePropsType
+    const updatedData: TextEditablePropsType = {
+      text: data.text,
+      styles: {
+        container: JSON.parse(data.customCssContainer),
+        element: {
+          ...JSON.parse(data.customCssElement),
+          fontSize: data.fontSize,
+          fontWeight: data.fontWeight,
+          color: data.color,
+        },
+        overlay: JSON.parse(data.customCssOverlay),
+      },
+    };
+    onSave(updatedData);
+  };
+
+  // Handle scroll event to determine if buttons should be sticky
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop } = event.currentTarget;
+    setIsSticky(scrollTop > 0);
+  };
+
   return (
-    <div>
-      <h1>SequenceItemEditorText</h1>
+    <div className="relative border-l bg-gray-100 p-2 shadow-xl">
+      <div
+        className="h-[calc(100vh-70px)] overflow-y-auto"
+        style={{
+          overscrollBehavior: "contain",
+        }}
+      >
+        <div className="h-screen bg-yellow-800"></div>
+        <form className="space-y-6 pb-20">
+          <Editor initialValue={htmlStringWithBg} />
+
+          {/* Custom CSS Inputs */}
+          {/* {["container", "element", "overlay"].map((styleType) => (
+          <div key={styleType} className="space-y-2">
+            <Label
+              htmlFor={`customCss${styleType.charAt(0).toUpperCase() + styleType.slice(1)}`}
+            >
+              Custom CSS for {styleType}
+            </Label>
+            <Controller
+              name={
+                `customCss${styleType.charAt(0).toUpperCase() + styleType.slice(1)}` as keyof FormData
+              }
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  id={`customCss${styleType.charAt(0).toUpperCase() + styleType.slice(1)}`}
+                  placeholder={`Enter custom CSS for ${styleType}`}
+                  className="font-mono text-sm"
+                  rows={5}
+                />
+              )}
+            />
+          </div>
+        ))} */}
+
+          {/* Sticky Save and Cancel Buttons */}
+        </form>
+      </div>
+      <div
+        className={`sticky bottom-0 left-0 right-0 flex justify-end space-x-2 border-t p-4 transition-all`}
+      >
+        <Button type="button" variant="outline" size="sm" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" size="sm">
+          Save Changes
+        </Button>
+      </div>
     </div>
   );
 };
+
 export default SequenceItemEditorText;

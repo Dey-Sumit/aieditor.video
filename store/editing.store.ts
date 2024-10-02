@@ -49,8 +49,8 @@ export const useEditingStore = create<
         });
       },
     })),
-    { name: "EditingStore", enabled: false }
-  )
+    { name: "EditingStore", enabled: false },
+  ),
 );
 
 /* Usage example:
