@@ -5,6 +5,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [{ hostname: "images.pexels.com" }],
+  },
 };
 
 module.exports = nextConfig;

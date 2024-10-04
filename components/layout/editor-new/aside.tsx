@@ -14,6 +14,8 @@ import { TooltipButton } from "~/components/ui/custom/tool-tip-button";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { cn } from "~/lib/utils";
 
+const PROJECT_HEADER_HEIGHT = "56px";
+
 const AsideNew = () => {
   const router = useRouter();
   const params = useParams<{ "project-id": string }>();
@@ -33,7 +35,7 @@ const AsideNew = () => {
       <div
         className="border-b p-2"
         style={{
-          height: "52px",
+          height: PROJECT_HEADER_HEIGHT,
         }}
       >
         {/* <TooltipButton

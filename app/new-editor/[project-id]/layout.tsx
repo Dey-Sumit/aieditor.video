@@ -14,7 +14,7 @@ import useVideoStore from "~/store/video.store";
 const SIDE_NAVBAR_WIDTH = "4rem";
 const NAVBAR_ITEM_CONTENT_WIDTH = "20rem";
 const TIMELINE_HEIGHT = "17rem";
-const PROJECT_HEADER_HEIGHT = "56px";
+ const PROJECT_HEADER_HEIGHT = "56px";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -128,3 +128,4 @@ const ProjectHeader = () => {
     </div>
   );
 };
+// "Error loading image with src: https://remotionlambda-useast1-q7hsmsvlrt.s3.us-east-1.amazonaws.com/sample-images/cave.jpg"
