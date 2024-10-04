@@ -10,13 +10,13 @@ const AddItemPlaceholder: React.FC<AddItemPlaceholderProps> = ({
   width,
 }) => (
   <div
-    className="absolute top-0 left-0 flex items-center justify-center h-full border border-blue-900 border-dashed rounded-md pointer-events-none bg-blue-500/40"
+    className="pointer-events-none absolute left-0 top-0 flex h-full items-center justify-center rounded-[2px] border-[1.5px] border-dashed border-blue-500 bg-blue-700/40"
     style={{
       left: `${startX}px`,
       width: `${width}px`,
     }}
   >
-    <Plus className="text-blue-700 stroke-2" size={18} />
+    <Plus className="stroke-2 text-blue-500" size={18} />
   </div>
 );
 

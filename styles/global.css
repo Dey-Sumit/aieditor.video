@@ -121,7 +121,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border text-sm
   }
   body {
     @apply bg-background text-foreground;
@@ -138,4 +138,22 @@
 
 .animate-gradient-fade-in {
   animation: gradientFadeIn 1s ease-out forwards;
+}
+@layer components{
+  .gradient-bg {
+    @apply bg-gradient-to-br from-[#0e0e0e] to-[#030303];
+  }
+}
+/* // TODO : download the image and also add a fallback bg color */
+@layer components{
+  .pattern-bg-asfalt{
+   background-color: #000000;
+background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+  }
+  .pattern-bg-black-orchid{
+   background-color: #000000;
+background-image: url("https://www.transparenttextures.com/patterns/black-orchid.png");
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+  }
 }

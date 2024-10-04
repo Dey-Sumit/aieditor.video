@@ -1,18 +1,22 @@
+import { DownloadIcon, PencilIcon } from "lucide-react";
 import React from "react";
 import AsideNew from "~/components/layout/editor-new/aside";
 import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline";
+import SequenceItemEditorContainerNew from "~/components/layout/editor/sequence-item-editor-new";
+import { Button } from "~/components/ui/button";
 
+// TODO : move these to constants file , and wrap it in a object or a hook maybe
 const SIDE_NAVBAR_WIDTH = "4rem";
 const NAVBAR_ITEM_CONTENT_WIDTH = "20rem";
-const TIMELINE_HEIGHT = "12rem";
-const PROJECT_HEADER_HEIGHT = "52px";
+const TIMELINE_HEIGHT = "17rem";
+const PROJECT_HEADER_HEIGHT = "56px";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen">
       {/* -------------------- side navbar -------------------- */}
       <aside
-        className="overflow-y-scroll overscroll-contain border-r pb-10"
+        className="overflow-y-scroll overscroll-contain border-r bg-black pb-10"
         style={{ width: SIDE_NAVBAR_WIDTH }}
       >
         <AsideNew />
@@ -20,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* -------------------- navbar item content -------------------- */}
       <div
-        className="overflow-y-scroll overscroll-contain border-r"
+        className="gradient-bg overflow-y-scroll overscroll-contain border-r"
         style={{
           width: NAVBAR_ITEM_CONTENT_WIDTH,
           paddingBottom: TIMELINE_HEIGHT,
@@ -46,29 +50,19 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex flex-1">
           {/* -------------------- video player and timeline -------------------- */}
 
-          <section className="flex-1 bg-gray-700">
+          <section className="flex-1 bg-gray-900">
             <VideoAndTimeline />
           </section>
           <div className="border-l">
-            {/* -------------------- project header starts -------------------- */}
-            <div
-              className="border-b border-gray-900 bg-gray-950 shadow-xl"
-              style={{ height: PROJECT_HEADER_HEIGHT }}
-            ></div>
+            {/* -------------------- project header container starts -------------------- */}
+
+            <ProjectHeader />
+
             {/* -------------------- project header ends -------------------- */}
 
-            {/* -------------------- edit sequence starts -------------------- */}
-            <section
-              className="w-96 overflow-y-scroll overscroll-contain"
-              style={{
-                height: `calc(100vh - ${TIMELINE_HEIGHT} - ${PROJECT_HEADER_HEIGHT})`,
-              }}
-            >
-              <div className="sticky inset-x-0 top-0 h-12 border-b"></div>
-              <div className="h-screen"></div>
-              <div className="h-screen border"></div>
-            </section>
-            {/* -------------------- edit sequence ends -------------------- */}
+            {/* --------------------  sequence item editor container starts -------------------- */}
+            <SequenceItemEditorContainerNew />
+            {/* -------------------- sequence item editor container ends -------------------- */}
           </div>
         </div>
       </div>
@@ -77,3 +71,23 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default Layout;
+const ProjectHeader = () => {
+  return (
+    <div
+      className="pattern-bg-asfalt flex items-center justify-between p-2 text-sm"
+      style={{ height: PROJECT_HEADER_HEIGHT }}
+    >
+      <div className="flex items-center">
+        <span className=" ">My Project Name</span>
+        <Button size="icon" variant="ghost" className="">
+          <PencilIcon className="size-3" />
+        </Button>
+      </div>
+
+      <Button size="sm" variant="default" className="gap-2">
+        Export
+        <DownloadIcon className="size-4" />
+      </Button>
+    </div>
+  );
+};

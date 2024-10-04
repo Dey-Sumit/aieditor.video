@@ -132,7 +132,7 @@ export const Toolbar: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <div className="flex items-center justify-end space-x-1 bg-background p-1 shadow-sm">
+      <div className="flex items-center justify-end space-x-1 p-1 shadow-sm">
         <div>
           <p>{currentFrame}</p>
         </div>

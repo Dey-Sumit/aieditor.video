@@ -4,27 +4,31 @@ import { useTimeline } from "~/context/useTimeline";
 import { cn } from "~/lib/utils";
 
 import SequenceContextMenuWrapper from "../sequence-context-menu";
-import { ArrowRightLeft } from "lucide-react";
+import {
+  ALargeSmall,
+  ArrowRightLeft,
+  AudioLines,
+  Image,
+  Mic,
+  Text,
+  Video,
+} from "lucide-react";
 import { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-export const getItemStyle = (type: string) => {
-  switch (type) {
-    case "audio":
-      return "bg-blue-500 border-blue-600 ";
-    case "caption":
-      return "bg-green-600 border-green-600";
-    case "text":
-      return "bg-yellow-600/60 border-yellow-600";
-    case "video":
-      return "bg-pink-600/60 border-pink-600 ";
-    case "image":
-      return "bg-purple-600 border-purple-600/70 ";
-    case "preset":
-      return "bg-gray-200 border-yellow-900 border mouse-grab ";
-    default:
-      return "bg-gray-600 border-gray-600";
-  }
+/**
+ * Map of item types to their corresponding CSS classes for styling.
+ */
+export const ITEM_TYPE_TO_STYLES_MAP: Record<string, string> = {
+  text: "bg-green-600/50 border-green-700 before:bg-green-700 after:bg-green-700  ",
+  image:
+    "bg-purple-600/50 border-purple-600 before:bg-purple-600 after:bg-purple-600",
+  video: "bg-pink-600/50 border-pink-600 before:bg-pink-600 after:bg-pink-600",
+  audio:
+    "bg-orange-600/50 border-orange-600 before:bg-orange-600 after:bg-orange-600",
+  caption:
+    "bg-green-600/50 border-green-600 before:bg-green-600 after:bg-green-600",
+  preset: "bg-gray-200 border-yellow-900 border mouse-grab",
 };
 
 const SequenceItem = ({
@@ -36,17 +40,22 @@ const SequenceItem = ({
   layerId: LayerId;
   nextItemStartFrame: number | undefined;
 }) => {
-  const { throttledItemDrag, pixelsPerFrame, setDraggingLayerId } = useTimeline();
+  const { throttledItemDrag, pixelsPerFrame, setDraggingLayerId } =
+    useTimeline();
   const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
   const activeSeqItem = useEditingStore((state) => state.activeSeqItem);
-  const updateSequenceItemDuration = useVideoStore((state) => state.updateSequenceItemDuration);
+  const updateSequenceItemDuration = useVideoStore(
+    (state) => state.updateSequenceItemDuration,
+  );
 
   /* The adjustment of the x position is to account for the transition duration.
    -  without transition : seq1 0 to 120: duration 120 frames, seq2 120 to 210 : duration 90 frames
    - with transition of 30 frames : seq1 0 to (120+15 outgoing) 135: duration 135 frames, seq2 135(120+15 incoming) to 210 : duration 75 frames
   */
 
-  const x = (item.startFrame + (item.transition?.incoming?.duration || 0)) * pixelsPerFrame;
+  const x =
+    (item.startFrame + (item.transition?.incoming?.duration || 0)) *
+    pixelsPerFrame;
 
   const width =
     (item.sequenceDuration -
@@ -68,7 +77,7 @@ const SequenceItem = ({
     direction,
     ref,
     delta,
-    position
+    position,
   ) => {
     const frameDelta = Math.floor(delta.width / pixelsPerFrame);
 
@@ -87,7 +96,7 @@ const SequenceItem = ({
       item.id,
       // item.offset,
       frameDelta,
-      direction as "left" | "right"
+      direction as "left" | "right",
     );
   };
   return (
@@ -117,9 +126,15 @@ const SequenceItem = ({
       onDragStart={onDragStart}
       onResizeStop={onResizeStop}
       className={cn(
-        "box-border cursor-pointer  border-2  hover:opacity-90 focus:bg-yellow-800 rounded-[3px]",
-        getItemStyle(item.sequenceType === "standalone" ? item.contentType : item.sequenceType)
-        // activeSeqItem?.itemId === item.id && "border-blue-400"
+        "relative box-border rounded-[2px] border-2 shadow-inner hover:opacity-90 focus:bg-yellow-800",
+        ITEM_TYPE_TO_STYLES_MAP[
+          item.sequenceType === "standalone"
+            ? item.contentType
+            : item.sequenceType
+        ],
+        "before:absolute before:inset-y-[2px] before:left-[2px] before:w-1 before:cursor-ew-resize before:rounded-lg before:content-['']",
+        "after:absolute after:inset-y-[2px] after:right-[2px] after:w-1 after:cursor-ew-resize after:rounded-lg after:content-['']",
+        activeSeqItem?.itemId === item.id && "border-blue-500",
       )}
       dragGrid={[pixelsPerFrame, 0]}
     >
@@ -130,7 +145,7 @@ const SequenceItem = ({
         transition={item.transition}
       >
         <div
-          className="relative flex h-full w-full items-center  justify-center truncate px-0 text-sm  font-medium text-white"
+          className="relative flex h-full w-full cursor-grab items-center justify-center truncate px-0 text-[10px] font-medium text-white"
           onClick={(e) => {
             e.stopPropagation();
             setActiveSeqItem(layerId, item.id, "text"); // TODO : Fix this
@@ -143,7 +158,13 @@ const SequenceItem = ({
               pixelsPerFrame={pixelsPerFrame}
             />
           ) : (
-            item.id.slice(0, 6)
+            <div className="flex items-center gap-1">
+              {/* {item.id.slice(0, 7)} */}
+              {item.contentType === "video" && <Video size={14} />}
+              {item.contentType === "image" && <Image size={14} />}
+              {item.contentType === "text" && <ALargeSmall size={14} />}
+              {item.contentType === "audio" && <AudioLines size={14} />}
+            </div>
           )}
         </div>
 
@@ -177,7 +198,7 @@ const PresetItem = ({
 }) => {
   if (1 === 1)
     return (
-      <div className=" w-full h-full flex">
+      <div className="flex h-full w-full">
         {liteItems.map((item) => {
           const width =
             (item.sequenceDuration -
@@ -189,10 +210,13 @@ const PresetItem = ({
             <div
               key={item.id}
               className={cn(
-                " h-full cursor-pointer select-none rounded-sm border ",
-                getItemStyle(
-                  item.sequenceType === "standalone" ? item.contentType : item.sequenceType
-                )
+                "h-full cursor-pointer select-none rounded-sm border",
+
+                ITEM_TYPE_TO_STYLES_MAP[
+                  item.sequenceType === "standalone"
+                    ? item.contentType
+                    : item.sequenceType
+                ],
               )}
               style={{
                 // transform: `translateX(${x}px)`,
@@ -208,7 +232,9 @@ const PresetItem = ({
   return (
     <>
       {liteItems.map((item) => {
-        const x = (item.startFrame + (item.transition?.incoming?.duration || 0)) * pixelsPerFrame;
+        const x =
+          (item.startFrame + (item.transition?.incoming?.duration || 0)) *
+          pixelsPerFrame;
 
         const width =
           (item.sequenceDuration -
@@ -231,10 +257,12 @@ const PresetItem = ({
             enableResizing={false}
             dragAxis="x"
             className={cn(
-              "box-border cursor-pointer !bg-red-950 select-none rounded-sm border-2 hover:opacity-90  focus:bg-yellow-800",
+              "box-border cursor-pointer select-none rounded-sm border-2 !bg-red-950 hover:opacity-90 focus:bg-yellow-800",
               getItemStyle(
-                item.sequenceType === "standalone" ? item.contentType : item.sequenceType
-              )
+                item.sequenceType === "standalone"
+                  ? item.contentType
+                  : item.sequenceType,
+              ),
             )}
             dragGrid={[1, 0]}
           >

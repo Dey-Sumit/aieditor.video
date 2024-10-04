@@ -10,7 +10,7 @@ import { NestedCompositionPropsSchema } from "~/types/timeline.types";
 import NestedSequenceComposition from "~/video/compositions/composition";
 
 const SIDE_NAVBAR_WIDTH = "4rem";
-const TIMELINE_HEIGHT = "12rem";
+const TIMELINE_HEIGHT = "17rem";
 
 const VideoAndTimeline = () => {
   const playerRef = useRef<PlayerRef>(null);
@@ -24,7 +24,7 @@ const VideoAndTimeline = () => {
       {/* -------------------- timeline -------------------- */}
 
       <div
-        className="fixed bottom-0 right-0 border-t bg-background"
+        className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
         style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_HEIGHT }}
       >
         {props && (
