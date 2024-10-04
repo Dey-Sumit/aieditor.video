@@ -259,9 +259,8 @@ export const defaultContentProps: Record<
           alignItems: "center",
         },
         element: {
-          color: "white",
-          fontSize: "80px",
-          fontFamily: "serif",
+          // color: "white",
+          fontSize: "120px",
         },
       },
       text: "Hello",

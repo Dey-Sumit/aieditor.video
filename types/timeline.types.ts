@@ -138,40 +138,52 @@ type StoreActions = {
   updateProject: (updates: Partial<NestedCompositionProjectType>) => void;
   addSequenceItemToLayer: (
     layerId: LayerId,
-    item: Extract<LiteSequenceItemType, { sequenceType: "standalone" }>
+    item: Extract<LiteSequenceItemType, { sequenceType: "standalone" }>,
   ) => void;
   removeSequenceItemFromLayer: (layerId: LayerId, itemId: string) => void;
   updateSequenceItemPositionInLayer: (
     layerId: LayerId,
     itemId: string,
-    updates: Pick<LiteSequenceItemType, "startFrame">
+    updates: Pick<LiteSequenceItemType, "startFrame">,
   ) => void;
 
   addTransitionToLayer: (
     layerId: LayerId,
     itemId: string,
-    position: "incoming" | "outgoing"
+    position: "incoming" | "outgoing",
   ) => void;
   removeTransitionFromLayer: (layerId: LayerId, transitionId: string) => void;
   updateTransitionInLayer: (
     layerId: LayerId,
     transitionId: string,
-    updates: Partial<TransitionItemType>
+    updates: Partial<TransitionItemType>,
   ) => void;
 
   updateTextEditableProps: (
     layerId: LayerId,
     itemId: string,
-    updates: any // TODO : Fix this
+    updates: Partial<TextEditablePropsType>,
   ) => void;
-  updateImageEditableProps: (layerId: LayerId, itemId: string, updates: any) => void;
-  updateAudioEditableProps: (layerId: LayerId, itemId: string, updates: any) => void;
-  updateVideoEditableProps: (layerId: LayerId, itemId: string, updates: any) => void;
+  updateImageEditableProps: (
+    layerId: LayerId,
+    itemId: string,
+    updates: any,
+  ) => void;
+  updateAudioEditableProps: (
+    layerId: LayerId,
+    itemId: string,
+    updates: any,
+  ) => void;
+  updateVideoEditableProps: (
+    layerId: LayerId,
+    itemId: string,
+    updates: any,
+  ) => void;
   updateSequenceItemDuration: (
     layerId: LayerId,
     itemId: string,
     frameDelta: number,
-    direction: "left" | "right"
+    direction: "left" | "right",
   ) => void;
   addPresetToLayer: (layerId: LayerId, newPreset: newPresetDetails) => void;
 };

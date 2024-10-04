@@ -18,8 +18,8 @@ const VideoTimeline = () => {
   return (
     <div className="flex h-full flex-col justify-end">
       <Toolbar />
-      <Toolbar />
-      <Toolbar />
+      {/* <Toolbar />
+      <Toolbar /> */}
       <div className="relative flex">
         {/* ----- left section of the timeline: includes name,helper buttons, etc ----*/}
         <div className="w-32 flex-shrink-0 divide-y divide-gray-800 border-r">

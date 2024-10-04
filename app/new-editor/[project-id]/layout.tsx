@@ -1,9 +1,14 @@
+"use client";
 import { DownloadIcon, PencilIcon } from "lucide-react";
 import React from "react";
+import { DownloadButton } from "~/components/DownloadButton";
 import AsideNew from "~/components/layout/editor-new/aside";
 import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline";
 import SequenceItemEditorContainerNew from "~/components/layout/editor/sequence-item-editor-new";
+import { ProgressBar } from "~/components/ProgressBar";
 import { Button } from "~/components/ui/button";
+import { useRendering } from "~/helpers/use-rendering";
+import useVideoStore from "~/store/video.store";
 
 // TODO : move these to constants file , and wrap it in a object or a hook maybe
 const SIDE_NAVBAR_WIDTH = "4rem";
@@ -72,22 +77,52 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
 export default Layout;
 const ProjectHeader = () => {
+  const { props } = useVideoStore();
+
+  const { renderMedia, state, undo } = useRendering(
+    "new-dynamic-composition",
+    props,
+  );
+
   return (
     <div
-      className="pattern-bg-asfalt flex items-center justify-between p-2 text-sm"
+      className="pattern-bg-asfalt relative flex flex-col p-2 text-sm"
       style={{ height: PROJECT_HEADER_HEIGHT }}
     >
-      <div className="flex items-center">
-        <span className=" ">My Project Name</span>
-        <Button size="icon" variant="ghost" className="">
-          <PencilIcon className="size-3" />
-        </Button>
-      </div>
+      <div className="flex items-center justify-between">
+        {/* project name and edit button */}
+        <div className="flex items-center">
+          <span className=" ">My Project Name</span>
+          <Button size="icon" variant="ghost" className="">
+            <PencilIcon className="size-3" />
+          </Button>
+        </div>
+        {/* export button */}
+        {state.status !== "done" && (
+          <Button
+            size="sm"
+            variant="default"
+            className="gap-2"
+            disabled={state.status === "invoking"}
+            onClick={renderMedia}
+          >
+            {state.status === "rendering" ? "Cooking..." : "Export"}
 
-      <Button size="sm" variant="default" className="gap-2">
-        Export
-        <DownloadIcon className="size-4" />
-      </Button>
+            <DownloadIcon className="size-4" />
+          </Button>
+        )}
+      </div>
+      <div className="absolute inset-0 bg-black/90">
+        {state.status === "rendering" || state.status === "done" ? (
+          <div className="flex w-full flex-col items-end gap-1.5 p-2">
+            <ProgressBar
+              progress={state.status === "rendering" ? state.progress : 1}
+            />
+
+            <DownloadButton undo={undo} state={state}></DownloadButton>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 };

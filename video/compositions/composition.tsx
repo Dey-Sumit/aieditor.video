@@ -24,16 +24,26 @@ const SafeHTMLRenderer = ({ html }: { html: string }) => {
 };
 
 // Individual item renderer
-const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({ item }) => {
+const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
+  item,
+}) => {
   switch (item.type) {
     case "text":
+      // {
+      //   console.log(
+      //     "switch item.editableProps.text",
+      //     item.editableProps.text[0],
+      //   );
+      // }
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
           <div style={item.editableProps?.styles?.element}>
+            {/* TODO : FIX THIS */}
             {item.editableProps.text.startsWith("<") ? (
               <SafeHTMLRenderer html={item.editableProps.text} />
             ) : (
-              item.editableProps.text
+              <SafeHTMLRenderer html={item.editableProps.text} />
+              // item.editableProps.text
             )}
           </div>
         </AbsoluteFill>
@@ -109,7 +119,9 @@ const SequenceRenderer: React.FC<{
   }
 };
 
-const NestedSequenceComposition = (props: NestedCompositionProjectType["props"]) => {
+const NestedSequenceComposition = (
+  props: NestedCompositionProjectType["props"],
+) => {
   return (
     <AbsoluteFill>
       {Object.entries(props.layers).map(([layerId, layer]) => (

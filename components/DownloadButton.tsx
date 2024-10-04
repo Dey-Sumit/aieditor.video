@@ -29,12 +29,12 @@ export const DownloadButton: React.FC<{
 
   return (
     <div className="flex gap-2">
-      <Button onClick={undo} variant={"outline"}>
+      {/* <Button onClick={undo} variant={"outline"}>
         <UndoIcon></UndoIcon>
-      </Button>
+      </Button> */}
       <Spacing></Spacing>
       <a href={state.url}>
-        <Button className="gap-1.5">
+        <Button className="gap-1.5" size="sm">
           Download video
           <Megabytes sizeInBytes={state.size}></Megabytes>
         </Button>
