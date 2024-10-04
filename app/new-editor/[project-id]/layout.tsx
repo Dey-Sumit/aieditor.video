@@ -112,17 +112,19 @@ const ProjectHeader = () => {
           </Button>
         )}
       </div>
-      <div className="absolute inset-0 bg-black/90">
-        {state.status === "rendering" || state.status === "done" ? (
-          <div className="flex w-full flex-col items-end gap-1.5 p-2">
-            <ProgressBar
-              progress={state.status === "rendering" ? state.progress : 1}
-            />
+      {(state.status === "rendering" || state.status === "done") && (
+        <div className="absolute inset-0 bg-black/90">
+          {state.status === "rendering" || state.status === "done" ? (
+            <div className="flex w-full flex-col items-end gap-1.5 p-2">
+              <ProgressBar
+                progress={state.status === "rendering" ? state.progress : 1}
+              />
 
-            <DownloadButton undo={undo} state={state}></DownloadButton>
-          </div>
-        ) : null}
-      </div>
+              <DownloadButton undo={undo} state={state}></DownloadButton>
+            </div>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 };
