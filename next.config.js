@@ -8,6 +8,11 @@ const nextConfig = {
   images: {
     remotePatterns: [{ hostname: "images.pexels.com" }],
   },
+  redirects: {
+    source: "/new-editor/:path",
+    destination: "/new-editor/:path/media",
+    permanent: true,
+  },
 };
 
 module.exports = nextConfig;

@@ -260,7 +260,7 @@ export const defaultContentProps: Record<
         },
         element: {
           // color: "white",
-          fontSize: "120px",
+          // fontSize: "120px",
         },
       },
       text: "Hello",

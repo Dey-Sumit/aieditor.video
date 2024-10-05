@@ -13,6 +13,7 @@ import {
   UploadIcon,
 } from "lucide-react";
 
+// TODO: move to .env
 const PEXELS_API_KEY =
   "HnNGXbccHad7wcvshWD9uT2Ho3ZInpJq8GWFeEDh9L29oFfHuDbT7x7S";
 const PROJECT_HEADER_HEIGHT = "56px";
@@ -225,9 +226,3 @@ const MediaLibrary: React.FC = () => {
 };
 
 export default MediaLibrary;
-
-// const Hello = () => {
-//   return <div>Hello</div>;
-// };
-
-// export default Hello;
