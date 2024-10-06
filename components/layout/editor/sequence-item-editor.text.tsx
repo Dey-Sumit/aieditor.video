@@ -3,8 +3,9 @@
 import { EditorContent, EditorInstance, JSONContent } from "novel";
 import React, { ComponentProps, useEffect, useRef, useState } from "react";
 import * as z from "zod";
-import Editor from "~/components/novel/editor/advanced-editor";
-import { htmlStringWithBg } from "~/components/novel/page";
+import Editor from "~/components/editor/advanced-editor";
+// import Editor from "~/components/novel/editor/advanced-editor";
+// import { htmlStringWithBg } from "~/components/novel/page";
 import { Button } from "~/components/ui/button";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
@@ -20,7 +21,7 @@ const SequenceItemEditorText = () => {
   const updateTextEditableProps = useVideoStore(
     (store) => store.updateTextEditableProps,
   );
-  const [editorContent, setEditorContent] = useState(htmlStringWithBg);
+  const [editorContent, setEditorContent] = useState("");
   const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
 
   const editorRef = useRef<EditorInstance>(null);
@@ -35,11 +36,14 @@ const SequenceItemEditorText = () => {
     );
   };
 
-  const handleEditorUpdate: ComponentProps<
-    typeof EditorContent
-  >["onUpdate"] = ({ editor, transaction }) => {
-    setEditorContent(editor.getHTML());
-  };
+  // const handleEditorUpdate = () => {
+  //   setEditorContent(editor.getJSON());
+  // };
+  // const handleEditorUpdate: ComponentProps<
+  //   typeof EditorContent
+  // >["onUpdate"] = ({ editor, transaction }) => {
+  //   setEditorContent(editor.getJSON());
+  // };
 
   /*   useEffect(() => {
     if (activeSeqItemLite) {
@@ -63,11 +67,13 @@ const SequenceItemEditorText = () => {
         className="space-y-6 px-2 pb-20"
         onSubmit={(e) => e.preventDefault()}
       >
-        <Editor
+        {/* <Editor
           initialValue={htmlStringWithBg as unknown as JSONContent}
           ref={editorRef}
           onUpdate={handleEditorUpdate}
-        />
+        /> */}
+
+        <Editor initialValue={editorContent} onChange={setEditorContent} />
 
         {/* Custom CSS Inputs */}
         {/* {["container", "element", "overlay"].map((styleType) => (

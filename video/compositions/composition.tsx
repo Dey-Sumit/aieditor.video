@@ -39,12 +39,16 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
         <AbsoluteFill style={item.editableProps?.styles?.container}>
           <div style={item.editableProps?.styles?.element}>
             {/* TODO : FIX THIS */}
-            {item.editableProps.text.startsWith("<") ? (
+            {/* {item.editableProps.text.startsWith("<") ? (
               <SafeHTMLRenderer html={item.editableProps.text} />
             ) : (
               <SafeHTMLRenderer html={item.editableProps.text} />
               // item.editableProps.text
-            )}
+            )} */}
+            <div
+              dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
+              className="prose dark:prose-invert prose-lg [&>*]:my-1 space-y-0"
+            />
           </div>
         </AbsoluteFill>
       );
