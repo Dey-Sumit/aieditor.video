@@ -59,7 +59,7 @@ const HIGHLIGHT_COLORS: BubbleColorMenuItem[] = [
   },
   {
     name: "Purple",
-    color: "var(--novel-highlight-purple)",
+    color: "#9333EA",
   },
   {
     name: "Red",
@@ -170,7 +170,8 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
               key={index}
               onSelect={() => {
                 editor.commands.unsetHighlight();
-                name !== "Default" && editor.chain().focus().setHighlight({ color }).run();
+                name !== "Default" &&
+                  editor.chain().focus().setHighlight({ color }).run();
                 onOpenChange(false);
               }}
               className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-accent"

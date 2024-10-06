@@ -10,6 +10,7 @@ import {
   AIHighlight,
   Color,
   TextStyle,
+  HighlightExtension,
 } from "novel/extensions";
 import { UploadImagesPlugin } from "novel/plugins";
 
@@ -20,7 +21,7 @@ const placeholder = Placeholder;
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class: cx(
-      "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer"
+      "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
     ),
   },
 });
@@ -87,7 +88,9 @@ const starterKit = StarterKit.configure({
   },
   codeBlock: {
     HTMLAttributes: {
-      class: cx("rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium"),
+      class: cx(
+        "rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium",
+      ),
     },
   },
   code: {
@@ -116,4 +119,5 @@ export const defaultExtensions = [
   aiHighlight,
   Color,
   TextStyle,
+  HighlightExtension,
 ];

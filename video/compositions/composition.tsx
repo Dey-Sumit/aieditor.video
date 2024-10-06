@@ -47,7 +47,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
             )} */}
             <div
               dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
-              className="prose dark:prose-invert prose-lg [&>*]:my-1 space-y-0"
+              className="prose dark:prose-invert prose-lg [&>*]:my-1 space-y-0 whitespace-pre-wrap"
             />
           </div>
         </AbsoluteFill>
