@@ -53,7 +53,7 @@ const Editor = ({ initialValue, onChange }: EditorProp) => {
         onUpdate={({ editor }) => {
           onChange(editor.getHTML());
         }}
-        slotAfter={<ImageResizer />}
+        // slotAfter={<ImageResizer />}
       >
         <EditorCommand className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
           <EditorCommandEmpty className="px-2 text-muted-foreground">
@@ -91,8 +91,8 @@ const Editor = ({ initialValue, onChange }: EditorProp) => {
           <NodeSelector open={openNode} onOpenChange={setOpenNode} />
           <Separator orientation="vertical" />
 
-          <LinkSelector open={openLink} onOpenChange={setOpenLink} />
-          <Separator orientation="vertical" />
+          {/* <LinkSelector open={openLink} onOpenChange={setOpenLink} />
+          <Separator orientation="vertical" /> */}
           <TextButtons />
           <Separator orientation="vertical" />
           <ColorSelector open={openColor} onOpenChange={setOpenColor} />

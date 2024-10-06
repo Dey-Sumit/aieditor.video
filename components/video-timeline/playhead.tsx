@@ -11,7 +11,7 @@ const PlayHead = () => {
         x: 10,
         y: 0,
         width: PLAY_HEAD_WIDTH,
-        height: `${LAYER_HEIGHT_IN_PX * 5 + 16}px`, // 5 layers + TOP_OFFSET (-top-4) for the time layer
+        height: `${LAYER_HEIGHT_IN_PX * 7 + 16}px`, // 5 layers + TOP_OFFSET (-top-4) for the time layer
       }}
       dragAxis="x"
       bounds="parent"

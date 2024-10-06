@@ -92,6 +92,12 @@ const config = {
     "text-indigo-500",
     "border-2",
     "bg-blue-500",
+    "prose",
+    "dark:prose-invert",
+    "prose-lg",
+    "[&>*]:my-1",
+    "space-y-0",
+    "whitespace-pre-wrap",
   ],
 } satisfies Config;
 

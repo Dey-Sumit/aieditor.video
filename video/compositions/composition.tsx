@@ -36,7 +36,10 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
       //   );
       // }
       return (
-        <AbsoluteFill style={item.editableProps?.styles?.container}>
+        <AbsoluteFill
+          style={item.editableProps?.styles?.container}
+          className="dark"
+        >
           <div style={item.editableProps?.styles?.element}>
             {/* TODO : FIX THIS */}
             {/* {item.editableProps.text.startsWith("<") ? (

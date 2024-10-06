@@ -11,6 +11,10 @@ export const LAYERS_IN_ORDER: {
   id: LayerId;
 }[] = [
   {
+    label: "Captions",
+    id: "layerCaptions",
+  },
+  {
     label: "Foreground Layer",
     id: "layerForeground",
   },
@@ -21,6 +25,14 @@ export const LAYERS_IN_ORDER: {
   {
     label: "Background Layer",
     id: "layerBackground",
+  },
+  {
+    label: "Background Music",
+    id: "layerBgAudio",
+  },
+  {
+    label: "Sound effects",
+    id: "layerSoundEffects",
   },
 ] as const;
 

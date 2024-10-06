@@ -13,8 +13,8 @@ import useVideoStore from "~/store/video.store";
 // TODO : move these to constants file , and wrap it in a object or a hook maybe
 const SIDE_NAVBAR_WIDTH = "4rem";
 const NAVBAR_ITEM_CONTENT_WIDTH = "20rem";
-const TIMELINE_HEIGHT = "17rem";
- const PROJECT_HEADER_HEIGHT = "56px";
+const TIMELINE_HEIGHT = "14rem";
+const PROJECT_HEADER_HEIGHT = "56px";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

@@ -1,7 +1,7 @@
 import { cn } from "~/lib/utils";
 import SequenceItemEditorText from "./sequence-item-editor.text";
 
-const TIMELINE_HEIGHT = "17rem";
+const TIMELINE_HEIGHT = "14rem";
 const PROJECT_HEADER_HEIGHT = "56px";
 const SequenceItemEditorContainerNew = () => {
   return (

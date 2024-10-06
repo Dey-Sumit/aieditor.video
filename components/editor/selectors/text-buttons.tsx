@@ -39,12 +39,12 @@ export const TextButtons = () => {
       command: (editor) => editor.chain().focus().toggleStrike().run(),
       icon: StrikethroughIcon,
     },
-    {
-      name: "code",
-      isActive: (editor) => editor.isActive("code"),
-      command: (editor) => editor.chain().focus().toggleCode().run(),
-      icon: CodeIcon,
-    },
+    // {
+    //   name: "code",
+    //   isActive: (editor) => editor.isActive("code"),
+    //   command: (editor) => editor.chain().focus().toggleCode().run(),
+    //   icon: CodeIcon,
+    // },
   ];
 
   return (
