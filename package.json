@@ -29,7 +29,7 @@
     "@remotion/shapes": "4.0.209",
     "@remotion/tailwind": "4.0.209",
     "@remotion/transitions": "4.0.209",
-    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/typography": "^0.5.10",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

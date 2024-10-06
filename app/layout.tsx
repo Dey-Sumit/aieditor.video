@@ -1,3 +1,4 @@
+import "../styles/prosemirror.css";
 import "../styles/global.css";
 import { Metadata } from "next";
 
@@ -13,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" class="dark">
       <body className="bg-background">{children}</body>
     </html>
   );

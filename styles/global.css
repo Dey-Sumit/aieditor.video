@@ -121,7 +121,7 @@
 
 @layer base {
   * {
-    @apply border-border text-sm
+    @apply border-border 
   }
   body {
     @apply bg-background text-foreground;
@@ -156,4 +156,9 @@ background-image: url("https://www.transparenttextures.com/patterns/asfalt-light
 background-image: url("https://www.transparenttextures.com/patterns/black-orchid.png");
 /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
   }
+}
+
+.prose :where(p strong):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
+    font-weight: 900;
+    color: inherit;
 }

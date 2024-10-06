@@ -3,14 +3,19 @@ import {
   ChevronDown,
   Heading1,
   Heading2,
+  Heading3,
+  TextQuote,
+  ListOrdered,
   TextIcon,
+  Code,
+  CheckSquare,
   type LucideIcon,
 } from "lucide-react";
 import { EditorBubbleItem, EditorInstance, useEditor } from "novel";
 
 import { Popover } from "@radix-ui/react-popover";
-import { PopoverContent, PopoverTrigger } from "~/components//ui/popover";
-import { Button } from "~/components//ui/button";
+import { PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { Button } from "~/components/ui/button";
 
 export type SelectorItem = {
   name: string;
@@ -44,12 +49,19 @@ const items: SelectorItem[] = [
       editor.chain().focus().clearNodes().toggleHeading({ level: 2 }).run(),
     isActive: (editor) => editor.isActive("heading", { level: 2 }),
   },
-  /*   {
+  {
     name: "Heading 3",
     icon: Heading3,
     command: (editor) =>
       editor.chain().focus().clearNodes().toggleHeading({ level: 3 }).run(),
     isActive: (editor) => editor.isActive("heading", { level: 3 }),
+  },
+  {
+    name: "To-do List",
+    icon: CheckSquare,
+    command: (editor) =>
+      editor.chain().focus().clearNodes().toggleTaskList().run(),
+    isActive: (editor) => editor.isActive("taskItem"),
   },
   {
     name: "Bullet List",
@@ -64,8 +76,8 @@ const items: SelectorItem[] = [
     command: (editor) =>
       editor.chain().focus().clearNodes().toggleOrderedList().run(),
     isActive: (editor) => editor.isActive("orderedList"),
-  }, */
-  /* {
+  },
+  {
     name: "Quote",
     icon: TextQuote,
     command: (editor) =>
@@ -78,7 +90,7 @@ const items: SelectorItem[] = [
     command: (editor) =>
       editor.chain().focus().clearNodes().toggleCodeBlock().run(),
     isActive: (editor) => editor.isActive("codeBlock"),
-  }, */
+  },
 ];
 interface NodeSelectorProps {
   open: boolean;

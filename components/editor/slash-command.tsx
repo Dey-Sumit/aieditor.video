@@ -1,10 +1,22 @@
-import { Heading1, Heading2, Text } from "lucide-react";
+import {
+  CheckSquare,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  ImageIcon,
+  List,
+  ListOrdered,
+  MessageSquarePlus,
+  Text,
+  TextQuote,
+} from "lucide-react";
 import { createSuggestionItems } from "novel/extensions";
 import { Command, renderItems } from "novel/extensions";
-// import { uploadFn } from "./image-upload";
+import { uploadFn } from "./image-upload";
 
 export const suggestionItems = createSuggestionItems([
-  /*  {
+  {
     title: "Send Feedback",
     description: "Let us know how we can improve.",
     icon: <MessageSquarePlus size={18} />,
@@ -12,7 +24,7 @@ export const suggestionItems = createSuggestionItems([
       editor.chain().focus().deleteRange(range).run();
       window.open("/feedback", "_blank");
     },
-  }, */
+  },
   {
     title: "Text",
     description: "Just start typing with plain text.",
@@ -27,7 +39,7 @@ export const suggestionItems = createSuggestionItems([
         .run();
     },
   },
-  /*  {
+  {
     title: "To-do List",
     description: "Track tasks with a to-do list.",
     searchTerms: ["todo", "task", "list", "check", "checkbox"],
@@ -35,7 +47,7 @@ export const suggestionItems = createSuggestionItems([
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run();
     },
-  }, */
+  },
   {
     title: "Heading 1",
     description: "Big section heading.",
@@ -64,7 +76,7 @@ export const suggestionItems = createSuggestionItems([
         .run();
     },
   },
-  /*   {
+  {
     title: "Heading 3",
     description: "Small section heading.",
     searchTerms: ["subtitle", "small"],
@@ -77,8 +89,8 @@ export const suggestionItems = createSuggestionItems([
         .setNode("heading", { level: 3 })
         .run();
     },
-  }, */
-  /* {
+  },
+  {
     title: "Bullet List",
     description: "Create a simple bullet list.",
     searchTerms: ["unordered", "point"],
@@ -138,7 +150,7 @@ export const suggestionItems = createSuggestionItems([
       };
       input.click();
     },
-  }, */
+  },
 ]);
 
 export const slashCommand = Command.configure({
