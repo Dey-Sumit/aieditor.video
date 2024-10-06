@@ -10,10 +10,10 @@ export const LAYERS_IN_ORDER: {
   label: string;
   id: LayerId;
 }[] = [
-  {
-    label: "Captions",
-    id: "layerCaptions",
-  },
+  // {
+  //   label: "Captions",
+  //   id: "layerCaptions",
+  // },
   {
     label: "Foreground Layer",
     id: "layerForeground",
@@ -26,14 +26,14 @@ export const LAYERS_IN_ORDER: {
     label: "Background Layer",
     id: "layerBackground",
   },
-  {
-    label: "Background Music",
-    id: "layerBgAudio",
-  },
-  {
-    label: "Sound effects",
-    id: "layerSoundEffects",
-  },
+  // {
+  //   label: "Background Music",
+  //   id: "layerBgAudio",
+  // },
+  // {
+  //   label: "Sound effects",
+  //   id: "layerSoundEffects",
+  // },
 ] as const;
 
 // Utility function to calculate offset between two items
@@ -257,7 +257,7 @@ export function calculatePlaceholderDuration(
 }
 
 // Default props for different content types
-export const defaultContentProps: Record<
+export const DEFAULT_CONTENT_PROPS: Record<
   string,
   Omit<FullSequenceItemType, "id" | "layerId">
 > = {
@@ -266,7 +266,7 @@ export const defaultContentProps: Record<
     editableProps: {
       styles: {
         container: {
-          backgroundColor: "#000000",
+          // backgroundColor: "#000000",
           justifyContent: "center",
           alignItems: "center",
         },
@@ -292,7 +292,8 @@ export const defaultContentProps: Record<
           height: "100%",
         },
       },
-      imageUrl: staticFile("/sample-images/cave.jpg"),
+      imageUrl:
+        "https://images.pexels.com/photos/28689135/pexels-photo-28689135.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
     },
   },
   video: {
@@ -309,7 +310,8 @@ export const defaultContentProps: Record<
           height: "100%",
         },
       },
-      videoUrl: "https://example.com/placeholder-video.mp4",
+      videoUrl:
+        "https://videos.pexels.com/video-files/5386411/5386411-uhd_1440_2732_25fps.mp4",
     },
   },
   // audio: {

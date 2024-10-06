@@ -21,6 +21,8 @@ interface PexelsMedia {
   id: number;
   src: {
     medium: string;
+    landscape: string;
+    portrait: string;
   };
   video_files?: Array<{
     link: string;
@@ -40,7 +42,11 @@ const MediaItem: React.FC<{
   const [isHovered, setIsHovered] = useState(false);
 
   const handleUse = () => {
-    console.log(`Using ${type} with id: ${item.id}`);
+    console.log(
+      `Using ${type} with id: ${item.id}. src : `,
+      item,
+      item.src?.portrait,
+    );
   };
 
   return (

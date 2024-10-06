@@ -10,7 +10,7 @@ import {
 import {
   binarySearch,
   calculateOffset,
-  defaultContentProps,
+  DEFAULT_CONTENT_PROPS,
   calculateItemIndices,
 } from "../utils/timeline.utils";
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
@@ -73,7 +73,8 @@ const useVideoStore = create<
           }
 
           // Get default props based on content type
-          const defaultProps = defaultContentProps[newSeqLiteItem.contentType];
+          const defaultProps =
+            DEFAULT_CONTENT_PROPS[newSeqLiteItem.contentType];
 
           //@ts-ignore
           state.props.sequenceItems[layerId][newSeqLiteItem.id] = {
