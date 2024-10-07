@@ -148,7 +148,11 @@ const SequenceItem = ({
           className="relative flex h-full w-full cursor-grab items-center justify-center truncate px-0 text-[10px] font-medium text-white"
           onClick={(e) => {
             e.stopPropagation();
-            setActiveSeqItem(layerId, item.id, "text"); // TODO : Fix this
+            setActiveSeqItem(
+              layerId,
+              item.id,
+              item.sequenceType === "standalone" ? item.contentType : "preset",
+            ); // TODO : Fix this
           }}
         >
           {item.sequenceType === "preset" ? (

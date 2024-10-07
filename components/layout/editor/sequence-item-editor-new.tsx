@@ -5,6 +5,8 @@ import { LAYOUT } from "~/lib/constants/layout.constants";
 const { TIMELINE_HEIGHT, PROJECT_HEADER_HEIGHT } = LAYOUT;
 const SequenceItemEditorContainerNew = () => {
   const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
+  console.log({ activeSeqItem });
+
   return (
     <section
       className={cn(

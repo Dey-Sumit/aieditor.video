@@ -1,10 +1,11 @@
 import { PencilIcon, DownloadIcon } from "lucide-react";
-import { Button } from "~/components/Button";
 import { DownloadButton } from "~/components/DownloadButton";
 import { ProgressBar } from "~/components/ProgressBar";
+import { Button } from "~/components/ui/button";
 import { useRendering } from "~/helpers/use-rendering";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
-con
+const { PROJECT_HEADER_HEIGHT } = LAYOUT;
 const ProjectHeader = () => {
   const { props } = useVideoStore();
 
