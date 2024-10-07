@@ -270,12 +270,9 @@ export const DEFAULT_CONTENT_PROPS: Record<
           justifyContent: "center",
           alignItems: "center",
         },
-        element: {
-          // color: "white",
-          fontSize: "120px",
-        },
+        element: {},
       },
-      text: "Hello",
+      text: "<h1>Your text</h1>",
     },
   },
   image: {
@@ -311,7 +308,7 @@ export const DEFAULT_CONTENT_PROPS: Record<
         },
       },
       videoUrl:
-        "https://videos.pexels.com/video-files/5386411/5386411-uhd_1440_2732_25fps.mp4",
+        "https://videos.pexels.com/video-files/1526909/1526909-hd_1280_720_24fps.mp4",
     },
   },
   // audio: {

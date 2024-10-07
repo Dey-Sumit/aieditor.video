@@ -9,13 +9,17 @@ interface EditingState {
   activeSeqItem: {
     layerId: LayerId;
     itemId: string;
-    itemType: string;
+    itemType: NewItemType;
   } | null;
   newItemType: NewItemType;
 }
 
 interface EditingActions {
-  setActiveSeqItem: (layerId: LayerId, itemId: string, itemType: string) => void;
+  setActiveSeqItem: (
+    layerId: LayerId,
+    itemId: string,
+    itemType: string,
+  ) => void;
   clearActiveSeqItem: () => void;
   setNewItemType: (type: NewItemType) => void;
 }

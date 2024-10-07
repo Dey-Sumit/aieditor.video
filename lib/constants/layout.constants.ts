@@ -1,0 +1,7 @@
+export const LAYOUT = {
+  SIDE_NAVBAR_WIDTH: "4rem",
+  NAVBAR_ITEM_CONTENT_WIDTH: "20rem",
+  TIMELINE_HEIGHT: "14rem",
+  PROJECT_HEADER_HEIGHT: "3.5rem",
+};
+

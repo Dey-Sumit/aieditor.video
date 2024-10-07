@@ -124,13 +124,10 @@ export type NestedCompositionProjectType = {
   };
 };
 
-export type LayerId =
-  | "layerBackground"
-  | "layerMiddle"
-  | "layerForeground"
-  | "layerBgAudio"
-  | "layerSoundEffects"
-  | "layerCaptions";
+export type LayerId = "layerBackground" | "layerMiddle" | "layerForeground";
+// | "layerBgAudio"
+// | "layerSoundEffects"
+// | "layerCaptions";
 export type PresetName = "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND";
 export type newPresetDetails = Omit<
   Extract<LiteSequenceItemType, { sequenceType: "preset" }>,

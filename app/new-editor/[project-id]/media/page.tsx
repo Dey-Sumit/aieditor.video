@@ -12,10 +12,11 @@ import {
   PlusIcon,
   UploadIcon,
 } from "lucide-react";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 
 const PEXELS_API_KEY =
   "HnNGXbccHad7wcvshWD9uT2Ho3ZInpJq8GWFeEDh9L29oFfHuDbT7x7S";
-const PROJECT_HEADER_HEIGHT = "56px";
+const { PROJECT_HEADER_HEIGHT } = LAYOUT;
 
 interface PexelsMedia {
   id: number;

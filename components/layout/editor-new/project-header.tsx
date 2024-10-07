@@ -1,0 +1,61 @@
+import { PencilIcon, DownloadIcon } from "lucide-react";
+import { Button } from "~/components/Button";
+import { DownloadButton } from "~/components/DownloadButton";
+import { ProgressBar } from "~/components/ProgressBar";
+import { useRendering } from "~/helpers/use-rendering";
+import useVideoStore from "~/store/video.store";
+con
+const ProjectHeader = () => {
+  const { props } = useVideoStore();
+
+  const { renderMedia, state, undo } = useRendering(
+    "new-dynamic-composition",
+    props,
+  );
+
+  return (
+    <div
+      className="pattern-bg-asfalt relative flex flex-col p-2   justify-center text-sm"
+      style={{ height: PROJECT_HEADER_HEIGHT }}
+    >
+      <div className="flex items-center justify-between">
+        {/* project name and edit button */}
+        <div className="flex items-center">
+          <span className=" ">My Project Name</span>
+          <Button size="icon" variant="ghost" className="">
+            <PencilIcon className="size-3" />
+          </Button>
+        </div>
+        {/* export button */}
+        {state.status !== "done" && (
+          <Button
+            size="sm"
+            variant="default"
+            className="gap-2"
+            disabled={state.status === "invoking"}
+            onClick={renderMedia}
+          >
+            {state.status === "rendering" ? "Cooking..." : "Export"}
+
+            <DownloadIcon className="size-4" />
+          </Button>
+        )}
+      </div>
+      {(state.status === "rendering" || state.status === "done") && (
+        <div className="absolute inset-0 bg-black/90">
+          {state.status === "rendering" || state.status === "done" ? (
+            <div className="flex w-full flex-col items-end gap-1.5 p-1">
+              <ProgressBar
+                progress={state.status === "rendering" ? state.progress : 1}
+              />
+
+              <DownloadButton undo={undo} state={state}></DownloadButton>
+            </div>
+          ) : null}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProjectHeader;

@@ -13,8 +13,9 @@ import {
 import { TooltipButton } from "~/components/ui/custom/tool-tip-button";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { cn } from "~/lib/utils";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 
-const PROJECT_HEADER_HEIGHT = "56px";
+const { PROJECT_HEADER_HEIGHT } = LAYOUT;
 
 const AsideNew = () => {
   const router = useRouter();

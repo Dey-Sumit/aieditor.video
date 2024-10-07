@@ -1,9 +1,10 @@
 import { cn } from "~/lib/utils";
 import SequenceItemEditorText from "./sequence-item-editor.text";
-
-const TIMELINE_HEIGHT = "14rem";
-const PROJECT_HEADER_HEIGHT = "56px";
+import { useEditingStore } from "~/store/editing.store";
+import { LAYOUT } from "~/lib/constants/layout.constants";
+const { TIMELINE_HEIGHT, PROJECT_HEADER_HEIGHT } = LAYOUT;
 const SequenceItemEditorContainerNew = () => {
+  const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
   return (
     <section
       className={cn(
@@ -17,7 +18,7 @@ const SequenceItemEditorContainerNew = () => {
       {/* <div className="sticky inset-x-0 top-0 h-12 border-b"></div>
       <div className="h-screen"></div>
       <div className="h-screen border"></div> */}
-      <SequenceItemEditorText />
+      {activeSeqItem?.itemType === "text" && <SequenceItemEditorText />}
     </section>
   );
 };

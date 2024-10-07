@@ -21,14 +21,16 @@ const SequenceItemEditorText = () => {
   const updateTextEditableProps = useVideoStore(
     (store) => store.updateTextEditableProps,
   );
-  const [editorContent, setEditorContent] = useState("");
   const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
+  const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
+  const sequenceItemsForLayer = sequenceItems[activeSeqItemLite.layerId];
+  const activeSequenceItem = sequenceItemsForLayer[activeSeqItemLite.itemId]
+    .editableProps as TextEditablePropsType;
 
-  const editorRef = useRef<EditorInstance>(null);
+  const [editorContent, setEditorContent] = useState(
+    activeSequenceItem?.text || "",
+  );
   const handleSave = () => {
-    // const content = editorRef?.current?.getJSON();
-    // console.log(content);
-    console.log(editorContent);
     updateTextEditableProps(
       activeSeqItemLite.layerId,
       activeSeqItemLite.itemId,
@@ -45,11 +47,11 @@ const SequenceItemEditorText = () => {
   //   setEditorContent(editor.getJSON());
   // };
 
-  /*   useEffect(() => {
+  useEffect(() => {
     if (activeSeqItemLite) {
-      setEditorContent(activeSeqItemLite.editableProps?.text || "");
+      setEditorContent(activeSequenceItem.editableProps?.text || "");
     }
-  }, [activeSeqItemLite]); */
+  }, [activeSeqItemLite]);
 
   return (
     <>
@@ -64,7 +66,7 @@ const SequenceItemEditorText = () => {
 
       {/* <div className="h-screen bg-yellow-800"></div> */}
       <form
-        className="space-y-6 px-2 pb-20"
+        className="space-y-6 px-2  pb-20"
         onSubmit={(e) => e.preventDefault()}
       >
         {/* <Editor

@@ -314,7 +314,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 10 * 30,
+      duration: 30 * 30,
       compositionId: "new-dynamic-composition",
     },
     layers: {
