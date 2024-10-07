@@ -48,7 +48,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex flex-1">
           {/* -------------------- video player and timeline -------------------- */}
 
-          <section className="flex-1 bg-gray-900">
+          <section className="flex-1 editorBg">
             <VideoAndTimeline />
           </section>
           <div className="border-l">

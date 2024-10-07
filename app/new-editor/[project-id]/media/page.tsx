@@ -137,13 +137,14 @@ const MediaLibrary: React.FC = () => {
       try {
         const [imagesResponse, videosResponse] = await Promise.all([
           axios.get<PexelsResponse>(
-            "https://api.pexels.com/v1/curated?per_page=15",
+            "https://api.pexels.com/v1/curated?per_page=5&orientation=portrait",
             {
               headers: { Authorization: PEXELS_API_KEY },
             },
           ),
+
           axios.get<PexelsResponse>(
-            "https://api.pexels.com/videos/popular?per_page=15",
+            "https://api.pexels.com/videos/popular?per_page=5&orientation=portrait",
             {
               headers: { Authorization: PEXELS_API_KEY },
             },

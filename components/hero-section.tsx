@@ -4,6 +4,7 @@ import Particles from "~/components/magicui/particles";
 import { cn } from "~/lib/utils";
 import { ChevronRight } from "lucide-react";
 import HeroVideoDialog from "~/components/magicui/hero-video-dialog";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -30,19 +31,21 @@ export default function Hero() {
             </p>
           </div>
 
-          <button className="relative z-10 w-full sm:w-auto">
-            <AnimatedGradientText className="flex items-center justify-center rounded-full bg-white px-4 py-2 sm:py-3">
-              🧑‍🍳 <hr className="mx-2 h-4 w-[1px] shrink-0 bg-gray-300" />{" "}
-              <span
-                className={cn(
-                  `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-sm text-transparent sm:text-lg`,
-                )}
-              >
-                Cooking for beta release
-              </span>
-              <ChevronRight className="ml-1 size-5 text-[#ffaa40] transition-transform duration-300 ease-in-out group-hover:translate-x-0.5 sm:size-6" />
-            </AnimatedGradientText>
-          </button>
+          <Link href="new-editor/crazy-video-id/media">
+            <div className="relative z-10 w-full sm:w-auto">
+              <AnimatedGradientText className="flex items-center justify-center rounded-full bg-white px-4 py-2 sm:py-3">
+                🧑‍🍳 <hr className="mx-2 h-4 w-[1px] shrink-0 bg-gray-300" />{" "}
+                <span
+                  className={cn(
+                    `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-sm text-transparent sm:text-lg`,
+                  )}
+                >
+                  Cooking for beta release
+                </span>
+                <ChevronRight className="ml-1 size-5 text-[#ffaa40] transition-transform duration-300 ease-in-out group-hover:translate-x-0.5 sm:size-6" />
+              </AnimatedGradientText>
+            </div>
+          </Link>
         </div>
 
         {/* --------------- hero media section --------------- */}

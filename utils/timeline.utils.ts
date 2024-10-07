@@ -308,7 +308,7 @@ export const DEFAULT_CONTENT_PROPS: Record<
         },
       },
       videoUrl:
-        "https://videos.pexels.com/video-files/1526909/1526909-hd_1280_720_24fps.mp4",
+        "https://videos.pexels.com/video-files/6963395/6963395-hd_1080_1920_25fps.mp4",
     },
   },
   // audio: {
