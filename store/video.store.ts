@@ -15,6 +15,7 @@ import {
 } from "../utils/timeline.utils";
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
 import { END_SCREEN_PRESET } from "~/video/preset";
+import { DUMMY_PROJECT_BRUT_TEMPLATE } from "~/data/mockdata.brut-templage";
 
 /**
  * Custom hook for managing video store state.
@@ -27,7 +28,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...DUMMY_NESTED_PROJECT,
+      ...DUMMY_PROJECT_BRUT_TEMPLATE,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {

@@ -117,3 +117,6 @@ background-image: url("https://www.transparenttextures.com/patterns/black-orchid
   background-size: calc(4 * var(--s)) calc(4 * var(--s));
 }
 
+p.is-empty {
+  @apply text-lg
+}
