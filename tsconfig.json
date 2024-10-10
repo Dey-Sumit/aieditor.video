@@ -15,6 +15,8 @@
     "jsx": "preserve",
     "incremental": true,
     "noUnusedLocals": true,
+    "verbatimModuleSyntax": true, // ts : 4.5+
+    // "importsNotUsedAsValues": "error",
     "plugins": [
       {
         "name": "next"

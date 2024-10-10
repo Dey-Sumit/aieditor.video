@@ -1,21 +1,24 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { devtools } from "zustand/middleware";
-import {
+import { v4 as uuid } from "uuid";
+
+import type {
   StoreType,
   LiteSequenceItemType,
   LayerId,
   TransitionItemType,
 } from "../types/timeline.types";
+
 import {
   binarySearch,
   calculateOffset,
   DEFAULT_CONTENT_PROPS,
   calculateItemIndices,
 } from "../utils/timeline.utils";
-import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
 import { END_SCREEN_PRESET } from "~/video/preset";
-import { DUMMY_PROJECT_BRUT_TEMPLATE } from "~/data/mockdata.brut-templage";
+
+import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
 
 /**
  * Custom hook for managing video store state.
@@ -28,7 +31,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...DUMMY_PROJECT_BRUT_TEMPLATE,
+      ...DUMMY_NESTED_PROJECT,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {
@@ -478,6 +481,54 @@ const useVideoStore = create<
 
           console.log(`Added ${presetDetails} preset to layer ${layerId}`);
         });
+      },
+
+      addLayer: (index) => {
+        const newLayerId = uuid();
+        set((state) => ({
+          props: {
+            ...state.props,
+            layers: {
+              ...state.props.layers,
+              [newLayerId]: {
+                id: newLayerId,
+                name: `Layer ${state.props.layerOrder.length + 1}`,
+                liteItems: [],
+              },
+            },
+            layerOrder: [newLayerId, ...state.props.layerOrder],
+            sequenceItems: {
+              ...state.props.sequenceItems,
+              [newLayerId]: {},
+            },
+          },
+        }));
+      },
+
+      removeLayer: (layerId: string) => {
+        set((state) => {
+          const { [layerId]: removedLayer, ...remainingLayers } =
+            state.props.layers;
+          const { [layerId]: removedSequenceItems, ...remainingSequenceItems } =
+            state.props.sequenceItems;
+          return {
+            props: {
+              ...state.props,
+              layers: remainingLayers,
+              layerOrder: state.props.layerOrder.filter((id) => id !== layerId),
+              sequenceItems: remainingSequenceItems,
+            },
+          };
+        });
+      },
+
+      reorderLayers: (newOrder: string[]) => {
+        set((state) => ({
+          props: {
+            ...state.props,
+            layerOrder: newOrder,
+          },
+        }));
       },
     })),
     {

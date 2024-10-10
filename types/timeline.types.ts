@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { z } from "zod";
 
 const TransitionSchema = z.object({
@@ -56,6 +56,7 @@ export type TextEditablePropsType = Extract<
   FullSequenceItemType,
   { type: "text" }
 >["editableProps"];
+
 export type ContentType = "dummy" | "text" | "image" | "video" | "audio";
 
 export type LiteSequenceItemType = {
@@ -85,6 +86,12 @@ export type LiteSequenceItemType = {
     }
 );
 
+export type LayerType = {
+  id: string;
+  name: string;
+  liteItems: LiteSequenceItemType[];
+};
+
 export type NestedCompositionProjectType = {
   id: string;
   title: string;
@@ -97,37 +104,47 @@ export type NestedCompositionProjectType = {
       compositionId: string;
     };
     layers: {
-      layerBackground: {
-        liteItems: LiteSequenceItemType[];
-      };
-      layerMiddle: {
-        liteItems: LiteSequenceItemType[];
-      };
-      layerForeground: {
-        liteItems: LiteSequenceItemType[];
-      };
+      [layerId: string]: LayerType;
     };
+    layerOrder: string[]; // Array of layer IDs to maintain order
     sequenceItems: {
-      layerBackground: {
-        [key: string]: FullSequenceItemType;
-      };
-      layerMiddle: {
-        [key: string]: FullSequenceItemType;
-      };
-      layerForeground: {
+      [layerId: string]: {
         [key: string]: FullSequenceItemType;
       };
     };
     transitions: {
-      [key: string]: TransitionItemType;
+      [layerId: string]: {
+        [key: string]: TransitionItemType;
+      };
     };
   };
 };
 
-export type LayerId = "layerBackground" | "layerMiddle" | "layerForeground";
-// | "layerBgAudio"
-// | "layerSoundEffects"
-// | "layerCaptions";
+export const LayerSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  liteItems: z.array(z.any()),
+});
+
+// TODO : create a type from this schema and use it in the above NestedCompositionProjectType
+export const NestedCompositionPropsSchema = z.object({
+  compositionMetaData: z.object({
+    width: z.number(),
+    height: z.number(),
+    fps: z.number(),
+    duration: z.number(),
+    compositionId: z.string(),
+  }),
+  layers: z.record(LayerSchema),
+  layerOrder: z.array(z.string()),
+  sequenceItems: z.record(z.record(z.string(), z.any())),
+  transitions: z.record(z.record(z.string(), TransitionSchema)),
+});
+
+type Layer = string;
+
+export type LayerId = string;
+
 export type PresetName = "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND";
 export type newPresetDetails = Omit<
   Extract<LiteSequenceItemType, { sequenceType: "preset" }>,
@@ -189,36 +206,11 @@ type StoreActions = {
     direction: "left" | "right",
   ) => void;
   addPresetToLayer: (layerId: LayerId, newPreset: newPresetDetails) => void;
+  addLayer: (index: 0) => void;
+  removeLayer: (layerId: LayerId) => void;
+  reorderLayers: (newOrder: string[]) => void;
 };
 
+export type NestedCompositionPropsType = NestedCompositionProjectType["props"];
+
 export type StoreType = NestedCompositionProjectType & StoreActions;
-
-export const NestedCompositionPropsSchema = z.object({
-  compositionMetaData: z.object({
-    width: z.number(),
-    height: z.number(),
-    fps: z.number(),
-    duration: z.number(),
-    compositionId: z.string(),
-  }),
-  layers: z.object({
-    layerBackground: z.object({
-      liteItems: z.array(z.any()),
-    }),
-    layerMiddle: z.object({
-      liteItems: z.array(z.any()),
-    }),
-    layerForeground: z.object({
-      liteItems: z.array(z.any()),
-    }),
-  }),
-  sequenceItems: z.object({
-    layerBackground: z.record(z.any()),
-    layerMiddle: z.record(z.any()),
-    layerForeground: z.record(z.any()),
-  }),
-  transitions: z.record(z.any()),
-});
-
-export type NestedCompositionType = NestedCompositionProjectType["props"];
-export type LayerType = NestedCompositionType["layers"][LayerId];

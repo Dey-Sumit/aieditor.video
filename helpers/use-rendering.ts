@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { getProgress, renderVideo } from "../lambda/api";
-import { NestedCompositionType } from "~/types/timeline.types";
+import { NestedCompositionPropsType } from "~/types/timeline.types";
 
 export type State =
   | {
@@ -34,7 +34,10 @@ const wait = async (milliSeconds: number) => {
   });
 };
 
-export const useRendering = (id: string, inputProps: NestedCompositionType) => {
+export const useRendering = (
+  id: string,
+  inputProps: NestedCompositionPropsType,
+) => {
   const [state, setState] = useState<State>({
     status: "init",
   });

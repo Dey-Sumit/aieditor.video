@@ -20,11 +20,12 @@ import {
   Redo,
   ZoomIn,
   ZoomOut,
+  Layers,
 } from "lucide-react";
 
 import { cn } from "~/lib/utils";
-import { useTimeline } from "~/context/useTimeline";
 import { useEditingStore } from "~/store/editing.store";
+import useVideoStore from "~/store/video.store";
 
 interface ToolbarItem {
   icon: React.ReactNode;
@@ -40,9 +41,24 @@ interface ToolbarCategory {
 export const Toolbar: React.FC = () => {
   const setNewItemType = useEditingStore((state) => state.setNewItemType);
   const newItemType = useEditingStore((state) => state.newItemType);
-  const { currentFrame } = useTimeline();
-  // TODO : use memoization
+  // const { currentFrame } = useTimeline();
+  const addLayer = useVideoStore((state) => state.addLayer);
+
+  const handleAddLayer = () => {
+    addLayer(0);
+  };
+
   const toolbarCategories: ToolbarCategory[] = [
+    {
+      name: "Layers",
+      items: [
+        {
+          icon: <Layers size={16} />,
+          label: "Add Layer",
+          onClick: handleAddLayer,
+        },
+      ],
+    },
     {
       name: "Selection",
       items: [
@@ -132,10 +148,10 @@ export const Toolbar: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <div className="flex items-center justify-end space-x-1 p-1 shadow-sm">
-        <div>
+      <div className="flex sticky top-o inset-x-0 items-center justify-end space-x-1 p-1 shadow-sm">
+        {/* <div>
           <p>{currentFrame}</p>
-        </div>
+        </div> */}
         {toolbarCategories.map((category, categoryIndex) => (
           <React.Fragment key={category.name}>
             {categoryIndex > 0 && (

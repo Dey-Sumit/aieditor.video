@@ -6,7 +6,7 @@ import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
 
 import React from "react";
-import {
+import type {
   FullSequenceItemType,
   LayerId,
   LiteSequenceItemType,
@@ -129,11 +129,12 @@ const SequenceRenderer: React.FC<{
 const NestedSequenceComposition = (
   props: NestedCompositionProjectType["props"],
 ) => {
+  const { layers, layerOrder } = props;
   return (
     <AbsoluteFill>
-      {Object.entries(props.layers).map(([layerId, layer]) => (
+      {[...layerOrder].reverse().map((layerId) => (
         <TransitionSeries key={layerId} name={layerId}>
-          {layer.liteItems.map((item) => (
+          {layers[layerId].liteItems.map((item) => (
             <React.Fragment key={item.id}>
               <TransitionSeries.Sequence
                 key={item.id}

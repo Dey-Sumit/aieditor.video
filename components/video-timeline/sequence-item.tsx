@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
 import { Rnd } from "react-rnd";
 import { useTimeline } from "~/context/useTimeline";
 import { cn } from "~/lib/utils";
@@ -9,11 +9,9 @@ import {
   ArrowRightLeft,
   AudioLines,
   Image,
-  Mic,
-  Text,
   Video,
 } from "lucide-react";
-import { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
+import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
 /**
@@ -262,11 +260,11 @@ const PresetItem = ({
             dragAxis="x"
             className={cn(
               "box-border cursor-pointer select-none rounded-sm border-2 !bg-red-950 hover:opacity-90 focus:bg-yellow-800",
-              getItemStyle(
+              /*  getItemStyle(
                 item.sequenceType === "standalone"
                   ? item.contentType
                   : item.sequenceType,
-              ),
+              ), */
             )}
             dragGrid={[1, 0]}
           >

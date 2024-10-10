@@ -11,7 +11,7 @@ import {
 } from "~/components/ui/context-menu";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
+import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 
 function SequenceContextMenuWrapper({
   children,

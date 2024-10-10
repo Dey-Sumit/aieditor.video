@@ -17,6 +17,7 @@
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slider": "^1.2.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@remotion/bundler": "4.0.216",
@@ -81,7 +82,7 @@
     "render": "remotion render",
     "deploy": "node deploy.mjs",
     "check-types": "tsc --noEmit",
-    "ui": "pnpm dlx shadcn-ui@latest add "
+    "ui": "pnpm dlx shadcn@latest add"
   },
   "packageManager": "pnpm@9.1.2"
 }
