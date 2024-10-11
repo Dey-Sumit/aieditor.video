@@ -38,6 +38,7 @@ export const useEditingStore = create<
 
       setActiveSeqItem: (layerId, itemId, itemType) => {
         set((state) => {
+          // @ts-ignore : // TODO fix this
           state.activeSeqItem = { layerId, itemId, itemType };
         });
       },

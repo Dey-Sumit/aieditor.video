@@ -3,7 +3,7 @@ import React from "react";
 import AsideNew from "~/components/layout/editor-new/aside";
 import ProjectHeader from "~/components/layout/editor-new/project-header";
 import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline";
-import SequenceItemEditorContainerNew from "~/components/layout/editor/sequence-item-editor-new";
+import SequenceItemEditorRenderer from "~/components/layout/editor/sequence-item-editor-new";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 
 const {
@@ -56,7 +56,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             {/* -------------------- project header ends -------------------- */}
 
             {/* --------------------  sequence item editor container starts -------------------- */}
-            <SequenceItemEditorContainerNew />
+            <SequenceItemEditorRenderer />
             {/* -------------------- sequence item editor container ends -------------------- */}
           </div>
         </div>

@@ -1,23 +1,23 @@
 "use client";
+import { Twitter } from "lucide-react";
+import { useState } from "react";
+import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { TooltipButton } from "~/components/ui/custom/tool-tip-button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "~/components/ui/dialog";
-import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "~/components/ui/card";
-import { Twitter } from "lucide-react";
-import { useState } from "react";
-import { TooltipButton } from "~/components/ui/custom/tool-tip-button";
 // import { useVideoStore } from "~/zustand/video-store";
 // import { z } from "zod";
 
@@ -32,7 +32,7 @@ const RenderFromTweet: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [tweetLink, setTweetLink] = useState("");
-  const [selectedStyle, setSelectedStyle] = useState("");
+  const [, setSelectedStyle] = useState("");
 
   // const loadProject = useVideoStore((state) => state.loadProject);
 

@@ -1,10 +1,10 @@
-import { FC, ReactNode, ComponentProps, ReactElement } from "react";
-import { Button, ButtonProps } from "~/components/ui/button";
+import type { ComponentProps, FC, ReactNode } from "react";
+import { Button } from "~/components/ui/button";
 import {
-  TooltipTrigger,
-  TooltipContent,
   Tooltip,
+  TooltipContent,
   TooltipProvider,
+  TooltipTrigger,
 } from "~/components/ui/tooltip";
 
 interface TooltipButtonProps {

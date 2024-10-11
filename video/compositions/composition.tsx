@@ -13,7 +13,8 @@ import type {
   NestedCompositionProjectType,
 } from "~/types/timeline.types";
 
-const SafeHTMLRenderer = ({ html }: { html: string }) => {
+// TODO : use this
+export const SafeHTMLRenderer = ({ html }: { html: string }) => {
   const sanitizedHTML = DOMPurify.sanitize(html, {
     USE_PROFILES: { html: true },
     ALLOWED_TAGS: ["div", "p", "span", "strong", "s", "u", "mark"],

@@ -28,7 +28,6 @@ import {
 
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
-import useVideoStore from "~/store/video.store";
 
 interface ToolbarItem {
   Icon: ForwardRefExoticComponent<
@@ -47,8 +46,6 @@ export const Toolbar: React.FC = () => {
   const setNewItemType = useEditingStore((state) => state.setNewItemType);
   const newItemType = useEditingStore((state) => state.newItemType);
   // const { currentFrame } = useTimeline();
-  const addLayer = useVideoStore((state) => state.addLayer);
-
 
   const toolbarCategories: ToolbarCategory[] = [
     {

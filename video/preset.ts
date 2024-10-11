@@ -1,4 +1,7 @@
-import { FullSequenceItemType, LiteSequenceItemType } from "~/types/timeline.types";
+import type {
+  FullSequenceItemType,
+  LiteSequenceItemType,
+} from "~/types/timeline.types";
 
 type Preset = {
   liteLevel: Omit<
@@ -15,7 +18,6 @@ type Preset = {
   };
   sequenceItems: {
     [key: string]: FullSequenceItemType;
-
   };
 };
 /* ------------------------ Brut End Screen Preset ----------------------- */
@@ -57,14 +59,6 @@ export const END_SCREEN_PRESET: Preset = {
       },
     ],
     // write the best code
-    
-
-
-
-
-    
-
-
   },
 
   sequenceItems: {
@@ -134,7 +128,4 @@ export const END_SCREEN_PRESET: Preset = {
       },
     },
   },
-
 };
-
-

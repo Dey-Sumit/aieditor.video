@@ -323,5 +323,5 @@ export const DEFAULT_CONTENT_PROPS: Record<
 };
 
 // Function to generate a random background color
-const getRandomBackgroundColor = () =>
+export const getRandomBackgroundColor = () =>
   `#${Math.floor(Math.random() * 16777215).toString(16)}`;

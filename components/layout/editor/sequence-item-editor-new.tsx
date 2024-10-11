@@ -2,13 +2,16 @@ import { LAYOUT } from "~/lib/constants/layout.constants";
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
 import SequenceItemEditorText from "./sequence-item-editor.text";
+
 const {
   TIMELINE: { TIMELINE_CONTAINER_HEIGHT },
   PROJECT_HEADER_HEIGHT,
 } = LAYOUT;
-const SequenceItemEditorContainerNew = () => {
+
+const SequenceItemEditorRenderer = () => {
   const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
 
+  // TODO : w-96? is it needed?
   return (
     <section
       className={cn(
@@ -27,4 +30,4 @@ const SequenceItemEditorContainerNew = () => {
   );
 };
 
-export default SequenceItemEditorContainerNew;
+export default SequenceItemEditorRenderer;

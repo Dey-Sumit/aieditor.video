@@ -1,5 +1,5 @@
-import { CallbackListener, PlayerRef } from '@remotion/player';
-import { useCallback, useSyncExternalStore } from 'react';
+import type { CallbackListener, PlayerRef } from "@remotion/player";
+import { useCallback, useSyncExternalStore } from "react";
 export const useCurrentPlayerFrame = (ref: React.RefObject<PlayerRef>) => {
   const subscribe = useCallback(
     (onStoreChange: () => void) => {
@@ -7,12 +7,12 @@ export const useCurrentPlayerFrame = (ref: React.RefObject<PlayerRef>) => {
       if (!current) {
         return () => undefined;
       }
-      const updater: CallbackListener<'frameupdate'> = ({ detail }) => {
+      const updater: CallbackListener<"frameupdate"> = ({ detail }) => {
         onStoreChange();
       };
-      current.addEventListener('frameupdate', updater);
+      current.addEventListener("frameupdate", updater);
       return () => {
-        current.removeEventListener('frameupdate', updater);
+        current.removeEventListener("frameupdate", updater);
       };
     },
     [ref],

@@ -1,7 +1,8 @@
 import { useTimeline } from "~/context/useTimeline";
 import { useEditingStore } from "~/store/editing.store";
-import { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
+import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 
+// TODO : work on this
 const TransitionItem = ({
   item,
   layerId,
@@ -13,8 +14,7 @@ const TransitionItem = ({
   const activeItem = useEditingStore((state) => state.activeSeqItem);
   const { pixelsPerFrame } = useTimeline();
 
-  const isActive =
-    activeItem?.itemId === item.id && activeItem?.itemType === "transition";
+  const isActive = activeItem?.itemId === item.id;
 
   return (
     <div

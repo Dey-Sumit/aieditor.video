@@ -1,16 +1,16 @@
 import {
   ContextMenu,
-  ContextMenuTrigger,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuShortcut,
   ContextMenuSeparator,
+  ContextMenuShortcut,
   ContextMenuSub,
-  ContextMenuSubTrigger,
   ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
 } from "~/components/ui/context-menu";
 import { useSequenceAddition } from "~/hooks/use-video-timeline";
-import { LayerId } from "~/types/timeline.types";
+import type { LayerId } from "~/types/timeline.types";
 
 function AddItemContextMenu({
   children,

@@ -156,12 +156,12 @@ const MediaLibrary: React.FC = () => {
         setCloudVideos(videosResponse.data.videos || []);
 
         // Simulating audio data and sound effects (Pexels doesn't provide audio API)
-        const simulatedAudios = Array(15)
+        /*     const simulatedAudios = Array(15)
           .fill(null)
           .map((_, index) => ({
             id: index,
             src: { medium: "" },
-          }));
+          })); */
         // setCloudAudios(simulatedAudios);
         // setSoundEffects(simulatedAudios);
 

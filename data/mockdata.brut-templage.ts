@@ -1,4 +1,4 @@
-import { NestedCompositionProjectType } from "~/types/timeline.types";
+import type { NestedCompositionProjectType } from "~/types/timeline.types";
 
 export const DUMMY_PROJECT_BRUT_TEMPLATE: NestedCompositionProjectType = {
   id: "id-dummy",
@@ -24,11 +24,20 @@ export const DUMMY_PROJECT_BRUT_TEMPLATE: NestedCompositionProjectType = {
             effectiveDuration: 420,
           },
         ],
+        id: "layerBackground",
+        isVisible: true,
+        name: "Background",
       },
       layerMiddle: {
         liteItems: [],
+        id: "layerMiddle",
+        isVisible: true,
+        name: "Middle",
       },
       layerForeground: {
+        isVisible: true,
+        name: "Foreground",
+        id: "layerForeground",
         liteItems: [
           /* ------------------------ Brut Foreground Preset ----------------------- */
           /*           {
@@ -284,8 +293,9 @@ export const DUMMY_PROJECT_BRUT_TEMPLATE: NestedCompositionProjectType = {
       },
       layerMiddle: {},
     },
+    layerOrder: ["layerForeground", "layerMiddle", "layerBackground"],
     transitions: {
-      "transition-0": {
+      /*  "transition-0": {
         id: "transition-0",
         type: "fade",
         duration: 60,
@@ -295,7 +305,7 @@ export const DUMMY_PROJECT_BRUT_TEMPLATE: NestedCompositionProjectType = {
         fromSequenceId: "id-like",
         toSequenceId: "id-share",
         fromSequenceIndex: 0,
-      },
+      }, */
     },
   },
 };

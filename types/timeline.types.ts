@@ -142,8 +142,6 @@ export const NestedCompositionPropsSchema = z.object({
   transitions: z.record(z.record(z.string(), TransitionSchema)),
 });
 
-type Layer = string;
-
 export type LayerId = string;
 
 export type PresetName = "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND";

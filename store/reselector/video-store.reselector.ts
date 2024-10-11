@@ -1,11 +1,11 @@
 import { createSelector } from "reselect";
-import {
-  LayerType,
-  LayerId,
+import type {
   FullSequenceItemType,
+  LayerId,
+  LayerType,
+  LiteSequenceItemType,
   StoreType,
   TransitionItemType,
-  LiteSequenceItemType,
 } from "~/types/timeline.types";
 
 const selectLayers = (state: StoreType) => state.props.layers;
@@ -14,19 +14,20 @@ const selectTransitions = (state: StoreType) => state.props.transitions;
 
 export const selectLayerById = createSelector(
   [selectLayers, (_, layerId: LayerId) => layerId],
-  (layers, layerId): LayerType | undefined => layers[layerId]
+  (layers, layerId): LayerType | undefined => layers[layerId],
 );
 
 export const selectSequenceItemsForLayer = createSelector(
   [selectSequenceItems, (_, layerId: LayerId) => layerId],
-  (sequenceItems, layerId): Record<string, FullSequenceItemType> => sequenceItems[layerId] || {}
+  (sequenceItems, layerId): Record<string, FullSequenceItemType> =>
+    sequenceItems[layerId] || {},
 );
 
 export const selectTransitionsForLayer = createSelector(
   [selectTransitions, (_, layerId: LayerId) => layerId],
   (transitions, layerId): Record<string, TransitionItemType> =>
     //@ts-ignore : TODO : FIX THIS
-    transitions[layerId]
+    transitions[layerId],
 );
 
 /* export const selectItemsForLayer = createSelector(
@@ -85,5 +86,5 @@ export const selectTransitionItemsByIds = createSelector(
 // New selector for liteItems
 export const selectLiteItems = createSelector(
   [selectLayerById],
-  (layer): LiteSequenceItemType[] => layer?.liteItems || []
+  (layer): LiteSequenceItemType[] => layer?.liteItems || [],
 );

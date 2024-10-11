@@ -1,4 +1,5 @@
-import { NestedCompositionProjectType } from "~/types/timeline.types";
+// TODO : delete this file
+import type { NestedCompositionProjectType } from "~/types/timeline.types";
 import { useRendering } from "../helpers/use-rendering";
 import { AlignEnd } from "./AlignEnd";
 import { Button } from "./Button";
@@ -11,11 +12,16 @@ import { Spacing } from "./Spacing";
 export const RenderControls: React.FC<{
   inputProps: NestedCompositionProjectType["props"];
 }> = ({ inputProps }) => {
-  const { renderMedia, state, undo } = useRendering("new-dynamic-composition", inputProps);
+  const { renderMedia, state, undo } = useRendering(
+    "new-dynamic-composition",
+    inputProps,
+  );
 
   return (
     <InputContainer>
-      {state.status === "init" || state.status === "invoking" || state.status === "error" ? (
+      {state.status === "init" ||
+      state.status === "invoking" ||
+      state.status === "error" ? (
         <>
           <AlignEnd>
             <Button
@@ -26,12 +32,16 @@ export const RenderControls: React.FC<{
               Render video
             </Button>
           </AlignEnd>
-          {state.status === "error" ? <ErrorComp message={state.error.message}></ErrorComp> : null}
+          {state.status === "error" ? (
+            <ErrorComp message={state.error.message}></ErrorComp>
+          ) : null}
         </>
       ) : null}
       {state.status === "rendering" || state.status === "done" ? (
         <>
-          <ProgressBar progress={state.status === "rendering" ? state.progress : 1} />
+          <ProgressBar
+            progress={state.status === "rendering" ? state.progress : 1}
+          />
           <Spacing></Spacing>
           <AlignEnd>
             <DownloadButton undo={undo} state={state}></DownloadButton>
