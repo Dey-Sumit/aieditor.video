@@ -42,7 +42,7 @@ interface ToolbarCategory {
   items: ToolbarItem[];
 }
 
-export const Toolbar: React.FC = () => {
+const Toolbar: React.FC = () => {
   const setNewItemType = useEditingStore((state) => state.setNewItemType);
   const newItemType = useEditingStore((state) => state.newItemType);
   // const { currentFrame } = useTimeline();

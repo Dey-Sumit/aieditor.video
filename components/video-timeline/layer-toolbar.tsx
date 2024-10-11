@@ -27,7 +27,7 @@ interface ToolbarCategory {
   items: ToolbarItem[];
 }
 
-export const LayerToolbar: React.FC = () => {
+const LayerToolbar: React.FC = () => {
   const addLayer = useVideoStore((state) => state.addLayer);
 
   const handleAddLayer = () => {

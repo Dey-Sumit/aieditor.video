@@ -7,7 +7,7 @@ interface AddItemPlaceholderProps {
   width: number;
 }
 
-export const PLACEHOLDER_ITEM_TYPE_TO_STYLES_MAP: Record<string, string> = {
+const PLACEHOLDER_ITEM_TYPE_TO_STYLES_MAP: Record<string, string> = {
   text: "bg-green-600/30 text-green-600 border-green-700 ",
   image: "bg-purple-600/30 text-purple-600 border-purple-600 ",
   video: "bg-pink-600/30 text-pink-600 border-pink-600 ",
