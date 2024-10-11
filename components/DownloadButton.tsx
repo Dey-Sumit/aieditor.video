@@ -1,8 +1,8 @@
+import { RefreshCcwIcon } from "lucide-react";
 import React from "react";
-import { State } from "../helpers/use-rendering";
+import type { State } from "../helpers/use-rendering";
 import { Spacing } from "./Spacing";
 import { Button } from "./ui/button";
-import { RefreshCcwIcon } from "lucide-react";
 
 const Megabytes: React.FC<{
   sizeInBytes: number;

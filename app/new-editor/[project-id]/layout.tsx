@@ -9,7 +9,7 @@ import { LAYOUT } from "~/lib/constants/layout.constants";
 const {
   SIDE_NAVBAR_WIDTH,
   NAVBAR_ITEM_CONTENT_WIDTH,
-  TIMELINE: { TRACK_LAYER_HEIGHT, TIMELINE_CONTAINER_HEIGHT },
+  TIMELINE: { TIMELINE_CONTAINER_HEIGHT },
 } = LAYOUT;
 
 const Layout = ({ children }: { children: React.ReactNode }) => {

@@ -1,6 +1,7 @@
-import { AwsRegion, RenderMediaOnLambdaOutput } from "@remotion/lambda/client";
 import {
+  type AwsRegion,
   renderMediaOnLambda,
+  type RenderMediaOnLambdaOutput,
   speculateFunctionName,
 } from "@remotion/lambda/client";
 import { DISK, RAM, REGION, SITE_NAME, TIMEOUT } from "../../../../config.mjs";

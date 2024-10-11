@@ -1,21 +1,22 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
-import { Button } from "~/components/ui/button";
-import Image from "next/image";
 import {
-  ImageIcon,
-  VideoIcon,
-  Music,
   AudioLinesIcon,
+  ImageIcon,
+  Music,
   PlusIcon,
   UploadIcon,
+  VideoIcon,
 } from "lucide-react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { Button } from "~/components/ui/button";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 
-const PEXELS_API_KEY =
-  "HnNGXbccHad7wcvshWD9uT2Ho3ZInpJq8GWFeEDh9L29oFfHuDbT7x7S";
+const PEXELS_API_KEY = process.env.NEXT_PUBLIC_PEXELS_API_KEY;
+// 563492ad6f91700001000001e2a0f1b1 // copilot suggestion, not sure if it's correct xD
+
 const { PROJECT_HEADER_HEIGHT } = LAYOUT;
 
 interface PexelsMedia {
@@ -129,8 +130,8 @@ const MediaLibrary: React.FC = () => {
   const [myAssets, setMyAssets] = useState<PexelsMedia[]>([]);
   const [cloudImages, setCloudImages] = useState<PexelsMedia[]>([]);
   const [cloudVideos, setCloudVideos] = useState<PexelsMedia[]>([]);
-  const [cloudAudios, setCloudAudios] = useState<PexelsMedia[]>([]);
-  const [soundEffects, setSoundEffects] = useState<PexelsMedia[]>([]);
+  // const [cloudAudios, setCloudAudios] = useState<PexelsMedia[]>([]);
+  // const [soundEffects, setSoundEffects] = useState<PexelsMedia[]>([]);
 
   useEffect(() => {
     const fetchMedia = async () => {
@@ -161,15 +162,15 @@ const MediaLibrary: React.FC = () => {
             id: index,
             src: { medium: "" },
           }));
-        setCloudAudios(simulatedAudios);
-        setSoundEffects(simulatedAudios);
+        // setCloudAudios(simulatedAudios);
+        // setSoundEffects(simulatedAudios);
 
         // Simulating my assets (mix of all types)
         setMyAssets([
           ...(imagesResponse.data.photos?.slice(0, 4) || []),
           ...(videosResponse.data.videos?.slice(0, 4) || []),
-          ...simulatedAudios.slice(0, 4),
-          ...simulatedAudios.slice(0, 3),
+          // ...simulatedAudios.slice(0, 4),
+          // ...simulatedAudios.slice(0, 3),
         ]);
       } catch (error) {
         console.error("Error fetching media:", error);
@@ -214,7 +215,7 @@ const MediaLibrary: React.FC = () => {
           type="video"
           icon={<VideoIcon size={16} />}
         />
-        <MediaSection
+        {/* <MediaSection
           title="Cloud Audios"
           items={cloudAudios}
           type="audio"
@@ -226,7 +227,7 @@ const MediaLibrary: React.FC = () => {
           items={soundEffects}
           type="sound"
           icon={<Music size={16} />}
-        />
+        /> */}
       </div>
     </div>
   );

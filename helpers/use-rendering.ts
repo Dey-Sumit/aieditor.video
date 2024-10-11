@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
+import { type NestedCompositionPropsType } from "~/types/timeline.types";
 import { getProgress, renderVideo } from "../lambda/api";
-import { NestedCompositionPropsType } from "~/types/timeline.types";
 
 export type State =
   | {

@@ -1,19 +1,17 @@
 "use client";
-import React from "react";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import {
   HeadphonesIcon,
   LifeBuoyIcon,
   Settings2Icon,
   ShuffleIcon,
   SquareUserIcon,
-  TriangleIcon,
   VideoIcon,
   WandIcon,
 } from "~/components/Icons";
 import { TooltipButton } from "~/components/ui/custom/tool-tip-button";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { cn } from "~/lib/utils";
 import { LAYOUT } from "~/lib/constants/layout.constants";
+import { cn } from "~/lib/utils";
 
 const { PROJECT_HEADER_HEIGHT } = LAYOUT;
 

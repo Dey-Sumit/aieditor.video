@@ -1,21 +1,13 @@
 "use client";
 
-import { EditorContent, EditorInstance, JSONContent } from "novel";
-import React, { ComponentProps, useEffect, useRef, useState } from "react";
-import * as z from "zod";
+import { useEffect, useState } from "react";
 import Editor from "~/components/editor/advanced-editor";
 // import Editor from "~/components/novel/editor/advanced-editor";
 // import { htmlStringWithBg } from "~/components/novel/page";
 import { Button } from "~/components/ui/button";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import { TextEditablePropsType } from "~/types/timeline.types";
-
-interface SequenceItemEditorTextProps {
-  initialData: TextEditablePropsType;
-  onSave: (data: TextEditablePropsType) => void;
-  onCancel: () => void;
-}
+import type { TextEditablePropsType } from "~/types/timeline.types";
 
 const SequenceItemEditorText = () => {
   const updateTextEditableProps = useVideoStore(
@@ -49,9 +41,17 @@ const SequenceItemEditorText = () => {
 
   useEffect(() => {
     if (activeSeqItemLite) {
+      // TODO : FIX THIS
+      // @ts-ignore : fix this
       setEditorContent(activeSequenceItem.editableProps?.text || "");
     }
-  }, [activeSeqItemLite]);
+  }, [
+    activeSeqItemLite,
+
+    // TODO : FIX THIS
+    // @ts-ignore : fix this
+    activeSequenceItem.editableProps?.text,
+  ]);
 
   return (
     <>
@@ -66,7 +66,7 @@ const SequenceItemEditorText = () => {
 
       {/* <div className="h-screen bg-yellow-800"></div> */}
       <form
-        className="space-y-6 px-2  pb-20"
+        className="space-y-6 px-2 pb-20"
         onSubmit={(e) => e.preventDefault()}
       >
         {/* <Editor

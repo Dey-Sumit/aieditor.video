@@ -1,23 +1,31 @@
-import React from "react";
-
 import { useTimeline } from "~/context/useTimeline";
 import { useEditingStore } from "~/store/editing.store";
 import { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 
-const TransitionItem = ({ item, layerId }: { item: LiteSequenceItemType; layerId: LayerId }) => {
+const TransitionItem = ({
+  item,
+  layerId,
+}: {
+  item: LiteSequenceItemType;
+  layerId: LayerId;
+}) => {
   const setActiveItem = useEditingStore((state) => state.setActiveSeqItem);
   const activeItem = useEditingStore((state) => state.activeSeqItem);
   const { pixelsPerFrame } = useTimeline();
 
-  const isActive = activeItem?.itemId === item.id && activeItem?.itemType === "transition";
+  const isActive =
+    activeItem?.itemId === item.id && activeItem?.itemType === "transition";
 
   return (
     <div
       className={`absolute h-full cursor-pointer ${isActive ? "border-blue-400" : ""}`}
       style={{
-        left: (item.startFrame - (item.transition?.incoming?.duration || 0)) * pixelsPerFrame,
+        left:
+          (item.startFrame - (item.transition?.incoming?.duration || 0)) *
+          pixelsPerFrame,
         width: (item.transition?.incoming?.duration || 0) * pixelsPerFrame,
-        background: "linear-gradient(to right, transparent, rgba(255,255,255,0.3))",
+        background:
+          "linear-gradient(to right, transparent, rgba(255,255,255,0.3))",
       }}
       onClick={(e) => {
         e.stopPropagation();
