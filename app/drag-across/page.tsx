@@ -6,41 +6,51 @@ const LAYER_HEIGHT = 50;
 const ITEM_HEIGHT = 50;
 const TIMELINE_WIDTH = 2000; // Adjust based on your needs
 
-interface Item {
-  id: number;
-  layer: number;
-  start: number;
-  duration: number;
+interface SequenceItem {
+  id: string;
   color: string;
 }
 
-interface TimelineItemProps {
-  item: Item;
-  onDragStop: (id: number, newLayer: number, newStart: number) => void;
-  onResize: (id: number, newDuration: number) => void;
+interface Layer {
+  id: string;
+  items: string[];
 }
 
+interface ProjectState {
+  layers: {
+    [key: string]: Layer;
+  };
+  sequenceItems: {
+    [key: string]: SequenceItem;
+  };
+}
+interface TimelineItemProps {
+  item: SequenceItem;
+  layerId: string;
+  onDragStop: (itemId: string, newLayerId: string, newStart: number) => void;
+  layerIndex: number;
+}
 const TimelineItem: React.FC<TimelineItemProps> = ({
   item,
   onDragStop,
-  onResize,
+  layerIndex,
 }) => {
   return (
     <Rnd
       default={{
-        x: item.start,
-        y: item.layer * LAYER_HEIGHT + (LAYER_HEIGHT - ITEM_HEIGHT) / 2,
-        width: item.duration,
+        x: 0, // We'll need to calculate this based on item index
+        y: layerIndex * LAYER_HEIGHT + (LAYER_HEIGHT - ITEM_HEIGHT) / 2,
+        width: 100, // Fixed width for now
         height: ITEM_HEIGHT,
       }}
       bounds="parent"
       onDragStop={(e, d) => {
-        const newLayer = Math.floor((d.y + ITEM_HEIGHT / 2) / LAYER_HEIGHT);
-        onDragStop(item.id, newLayer, d.x);
+        const newLayerId = `layer${Math.floor(d.y / LAYER_HEIGHT) + 1}`;
+        onDragStop(item.id, newLayerId, d.x);
       }}
-      onResizeStop={(e, direction, ref, delta, position) => {
-        onResize(item.id, parseInt(ref.style.width));
-      }}
+      // onResizeStop={(e, direction, ref, delta, position) => {
+      //   onResize(item.id, parseInt(ref.style.width));
+      // }}
       minWidth={50}
       dragGrid={[1, LAYER_HEIGHT]}
     >
@@ -54,26 +64,35 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
 };
 
 const VideoEditorTimelinePOC: React.FC = () => {
-  const [items, setItems] = useState<Item[]>([
-    { id: 1, layer: 0, start: 0, duration: 200, color: "bg-blue-500" },
-    { id: 2, layer: 1, start: 100, duration: 150, color: "bg-green-500" },
-    { id: 3, layer: 2, start: 50, duration: 250, color: "bg-red-500" },
-  ]);
+  const [projectState, setProjectState] = useState<ProjectState>({
+    layers: {
+      layer1: {
+        id: "layer1",
+        items: ["item1"],
+      },
+      layer2: {
+        id: "layer2",
+        items: ["item2"],
+      },
+      layer3: {
+        id: "layer3",
+        items: ["item3"],
+      },
+    },
+    sequenceItems: {
+      item1: { id: "item1", color: "bg-blue-500" },
+      item2: { id: "item2", color: "bg-green-500" },
+      item3: { id: "item3", color: "bg-red-500" },
+    },
+  });
+  console.log({ projectState });
 
-  const handleDragStop = (id: number, newLayer: number, newStart: number) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, layer: newLayer, start: newStart } : item,
-      ),
-    );
-  };
-
-  const handleResize = (id: number, newDuration: number) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, duration: newDuration } : item,
-      ),
-    );
+  const handleDragStop = (
+    itemId: string,
+    newLayerId: string,
+    newStart: number,
+  ) => {
+    // This function needs to be implemented
   };
 
   return (
@@ -98,14 +117,21 @@ const VideoEditorTimelinePOC: React.FC = () => {
         </div>
 
         <div className="relative w-full">
-          {items.map((item) => (
-            <TimelineItem
-              key={item.id}
-              item={item}
-              onDragStop={handleDragStop}
-              onResize={handleResize}
-            />
-          ))}
+          {Object.entries(projectState.layers).map(
+            ([layerId, layer], layerIndex) => (
+              <React.Fragment key={layerId}>
+                {layer.items.map((itemId) => (
+                  <TimelineItem
+                    key={itemId}
+                    item={projectState.sequenceItems[itemId]}
+                    layerId={layerId}
+                    onDragStop={handleDragStop}
+                    layerIndex={layerIndex}
+                  />
+                ))}
+              </React.Fragment>
+            ),
+          )}
         </div>
       </div>
     </div>
@@ -113,3 +139,29 @@ const VideoEditorTimelinePOC: React.FC = () => {
 };
 
 export default VideoEditorTimelinePOC;
+
+/*  const [projectState, setProjectState] = useState({
+    layers: {
+      layer1: {
+        id: "layer1",
+       
+        items: ["item1"],
+      },
+      layer2: {
+        id: "layer2",
+      
+        items: ["item2"],
+      },
+      layer3: {
+        id: "layer3",
+      
+        items: ["item3"],
+      },
+    },
+    
+    sequenceItems: {
+      item1: { id: "item1", color: "bg-blue-500" },
+      item2: { id: "item2", color: "bg-green-500" },
+      item3: { id: "item3", color: "bg-red-500" },
+    },
+  }); */
