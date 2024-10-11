@@ -89,6 +89,7 @@ export type LiteSequenceItemType = {
 export type LayerType = {
   id: string;
   name: string;
+  isVisible: boolean;
   liteItems: LiteSequenceItemType[];
 };
 
@@ -206,9 +207,22 @@ type StoreActions = {
     direction: "left" | "right",
   ) => void;
   addPresetToLayer: (layerId: LayerId, newPreset: newPresetDetails) => void;
-  addLayer: (index: 0) => void;
+  addLayer: (
+    data:
+      | {
+          position: "AT_TOP" | "AT_BOTTOM";
+        }
+      | {
+          position: "ABOVE_CURRENT" | "BELOW_CURRENT";
+          currentLayerId: LayerId;
+        },
+  ) => void;
   removeLayer: (layerId: LayerId) => void;
   reorderLayers: (newOrder: string[]) => void;
+  updateLayerMetadata: (
+    layerId: LayerId,
+    updates: Partial<Pick<LayerType, "name" | "isVisible">>,
+  ) => void;
 };
 
 export type NestedCompositionPropsType = NestedCompositionProjectType["props"];

@@ -3,8 +3,9 @@ import "../styles/global.css";
 import "../styles/prosemirror.css";
 
 export const metadata: Metadata = {
-  title: "Remotion and Next.js",
-  description: "Remotion and Next.js",
+  title: "aieditor.video",
+  description:
+    "AI powered video editor for everyone | Easy to use video editor",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 };
 

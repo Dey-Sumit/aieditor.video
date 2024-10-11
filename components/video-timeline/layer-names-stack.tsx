@@ -5,19 +5,14 @@ import useVideoStore from "~/store/video.store";
 
 const { LAYER_HEIGHT_IN_PX } = TIMELINE;
 
-import React, { useRef } from "react";
 import { Reorder, useDragControls } from "framer-motion";
-import { GripVertical, Plus } from "lucide-react";
-import { Button } from "../ui/button";
+import { EyeOff, GripVertical } from "lucide-react";
+import React, { useRef } from "react";
+import type { LayerType } from "~/types/timeline.types";
 import LayerContentMenuWrapper from "../layer-context-menu-wrapper";
 
-interface Layer {
-  id: string;
-  name: string;
-}
-
 interface LayerItemProps {
-  layer: Layer;
+  layer: LayerType;
   constraintsRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -34,22 +29,25 @@ const LayerItem: React.FC<LayerItemProps> = ({ layer, constraintsRef }) => {
         height: `${LAYER_HEIGHT_IN_PX}px`,
         width: "100%",
       }}
-      className=" border-b "
+      className="border-b"
       transition={{
         duration: 0.3,
       }}
     >
       <LayerContentMenuWrapper layerId={layer.id}>
-        <div className="flex items-center w-full h-full px-1">
+        <div className="relative flex h-full w-full items-center px-1">
           <div
-            className="reorder-handle cursor-move mr-2"
+            className="reorder-handle mr-2 cursor-move"
             onPointerDown={(e) => controls.start(e)}
           >
             <GripVertical size={16} className="text-white/30" />
           </div>
-          <span className="text-xs capitalize select-none line-clamp-1 ">
+          <span className="line-clamp-1 select-none text-xs capitalize">
             {layer.name}
           </span>
+          {!layer.isVisible && (
+            <EyeOff className="absolute right-0 mr-2 size-3" />
+          )}
         </div>
       </LayerContentMenuWrapper>
     </Reorder.Item>
@@ -73,7 +71,7 @@ const LayerStack: React.FC = () => {
           reorderLayers(newLayerOrder);
           console.log({ newLayerOrder });
         }}
-        className="relative "
+        className="relative"
         style={{ height: `${orderedLayers.length * LAYER_HEIGHT_IN_PX}px` }}
       >
         {orderedLayers.map((layerId) => (

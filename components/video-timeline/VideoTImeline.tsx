@@ -27,16 +27,7 @@ const VideoTimeline = () => {
       style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_CONTAINER_HEIGHT }}
     >
       <div className="relative flex h-full flex-col">
-        <div className="w-full bg-black">
-          {/* <div
-            id="timeline-controls"
-            className="flex items-center justify-center bg-red-900 text-xs"
-            style={{
-              height: UTILS_LAYER_HEIGHT,
-            }}
-          >
-            video player controls
-          </div> */}
+        <div className="w-full border-b backdrop-blur-lg">
           <Toolbar />
           {/* ------------------------- TIME LAYER ------------------------  */}
           <div
@@ -70,7 +61,7 @@ const VideoTimeline = () => {
             </div>
 
             {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
-            <div ref={containerRef} className="relative flex-grow divide-y">
+            <div ref={containerRef} className="relative flex-grow">
               {/* -------------------------- Stack of Main Layers -------------------------- */}
               {orderedLayers.map((layerId) => (
                 <Layer

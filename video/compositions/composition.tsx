@@ -1,6 +1,6 @@
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
-import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
 import DOMPurify from "dompurify";
+import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
 
 import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
@@ -50,7 +50,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
             )} */}
             <div
               dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
-              className="prose dark:prose-invert prose-2xl [&>*]:my-0 space-y-0 whitespace-pre-wrap "
+              className="prose prose-2xl space-y-0 whitespace-pre-wrap dark:prose-invert [&>*]:my-0"
             />
           </div>
         </AbsoluteFill>
@@ -132,32 +132,38 @@ const NestedSequenceComposition = (
   const { layers, layerOrder } = props;
   return (
     <AbsoluteFill>
-      {[...layerOrder].reverse().map((layerId) => (
-        <TransitionSeries key={layerId} name={layerId}>
-          {layers[layerId].liteItems.map((item) => (
-            <React.Fragment key={item.id}>
-              <TransitionSeries.Sequence
-                key={item.id}
-                durationInFrames={item.sequenceDuration}
-                name={item.id}
-                offset={item.offset}
-              >
-                <SequenceRenderer
-                  liteItem={item}
-                  layerId={layerId as LayerId}
-                  sequenceItems={props.sequenceItems[layerId as LayerId]}
-                />
-              </TransitionSeries.Sequence>
-              {item.transition?.outgoing && (
-                <TransitionSeries.Transition
-                  presentation={slide()}
-                  timing={linearTiming({ durationInFrames: 15 * 2 })} // duration of transition , as of now it is 30 frames hardcoded
-                />
-              )}
-            </React.Fragment>
-          ))}
-        </TransitionSeries>
-      ))}
+      {[...layerOrder].reverse().map((layerId) => {
+        const layer = layers[layerId];
+        if (!layer || !layer.isVisible) return null;
+        return (
+          <TransitionSeries key={layerId} name={layerId}>
+            {layers[layerId].liteItems.map((item) => {
+              return (
+                <React.Fragment key={item.id}>
+                  <TransitionSeries.Sequence
+                    key={item.id}
+                    durationInFrames={item.sequenceDuration}
+                    name={item.id}
+                    offset={item.offset}
+                  >
+                    <SequenceRenderer
+                      liteItem={item}
+                      layerId={layerId as LayerId}
+                      sequenceItems={props.sequenceItems[layerId as LayerId]}
+                    />
+                  </TransitionSeries.Sequence>
+                  {item.transition?.outgoing && (
+                    <TransitionSeries.Transition
+                      presentation={slide()}
+                      timing={linearTiming({ durationInFrames: 15 * 2 })} // duration of transition , as of now it is 30 frames hardcoded
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </TransitionSeries>
+        );
+      })}
     </AbsoluteFill>
   );
 };

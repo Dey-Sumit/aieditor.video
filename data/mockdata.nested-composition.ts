@@ -319,6 +319,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       layerBackground: {
         id: "layerBackground",
         name: "Layer Background",
+        isVisible: true,
         liteItems: [
           {
             id: "id-train-window-smash",
@@ -334,11 +335,15 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       layerMiddle: {
         id: "layerMiddle",
         name: "Layer Middle",
+        isVisible: true,
+
         liteItems: [],
       },
       layerForeground: {
         id: "layerForeground",
         name: "Layer Foreground",
+        isVisible: true,
+
         liteItems: [
           /* {
             sequenceType: "preset",

@@ -1,6 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Edit,
+  Eye,
+  EyeOff,
+  Plus,
+  Save,
+  Trash,
+} from "lucide-react";
+import { useRef } from "react";
+import { Button } from "~/components/ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -11,21 +22,9 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { Switch } from "~/components/ui/switch";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import {
-  Plus,
-  Trash,
-  Eye,
-  EyeOff,
-  Edit,
-  Save,
-  ArrowUp,
-  ArrowDown,
-  Circle,
-  Delete,
-} from "lucide-react";
+import { Switch } from "~/components/ui/switch";
+import useVideoStore from "~/store/video.store";
 
 export default function Component({
   layerId,
@@ -34,21 +33,31 @@ export default function Component({
   layerId: string;
   children: React.ReactNode;
 }) {
-  const [layerName, setLayerName] = useState("Layer 1");
-  const [tempLayerName, setTempLayerName] = useState(layerName);
-  const [isVisible, setIsVisible] = useState(true);
+  const layer = useVideoStore((state) => state.props.layers[layerId]);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const removeLayer = useVideoStore((state) => state.removeLayer);
+  const addLayer = useVideoStore((state) => state.addLayer);
 
-  const handleRename = () => {
-    setTempLayerName(layerName);
-  };
+  const updateLayerMetadata = useVideoStore(
+    (state) => state.updateLayerMetadata,
+  );
+
+  const handleRename = () => {};
 
   const handleSaveRename = () => {
-    setLayerName(tempLayerName);
+    const newName = nameInputRef.current?.value;
+    if (newName) {
+      updateLayerMetadata(layerId, { name: newName });
+    }
   };
 
-  const handleCancelRename = () => {
-    setTempLayerName(layerName);
+  const isVisible = layer.isVisible;
+
+  const handleVisibilityToggle = (checked: boolean) => {
+    updateLayerMetadata(layerId, { isVisible: checked });
   };
+
+  const handleCancelRename = () => {};
 
   return (
     <ContextMenu>
@@ -56,13 +65,13 @@ export default function Component({
       <ContextMenuContent className="w-64">
         <ContextMenuSub>
           <ContextMenuSubTrigger className="text-red-700">
-            <Trash className="mr-2 size-4 " />
+            <Trash className="mr-2 size-4" />
             Delete Layer
           </ContextMenuSubTrigger>
-          <ContextMenuSubContent className="w-56 ">
+          <ContextMenuSubContent className="w-56">
             <ContextMenuItem
-              onClick={() => console.log("Delete layer")}
-              className="text-red-700 cursor-pointer focus:bg-red-900 focus:text-white"
+              onClick={() => removeLayer(layerId)}
+              className="cursor-pointer text-red-700 focus:bg-red-900 focus:text-white"
             >
               <Trash className="mr-2 size-4" />
               Yes, Delete it! 😡
@@ -76,25 +85,43 @@ export default function Component({
           </ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-56">
             <ContextMenuItem
-              onClick={() => console.log("Add layer at the top")}
+              onClick={() =>
+                addLayer({
+                  position: "AT_TOP",
+                })
+              }
             >
               <ArrowUp className="mr-2 size-4" />
               Insert at the Top
             </ContextMenuItem>
             <ContextMenuItem
-              onClick={() => console.log("Add layer above this")}
+              onClick={() =>
+                addLayer({
+                  position: "ABOVE_CURRENT",
+                  currentLayerId: layerId,
+                })
+              }
             >
               <ArrowUp className="mr-2 size-4" />
               Insert Above Current
             </ContextMenuItem>
             <ContextMenuItem
-              onClick={() => console.log("Add layer below this")}
+              onClick={() =>
+                addLayer({
+                  position: "BELOW_CURRENT",
+                  currentLayerId: layerId,
+                })
+              }
             >
               <ArrowDown className="mr-2 size-4" />
               Insert Below Current
             </ContextMenuItem>
             <ContextMenuItem
-              onClick={() => console.log("Add layer at the bottom")}
+              onClick={() =>
+                addLayer({
+                  position: "AT_BOTTOM",
+                })
+              }
             >
               <ArrowDown className="mr-2 size-4" />
               Insert at the Bottom
@@ -116,9 +143,9 @@ export default function Component({
               className="flex items-center space-x-2"
             >
               <Input
-                value={tempLayerName}
-                onChange={(e) => setTempLayerName(e.target.value)}
-                className="h-8 flex-grow"
+                ref={nameInputRef}
+                defaultValue={layer.name}
+                className="h-8 flex-grow focus-visible:ring-1"
               />
               <Button
                 type="submit"
@@ -134,12 +161,15 @@ export default function Component({
         <ContextMenuSeparator />
         <div className="flex items-center justify-between px-2 py-1.5">
           {isVisible ? (
-            <Eye className="size-4 mr-2" />
+            <Eye className="mr-2 size-4" />
           ) : (
-            <EyeOff className="size-4 mr-2" />
+            <EyeOff className="mr-2 size-4" />
           )}
           <span className="flex-grow">{isVisible ? "Visible" : "Hidden"}</span>
-          <Switch checked={isVisible} onCheckedChange={setIsVisible} />
+          <Switch
+            checked={isVisible}
+            onCheckedChange={handleVisibilityToggle}
+          />
         </div>
       </ContextMenuContent>
     </ContextMenu>

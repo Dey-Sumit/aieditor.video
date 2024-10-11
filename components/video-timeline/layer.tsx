@@ -4,10 +4,10 @@ import { useSequenceAddition } from "~/hooks/use-video-timeline";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import { selectLiteItems } from "~/store/reselector/video-store.reselector";
 import useVideoStore from "~/store/video.store";
-import { LayerId } from "~/types/timeline.types";
-import SequenceItem from "./sequence-item";
-import AddItemPlaceholder from "./add-item-placeholder";
+import type { LayerId } from "~/types/timeline.types";
 import AddItemContextMenu from "./add-item-context-menu";
+import AddItemPlaceholder from "./add-item-placeholder";
+import SequenceItem from "./sequence-item";
 
 const { LAYER_HEIGHT_IN_PX } = TIMELINE;
 interface LayerProps {
@@ -15,28 +15,34 @@ interface LayerProps {
   pixelsPerFrame: number;
 }
 
-const Layer: React.FC<LayerProps> = React.memo(({ layerId, pixelsPerFrame }) => {
-  const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
+const Layer: React.FC<LayerProps> = React.memo(
+  ({ layerId, pixelsPerFrame }) => {
+    const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
 
-  return (
-    <div className="group relative" style={{ height: LAYER_HEIGHT_IN_PX }}>
-      <HoverLayer layerId={layerId} pixelsPerFrame={pixelsPerFrame} />
+    return (
+      <div
+        className="group relative border-b"
+        style={{ height: LAYER_HEIGHT_IN_PX }}
+      >
+        <HoverLayer layerId={layerId} pixelsPerFrame={pixelsPerFrame} />
 
-      {/* Sequence Items */}
-      {liteItems.map((item) => {
-        const nextItemStartFrame = liteItems[liteItems.indexOf(item) + 1]?.startFrame; // TODO : can be optimized
-        return (
-          <SequenceItem
-            key={item.id}
-            item={item}
-            layerId={layerId}
-            nextItemStartFrame={nextItemStartFrame}
-          />
-        );
-      })}
-    </div>
-  );
-});
+        {/* Sequence Items */}
+        {liteItems.map((item) => {
+          const nextItemStartFrame =
+            liteItems[liteItems.indexOf(item) + 1]?.startFrame; // TODO : can be optimized
+          return (
+            <SequenceItem
+              key={item.id}
+              item={item}
+              layerId={layerId}
+              nextItemStartFrame={nextItemStartFrame}
+            />
+          );
+        })}
+      </div>
+    );
+  },
+);
 
 export default Layer;
 
@@ -45,36 +51,41 @@ interface HoverLayerProps {
   pixelsPerFrame: number;
 }
 
-const HoverLayer: React.FC<HoverLayerProps> = React.memo(({ layerId, pixelsPerFrame }) => {
-  const {
-    hoverInfo,
-    mouseEventHandlers: { onMouseMove, onMouseLeave, onClick },
-    isPointWithinItem,
-  } = useSequenceAddition(layerId, pixelsPerFrame);
+const HoverLayer: React.FC<HoverLayerProps> = React.memo(
+  ({ layerId, pixelsPerFrame }) => {
+    const {
+      hoverInfo,
+      mouseEventHandlers: { onMouseMove, onMouseLeave, onClick },
+      isPointWithinItem,
+    } = useSequenceAddition(layerId, pixelsPerFrame);
 
-  return (
-    <>
-      <AddItemContextMenu layerId={layerId} onPresetAdd={onClick}>
-        {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
+    return (
+      <>
+        <AddItemContextMenu layerId={layerId} onPresetAdd={onClick}>
+          {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
 
-        <div
-          className="absolute inset-0"
-          onMouseMove={onMouseMove}
-          onMouseLeave={onMouseLeave}
-          onClick={(e) => {
-            onClick(e, {
-              sequenceType: "standalone",
-            });
-          }}
-        />
-        {/* -------------------------- Item adding placeholder for handing clicks and hover -------------------------- */}
+          <div
+            className="absolute inset-0"
+            onMouseMove={onMouseMove}
+            onMouseLeave={onMouseLeave}
+            onClick={(e) => {
+              onClick(e, {
+                sequenceType: "standalone",
+              });
+            }}
+          />
+          {/* -------------------------- Item adding placeholder for handing clicks and hover -------------------------- */}
 
-        {hoverInfo && !isPointWithinItem(hoverInfo.startX) && (
-          <AddItemPlaceholder startX={hoverInfo.startX} width={hoverInfo.width} />
-        )}
-      </AddItemContextMenu>
-    </>
-  );
-});
+          {hoverInfo && !isPointWithinItem(hoverInfo.startX) && (
+            <AddItemPlaceholder
+              startX={hoverInfo.startX}
+              width={hoverInfo.width}
+            />
+          )}
+        </AddItemContextMenu>
+      </>
+    );
+  },
+);
 
 HoverLayer.displayName = "HoverLayer";

@@ -1,24 +1,25 @@
 import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
 import { devtools } from "zustand/middleware";
-import { v4 as uuid } from "uuid";
+import { immer } from "zustand/middleware/immer";
 
 import type {
-  StoreType,
-  LiteSequenceItemType,
   LayerId,
+  LayerType,
+  LiteSequenceItemType,
+  StoreType,
   TransitionItemType,
 } from "../types/timeline.types";
 
+import { END_SCREEN_PRESET } from "~/video/preset";
 import {
   binarySearch,
+  calculateItemIndices,
   calculateOffset,
   DEFAULT_CONTENT_PROPS,
-  calculateItemIndices,
 } from "../utils/timeline.utils";
-import { END_SCREEN_PRESET } from "~/video/preset";
 
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
+import { genId } from "~/utils/misc.utils";
 
 /**
  * Custom hook for managing video store state.
@@ -483,26 +484,59 @@ const useVideoStore = create<
         });
       },
 
-      addLayer: (index) => {
-        const newLayerId = uuid();
-        set((state) => ({
-          props: {
-            ...state.props,
-            layers: {
-              ...state.props.layers,
-              [newLayerId]: {
-                id: newLayerId,
-                name: `Layer ${state.props.layerOrder.length + 1}`,
-                liteItems: [],
+      addLayer: (data) => {
+        const newLayerId = genId("l");
+        set((state) => {
+          const newLayer: LayerType = {
+            id: newLayerId,
+            name: `Layer ${state.props.layerOrder.length + 1}`,
+            liteItems: [],
+            isVisible: true,
+          };
+
+          let newLayerOrder = [...state.props.layerOrder];
+
+          switch (data.position) {
+            case "AT_TOP":
+              newLayerOrder.unshift(newLayerId);
+              break;
+            case "ABOVE_CURRENT":
+              const aboveIndex = newLayerOrder.indexOf(data.currentLayerId);
+              if (aboveIndex !== -1) {
+                newLayerOrder.splice(aboveIndex, 0, newLayerId);
+              } else {
+                newLayerOrder.unshift(newLayerId);
+              }
+              break;
+            case "BELOW_CURRENT":
+              const belowIndex = newLayerOrder.indexOf(data.currentLayerId);
+              if (belowIndex !== -1) {
+                newLayerOrder.splice(belowIndex + 1, 0, newLayerId);
+              } else {
+                newLayerOrder.push(newLayerId);
+              }
+              break;
+            case "AT_BOTTOM":
+            default:
+              newLayerOrder.push(newLayerId);
+              break;
+          }
+
+          return {
+            props: {
+              ...state.props,
+              layers: {
+                ...state.props.layers,
+                [newLayerId]: newLayer,
+              },
+              layerOrder: newLayerOrder,
+              sequenceItems: {
+                ...state.props.sequenceItems,
+                [newLayerId]: {},
               },
             },
-            layerOrder: [newLayerId, ...state.props.layerOrder],
-            sequenceItems: {
-              ...state.props.sequenceItems,
-              [newLayerId]: {},
-            },
-          },
-        }));
+          };
+        });
       },
 
       removeLayer: (layerId: string) => {
@@ -511,6 +545,11 @@ const useVideoStore = create<
             state.props.layers;
           const { [layerId]: removedSequenceItems, ...remainingSequenceItems } =
             state.props.sequenceItems;
+          console.log(
+            { removedLayer },
+            state.props.layerOrder.filter((id) => id !== layerId),
+          );
+
           return {
             props: {
               ...state.props,
@@ -529,6 +568,44 @@ const useVideoStore = create<
             layerOrder: newOrder,
           },
         }));
+      },
+
+      // updateLayerMetaData(layerId, updates) {
+      //   set((state) => {
+      //     const layer = state.props.layers[layerId];
+      //     if (!layer) {
+      //       console.warn(`Layer ${layerId} not found`);
+      //       return;
+      //     }
+
+      //     layer.name = updates.name;
+      //   });
+      // },
+      updateLayerMetadata: (layerId, updates) => {
+        set((state) => {
+          const layer = state.props.layers[layerId];
+          if (!layer) {
+            console.warn(`Layer ${layerId} not found`);
+            return state; // Return the unchanged state if the layer is not found
+          }
+
+          // Create a new layers object with the updated layer
+          const updatedLayers = {
+            ...state.props.layers,
+            [layerId]: {
+              ...layer,
+              ...updates,
+            },
+          };
+
+          // Return the new state with the updated layers
+          return {
+            props: {
+              ...state.props,
+              layers: updatedLayers,
+            },
+          };
+        });
       },
     })),
     {

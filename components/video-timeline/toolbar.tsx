@@ -51,7 +51,9 @@ export const Toolbar: React.FC = () => {
   const addLayer = useVideoStore((state) => state.addLayer);
 
   const handleAddLayer = () => {
-    addLayer(0);
+    addLayer({
+      position: "AT_TOP",
+    });
   };
 
   const toolbarCategories: ToolbarCategory[] = [
@@ -155,7 +157,7 @@ export const Toolbar: React.FC = () => {
   return (
     <TooltipProvider>
       <div
-        className="flex items-center justify-end space-x-1 p-1 shadow-sm"
+        className="flex items-center justify-end space-x-1 border-b p-1 shadow-sm"
         style={
           {
             // height: TRACK_LAYER_HEIGHT,
