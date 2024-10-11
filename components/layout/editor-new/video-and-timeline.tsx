@@ -1,6 +1,6 @@
 "use client";
 
-import { ErrorFallback, Player, PlayerRef } from "@remotion/player";
+import { type ErrorFallback, Player, type PlayerRef } from "@remotion/player";
 import { useRef } from "react";
 import { AbsoluteFill } from "remotion";
 import VideoTimeline from "~/components/video-timeline/VideoTImeline";

@@ -9,12 +9,13 @@ import Toolbar from "./toolbar";
 import Layer from "./layer";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import { LAYERS_IN_ORDER } from "~/utils/timeline.utils";
+import useVideoStore from "~/store/video.store";
 
 const { LAYER_HEIGHT_IN_PX } = TIMELINE;
 
 const VideoTimeline = () => {
   const { containerRef, handleTimelineClick, pixelsPerFrame } = useTimeline();
-
+  const orderedLayers = useVideoStore((state) => state.props.layerOrder);
   return (
     <div className="flex h-full flex-col justify-end">
       <Toolbar />
@@ -40,8 +41,12 @@ const VideoTimeline = () => {
           <TimeLayer />
 
           {/* -------------------------- Stack of Main Layers -------------------------- */}
-          {LAYERS_IN_ORDER.map(({ id }) => (
-            <Layer key={id} layerId={id} pixelsPerFrame={pixelsPerFrame} />
+          {orderedLayers.map((layerId) => (
+            <Layer
+              key={layerId}
+              layerId={layerId}
+              pixelsPerFrame={pixelsPerFrame}
+            />
           ))}
 
           {/* -------------------------- Playhead -------------------------- */}

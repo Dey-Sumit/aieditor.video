@@ -45,9 +45,11 @@ const LayerItem: React.FC<LayerItemProps> = ({ layer, constraintsRef }) => {
             className="reorder-handle cursor-move mr-2"
             onPointerDown={(e) => controls.start(e)}
           >
-            <GripVertical size={16} />
+            <GripVertical size={16} className="text-white/30" />
           </div>
-          <span className="text-xs capitalize">{layer.name.slice(6, 10)}</span>
+          <span className="text-xs capitalize select-none">
+            {layer.name.slice(6, 10)}
+          </span>
         </div>
       </LayerContentMenuWrapper>
     </Reorder.Item>

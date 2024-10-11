@@ -18,9 +18,13 @@ function AddItemContextMenu({
 }: {
   children: React.ReactNode;
   layerId: LayerId;
-  onPresetAdd: ReturnType<typeof useSequenceAddition>["mouseEventHandlers"]["onClick"];
+  onPresetAdd: ReturnType<
+    typeof useSequenceAddition
+  >["mouseEventHandlers"]["onClick"];
 }) {
-  const addPreset = (presetName: "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND") => {
+  const addPreset = (
+    presetName: "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND",
+  ) => {
     // END_SCREEN_PRESET
     console.log(presetName);
   };
@@ -28,24 +32,39 @@ function AddItemContextMenu({
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
-      <ContextMenuContent className="mb-4 w-64 bg-white/90">
-        <ContextMenuItem className="text-xs" onClick={() => console.log("add text")}>
+      <ContextMenuContent className="mb-4 w-64">
+        <ContextMenuItem
+          className="text-xs"
+          onClick={() => console.log("add text")}
+        >
           Add Text
           <ContextMenuShortcut>T</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem className="text-xs" onClick={() => console.log("add text")}>
+        <ContextMenuItem
+          className="text-xs"
+          onClick={() => console.log("add text")}
+        >
           Add Image
           <ContextMenuShortcut>I</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem className="text-xs" onClick={() => console.log("add text")}>
+        <ContextMenuItem
+          className="text-xs"
+          onClick={() => console.log("add text")}
+        >
           Add Video
           <ContextMenuShortcut>V</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem className="text-xs" onClick={() => console.log("add text")}>
+        <ContextMenuItem
+          className="text-xs"
+          onClick={() => console.log("add text")}
+        >
           Add Dummy
           <ContextMenuShortcut>D</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem className="text-xs" onClick={() => console.log("add text")}>
+        <ContextMenuItem
+          className="text-xs"
+          onClick={() => console.log("add text")}
+        >
           Add Audio
           <ContextMenuShortcut>A</ContextMenuShortcut>
         </ContextMenuItem>
@@ -77,9 +96,7 @@ function AddItemContextMenu({
         <ContextMenuSub>
           <ContextMenuSubTrigger>Last Added Presets</ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-48">
-            {/* <ContextMenuItem onClick={() => addPreset("END_SCREEN_PRESET")}>
-              Brut End Screen
-            </ContextMenuItem> */}
+            <ContextMenuItem>Brut End Screen</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
       </ContextMenuContent>
