@@ -321,7 +321,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
         name: "Layer Background",
         isVisible: true,
         liteItems: [
-          {
+          /*  {
             id: "id-train-window-smash",
             sequenceType: "standalone",
             contentType: "video",
@@ -329,7 +329,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             offset: 0,
             startFrame: 0,
             effectiveDuration: 600,
-          },
+          }, */
         ],
       },
       layerMiddle: {

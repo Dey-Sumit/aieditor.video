@@ -1,9 +1,8 @@
-import React, { type ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import { Rnd } from "react-rnd";
 import { useTimeline } from "~/context/useTimeline";
 import { cn } from "~/lib/utils";
 
-import SequenceContextMenuWrapper from "../sequence-context-menu";
 import {
   ALargeSmall,
   ArrowRightLeft,
@@ -11,9 +10,10 @@ import {
   Image,
   Video,
 } from "lucide-react";
-import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
+import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
+import SequenceContextMenuWrapper from "../sequence-context-menu";
 /**
  * Map of item types to their corresponding CSS classes for styling.
  */
@@ -103,11 +103,11 @@ const SequenceItem = ({
       bounds="parent"
       position={{
         x,
-        y: 2,
+        y: 0,
       }}
       size={{
         width,
-        height: "96%",
+        height: "100%",
       }}
       enableResizing={{
         bottom: false,
@@ -163,6 +163,7 @@ const SequenceItem = ({
             <div className="flex items-center gap-1">
               {/* {item.id.slice(0, 7)} */}
               {item.contentType === "video" && <Video size={14} />}
+              {/* eslint-disable-next-line jsx-a11y/alt-text */}
               {item.contentType === "image" && <Image size={14} />}
               {item.contentType === "text" && <ALargeSmall size={14} />}
               {item.contentType === "audio" && <AudioLines size={14} />}
@@ -173,13 +174,13 @@ const SequenceItem = ({
         {/* --------------------------- Transition Element --------------------------- */}
         {item.transition?.incoming && (
           <button
-            className="absolute left-0 top-0 z-10 flex h-full items-center justify-center rounded-[4px] border border-green-200 bg-gradient-to-r from-green-500/80 to-green-500/80"
+            className="absolute inset-y-px left-0 z-10 flex h-auto items-center justify-center rounded-[4px] border border-orange-600 bg-orange-600/60"
             style={{
               width: item.transition?.incoming.duration * 2 * pixelsPerFrame,
-              left: -(item.transition?.incoming.duration * pixelsPerFrame),
+              left: -item.transition?.incoming.duration * pixelsPerFrame - 2,
             }}
           >
-            <ArrowRightLeft size={16} className="-ml-1 text-white" />
+            <ArrowRightLeft size={16} className="text-white" />
           </button>
         )}
       </SequenceContextMenuWrapper>

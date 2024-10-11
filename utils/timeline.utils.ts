@@ -1,5 +1,4 @@
-import { staticFile } from "remotion";
-import {
+import type {
   FullSequenceItemType,
   LayerId,
   LiteSequenceItemType,

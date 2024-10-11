@@ -1,8 +1,7 @@
-import { PlayerRef } from "@remotion/player";
+import type { PlayerRef } from "@remotion/player";
 import React, { createContext, useContext, useState } from "react";
 import { useNewVideoTimeline } from "~/hooks/use-video-timeline";
-import { LayerId } from "~/types/timeline.types";
-
+import type { LayerId } from "~/types/timeline.types";
 
 const VideoTimelineContext = createContext<
   ReturnType<typeof useNewVideoTimeline> & {

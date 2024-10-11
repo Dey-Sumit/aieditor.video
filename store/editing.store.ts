@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { LayerId } from "~/types/timeline.types";
+import type { LayerId } from "~/types/timeline.types";
 
 type NewItemType = "text" | "image" | "video" | "audio";
 
@@ -12,6 +12,7 @@ interface EditingState {
     itemType: NewItemType;
   } | null;
   newItemType: NewItemType;
+  // aboutToUse: {};
 }
 
 interface EditingActions {

@@ -174,6 +174,7 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
     handlePlayheadDrag,
     handleTimeLayerClick,
     currentFrame,
+    setPlayheadPosition,
   };
 }
 
@@ -192,7 +193,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
 
   const selectedNewItemType = useEditingStore((state) => state.newItemType);
 
-  const { draggingLayerId } = useTimeline();
+  const { draggingLayerId, handleTimeLayerClick } = useTimeline();
 
   const liteItems = useVideoStore(
     (state) => state.props.layers[layerId]?.liteItems,
@@ -315,6 +316,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
           sequenceType: "preset",
         });
       }
+      handleTimeLayerClick(e);
     },
     [
       layerId,
@@ -322,6 +324,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
       setActiveSeqItem,
       addPresetToLayer,
       selectedNewItemType,
+      handleTimeLayerClick,
     ],
   );
 
@@ -341,6 +344,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
     handleAddNewItem,
   };
 }
+
 //TODO:  not using this hook, the code of the hooks can be better
 const useItemResize = (
   pixelsPerFrame: number,

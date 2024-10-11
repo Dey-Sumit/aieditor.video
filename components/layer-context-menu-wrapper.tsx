@@ -42,8 +42,6 @@ export default function Component({
     (state) => state.updateLayerMetadata,
   );
 
-  const handleRename = () => {};
-
   const handleSaveRename = () => {
     const newName = nameInputRef.current?.value;
     if (newName) {
@@ -56,8 +54,6 @@ export default function Component({
   const handleVisibilityToggle = (checked: boolean) => {
     updateLayerMetadata(layerId, { isVisible: checked });
   };
-
-  const handleCancelRename = () => {};
 
   return (
     <ContextMenu>
