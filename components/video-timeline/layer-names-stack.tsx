@@ -40,15 +40,15 @@ const LayerItem: React.FC<LayerItemProps> = ({ layer, constraintsRef }) => {
       }}
     >
       <LayerContentMenuWrapper layerId={layer.id}>
-        <div className="flex items-center w-full h-full px-2">
+        <div className="flex items-center w-full h-full px-1">
           <div
             className="reorder-handle cursor-move mr-2"
             onPointerDown={(e) => controls.start(e)}
           >
             <GripVertical size={16} className="text-white/30" />
           </div>
-          <span className="text-xs capitalize select-none">
-            {layer.name.slice(6, 10)}
+          <span className="text-xs capitalize select-none line-clamp-1 ">
+            {layer.name}
           </span>
         </div>
       </LayerContentMenuWrapper>

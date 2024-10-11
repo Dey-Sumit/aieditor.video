@@ -1,20 +1,20 @@
-import { useRef, useState, useCallback, useEffect, useMemo } from "react";
-import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import { type PlayerRef } from "@remotion/player";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
 import { useTimeline } from "~/context/useTimeline";
+import { TIMELINE } from "~/lib/constants/timeline.constants";
+import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import {
+import type {
   ContentType,
   LayerId,
   PresetName,
   StoreType,
 } from "~/types/timeline.types";
-import { useEditingStore } from "~/store/editing.store";
-import { calculatePlaceholderDuration } from "~/utils/timeline.utils";
 import { genId } from "~/utils/misc.utils";
-import { TIMELINE } from "~/lib/constants/timeline.constants";
+import { calculatePlaceholderDuration } from "~/utils/timeline.utils";
 
 const { MAX_PLACEHOLDER_FRAMES: MAX_PLACEHOLDER_DURATION_IN_FRAMES } = TIMELINE;
 
@@ -62,7 +62,7 @@ const useTimelineInteractions = (
     [containerWidth, pixelsPerFrame, playerRef, setPlayheadPosition],
   );
 
-  const handleTimelineClick = useCallback(
+  const handleTimeLayerClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!playerRef.current) return;
 
@@ -77,7 +77,7 @@ const useTimelineInteractions = (
     [containerWidth, pixelsPerFrame, playerRef, setPlayheadPosition],
   );
 
-  return { handlePlayheadDrag, handleTimelineClick };
+  return { handlePlayheadDrag, handleTimeLayerClick };
 };
 
 const useItemDrag = (
@@ -147,7 +147,7 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
     pixelsPerFrame,
   );
 
-  const { handlePlayheadDrag, handleTimelineClick } = useTimelineInteractions(
+  const { handlePlayheadDrag, handleTimeLayerClick } = useTimelineInteractions(
     containerWidth,
     pixelsPerFrame,
     playerRef,
@@ -172,7 +172,7 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
     throttledItemDrag,
     throttledItemResize,
     handlePlayheadDrag,
-    handleTimelineClick,
+    handleTimeLayerClick,
     currentFrame,
   };
 }

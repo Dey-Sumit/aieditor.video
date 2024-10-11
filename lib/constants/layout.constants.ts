@@ -1,7 +1,12 @@
 export const LAYOUT = {
   SIDE_NAVBAR_WIDTH: "4rem",
   NAVBAR_ITEM_CONTENT_WIDTH: "20rem",
-  TIMELINE_HEIGHT: "14rem",
+  TIMELINE_HEIGHT: "14rem", // TODO : remove this
+  TIMELINE: {
+    TIMELINE_CONTAINER_HEIGHT: "15rem",
+    TRACK_LAYER_HEIGHT: "2rem",
+    UTILS_LAYER_HEIGHT: "1.8rem",
+    LAYER_NAME_STACK_WIDTH: "8rem",
+  },
   PROJECT_HEADER_HEIGHT: "3.5rem",
 };
-

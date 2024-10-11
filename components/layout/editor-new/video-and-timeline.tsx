@@ -9,9 +9,6 @@ import useVideoStore from "~/store/video.store";
 import { NestedCompositionPropsSchema } from "~/types/timeline.types";
 import NestedSequenceComposition from "~/video/compositions/composition";
 
-const SIDE_NAVBAR_WIDTH = "4rem";
-const TIMELINE_HEIGHT = "14rem";
-
 const VideoAndTimeline = () => {
   const playerRef = useRef<PlayerRef>(null);
   const { props } = useVideoStore();
@@ -23,16 +20,11 @@ const VideoAndTimeline = () => {
       </div>
       {/* -------------------- timeline -------------------- */}
 
-      <div
-        className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
-        style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_HEIGHT }}
-      >
-        {props && (
-          <VideoTimelineProvider playerRef={playerRef}>
-            <VideoTimeline />
-          </VideoTimelineProvider>
-        )}
-      </div>
+      {props && (
+        <VideoTimelineProvider playerRef={playerRef}>
+          <VideoTimeline />
+        </VideoTimelineProvider>
+      )}
     </>
   );
 };
@@ -76,13 +68,7 @@ const VideoPreview = ({
 
 const errorFallback: ErrorFallback = ({ error }) => {
   return (
-    <AbsoluteFill
-      style={{
-        backgroundColor: "yellow",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <AbsoluteFill className="flex items-center justify-center bg-yellow-700">
       Sorry about this! An error occurred: {error.message}
     </AbsoluteFill>
   );

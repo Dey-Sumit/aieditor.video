@@ -6,8 +6,11 @@ import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline"
 import SequenceItemEditorContainerNew from "~/components/layout/editor/sequence-item-editor-new";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 
-const { SIDE_NAVBAR_WIDTH, NAVBAR_ITEM_CONTENT_WIDTH, TIMELINE_HEIGHT } =
-  LAYOUT;
+const {
+  SIDE_NAVBAR_WIDTH,
+  NAVBAR_ITEM_CONTENT_WIDTH,
+  TIMELINE: { TRACK_LAYER_HEIGHT, TIMELINE_CONTAINER_HEIGHT },
+} = LAYOUT;
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -25,7 +28,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         className="gradient-bg overflow-y-scroll overscroll-contain border-r"
         style={{
           width: NAVBAR_ITEM_CONTENT_WIDTH,
-          paddingBottom: TIMELINE_HEIGHT,
+          paddingBottom: TIMELINE_CONTAINER_HEIGHT,
         }}
       >
         {children}
@@ -42,13 +45,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div
         className="flex flex-1 flex-col"
         style={{
-          height: `calc(100vh - ${TIMELINE_HEIGHT})`,
+          height: `calc(100vh - ${TIMELINE_CONTAINER_HEIGHT})`,
         }}
       >
         <div className="flex flex-1">
           {/* -------------------- video player and timeline -------------------- */}
 
-          <section className="flex-1 editorBg">
+          <section className="editorBg flex-1">
             <VideoAndTimeline />
           </section>
           <div className="border-l">

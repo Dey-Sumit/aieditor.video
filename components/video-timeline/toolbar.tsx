@@ -1,4 +1,23 @@
-import React from "react";
+import {
+  ClipboardPaste,
+  Copy,
+  ImageIcon,
+  Layers,
+  MousePointer2,
+  Music,
+  Redo,
+  Scissors,
+  Type,
+  Undo,
+  Video,
+  ZoomIn,
+  ZoomOut,
+  type LucideProps,
+} from "lucide-react";
+import React, {
+  type ForwardRefExoticComponent,
+  type RefAttributes,
+} from "react";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -7,28 +26,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import {
-  MousePointer2,
-  Type,
-  Image as ImageIcon,
-  Video,
-  Music,
-  Scissors,
-  Copy,
-  ClipboardPaste,
-  Undo,
-  Redo,
-  ZoomIn,
-  ZoomOut,
-  Layers,
-} from "lucide-react";
 
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
 
 interface ToolbarItem {
-  icon: React.ReactNode;
+  Icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
   label: string;
   onClick: () => void;
 }
@@ -53,7 +59,7 @@ export const Toolbar: React.FC = () => {
       name: "Layers",
       items: [
         {
-          icon: <Layers size={16} />,
+          Icon: Layers,
           label: "Add Layer",
           onClick: handleAddLayer,
         },
@@ -63,7 +69,7 @@ export const Toolbar: React.FC = () => {
       name: "Selection",
       items: [
         {
-          icon: <MousePointer2 size={16} />,
+          Icon: MousePointer2,
           label: "Select",
           onClick: () => console.log("Select clicked"),
         },
@@ -73,22 +79,22 @@ export const Toolbar: React.FC = () => {
       name: "Insert",
       items: [
         {
-          icon: <Type size={16} />,
+          Icon: Type,
           label: "Text",
           onClick: () => setNewItemType("text"),
         },
         {
-          icon: <ImageIcon size={16} />,
+          Icon: ImageIcon,
           label: "Image",
           onClick: () => setNewItemType("image"),
         },
         {
-          icon: <Video size={16} />,
+          Icon: Video,
           label: "Video",
           onClick: () => setNewItemType("video"),
         },
         {
-          icon: <Music size={16} />,
+          Icon: Music,
           label: "Audio",
           onClick: () => setNewItemType("audio"),
         },
@@ -98,17 +104,17 @@ export const Toolbar: React.FC = () => {
       name: "Edit",
       items: [
         {
-          icon: <Scissors size={16} />,
+          Icon: Scissors,
           label: "Cut",
           onClick: () => console.log("Cut clicked"),
         },
         {
-          icon: <Copy size={16} />,
+          Icon: Copy,
           label: "Copy",
           onClick: () => console.log("Copy clicked"),
         },
         {
-          icon: <ClipboardPaste size={16} />,
+          Icon: ClipboardPaste,
           label: "Paste",
           onClick: () => console.log("Paste clicked"),
         },
@@ -118,12 +124,12 @@ export const Toolbar: React.FC = () => {
       name: "History",
       items: [
         {
-          icon: <Undo size={16} />,
+          Icon: Undo,
           label: "Undo",
           onClick: () => console.log("Undo clicked"),
         },
         {
-          icon: <Redo size={16} />,
+          Icon: Redo,
           label: "Redo",
           onClick: () => console.log("Redo clicked"),
         },
@@ -133,12 +139,12 @@ export const Toolbar: React.FC = () => {
       name: "View",
       items: [
         {
-          icon: <ZoomIn size={16} />,
+          Icon: ZoomIn,
           label: "Zoom In",
           onClick: () => console.log("Zoom In clicked"),
         },
         {
-          icon: <ZoomOut size={16} />,
+          Icon: ZoomOut,
           label: "Zoom Out",
           onClick: () => console.log("Zoom Out clicked"),
         },
@@ -148,7 +154,14 @@ export const Toolbar: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <div className="flex sticky top-o inset-x-0 items-center justify-end space-x-1 p-1 shadow-sm">
+      <div
+        className="flex items-center justify-end space-x-1 p-1 shadow-sm"
+        style={
+          {
+            // height: TRACK_LAYER_HEIGHT,
+          }
+        }
+      >
         {/* <div>
           <p>{currentFrame}</p>
         </div> */}
@@ -170,7 +183,7 @@ export const Toolbar: React.FC = () => {
                         newItemType === item.label.toLowerCase() && "bg-muted",
                       )}
                     >
-                      {item.icon}
+                      <item.Icon size={14} />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>

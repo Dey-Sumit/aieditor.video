@@ -1,6 +1,6 @@
-import "../styles/prosemirror.css";
+import type { Metadata } from "next";
 import "../styles/global.css";
-import { Metadata } from "next";
+import "../styles/prosemirror.css";
 
 export const metadata: Metadata = {
   title: "Remotion and Next.js",

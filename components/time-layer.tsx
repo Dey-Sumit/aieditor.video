@@ -1,15 +1,19 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useTimeline } from "~/context/useTimeline";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import useVideoStore from "~/store/video.store";
+import PlayHead from "./video-timeline/playhead";
 
-const { LAYER_HEIGHT_IN_PX, TIME_LAYER_RIGHT_OFFSET } = TIMELINE;
+const { TIME_LAYER_RIGHT_OFFSET } = TIMELINE;
 
 const TimeLayer = () => {
-  const { containerWidth } = useTimeline();
+  const { containerWidth, handleTimeLayerClick } = useTimeline();
+
   const width = containerWidth - TIME_LAYER_RIGHT_OFFSET;
 
-  const durationInFrames = useVideoStore((state) => state.props.compositionMetaData.duration);
+  const durationInFrames = useVideoStore(
+    (state) => state.props.compositionMetaData.duration,
+  );
   const fps = useVideoStore((state) => state.props.compositionMetaData.fps);
 
   const timeMarkers = useMemo(() => {
@@ -46,8 +50,8 @@ const TimeLayer = () => {
 
   return (
     <div
-      className="relative w-full border-t border-gray-400 text-[8px] text-gray-500"
-      style={{ height: `${LAYER_HEIGHT_IN_PX}px` }}
+      onClick={handleTimeLayerClick}
+      className="relative z-50 w-full border-t border-gray-400 text-[8px] text-gray-500"
     >
       {timeMarkers.map((marker, index) => (
         <div
@@ -62,6 +66,8 @@ const TimeLayer = () => {
           <span>{formatTime(marker.time)}</span>
         </div>
       ))}
+      {/* -------------------------- Playhead -------------------------- */}
+      <PlayHead />
     </div>
   );
 };

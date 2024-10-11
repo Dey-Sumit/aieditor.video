@@ -1,59 +1,89 @@
 "use client";
-import React from "react";
 
 import { useTimeline } from "~/context/useTimeline";
-import TimeLayer from "../time-layer";
-import LayerNamesStack from "./layer-names-stack";
-import PlayHead from "./playhead";
-import Toolbar from "./toolbar";
-import Layer from "./layer";
-import { TIMELINE } from "~/lib/constants/timeline.constants";
-import { LAYERS_IN_ORDER } from "~/utils/timeline.utils";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
+import TimeLayer from "../time-layer";
+import Layer from "./layer";
+import LayerNamesStack from "./layer-names-stack";
+import Toolbar from "./toolbar";
 
-const { LAYER_HEIGHT_IN_PX } = TIMELINE;
+const {
+  SIDE_NAVBAR_WIDTH,
+  TIMELINE: {
+    TRACK_LAYER_HEIGHT,
+    TIMELINE_CONTAINER_HEIGHT,
+
+    LAYER_NAME_STACK_WIDTH,
+  },
+} = LAYOUT;
 
 const VideoTimeline = () => {
-  const { containerRef, handleTimelineClick, pixelsPerFrame } = useTimeline();
+  const { containerRef, pixelsPerFrame } = useTimeline();
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
   return (
-    <div className="flex h-full flex-col justify-end">
-      <Toolbar />
-      {/* <Toolbar />
-      <Toolbar /> */}
-      <div className="relative flex">
-        {/* ----- left section of the timeline: includes name,helper buttons, etc ----*/}
-        <div className="w-32 flex-shrink-0 divide-y divide-gray-800 border-r">
-          {/* ------------------------- FAKE DIV FOR TIME LAYER ------------------------  */}
-          <div style={{ height: `${LAYER_HEIGHT_IN_PX}px` }} />
+    <section
+      className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
+      style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_CONTAINER_HEIGHT }}
+    >
+      <div className="relative flex h-full flex-col">
+        <div className="w-full bg-black">
+          {/* <div
+            id="timeline-controls"
+            className="flex items-center justify-center bg-red-900 text-xs"
+            style={{
+              height: UTILS_LAYER_HEIGHT,
+            }}
+          >
+            video player controls
+          </div> */}
+          <Toolbar />
+          {/* ------------------------- TIME LAYER ------------------------  */}
+          <div
+            className="flex"
+            style={{
+              height: TRACK_LAYER_HEIGHT,
+            }}
+          >
+            <div
+              className="flex-shrink-0 divide-y divide-gray-800 border-r"
+              style={{
+                width: LAYER_NAME_STACK_WIDTH,
+              }}
+            ></div>
 
-          {/* -------------------------- Stack of Main Layers Names -------------------------- */}
-          <LayerNamesStack />
+            <TimeLayer />
+          </div>
         </div>
 
-        {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
-        <div
-          ref={containerRef}
-          className="relative flex-grow divide-y"
-          onClick={handleTimelineClick}
-        >
-          {/* ------------------------- TIME LAYER ------------------------  */}
-          <TimeLayer />
+        <div className="relative overflow-y-auto overscroll-contain">
+          <div className="flex">
+            {/* ----- left section of the timeline: includes name,helper buttons, etc ----*/}
+            <div
+              className="flex-shrink-0 divide-y divide-gray-800 border-r"
+              style={{
+                width: LAYER_NAME_STACK_WIDTH,
+              }}
+            >
+              {/* -------------------------- Stack of Main Layers Names -------------------------- */}
+              <LayerNamesStack />
+            </div>
 
-          {/* -------------------------- Stack of Main Layers -------------------------- */}
-          {orderedLayers.map((layerId) => (
-            <Layer
-              key={layerId}
-              layerId={layerId}
-              pixelsPerFrame={pixelsPerFrame}
-            />
-          ))}
-
-          {/* -------------------------- Playhead -------------------------- */}
-          <PlayHead />
+            {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
+            <div ref={containerRef} className="relative flex-grow divide-y">
+              {/* -------------------------- Stack of Main Layers -------------------------- */}
+              {orderedLayers.map((layerId) => (
+                <Layer
+                  key={layerId}
+                  layerId={layerId}
+                  pixelsPerFrame={pixelsPerFrame}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
