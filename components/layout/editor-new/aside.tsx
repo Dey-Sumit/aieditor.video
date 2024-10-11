@@ -1,5 +1,4 @@
 "use client";
-import { useParams, usePathname, useRouter } from "next/navigation";
 import {
   HeadphonesIcon,
   LifeBuoyIcon,
@@ -8,7 +7,9 @@ import {
   SquareUserIcon,
   VideoIcon,
   WandIcon,
-} from "~/components/Icons";
+} from "lucide-react";
+import { useParams, usePathname, useRouter } from "next/navigation";
+
 import { TooltipButton } from "~/components/ui/custom/tool-tip-button";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { cn } from "~/lib/utils";

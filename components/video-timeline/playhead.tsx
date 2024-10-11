@@ -21,8 +21,8 @@ const PlayHead = () => {
       dragHandleClassName="playhead-handle"
     >
       <div className="absolute -top-4 left-0 flex h-full w-full flex-col items-center rounded-xl">
-        <div className="playhead-handle size-4 cursor-grab rounded-full border border-indigo-500 bg-indigo-700" />
-        <div className="h-full w-full border border-indigo-700 bg-indigo-600" />
+        <div className="playhead-handle -mb-px size-4 cursor-grab rounded-full border border-indigo-500 bg-indigo-600 transition-all hover:size-5" />
+        <div className="h-full w-full border border-indigo-500 bg-indigo-600" />
       </div>
     </Rnd>
   );

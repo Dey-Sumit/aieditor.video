@@ -1,10 +1,16 @@
-"use client";
+import dynamic from "next/dynamic";
 import React from "react";
 import AsideNew from "~/components/layout/editor-new/aside";
 import ProjectHeader from "~/components/layout/editor-new/project-header";
 import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline";
-import SequenceItemEditorRenderer from "~/components/layout/editor/sequence-item-editor-new";
 import { LAYOUT } from "~/lib/constants/layout.constants";
+
+const DynamicSeqEditor = dynamic(
+  () => import("~/components/layout/editor/sequence-item-editor-new"),
+  {
+    loading: () => <p>Loading...</p>,
+  },
+);
 
 const {
   SIDE_NAVBAR_WIDTH,
@@ -43,11 +49,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <div className="flex flex-1">
-          {/* -------------------- video player and timeline -------------------- */}
+          {/* -------------------- video player and timeline starts -------------------- */}
 
           <section className="editorBg flex-1">
             <VideoAndTimeline />
           </section>
+
+          {/* -------------------- video player and timeline ends -------------------- */}
+
           <div className="border-l">
             {/* -------------------- project header container starts -------------------- */}
 
@@ -56,7 +65,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             {/* -------------------- project header ends -------------------- */}
 
             {/* --------------------  sequence item editor container starts -------------------- */}
-            <SequenceItemEditorRenderer />
+            <DynamicSeqEditor />
             {/* -------------------- sequence item editor container ends -------------------- */}
           </div>
         </div>

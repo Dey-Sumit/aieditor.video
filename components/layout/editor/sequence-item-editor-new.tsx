@@ -1,3 +1,4 @@
+"use client";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";

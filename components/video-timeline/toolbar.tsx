@@ -33,6 +33,7 @@ interface ToolbarItem {
   Icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
+  iconClassName?: string;
   label: string;
   onClick: () => void;
 }
@@ -65,21 +66,25 @@ const Toolbar: React.FC = () => {
           Icon: Type,
           label: "Text",
           onClick: () => setNewItemType("text"),
+          iconClassName: "text-green-500",
         },
         {
           Icon: ImageIcon,
           label: "Image",
           onClick: () => setNewItemType("image"),
+          iconClassName: "text-purple-500",
         },
         {
           Icon: Video,
           label: "Video",
           onClick: () => setNewItemType("video"),
+          iconClassName: "text-pink-500",
         },
         {
           Icon: Music,
           label: "Audio",
           onClick: () => setNewItemType("audio"),
+          iconClassName: "text-orange-500",
         },
       ],
     },
@@ -137,17 +142,7 @@ const Toolbar: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <div
-        className="flex items-center justify-end space-x-1 border-b p-1 shadow-sm"
-        style={
-          {
-            // height: TRACK_LAYER_HEIGHT,
-          }
-        }
-      >
-        {/* <div>
-          <p>{currentFrame}</p>
-        </div> */}
+      <div className="flex items-center justify-end space-x-1 p-1 shadow-sm">
         {toolbarCategories.map((category, categoryIndex) => (
           <React.Fragment key={category.name}>
             {categoryIndex > 0 && (
@@ -166,7 +161,7 @@ const Toolbar: React.FC = () => {
                         newItemType === item.label.toLowerCase() && "bg-muted",
                       )}
                     >
-                      <item.Icon size={14} />
+                      <item.Icon size={14} className={item.iconClassName} />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>

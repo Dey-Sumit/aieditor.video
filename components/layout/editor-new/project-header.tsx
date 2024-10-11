@@ -1,4 +1,5 @@
-import { PencilIcon, DownloadIcon } from "lucide-react";
+"use client";
+import { DownloadIcon, PencilIcon } from "lucide-react";
 import { DownloadButton } from "~/components/DownloadButton";
 import { ProgressBar } from "~/components/ProgressBar";
 import { Button } from "~/components/ui/button";
@@ -16,7 +17,7 @@ const ProjectHeader = () => {
 
   return (
     <div
-      className="pattern-bg-asfalt relative flex flex-col p-2   justify-center text-sm"
+      className="pattern-bg-asfalt relative flex flex-col justify-center p-2 text-sm"
       style={{ height: PROJECT_HEADER_HEIGHT }}
     >
       <div className="flex items-center justify-between">

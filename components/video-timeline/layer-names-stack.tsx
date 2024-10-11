@@ -62,25 +62,23 @@ const LayerStack: React.FC = () => {
   const constraintsRef = useRef(null);
 
   return (
-    <div ref={constraintsRef} className="relative">
-      <Reorder.Group
-        axis="y"
-        values={orderedLayers}
-        onReorder={(newLayerOrder) => {
-          reorderLayers(newLayerOrder);
-        }}
-        className="relative"
-        style={{ height: `${orderedLayers.length * LAYER_HEIGHT_IN_PX}px` }}
-      >
-        {orderedLayers.map((layerId) => (
-          <LayerItem
-            key={layerId}
-            layer={layers[layerId]}
-            constraintsRef={constraintsRef}
-          />
-        ))}
-      </Reorder.Group>
-    </div>
+    <Reorder.Group
+      axis="y"
+      values={orderedLayers}
+      onReorder={(newLayerOrder) => {
+        reorderLayers(newLayerOrder);
+      }}
+      className="relative"
+      ref={constraintsRef}
+    >
+      {orderedLayers.map((layerId) => (
+        <LayerItem
+          key={layerId}
+          layer={layers[layerId]}
+          constraintsRef={constraintsRef}
+        />
+      ))}
+    </Reorder.Group>
   );
 };
 

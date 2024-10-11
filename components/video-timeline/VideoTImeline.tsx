@@ -27,8 +27,9 @@ const VideoTimeline = () => {
       className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
       style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_CONTAINER_HEIGHT }}
     >
-      <div className="relative flex h-full flex-col">
-        <div className="w-full border-b backdrop-blur-lg">
+      <div className="flex h-full flex-col">
+        {/* ------------------------- Sticky(absolute) section starts ------------------------  */}
+        <div className="w-full border-b">
           <Toolbar />
           {/* ------------------------- TIME LAYER ------------------------  */}
           <div
@@ -38,7 +39,7 @@ const VideoTimeline = () => {
             }}
           >
             <div
-              className="flex-shrink-0 divide-y divide-gray-800 border-r"
+              className="flex-shrink-0 divide-y divide-gray-800 border-r border-t"
               style={{
                 width: LAYER_NAME_STACK_WIDTH,
               }}
@@ -50,33 +51,39 @@ const VideoTimeline = () => {
           </div>
         </div>
 
-        <div className="relative overflow-y-auto overscroll-contain">
-          <div className="flex">
-            {/* ----- left section of the timeline: includes name,helper buttons, etc ----*/}
-            <div
-              className="flex-shrink-0 divide-y divide-gray-800 border-r"
-              style={{
-                width: LAYER_NAME_STACK_WIDTH,
-              }}
-            >
-              {/* -------------------------- Stack of Main Layers Names -------------------------- */}
-              <LayerNamesStack />
-            </div>
+        {/* ------------------------- Sticky(absolute) section ends ------------------------  */}
 
-            {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
-            <div ref={containerRef} className="relative flex-grow">
-              {/* -------------------------- Stack of Main Layers -------------------------- */}
-              {orderedLayers.map((layerId) => (
-                <Layer
-                  key={layerId}
-                  layerId={layerId}
-                  pixelsPerFrame={pixelsPerFrame}
-                />
-              ))}
-            </div>
+        {/* ------------------------- Layers section starts ------------------------  */}
+
+        <div className="flex overflow-y-auto overscroll-contain">
+          {/* ----- left section of the timeline: includes name,helper buttons, etc ----*/}
+          <div
+            className="h-fit divide-y divide-gray-800 border-r"
+            style={{
+              width: LAYER_NAME_STACK_WIDTH,
+            }}
+          >
+            {/* -------------------------- Stack of Main Layers Names -------------------------- */}
+            <LayerNamesStack />
+          </div>
+
+          {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
+          <div ref={containerRef} className="flex-grow">
+            {/* -------------------------- Stack of Main Layers -------------------------- */}
+            {orderedLayers.map((layerId) => (
+              <Layer
+                key={layerId}
+                layerId={layerId}
+                pixelsPerFrame={pixelsPerFrame}
+              />
+            ))}
           </div>
         </div>
+        {/* ------------------------- Layers section ends ------------------------  */}
       </div>
+
+      {/* -------------------------- Playhead -------------------------- */}
+      {/* <PlayHead /> */}
     </section>
   );
 };
