@@ -9,6 +9,8 @@ const TIMELINE_WIDTH = 2000; // Adjust based on your needs
 interface SequenceItem {
   id: string;
   color: string;
+  startFrame: number;
+  duration: number;
 }
 
 interface Layer {
@@ -30,29 +32,60 @@ interface TimelineItemProps {
   layerIndex: number;
   itemIndex: number; // Add this new prop
   onDragStop: (itemId: string, newLayerId: string, newStart: number) => void;
+  layerOrder: string[]; // Add this prop
 }
+
+const FRAMES_PER_PIXEL = 1; // Adjust this value to change the zoom level
+const SNAP_THRESHOLD = LAYER_HEIGHT * 0.3; // 30% of layer height as snap zone
 
 const TimelineItem: React.FC<TimelineItemProps> = ({
   item,
   layerIndex,
   itemIndex, // Use this new prop
   onDragStop,
+  layerOrder, // Add this prop to get the list of layer IDs
 }) => {
-  const ITEM_WIDTH = 100; // You can adjust this or make it dynamic based on item duration
-  const ITEM_GAP = 10; // Gap between items
   return (
     <Rnd
       default={{
-        x: itemIndex * (ITEM_WIDTH + ITEM_GAP),
+        x: Math.floor(item.startFrame / FRAMES_PER_PIXEL),
         y: layerIndex * LAYER_HEIGHT + (LAYER_HEIGHT - ITEM_HEIGHT) / 2,
         width: 100, // Fixed width for now
         height: ITEM_HEIGHT,
       }}
       bounds="parent"
       onDragStop={(e, d) => {
-        const newLayerId = `layer${Math.floor(d.y / LAYER_HEIGHT) + 1}`;
-        onDragStop(item.id, newLayerId, d.x);
+        const centerY = d.y + ITEM_HEIGHT / 2;
+        const rawLayerIndex = centerY / LAYER_HEIGHT;
+        const snapLayerIndex = Math.round(rawLayerIndex);
+
+        // Check if we're within the snap threshold
+        if (
+          Math.abs(rawLayerIndex - snapLayerIndex) * LAYER_HEIGHT <=
+          SNAP_THRESHOLD
+        ) {
+          const newLayerId = layerOrder[snapLayerIndex];
+          if (newLayerId) {
+            const newStartFrame = Math.round(d.x * FRAMES_PER_PIXEL);
+            onDragStop(item.id, newLayerId, newStartFrame);
+          }
+        } else {
+          // If not within snap threshold, don't change the layer
+          const newStartFrame = Math.round(d.x * FRAMES_PER_PIXEL);
+          onDragStop(item.id, layerOrder[layerIndex], newStartFrame);
+        }
       }}
+      /*      onDragStop={(e, d) => {
+        const layerIndex = Math.floor(d.y / LAYER_HEIGHT);
+        const newLayerId = `layer${layerIndex}`; // BAD CODE: Don't hardcode layer names
+        console.log("New layer id", d, {
+          layerIndex,
+          newLayerId,
+          LAYER_HEIGHT,
+        });
+
+        onDragStop(item.id, newLayerId, d.x);
+      }} */
       // onResizeStop={(e, direction, ref, delta, position) => {
       //   onResize(item.id, parseInt(ref.style.width));
       // }}
@@ -71,58 +104,64 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
 const VideoEditorTimelinePOC: React.FC = () => {
   const [projectState, setProjectState] = useState<ProjectState>({
     layers: {
+      layer0: {
+        id: "layer0",
+        items: [],
+      },
       layer1: {
         id: "layer1",
         items: ["item1"],
       },
+
       layer2: {
         id: "layer2",
         items: ["item2"],
       },
-      layer3: {
-        id: "layer3",
-        items: ["item3"],
-      },
     },
     sequenceItems: {
-      item1: { id: "item1", color: "bg-blue-500" },
-      item2: { id: "item2", color: "bg-green-500" },
-      item3: { id: "item3", color: "bg-red-500" },
+      item1: {
+        id: "item1",
+        color: "bg-blue-500",
+        startFrame: 0,
+        duration: 200,
+      },
+
+      item2: {
+        id: "item2",
+        color: "bg-red-500",
+        startFrame: 50,
+        duration: 250,
+      },
     },
   });
-  console.log({ projectState });
-
+  const layerOrder = Object.keys(projectState.layers);
   const handleDragStop = (
     itemId: string,
     newLayerId: string,
-    newStart: number,
+    newStartFrame: number,
   ) => {
-    setProjectState((prevState) => {
-      // Create a copy of the previous state
-      const newState = { ...prevState };
+    // console.log("Drag stopped", itemId, newLayerId, newStartFrame);
 
-      // Find the layer that currently contains the item
+    setProjectState((prevState) => {
+      const newState = { ...prevState };
       const oldLayerId = Object.keys(newState.layers).find((layerId) =>
         newState.layers[layerId].items.includes(itemId),
       );
 
       if (oldLayerId) {
-        // Remove the item from the old layer
+        // Remove from old layer
         newState.layers[oldLayerId].items = newState.layers[
           oldLayerId
         ].items.filter((id) => id !== itemId);
 
-        // Add the item to the new layer
+        // Add to new layer
         if (!newState.layers[newLayerId]) {
-          // If the new layer doesn't exist, create it
           newState.layers[newLayerId] = { id: newLayerId, items: [] };
         }
         newState.layers[newLayerId].items.push(itemId);
 
-        // Update the item's position (if you want to store this information)
-        // For this, you'd need to modify your SequenceItem interface and state structure
-        // to include a 'start' property
-        // newState.sequenceItems[itemId].start = newStart;
+        // Update item's start frame
+        newState.sequenceItems[itemId].startFrame = newStartFrame;
       }
 
       return newState;
@@ -130,10 +169,10 @@ const VideoEditorTimelinePOC: React.FC = () => {
   };
 
   return (
-    <div className="w-full overflow-x-auto bg-gray-100 p-4">
-      <div className="flex h-[200px] w-full border border-gray-300">
+    <div className="mt-96 w-full overflow-x-auto bg-gray-100 p-4">
+      <div className="flex h-[150px] w-full border border-gray-300">
         <div className="w-[200px] border-r">
-          {[0, 1, 2, 3].map((layer) => (
+          {[0, 1, 2].map((layer) => (
             <div
               key={layer}
               className="w-full border-b border-red-800"
@@ -144,7 +183,7 @@ const VideoEditorTimelinePOC: React.FC = () => {
               }}
             >
               <span className="left-1 top-1 text-xs text-gray-500">
-                Layer {layer + 1}
+                Layer {layer}
               </span>
             </div>
           ))}
@@ -162,6 +201,7 @@ const VideoEditorTimelinePOC: React.FC = () => {
                     layerId={layerId}
                     onDragStop={handleDragStop}
                     layerIndex={layerIndex}
+                    layerOrder={layerOrder}
                   />
                 ))}
               </React.Fragment>
