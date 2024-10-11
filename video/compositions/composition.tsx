@@ -28,6 +28,8 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
 const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
   item,
 }) => {
+  console.log("SequenceItemRenderer item", item.type);
+
   switch (item.type) {
     case "text":
       // {
@@ -56,7 +58,9 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
           </div>
         </AbsoluteFill>
       );
-    case "image":
+    case "image": {
+      console.log("image renders");
+
       return (
         <AbsoluteFill className="flex items-center justify-center">
           <AbsoluteFill className="bg-black/10" />
@@ -75,6 +79,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
           />
         </AbsoluteFill>
       );
+    }
     case "video":
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
@@ -128,6 +133,8 @@ const SequenceRenderer: React.FC<{
     );
   } else {
     const fullItem = sequenceItems[liteItem.id];
+    console.log("fullItem", fullItem);
+
     return fullItem ? <SequenceItemRenderer item={fullItem} /> : null;
   }
 };
@@ -136,6 +143,8 @@ const NestedSequenceComposition = (
   props: NestedCompositionProjectType["props"],
 ) => {
   const { layers, layerOrder } = props;
+  console.log("layers", layers);
+
   return (
     <AbsoluteFill>
       {[...layerOrder].reverse().map((layerId) => {

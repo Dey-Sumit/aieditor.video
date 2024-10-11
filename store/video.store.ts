@@ -137,83 +137,192 @@ const useVideoStore = create<
         });
       },
 
-      updateSequenceItemPositionInLayer: (layerId, itemId, updates) => {
+      updateSequenceItemPositionInLayer: (
+        oldLayerId,
+        newLayerId,
+        itemId,
+        updates,
+      ) => {
         set((state: StoreType) => {
-          const layer = state.props.layers[layerId];
-          if (!layer) {
-            console.warn(`Layer ${layerId} not found`);
-            return;
-          }
-
-          const { oldIndex, futureNewIndex } = calculateItemIndices(
-            layer.liteItems,
-            itemId,
-            updates.startFrame,
-          );
-
-          const draggedItem = layer.liteItems[oldIndex];
-
-          // If the position hasn't changed, do nothing
-          if (updates.startFrame === draggedItem.startFrame) {
-            return;
-          }
-
-          // Create the updated item
-          const updatedItem = {
-            ...draggedItem,
-            startFrame: updates.startFrame,
-          };
-
-          // Remove the item from its current position
-          layer.liteItems.splice(oldIndex, 1);
-
-          // Insert the item at its new position
-          layer.liteItems.splice(futureNewIndex, 0, updatedItem);
-
-          // Determine the range of items that need updating
-          const startUpdateIndex = Math.min(oldIndex, futureNewIndex);
-          const endUpdateIndex = Math.max(oldIndex, futureNewIndex);
-
-          if (updatedItem.transition?.incoming) {
-            const prevItemBeforeChange = layer.liteItems[startUpdateIndex - 1];
-            if (prevItemBeforeChange) {
-              delete prevItemBeforeChange?.transition?.outgoing;
-              prevItemBeforeChange.effectiveDuration =
-                prevItemBeforeChange.sequenceDuration;
-            }
-            delete updatedItem.transition?.incoming;
-          }
-
-          // Remove outgoing transition if it exists
-          if (updatedItem.transition?.outgoing) {
-            const nextItem = layer.liteItems[endUpdateIndex + 1];
-            // Update the next item
-            if (!nextItem) {
+          if (oldLayerId === newLayerId) {
+            const layer = state.props.layers[oldLayerId];
+            if (!layer) {
+              console.warn(`Layer ${oldLayerId} not found`);
               return;
             }
 
-            delete nextItem.transition?.incoming;
-            delete updatedItem.transition?.outgoing;
-            updatedItem.effectiveDuration = updatedItem.sequenceDuration;
+            const { oldIndex, futureNewIndex } = calculateItemIndices(
+              layer.liteItems,
+              itemId,
+              updates.startFrame,
+            );
+
+            const draggedItem = layer.liteItems[oldIndex];
+
+            // If the position hasn't changed, do nothing
+            if (updates.startFrame === draggedItem.startFrame) {
+              return;
+            }
+
+            // Create the updated item
+            const updatedItem = {
+              ...draggedItem,
+              startFrame: updates.startFrame,
+            };
+
+            // Remove the item from its current position
+            layer.liteItems.splice(oldIndex, 1);
+
+            // Insert the item at its new position
+            layer.liteItems.splice(futureNewIndex, 0, updatedItem);
+
+            // Determine the range of items that need updating
+            const startUpdateIndex = Math.min(oldIndex, futureNewIndex);
+            const endUpdateIndex = Math.max(oldIndex, futureNewIndex);
+
+            if (updatedItem.transition?.incoming) {
+              const prevItemBeforeChange =
+                layer.liteItems[startUpdateIndex - 1];
+              if (prevItemBeforeChange) {
+                delete prevItemBeforeChange?.transition?.outgoing;
+                prevItemBeforeChange.effectiveDuration =
+                  prevItemBeforeChange.sequenceDuration;
+              }
+              delete updatedItem.transition?.incoming;
+            }
+
+            // Remove outgoing transition if it exists
+            if (updatedItem.transition?.outgoing) {
+              const nextItem = layer.liteItems[endUpdateIndex + 1];
+              // Update the next item
+              if (!nextItem) {
+                return;
+              }
+
+              delete nextItem.transition?.incoming;
+              delete updatedItem.transition?.outgoing;
+              updatedItem.effectiveDuration = updatedItem.sequenceDuration;
+            }
+
+            // TODO : i dont think we need to update the offsets for all affected items, we can just update the offsets for the items that are affected by the transition eg. the next item
+            // Update offsets for all affected items
+            for (let i = startUpdateIndex; i <= endUpdateIndex; i++) {
+              const currentItem = layer.liteItems[i];
+              const prevItem = i > 0 ? layer.liteItems[i - 1] : null;
+
+              currentItem.offset = calculateOffset(prevItem, currentItem);
+            }
+
+            // If the last affected item isn't the last in the layer, update the next item's offset
+            if (endUpdateIndex < layer.liteItems.length - 1) {
+              const nextItem = layer.liteItems[endUpdateIndex + 1];
+              const lastAffectedItem = layer.liteItems[endUpdateIndex];
+              nextItem.offset = calculateOffset(lastAffectedItem, nextItem);
+            }
+
+            console.log(
+              `Updated sequence item ${itemId} in layer ${oldLayerId}`,
+            );
+          } else {
+            // Get references to the old and new layers
+            const oldLayer = state.props.layers[oldLayerId];
+            const newLayer = state.props.layers[newLayerId];
+
+            // Check if both layers exist
+            if (!oldLayer || !newLayer) {
+              console.warn(
+                `Layer not found: oldLayerId=${oldLayerId}, newLayerId=${newLayerId}`,
+              );
+              return;
+            }
+
+            // Find the item's current index in the old layer
+            const oldIndexInOldLayer = oldLayer.liteItems.findIndex(
+              (item) => item.id === itemId,
+            );
+
+            if (oldIndexInOldLayer === -1) {
+              console.warn(`Item ${itemId} not found in layer ${oldLayerId}`);
+              return;
+            }
+            console.log("oldIndexInOldLayer", oldIndexInOldLayer);
+
+            // Get the item that's being moved
+            const movedItem = oldLayer.liteItems[oldIndexInOldLayer];
+            console.log("movedItem", movedItem);
+
+            // If the item hasn't moved and the layer hasn't changed, do nothing
+            if (
+              updates.startFrame === movedItem.startFrame &&
+              oldLayerId === newLayerId
+            ) {
+              return;
+            }
+
+            // Create the updated item with the new start frame
+            const updatedItem = {
+              ...movedItem,
+              startFrame: updates.startFrame,
+            };
+
+            console.log("updatedItem", updatedItem);
+
+            // Remove the item from the old layer
+            oldLayer.liteItems.splice(oldIndexInOldLayer, 1);
+
+            // Find the new index for the item in the new layer
+            /*      const { futureNewIndex } = calculateItemIndices(
+              newLayer.liteItems,
+              itemId,
+              updates.startFrame,
+            ); */
+            const insertIndex = binarySearch(
+              newLayer.liteItems,
+              updatedItem.startFrame,
+              (item) => item.startFrame,
+            );
+            const newOffset = calculateOffset(
+              newLayer.liteItems[insertIndex - 1],
+              updatedItem,
+            );
+
+            updatedItem.offset = newOffset;
+            console.log("futureNewIndex", insertIndex);
+
+            // Insert the item at its new position in the new layer
+            newLayer.liteItems.splice(insertIndex, 0, updatedItem);
+
+            // Handle transitions
+            /* if (updatedItem.transition?.incoming) {
+              const prevItem = newLayer.liteItems[futureNewIndex - 1];
+              if (prevItem) {
+                delete prevItem.transition?.outgoing;
+                prevItem.effectiveDuration = prevItem.sequenceDuration;
+              }
+              delete updatedItem.transition?.incoming;
+            } */
+
+            /*  if (updatedItem.transition?.outgoing) {
+              const nextItem = newLayer.liteItems[futureNewIndex + 1];
+              if (nextItem) {
+                delete nextItem.transition?.incoming;
+                delete updatedItem.transition?.outgoing;
+                updatedItem.effectiveDuration = updatedItem.sequenceDuration;
+              }
+            } */
+
+            // Update offsets for affected items in both old and new layers
+            /* [oldLayer, newLayer].forEach((layer) => {
+              layer.liteItems.forEach((item, index) => {
+                const prevItem = index > 0 ? layer.liteItems[index - 1] : null;
+                item.offset = calculateOffset(prevItem, item);
+              });
+            });
+ */
+            console.log(
+              `Updated sequence item ${itemId} from layer ${oldLayerId} to ${newLayerId}`,
+            );
           }
-
-          // TODO : i dont think we need to update the offsets for all affected items, we can just update the offsets for the items that are affected by the transition eg. the next item
-          // Update offsets for all affected items
-          for (let i = startUpdateIndex; i <= endUpdateIndex; i++) {
-            const currentItem = layer.liteItems[i];
-            const prevItem = i > 0 ? layer.liteItems[i - 1] : null;
-
-            currentItem.offset = calculateOffset(prevItem, currentItem);
-          }
-
-          // If the last affected item isn't the last in the layer, update the next item's offset
-          if (endUpdateIndex < layer.liteItems.length - 1) {
-            const nextItem = layer.liteItems[endUpdateIndex + 1];
-            const lastAffectedItem = layer.liteItems[endUpdateIndex];
-            nextItem.offset = calculateOffset(lastAffectedItem, nextItem);
-          }
-
-          console.log(`Updated sequence item ${itemId} in layer ${layerId}`);
         });
       },
 

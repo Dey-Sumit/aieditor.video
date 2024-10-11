@@ -75,20 +75,6 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
           onDragStop(item.id, layerOrder[layerIndex], newStartFrame);
         }
       }}
-      /*      onDragStop={(e, d) => {
-        const layerIndex = Math.floor(d.y / LAYER_HEIGHT);
-        const newLayerId = `layer${layerIndex}`; // BAD CODE: Don't hardcode layer names
-        console.log("New layer id", d, {
-          layerIndex,
-          newLayerId,
-          LAYER_HEIGHT,
-        });
-
-        onDragStop(item.id, newLayerId, d.x);
-      }} */
-      // onResizeStop={(e, direction, ref, delta, position) => {
-      //   onResize(item.id, parseInt(ref.style.width));
-      // }}
       minWidth={50}
       dragGrid={[1, LAYER_HEIGHT]}
     >
@@ -170,7 +156,7 @@ const VideoEditorTimelinePOC: React.FC = () => {
 
   return (
     <div className="mt-96 w-full overflow-x-auto bg-gray-100 p-4">
-      <div className="flex h-[150px] w-full border border-gray-300">
+      <div className="flex h-[150px] w-full border-gray-300">
         <div className="w-[200px] border-r">
           {[0, 1, 2].map((layer) => (
             <div

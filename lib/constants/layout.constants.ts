@@ -4,6 +4,7 @@ export const LAYOUT = {
   TIMELINE: {
     TIMELINE_CONTAINER_HEIGHT: "15rem",
     TRACK_LAYER_HEIGHT: "2rem",
+    TRACK_LAYER_HEIGHT_IN_PX: 2 * 16,
     UTILS_LAYER_HEIGHT: "1.8rem",
     LAYER_NAME_STACK_WIDTH: "8rem",
   },

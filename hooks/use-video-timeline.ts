@@ -4,6 +4,7 @@ import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
 import { useTimeline } from "~/context/useTimeline";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
@@ -17,7 +18,9 @@ import { genId } from "~/utils/misc.utils";
 import { calculatePlaceholderDuration } from "~/utils/timeline.utils";
 
 const { MAX_PLACEHOLDER_FRAMES: MAX_PLACEHOLDER_DURATION_IN_FRAMES } = TIMELINE;
-
+const {
+  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
+} = LAYOUT;
 // Hook for managing container dimensions
 const useContainerDimensions = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -84,45 +87,62 @@ const useItemDrag = (
   pixelsPerFrame: number,
   updateSequenceItemPositionInLayer: StoreType["updateSequenceItemPositionInLayer"],
 ) => {
-  const {
-    props: { layers },
-  } = useVideoStore();
+  const layers = useVideoStore((store) => store.props.layers);
+  const orderedLayers = useVideoStore((store) => store.props.layerOrder);
 
   const handleItemDrag = useCallback(
-    (layerId: LayerId, itemId: string, deltaPositionX: number) => {
-      const layer = layers[layerId];
+    (
+      oldLayerId: LayerId,
+      itemId: string,
+      deltaPositionX: number,
+      deltaPositionY: number,
+    ) => {
+      const layer = layers[oldLayerId];
       if (!layer) return;
 
       const item = layer.liteItems.find((liteItem) => liteItem.id === itemId);
       if (!item) return;
+
+      const centerY = deltaPositionY + TRACK_LAYER_HEIGHT_IN_PX / 2;
+      const rawLayerIndex = centerY / TRACK_LAYER_HEIGHT_IN_PX;
+      const snapLayerIndex = Math.floor(rawLayerIndex);
+      const newLayerId = orderedLayers[snapLayerIndex];
 
       const newStartFrame = Math.max(
         0,
         Math.round(deltaPositionX / pixelsPerFrame),
       );
       const newEndFrame = newStartFrame + item.effectiveDuration;
+      // Check if the layer has changed
+      const isLayerChanged = newLayerId !== oldLayerId;
+      console.log("snapLayerIndex,newLayerId", {
+        snapLayerIndex,
+        newLayerId,
+        newStartFrame,
+        isLayerChanged,
+      });
 
+      // TODO : put all this in store maybe. collision detection needs to work for y axis and new layer as well
       // Efficient collision detection using liteItems
-      const hasCollision = layer.liteItems.some((liteItem) => {
+      /*  const hasCollision = layer.liteItems.some((liteItem) => {
         if (liteItem.id === itemId) return false;
         const otherEndFrame = liteItem.startFrame + liteItem.effectiveDuration;
         return (
           newStartFrame < otherEndFrame && newEndFrame > liteItem.startFrame
         );
-      });
-
-      console.log("hasCollision", hasCollision);
+      }); */
+      const hasCollision = false;
 
       if (!hasCollision) {
         // Only update the store if it's significantly different from the last update
         if (Math.abs(newStartFrame - item.startFrame) >= 1) {
-          updateSequenceItemPositionInLayer(layerId, itemId, {
+          updateSequenceItemPositionInLayer(oldLayerId, newLayerId, itemId, {
             startFrame: newStartFrame,
           });
         }
       }
     },
-    [layers, pixelsPerFrame, updateSequenceItemPositionInLayer],
+    [layers, pixelsPerFrame, updateSequenceItemPositionInLayer, orderedLayers],
   );
 
   // Use a more aggressive throttle for drag operations

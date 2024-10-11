@@ -20,12 +20,12 @@ const Layer: React.FC<LayerProps> = React.memo(
     const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
 
     return (
-      <div
+      /*  <div
         className="group relative border-b"
         style={{ height: LAYER_HEIGHT_IN_PX }}
       >
-        <HoverLayer layerId={layerId} pixelsPerFrame={pixelsPerFrame} />
-
+        <HoverLayer layerId={layerId} pixelsPerFrame={pixelsPerFrame} /> */
+      <>
         {/* Sequence Items */}
         {liteItems.map((item) => {
           const nextItemStartFrame =
@@ -39,7 +39,8 @@ const Layer: React.FC<LayerProps> = React.memo(
             />
           );
         })}
-      </div>
+      </>
+      // </div>
     );
   },
 );

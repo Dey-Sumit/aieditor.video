@@ -23,12 +23,10 @@ const AsideNew = () => {
     router.push(`/new-editor/${params["project-id"]}/${path}`);
   };
   const pathname = usePathname();
-  console.log({ params, pathname });
 
   // Determine the active tab from the last segment of the pathname
   // This allows for flexibility if the URL structure changes in the future
   const activeTab = pathname.split("/").slice(-1)[0];
-  console.log({ activeTab });
 
   return (
     <div className="flex h-full flex-col">

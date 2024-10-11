@@ -10,6 +10,7 @@ import {
   Image,
   Video,
 } from "lucide-react";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
 import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
@@ -29,6 +30,10 @@ export const ITEM_TYPE_TO_STYLES_MAP: Record<string, string> = {
   preset: "bg-gray-200 border-yellow-900 border mouse-grab",
 };
 
+const {
+  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
+} = LAYOUT;
+
 const SequenceItem = ({
   item,
   layerId,
@@ -45,6 +50,7 @@ const SequenceItem = ({
   const updateSequenceItemDuration = useVideoStore(
     (state) => state.updateSequenceItemDuration,
   );
+  const orderedLayers = useVideoStore((state) => state.props.layerOrder);
 
   /* The adjustment of the x position is to account for the transition duration.
    -  without transition : seq1 0 to 120: duration 120 frames, seq2 120 to 210 : duration 90 frames
@@ -66,9 +72,10 @@ const SequenceItem = ({
   };
 
   const onDragStop: ComponentProps<typeof Rnd>["onDragStop"] = (e, d) => {
-    console.log("drag stop", d);
+    // console.log("drag stop", d);
 
-    if (d.x !== x) throttledItemDrag(layerId, item.id, d.x);
+    // if (d.x !== x ) throttledItemDrag(layerId, item.id, d.x);
+    throttledItemDrag(layerId, item.id, d.x, d.y);
     setDraggingLayerId(null);
   };
 
@@ -98,6 +105,7 @@ const SequenceItem = ({
       direction as "left" | "right",
     );
   };
+  const layerIndex = orderedLayers.indexOf(layerId);
 
   return (
     <Rnd
@@ -105,11 +113,12 @@ const SequenceItem = ({
       bounds="parent"
       position={{
         x,
-        y: 0,
+        y: layerIndex * TRACK_LAYER_HEIGHT_IN_PX, // layerIndex * 32(TRACK_LAYER_HEIGHT),
       }}
       size={{
         width,
-        height: "100%",
+        // height: TRACK_LAYER_HEIGHT,
+        height: TRACK_LAYER_HEIGHT_IN_PX, // rem is not working
       }}
       enableResizing={{
         bottom: false,
@@ -121,16 +130,15 @@ const SequenceItem = ({
         topLeft: false,
         topRight: false,
       }}
-      dragAxis="x"
       onDragStop={onDragStop}
       onDragStart={onDragStart}
-      onDrag={(e, d) => {
+      /*       onDrag={(e, d) => {
         console.log("dragging", {
           x: d.x,
           deltaX: d.deltaX,
         });
         console.log("nextItemStartFrame", nextItemStartFrame);
-      }}
+      }} */
       onResizeStop={onResizeStop}
       className={cn(
         "relative box-border rounded-[2px] border-2 shadow-inner hover:opacity-90 focus:bg-yellow-800",
@@ -143,7 +151,7 @@ const SequenceItem = ({
         "after:absolute after:inset-y-[2px] after:right-[2px] after:w-1 after:cursor-ew-resize after:rounded-lg after:content-['']",
         activeSeqItem?.itemId === item.id && "border-blue-500",
       )}
-      dragGrid={[pixelsPerFrame, 0]}
+      dragGrid={[pixelsPerFrame, TRACK_LAYER_HEIGHT_IN_PX]}
     >
       <SequenceContextMenuWrapper
         key={item.id}

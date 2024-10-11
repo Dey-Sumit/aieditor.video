@@ -312,7 +312,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 30 * 30,
+      duration: 900,
       compositionId: "new-dynamic-composition",
     },
     layers: {
@@ -320,68 +320,38 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
         id: "layerBackground",
         name: "Layer Background",
         isVisible: true,
-        liteItems: [
-          /*  {
-            id: "id-train-window-smash",
-            sequenceType: "standalone",
-            contentType: "video",
-            sequenceDuration: 600,
-            offset: 0,
-            startFrame: 0,
-            effectiveDuration: 600,
-          }, */
-        ],
+        liteItems: [],
       },
       layerMiddle: {
         id: "layerMiddle",
         name: "Layer Middle",
         isVisible: true,
-
-        liteItems: [],
+        liteItems: [
+          {
+            id: "s-image-8d408a25-954b-4da0-a74a-c3c125377804",
+            sequenceType: "standalone",
+            contentType: "image",
+            startFrame: 358,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 358,
+          },
+        ],
       },
       layerForeground: {
         id: "layerForeground",
         name: "Layer Foreground",
         isVisible: true,
-
         liteItems: [
-          /* {
-            sequenceType: "preset",
-            effectiveDuration: 60,
-            sequenceDuration: 60,
-            id: "id-preset-end-screen-8jekku",
-            offset: 83,
-            startFrame: 83,
-            liteItems: [
-              {
-                sequenceType: "standalone",
-                id: "id-like",
-                sequenceDuration: 20,
-                effectiveDuration: 20,
-                startFrame: 83, // This does not really matter . as when it's under a preset, it's start frame is adjusted as per the width
-                offset: 0,
-                contentType: "text",
-              },
-              {
-                sequenceType: "standalone",
-                id: "id-share",
-                offset: 0,
-                startFrame: 93,
-                sequenceDuration: 30,
-                effectiveDuration: 30,
-                contentType: "text",
-              },
-              {
-                sequenceType: "standalone",
-                id: "id-subscribe",
-                offset: 0,
-                startFrame: 123,
-                sequenceDuration: 20,
-                effectiveDuration: 20,
-                contentType: "text",
-              },
-            ],
-          }, */
+          {
+            id: "s-text-eaadc973-1830-4c46-a012-ccc3e48774c6",
+            sequenceType: "standalone",
+            contentType: "text",
+            startFrame: 85,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 85,
+          },
         ],
       },
     },
@@ -485,6 +455,21 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             },
           },
         },
+        "s-text-eaadc973-1830-4c46-a012-ccc3e48774c6": {
+          id: "s-text-eaadc973-1830-4c46-a012-ccc3e48774c6",
+          layerId: "layerForeground",
+          type: "text",
+          editableProps: {
+            styles: {
+              container: {
+                justifyContent: "center",
+                alignItems: "center",
+              },
+              element: {},
+            },
+            text: "<h1>Your text</h1>",
+          },
+        },
       },
       layerBackground: {
         "id-train-window-smash": {
@@ -507,21 +492,30 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
           },
         },
       },
-      layerMiddle: {},
-    },
-    transitions: {
-      /*  "transition-0": {
-        id: "transition-0",
-        type: "fade",
-        duration: 60,
-        properties: {
-          easing: "linear",
+      layerMiddle: {
+        "s-image-8d408a25-954b-4da0-a74a-c3c125377804": {
+          id: "s-image-8d408a25-954b-4da0-a74a-c3c125377804",
+          layerId: "layerMiddle",
+          type: "image",
+          editableProps: {
+            styles: {
+              container: {
+                justifyContent: "center",
+                alignItems: "center",
+              },
+              element: {
+                objectFit: "contain",
+                width: "100%",
+                height: "100%",
+              },
+            },
+            imageUrl:
+              "https://images.pexels.com/photos/28689135/pexels-photo-28689135.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+          },
         },
-        fromSequenceId: "id-like",
-        toSequenceId: "id-share",
-        fromSequenceIndex: 0,
-      }, */
+      },
     },
+    transitions: {},
     layerOrder: ["layerForeground", "layerMiddle", "layerBackground"],
   },
 };

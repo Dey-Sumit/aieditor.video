@@ -14,6 +14,7 @@ const {
   TIMELINE: {
     TRACK_LAYER_HEIGHT,
     TIMELINE_CONTAINER_HEIGHT,
+    TRACK_LAYER_HEIGHT_IN_PX,
 
     LAYER_NAME_STACK_WIDTH,
   },
@@ -22,6 +23,8 @@ const {
 const VideoTimeline = () => {
   const { containerRef, pixelsPerFrame } = useTimeline();
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
+  const props = useVideoStore((state) => state.props);
+
   return (
     <section
       className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
@@ -68,7 +71,7 @@ const VideoTimeline = () => {
           </div>
 
           {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
-          <div ref={containerRef} className="flex-grow">
+          <div ref={containerRef} className="relative flex-grow">
             {/* -------------------------- Stack of Main Layers -------------------------- */}
             {orderedLayers.map((layerId) => (
               <Layer

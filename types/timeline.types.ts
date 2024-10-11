@@ -161,7 +161,8 @@ type StoreActions = {
   ) => void;
   removeSequenceItemFromLayer: (layerId: LayerId, itemId: string) => void;
   updateSequenceItemPositionInLayer: (
-    layerId: LayerId,
+    oldLayerId: LayerId,
+    newLayerId: LayerId,
     itemId: string,
     updates: Pick<LiteSequenceItemType, "startFrame">,
   ) => void;
