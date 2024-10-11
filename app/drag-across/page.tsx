@@ -27,18 +27,23 @@ interface ProjectState {
 interface TimelineItemProps {
   item: SequenceItem;
   layerId: string;
-  onDragStop: (itemId: string, newLayerId: string, newStart: number) => void;
   layerIndex: number;
+  itemIndex: number; // Add this new prop
+  onDragStop: (itemId: string, newLayerId: string, newStart: number) => void;
 }
+
 const TimelineItem: React.FC<TimelineItemProps> = ({
   item,
-  onDragStop,
   layerIndex,
+  itemIndex, // Use this new prop
+  onDragStop,
 }) => {
+  const ITEM_WIDTH = 100; // You can adjust this or make it dynamic based on item duration
+  const ITEM_GAP = 10; // Gap between items
   return (
     <Rnd
       default={{
-        x: 0, // We'll need to calculate this based on item index
+        x: itemIndex * (ITEM_WIDTH + ITEM_GAP),
         y: layerIndex * LAYER_HEIGHT + (LAYER_HEIGHT - ITEM_HEIGHT) / 2,
         width: 100, // Fixed width for now
         height: ITEM_HEIGHT,
@@ -92,7 +97,36 @@ const VideoEditorTimelinePOC: React.FC = () => {
     newLayerId: string,
     newStart: number,
   ) => {
-    // This function needs to be implemented
+    setProjectState((prevState) => {
+      // Create a copy of the previous state
+      const newState = { ...prevState };
+
+      // Find the layer that currently contains the item
+      const oldLayerId = Object.keys(newState.layers).find((layerId) =>
+        newState.layers[layerId].items.includes(itemId),
+      );
+
+      if (oldLayerId) {
+        // Remove the item from the old layer
+        newState.layers[oldLayerId].items = newState.layers[
+          oldLayerId
+        ].items.filter((id) => id !== itemId);
+
+        // Add the item to the new layer
+        if (!newState.layers[newLayerId]) {
+          // If the new layer doesn't exist, create it
+          newState.layers[newLayerId] = { id: newLayerId, items: [] };
+        }
+        newState.layers[newLayerId].items.push(itemId);
+
+        // Update the item's position (if you want to store this information)
+        // For this, you'd need to modify your SequenceItem interface and state structure
+        // to include a 'start' property
+        // newState.sequenceItems[itemId].start = newStart;
+      }
+
+      return newState;
+    });
   };
 
   return (
@@ -120,9 +154,10 @@ const VideoEditorTimelinePOC: React.FC = () => {
           {Object.entries(projectState.layers).map(
             ([layerId, layer], layerIndex) => (
               <React.Fragment key={layerId}>
-                {layer.items.map((itemId) => (
+                {layer.items.map((itemId, itemIndex) => (
                   <TimelineItem
                     key={itemId}
+                    itemIndex={itemIndex}
                     item={projectState.sequenceItems[itemId]}
                     layerId={layerId}
                     onDragStop={handleDragStop}
