@@ -1,7 +1,8 @@
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import "../styles/global.css";
 import "../styles/prosemirror.css";
-
 export const metadata: Metadata = {
   title: "aieditor.video",
   description:
@@ -17,6 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>{children}</body>
+      <Analytics />
+      <SpeedInsights />
     </html>
   );
 }
