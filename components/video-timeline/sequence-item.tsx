@@ -66,6 +66,8 @@ const SequenceItem = ({
   };
 
   const onDragStop: ComponentProps<typeof Rnd>["onDragStop"] = (e, d) => {
+    console.log("drag stop", d);
+
     if (d.x !== x) throttledItemDrag(layerId, item.id, d.x);
     setDraggingLayerId(null);
   };
@@ -92,11 +94,11 @@ const SequenceItem = ({
     updateSequenceItemDuration(
       layerId,
       item.id,
-      // item.offset,
       frameDelta,
       direction as "left" | "right",
     );
   };
+
   return (
     <Rnd
       key={item.id}
@@ -122,6 +124,13 @@ const SequenceItem = ({
       dragAxis="x"
       onDragStop={onDragStop}
       onDragStart={onDragStart}
+      onDrag={(e, d) => {
+        console.log("dragging", {
+          x: d.x,
+          deltaX: d.deltaX,
+        });
+        console.log("nextItemStartFrame", nextItemStartFrame);
+      }}
       onResizeStop={onResizeStop}
       className={cn(
         "relative box-border rounded-[2px] border-2 shadow-inner hover:opacity-90 focus:bg-yellow-800",

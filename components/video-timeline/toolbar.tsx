@@ -2,7 +2,6 @@ import {
   ClipboardPaste,
   Copy,
   ImageIcon,
-  Layers,
   MousePointer2,
   Music,
   Redo,
@@ -50,23 +49,8 @@ export const Toolbar: React.FC = () => {
   // const { currentFrame } = useTimeline();
   const addLayer = useVideoStore((state) => state.addLayer);
 
-  const handleAddLayer = () => {
-    addLayer({
-      position: "AT_TOP",
-    });
-  };
 
   const toolbarCategories: ToolbarCategory[] = [
-    {
-      name: "Layers",
-      items: [
-        {
-          Icon: Layers,
-          label: "Add Layer",
-          onClick: handleAddLayer,
-        },
-      ],
-    },
     {
       name: "Selection",
       items: [

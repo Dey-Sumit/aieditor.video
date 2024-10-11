@@ -1,16 +1,14 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
-import SequenceItemEditorImage from "./sequence-item-editor.image";
-import SequenceItemEditorText from "./sequence-item-editor.text";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import { AnimatePresence, motion } from "framer-motion";
+import SequenceItemEditorText from "./sequence-item-editor.text";
 const SequenceItemEditor: React.FC = () => {
   const activeSeqItem = useEditingStore((state) => state.activeSeqItem);
   const clearActiveSeqItem = useEditingStore(
     (state) => state.clearActiveSeqItem,
   );
   const props = useVideoStore((state) => state.props);
-  console.log({ activeSeqItem });
 
   if (!activeSeqItem) {
     return null;

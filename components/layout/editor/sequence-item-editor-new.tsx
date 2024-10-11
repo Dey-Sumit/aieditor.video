@@ -1,11 +1,13 @@
-import { cn } from "~/lib/utils";
-import SequenceItemEditorText from "./sequence-item-editor.text";
-import { useEditingStore } from "~/store/editing.store";
 import { LAYOUT } from "~/lib/constants/layout.constants";
-const { TIMELINE_HEIGHT, PROJECT_HEADER_HEIGHT } = LAYOUT;
+import { cn } from "~/lib/utils";
+import { useEditingStore } from "~/store/editing.store";
+import SequenceItemEditorText from "./sequence-item-editor.text";
+const {
+  TIMELINE: { TIMELINE_CONTAINER_HEIGHT },
+  PROJECT_HEADER_HEIGHT,
+} = LAYOUT;
 const SequenceItemEditorContainerNew = () => {
   const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
-  console.log({ activeSeqItem });
 
   return (
     <section
@@ -14,7 +16,7 @@ const SequenceItemEditorContainerNew = () => {
         "gradient-bg",
       )}
       style={{
-        height: `calc(100vh - ${TIMELINE_HEIGHT} - ${PROJECT_HEADER_HEIGHT})`,
+        height: `calc(100vh - ${TIMELINE_CONTAINER_HEIGHT} - ${PROJECT_HEADER_HEIGHT})`,
       }}
     >
       {/* <div className="sticky inset-x-0 top-0 h-12 border-b"></div>

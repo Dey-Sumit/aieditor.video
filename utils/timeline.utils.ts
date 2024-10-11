@@ -62,7 +62,6 @@ export const calculateItemIndices = (
   updatedStartFrame: number,
 ): { oldIndex: number; futureNewIndex: number } => {
   const oldIndex = items.findIndex((item) => item.id === itemId);
-  console.log(JSON.stringify({ oldIndex, itemId, updatedStartFrame, items }));
 
   if (oldIndex === -1) {
     throw new Error("Item not found");
@@ -184,11 +183,6 @@ export function binarySearch<T>(
   searchValue: number,
   getCompareValue: (item: T) => number,
 ): number {
-  console.log(
-    "binarySearch",
-    JSON.stringify({ arr, searchValue, getCompareValue }),
-  );
-
   let low = 0;
   let high = arr.length;
 
@@ -301,7 +295,7 @@ export const DEFAULT_CONTENT_PROPS: Record<
           alignItems: "center",
         },
         element: {
-          objectFit: "contain",
+          objectFit: "cover",
           width: "100%",
           height: "100%",
         },

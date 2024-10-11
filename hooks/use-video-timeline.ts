@@ -111,6 +111,8 @@ const useItemDrag = (
         );
       });
 
+      console.log("hasCollision", hasCollision);
+
       if (!hasCollision) {
         // Only update the store if it's significantly different from the last update
         if (Math.abs(newStartFrame - item.startFrame) >= 1) {

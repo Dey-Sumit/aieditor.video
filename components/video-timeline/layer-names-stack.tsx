@@ -58,7 +58,6 @@ const LayerStack: React.FC = () => {
   const layers = useVideoStore((state) => state.props.layers);
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
   const reorderLayers = useVideoStore((state) => state.reorderLayers);
-  console.log({ orderedLayers });
 
   const constraintsRef = useRef(null);
 
@@ -69,7 +68,6 @@ const LayerStack: React.FC = () => {
         values={orderedLayers}
         onReorder={(newLayerOrder) => {
           reorderLayers(newLayerOrder);
-          console.log({ newLayerOrder });
         }}
         className="relative"
         style={{ height: `${orderedLayers.length * LAYER_HEIGHT_IN_PX}px` }}

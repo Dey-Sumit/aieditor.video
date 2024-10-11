@@ -151,8 +151,6 @@ const useVideoStore = create<
             updates.startFrame,
           );
 
-          console.log({ oldIndex, futureNewIndex });
-
           const draggedItem = layer.liteItems[oldIndex];
 
           // If the position hasn't changed, do nothing
@@ -270,8 +268,6 @@ const useVideoStore = create<
       // frameDelta can be positive or negative, positive means increase the duration, negative means decrease the duration
       updateSequenceItemDuration: (layerId, itemId, frameDelta, direction) => {
         set((state: StoreType) => {
-          console.log("in updateSequenceItemDuration", frameDelta, direction);
-
           const layer = state.props.layers[layerId]!;
 
           const itemIndex = layer.liteItems.findIndex(
@@ -452,7 +448,6 @@ const useVideoStore = create<
           }
           let preset = { ...END_SCREEN_PRESET };
           const { offset, startFrame } = presetDetails;
-          console.log({ offset });
 
           // Generate a random suffix for the key
           const randomSuffix = Math.random().toString(36).substring(2, 8);

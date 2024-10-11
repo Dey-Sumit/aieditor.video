@@ -6,6 +6,7 @@ import useVideoStore from "~/store/video.store";
 import TimeLayer from "../time-layer";
 import Layer from "./layer";
 import LayerNamesStack from "./layer-names-stack";
+import LayerToolbar from "./layer-toolbar";
 import Toolbar from "./toolbar";
 
 const {
@@ -41,7 +42,9 @@ const VideoTimeline = () => {
               style={{
                 width: LAYER_NAME_STACK_WIDTH,
               }}
-            ></div>
+            >
+              <LayerToolbar />
+            </div>
 
             <TimeLayer />
           </div>

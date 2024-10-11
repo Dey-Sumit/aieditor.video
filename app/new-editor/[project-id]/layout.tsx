@@ -34,12 +34,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         {children}
       </div>
 
-      {/* -------------------- timeline -------------------- */}
-      {/* <div
-        className="fixed bottom-0 right-0 bg-yellow-700"
-        style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_HEIGHT }}
-      ></div> */}
-
       {/* -------------------- video player and edit sequence container -------------------- */}
 
       <div
