@@ -4,7 +4,7 @@ import { useTimeline } from "~/context/useTimeline";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
 import TimeLayer from "../time-layer";
-import Layer from "./layer";
+import Layer, { HoverLayer } from "./layer";
 import LayerNamesStack from "./layer-names-stack";
 import LayerToolbar from "./layer-toolbar";
 import Toolbar from "./toolbar";
@@ -69,22 +69,34 @@ const VideoTimeline = () => {
           </div>
 
           {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
-          <div ref={containerRef} className="relative flex-grow">
-            {/* -------------------------- Stack of Main Layers -------------------------- */}
-            {orderedLayers.map((layerId) => (
-              <Layer
-                key={layerId}
-                layerId={layerId}
-                pixelsPerFrame={pixelsPerFrame}
-              />
-            ))}
+          <div className="relative flex flex-1" ref={containerRef}>
+            {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
+            <div className="absolute inset-0">
+              {orderedLayers.map((layerId) => (
+                <div key={layerId} className="relative h-8 border">
+                  <HoverLayer
+                    key={layerId}
+                    layerId={layerId}
+                    pixelsPerFrame={pixelsPerFrame}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <>
+              {/* -------------------------- Stack of Main Layers -------------------------- */}
+              {orderedLayers.map((layerId) => (
+                <Layer
+                  key={layerId}
+                  layerId={layerId}
+                  pixelsPerFrame={pixelsPerFrame}
+                />
+              ))}
+            </>
           </div>
         </div>
         {/* ------------------------- Layers section ends ------------------------  */}
       </div>
-
-      {/* -------------------------- Playhead -------------------------- */}
-      {/* <PlayHead /> */}
     </section>
   );
 };

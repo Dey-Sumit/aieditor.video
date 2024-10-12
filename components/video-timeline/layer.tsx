@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 import React from "react";
 import { useSequenceAddition } from "~/hooks/use-video-timeline";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 import { selectLiteItems } from "~/store/reselector/video-store.reselector";
 import useVideoStore from "~/store/video.store";
 import type { LayerId } from "~/types/timeline.types";
@@ -12,7 +13,9 @@ interface LayerProps {
   layerId: LayerId;
   pixelsPerFrame: number;
 }
-
+const {
+  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
+} = LAYOUT;
 const Layer: React.FC<LayerProps> = React.memo(
   ({ layerId, pixelsPerFrame }) => {
     const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
@@ -50,7 +53,7 @@ interface HoverLayerProps {
   pixelsPerFrame: number;
 }
 
-const HoverLayer: React.FC<HoverLayerProps> = React.memo(
+export const HoverLayer: React.FC<HoverLayerProps> = React.memo(
   ({ layerId, pixelsPerFrame }) => {
     const {
       hoverInfo,
@@ -65,6 +68,7 @@ const HoverLayer: React.FC<HoverLayerProps> = React.memo(
 
           <div
             className="absolute inset-0"
+            style={{ height: TRACK_LAYER_HEIGHT_IN_PX }}
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
             onClick={(e) => {
