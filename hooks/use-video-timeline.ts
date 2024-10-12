@@ -96,13 +96,16 @@ const useItemDrag = (
   const layers = useVideoStore((store) => store.props.layers);
   const props = useVideoStore((store) => store.props);
   const orderedLayers = useVideoStore((store) => store.props.layerOrder);
-
   const checkCollisionAndSnap = (
     layerItems: LiteSequenceItemType[],
     itemId: string,
     newStartFrame: number,
     newEndFrame: number,
-  ): CollisionResult => {
+  ): {
+    hasCollision: boolean;
+    snapTo: number | null;
+    collisionExtent: number;
+  } => {
     let snapTo: number | null = null;
     let minCollision = Infinity;
 
@@ -119,18 +122,23 @@ const useItemDrag = (
         const rightCollision = Math.abs(newStartFrame - otherEndFrame);
         const collision = Math.min(leftCollision, rightCollision);
 
-        // If this collision is smaller than previous ones and within threshold
-        if (collision < minCollision && collision <= SNAP_THRESHOLD) {
+        if (collision < minCollision) {
           minCollision = collision;
-          snapTo =
-            leftCollision < rightCollision
-              ? otherStartFrame - liteItem.effectiveDuration
-              : otherEndFrame;
+          if (collision <= SNAP_THRESHOLD) {
+            snapTo =
+              leftCollision < rightCollision
+                ? otherStartFrame - liteItem.effectiveDuration
+                : otherEndFrame;
+          }
         }
       }
     }
 
-    return { hasCollision: minCollision !== Infinity, snapTo };
+    return {
+      hasCollision: minCollision !== Infinity,
+      snapTo,
+      collisionExtent: minCollision,
+    };
   };
 
   const handleItemDrag = useCallback(
@@ -197,51 +205,6 @@ const useItemDrag = (
       updateSequenceItemPositionInLayer(oldLayerId, newLayerId, itemId, {
         startFrame: newStartFrame,
       }); */
-
-      const checkCollisionAndSnap = (
-        layerItems: LiteSequenceItemType[],
-        itemId: string,
-        newStartFrame: number,
-        newEndFrame: number,
-      ): {
-        hasCollision: boolean;
-        snapTo: number | null;
-        collisionExtent: number;
-      } => {
-        let snapTo: number | null = null;
-        let minCollision = Infinity;
-
-        for (const liteItem of layerItems) {
-          if (liteItem.id === itemId) continue;
-
-          const otherStartFrame = liteItem.startFrame;
-          const otherEndFrame = otherStartFrame + liteItem.effectiveDuration;
-
-          // Check for collision
-          if (newStartFrame < otherEndFrame && newEndFrame > otherStartFrame) {
-            // Calculate the extent of collision
-            const leftCollision = Math.abs(newEndFrame - otherStartFrame);
-            const rightCollision = Math.abs(newStartFrame - otherEndFrame);
-            const collision = Math.min(leftCollision, rightCollision);
-
-            if (collision < minCollision) {
-              minCollision = collision;
-              if (collision <= SNAP_THRESHOLD) {
-                snapTo =
-                  leftCollision < rightCollision
-                    ? otherStartFrame - liteItem.effectiveDuration
-                    : otherEndFrame;
-              }
-            }
-          }
-        }
-
-        return {
-          hasCollision: minCollision !== Infinity,
-          snapTo,
-          collisionExtent: minCollision,
-        };
-      };
 
       const { hasCollision, snapTo, collisionExtent } = checkCollisionAndSnap(
         newLayer.liteItems,
