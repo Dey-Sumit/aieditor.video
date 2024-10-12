@@ -155,44 +155,65 @@ const VideoEditorTimelinePOC: React.FC = () => {
   };
 
   return (
-    <div className="mt-96 w-full overflow-x-auto bg-gray-100 p-4">
-      <div className="flex h-[150px] w-full border-gray-300">
-        <div className="w-[200px] border-r">
-          {[0, 1, 2].map((layer) => (
-            <div
-              key={layer}
-              className="w-full border-b border-red-800"
-              style={{
-                top: layer * LAYER_HEIGHT,
-                height: LAYER_HEIGHT,
-                width: TIMELINE_WIDTH,
-              }}
-            >
-              <span className="left-1 top-1 text-xs text-gray-500">
-                Layer {layer}
-              </span>
-            </div>
-          ))}
-        </div>
+    <div className="p-8">
+      <div className="hidden w-full overflow-x-auto bg-gray-100 p-4">
+        <div className="flex h-[150px] w-full border-gray-300">
+          <div className="w-[200px] border-r">
+            {[0, 1, 2].map((layer) => (
+              <div
+                key={layer}
+                className="w-full border-b border-red-800"
+                style={{
+                  top: layer * LAYER_HEIGHT,
+                  height: LAYER_HEIGHT,
+                  width: TIMELINE_WIDTH,
+                }}
+              >
+                <span className="left-1 top-1 text-xs text-gray-500">
+                  Layer {layer}
+                </span>
+              </div>
+            ))}
+          </div>
 
-        <div className="relative w-full">
-          {Object.entries(projectState.layers).map(
-            ([layerId, layer], layerIndex) => (
-              <React.Fragment key={layerId}>
-                {layer.items.map((itemId, itemIndex) => (
-                  <TimelineItem
-                    key={itemId}
-                    itemIndex={itemIndex}
-                    item={projectState.sequenceItems[itemId]}
-                    layerId={layerId}
-                    onDragStop={handleDragStop}
-                    layerIndex={layerIndex}
-                    layerOrder={layerOrder}
-                  />
-                ))}
-              </React.Fragment>
-            ),
-          )}
+          <div className="relative w-full">
+            {Object.entries(projectState.layers).map(
+              ([layerId, layer], layerIndex) => (
+                <React.Fragment key={layerId}>
+                  {layer.items.map((itemId, itemIndex) => (
+                    <TimelineItem
+                      key={itemId}
+                      itemIndex={itemIndex}
+                      item={projectState.sequenceItems[itemId]}
+                      layerId={layerId}
+                      onDragStop={handleDragStop}
+                      layerIndex={layerIndex}
+                      layerOrder={layerOrder}
+                    />
+                  ))}
+                </React.Fragment>
+              ),
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="h-36 overflow-y-auto border-2 bg-yellow-300">
+        <div
+          className="relative h-full border-2 bg-blue-500"
+          style={{
+            minHeight: "max-content",
+          }}
+        >
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
+          <div className="border">Hello</div>
         </div>
       </div>
     </div>

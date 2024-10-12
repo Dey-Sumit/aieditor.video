@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { scrollToTop } from "~/lib/utils";
 
 import useVideoStore from "~/store/video.store";
 
@@ -34,6 +35,7 @@ const LayerToolbar: React.FC = () => {
     addLayer({
       position: "AT_TOP",
     });
+    scrollToTop("layerContainer");
   };
 
   const toolbarCategories: ToolbarCategory[] = [

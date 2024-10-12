@@ -11,7 +11,7 @@ export const genId = (...prefixes: Prefix): string => {
   return `${prefixes.join("-")}-${uuid()}`;
 };
 
-const emojis = [
+/* const emojis = [
   "😀",
   "😃",
   "😄",
@@ -118,3 +118,4 @@ export function getRandomEmoji(): string {
   const randomIndex = Math.floor(Math.random() * emojis.length);
   return emojis[randomIndex];
 }
+ */

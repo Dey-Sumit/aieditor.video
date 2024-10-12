@@ -56,7 +56,7 @@ const VideoTimeline = () => {
 
         {/* ------------------------- Layers section starts ------------------------  */}
 
-        <div className="flex overflow-y-auto overscroll-contain">
+        <div className="flex overflow-y-auto" id="layerContainer">
           {/* ----- left section of the timeline: includes name,helper buttons, etc ----*/}
           <div
             className="h-fit divide-y divide-gray-800 border-r"
@@ -69,7 +69,13 @@ const VideoTimeline = () => {
           </div>
 
           {/* ----- right section of the timeline: includes sequences, play-head, etc ----*/}
-          <div className="relative flex flex-1" ref={containerRef}>
+          <div
+            className="relative flex-1"
+            ref={containerRef}
+            style={{
+              height: orderedLayers.length * 32,
+            }}
+          >
             {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
             <div className="absolute inset-0">
               {orderedLayers.map((layerId) => (
@@ -97,7 +103,6 @@ const VideoTimeline = () => {
         </div>
         {/* ------------------------- Layers section ends ------------------------  */}
       </div>
-
     </section>
   );
 };

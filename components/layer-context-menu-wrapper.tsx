@@ -24,6 +24,7 @@ import {
 } from "~/components/ui/context-menu";
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
+import { scrollToBottom, scrollToTop } from "~/lib/utils";
 import useVideoStore from "~/store/video.store";
 
 export default function Component({
@@ -81,11 +82,12 @@ export default function Component({
           </ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-56">
             <ContextMenuItem
-              onClick={() =>
+              onClick={() => {
                 addLayer({
                   position: "AT_TOP",
-                })
-              }
+                });
+                scrollToTop("layerContainer");
+              }}
             >
               <ArrowUp className="mr-2 size-4" />
               Insert at the Top
@@ -113,11 +115,12 @@ export default function Component({
               Insert Below Current
             </ContextMenuItem>
             <ContextMenuItem
-              onClick={() =>
+              onClick={() => {
                 addLayer({
                   position: "AT_BOTTOM",
-                })
-              }
+                });
+                scrollToBottom("layerContainer");
+              }}
             >
               <ArrowDown className="mr-2 size-4" />
               Insert at the Bottom
