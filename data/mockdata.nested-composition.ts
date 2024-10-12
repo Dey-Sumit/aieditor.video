@@ -320,7 +320,17 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
         id: "layerBackground",
         name: "Layer Background",
         isVisible: true,
-        liteItems: [],
+        liteItems: [
+          {
+            id: "s-text-66056c6c-002d-4fc9-8152-9075771d6a8f",
+            sequenceType: "standalone",
+            contentType: "text",
+            startFrame: 623,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 623,
+          },
+        ],
       },
       layerMiddle: {
         id: "layerMiddle",
@@ -335,6 +345,15 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             effectiveDuration: 150,
             sequenceDuration: 150,
             offset: 358,
+          },
+          {
+            id: "s-text-fc5bc0e0-342c-4e3b-85f5-3001a85d6126",
+            sequenceType: "standalone",
+            contentType: "text",
+            startFrame: 508,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 0,
           },
         ],
       },
@@ -469,7 +488,6 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
           text: "<h1>Your text</h1>",
         },
       },
-
       "id-train-window-smash": {
         id: "id-train-window-smash",
         type: "video",
@@ -489,7 +507,6 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
           },
         },
       },
-
       "s-image-8d408a25-954b-4da0-a74a-c3c125377804": {
         id: "s-image-8d408a25-954b-4da0-a74a-c3c125377804",
         layerId: "layerMiddle",
@@ -508,6 +525,36 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
           },
           imageUrl:
             "https://images.pexels.com/photos/28689135/pexels-photo-28689135.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+        },
+      },
+      "s-text-fc5bc0e0-342c-4e3b-85f5-3001a85d6126": {
+        id: "s-text-fc5bc0e0-342c-4e3b-85f5-3001a85d6126",
+        layerId: "layerMiddle",
+        type: "text",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {},
+          },
+          text: "<h1>Your text</h1>",
+        },
+      },
+      "s-text-66056c6c-002d-4fc9-8152-9075771d6a8f": {
+        id: "s-text-66056c6c-002d-4fc9-8152-9075771d6a8f",
+        layerId: "layerBackground",
+        type: "text",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {},
+          },
+          text: "<h1>Your text</h1>",
         },
       },
     },

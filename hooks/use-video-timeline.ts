@@ -11,6 +11,7 @@ import useVideoStore from "~/store/video.store";
 import type {
   ContentType,
   LayerId,
+  LiteSequenceItemType,
   PresetName,
   StoreType,
 } from "~/types/timeline.types";
@@ -82,15 +83,56 @@ const useTimelineInteractions = (
 
   return { handlePlayheadDrag, handleTimeLayerClick };
 };
+const SNAP_THRESHOLD = 10; // Define a threshold in frames for snapping
+interface CollisionResult {
+  hasCollision: boolean;
+  snapTo: number | null;
+}
 
 const useItemDrag = (
   pixelsPerFrame: number,
   updateSequenceItemPositionInLayer: StoreType["updateSequenceItemPositionInLayer"],
 ) => {
   const layers = useVideoStore((store) => store.props.layers);
+  const props = useVideoStore((store) => store.props);
   const orderedLayers = useVideoStore((store) => store.props.layerOrder);
 
-  
+  const checkCollisionAndSnap = (
+    layerItems: LiteSequenceItemType[],
+    itemId: string,
+    newStartFrame: number,
+    newEndFrame: number,
+  ): CollisionResult => {
+    let snapTo: number | null = null;
+    let minCollision = Infinity;
+
+    for (const liteItem of layerItems) {
+      if (liteItem.id === itemId) continue;
+
+      const otherStartFrame = liteItem.startFrame;
+      const otherEndFrame = otherStartFrame + liteItem.effectiveDuration;
+
+      // Check for collision
+      if (newStartFrame < otherEndFrame && newEndFrame > otherStartFrame) {
+        // Calculate the extent of collision
+        const leftCollision = Math.abs(newEndFrame - otherStartFrame);
+        const rightCollision = Math.abs(newStartFrame - otherEndFrame);
+        const collision = Math.min(leftCollision, rightCollision);
+
+        // If this collision is smaller than previous ones and within threshold
+        if (collision < minCollision && collision <= SNAP_THRESHOLD) {
+          minCollision = collision;
+          snapTo =
+            leftCollision < rightCollision
+              ? otherStartFrame - liteItem.effectiveDuration
+              : otherEndFrame;
+        }
+      }
+    }
+
+    return { hasCollision: minCollision !== Infinity, snapTo };
+  };
+
   const handleItemDrag = useCallback(
     (
       oldLayerId: LayerId,
@@ -112,6 +154,7 @@ const useItemDrag = (
       const newLayerId = orderedLayers[snapLayerIndex];
 
       const isLayerChanged = newLayerId !== oldLayerId;
+      console.log({ deltaPositionX });
 
       const newStartFrame = Math.max(
         0,
@@ -128,23 +171,110 @@ const useItemDrag = (
 
       const newLayer = layers[newLayerId]; // if the layer is not changed, this will be the same as oldLayer
 
-      const hasCollision = newLayer.liteItems.some((liteItem) => {
+      /*       const hasCollision = newLayer.liteItems.some((liteItem) => {
         if (liteItem.id === itemId) return false;
         const otherEndFrame = liteItem.startFrame + liteItem.effectiveDuration;
         return (
           newStartFrame < otherEndFrame && newEndFrame > liteItem.startFrame
         );
       });
+ */
 
-      if (hasCollision) {
+      /*       if (hasCollision) {
         console.log("collision detected");
         return;
       }
 
+      console.log("updating item position", {
+        oldLayerId,
+        newLayerId,
+        itemId,
+        newStartFrame,
+        oldStartFrame: item.startFrame,
+      });
+
       // Only update the store if it's significantly different from the last update
       updateSequenceItemPositionInLayer(oldLayerId, newLayerId, itemId, {
         startFrame: newStartFrame,
-      });
+      }); */
+
+      const checkCollisionAndSnap = (
+        layerItems: LiteSequenceItemType[],
+        itemId: string,
+        newStartFrame: number,
+        newEndFrame: number,
+      ): {
+        hasCollision: boolean;
+        snapTo: number | null;
+        collisionExtent: number;
+      } => {
+        let snapTo: number | null = null;
+        let minCollision = Infinity;
+
+        for (const liteItem of layerItems) {
+          if (liteItem.id === itemId) continue;
+
+          const otherStartFrame = liteItem.startFrame;
+          const otherEndFrame = otherStartFrame + liteItem.effectiveDuration;
+
+          // Check for collision
+          if (newStartFrame < otherEndFrame && newEndFrame > otherStartFrame) {
+            // Calculate the extent of collision
+            const leftCollision = Math.abs(newEndFrame - otherStartFrame);
+            const rightCollision = Math.abs(newStartFrame - otherEndFrame);
+            const collision = Math.min(leftCollision, rightCollision);
+
+            if (collision < minCollision) {
+              minCollision = collision;
+              if (collision <= SNAP_THRESHOLD) {
+                snapTo =
+                  leftCollision < rightCollision
+                    ? otherStartFrame - liteItem.effectiveDuration
+                    : otherEndFrame;
+              }
+            }
+          }
+        }
+
+        return {
+          hasCollision: minCollision !== Infinity,
+          snapTo,
+          collisionExtent: minCollision,
+        };
+      };
+
+      const { hasCollision, snapTo, collisionExtent } = checkCollisionAndSnap(
+        newLayer.liteItems,
+        itemId,
+        newStartFrame,
+        newEndFrame,
+      );
+
+      if (hasCollision) {
+        if (snapTo !== null && collisionExtent <= SNAP_THRESHOLD) {
+          // Snap the item
+          // console.log("Snapping item", { itemId, snappedStartFrame: snapTo });
+          updateSequenceItemPositionInLayer(oldLayerId, newLayerId, itemId, {
+            startFrame: snapTo,
+          });
+        } else {
+          // Collision detected and beyond threshold, prevent the move
+          console.log("Collision detected beyond threshold, move prevented");
+          return;
+        }
+      } else {
+        // No collision, update normally
+        console.log("Updating item position", {
+          oldLayerId,
+          newLayerId,
+          itemId,
+          newStartFrame,
+          oldStartFrame: item.startFrame,
+        });
+        updateSequenceItemPositionInLayer(oldLayerId, newLayerId, itemId, {
+          startFrame: newStartFrame,
+        });
+      }
     },
     [layers, pixelsPerFrame, updateSequenceItemPositionInLayer, orderedLayers],
   );

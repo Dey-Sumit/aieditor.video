@@ -72,10 +72,16 @@ const SequenceItem = ({
   };
 
   const onDragStop: ComponentProps<typeof Rnd>["onDragStop"] = (e, d) => {
-    // console.log("drag stop", d);
+    console.log("drag stop", d);
 
-    // if (d.x !== x ) throttledItemDrag(layerId, item.id, d.x);
-    throttledItemDrag(layerId, item.id, d.x, d.y);
+    const centerY = d.y + TRACK_LAYER_HEIGHT_IN_PX / 2;
+    const rawLayerIndex = centerY / TRACK_LAYER_HEIGHT_IN_PX;
+    const snapLayerIndex = Math.floor(rawLayerIndex);
+    const newLayerId = orderedLayers[snapLayerIndex];
+
+    if (d.x !== x || layerId !== newLayerId)
+      throttledItemDrag(layerId, item.id, d.x, d.y);
+    //  throttledItemDrag(layerId, item.id, d.x, d.y);
     setDraggingLayerId(null);
   };
 
