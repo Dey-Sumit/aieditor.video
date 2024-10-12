@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@monaco-editor/react": "^4.6.0",
     "@next/bundle-analyzer": "^14.2.15",
     "@pavlobu/zustand": "4.1.4-4",
     "@radix-ui/react-context-menu": "^2.2.1",
@@ -74,6 +75,7 @@
     "eslint": "^8.43.0",
     "eslint-config-next": "^13.4.13",
     "knip": "^5.33.3",
+    "monaco-editor": "^0.52.0",
     "postcss": "^8.4.36",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^4.1.0",
