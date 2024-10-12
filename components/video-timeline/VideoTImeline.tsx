@@ -97,6 +97,7 @@ const VideoTimeline = () => {
         </div>
         {/* ------------------------- Layers section ends ------------------------  */}
       </div>
+
     </section>
   );
 };

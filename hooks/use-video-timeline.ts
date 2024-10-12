@@ -90,6 +90,12 @@ const useItemDrag = (
   const layers = useVideoStore((store) => store.props.layers);
   const orderedLayers = useVideoStore((store) => store.props.layerOrder);
 
+  /*
+
+  case 1 : change position on x axis
+  case 2 : change position on y axis
+  case 3 : change position on x and y axis
+  */
   const handleItemDrag = useCallback(
     (
       oldLayerId: LayerId,
@@ -97,45 +103,67 @@ const useItemDrag = (
       deltaPositionX: number,
       deltaPositionY: number,
     ) => {
-      const layer = layers[oldLayerId];
-      if (!layer) return;
+      const oldLayer = layers[oldLayerId];
+      if (!oldLayer) return;
 
-      const item = layer.liteItems.find((liteItem) => liteItem.id === itemId);
+      const item = oldLayer.liteItems.find(
+        (liteItem) => liteItem.id === itemId,
+      );
       if (!item) return;
 
       const centerY = deltaPositionY + TRACK_LAYER_HEIGHT_IN_PX / 2;
       const rawLayerIndex = centerY / TRACK_LAYER_HEIGHT_IN_PX;
       const snapLayerIndex = Math.floor(rawLayerIndex);
       const newLayerId = orderedLayers[snapLayerIndex];
+      const isLayerChanged = newLayerId !== oldLayerId;
 
       const newStartFrame = Math.max(
         0,
         Math.round(deltaPositionX / pixelsPerFrame),
       );
-      // const newEndFrame = newStartFrame + item.effectiveDuration;
+
+      const newEndFrame = newStartFrame + item.effectiveDuration;
+
       // Check if the layer has changed
-      const isLayerChanged = newLayerId !== oldLayerId;
+
       console.log("snapLayerIndex,newLayerId", {
         snapLayerIndex,
         newLayerId,
         newStartFrame,
         isLayerChanged,
       });
+      let hasCollision: boolean;
 
-      // TODO : put all this in store maybe. collision detection needs to work for y axis and new layer as well
-      // Efficient collision detection using liteItems
-      /*  const hasCollision = layer.liteItems.some((liteItem) => {
-        if (liteItem.id === itemId) return false;
-        const otherEndFrame = liteItem.startFrame + liteItem.effectiveDuration;
-        return (
-          newStartFrame < otherEndFrame && newEndFrame > liteItem.startFrame
-        );
-      }); */
-      const hasCollision = false;
+      if (!isLayerChanged) {
+        // TODO : put all this in store maybe. collision detection needs to work for y axis and new layer as well
+        // Efficient collision detection using liteItems
+        hasCollision = oldLayer.liteItems.some((liteItem) => {
+          if (liteItem.id === itemId) return false;
+          const otherEndFrame =
+            liteItem.startFrame + liteItem.effectiveDuration;
+          return (
+            newStartFrame < otherEndFrame && newEndFrame > liteItem.startFrame
+          );
+        });
+      } else {
+        const newLayer = layers[newLayerId];
+        if (!newLayer) return;
+        hasCollision = newLayer.liteItems.some((liteItem) => {
+          if (liteItem.id === itemId) return false;
+          const otherEndFrame =
+            liteItem.startFrame + liteItem.effectiveDuration;
+          return (
+            newStartFrame < otherEndFrame && newEndFrame > liteItem.startFrame
+          );
+        });
+      }
 
       if (!hasCollision) {
         // Only update the store if it's significantly different from the last update
-        if (Math.abs(newStartFrame - item.startFrame) >= 1) {
+        if (
+          Math.abs(newStartFrame - item.startFrame) >= 1 &&
+          oldLayerId !== newLayerId
+        ) {
           updateSequenceItemPositionInLayer(oldLayerId, newLayerId, itemId, {
             startFrame: newStartFrame,
           });
