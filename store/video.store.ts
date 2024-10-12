@@ -132,6 +132,12 @@ const useVideoStore = create<
         });
       },
 
+      /*
+
+  case 1 : change position on x axis
+  case 2 : change position on y axis
+  case 3 : change position on x and y axis
+  */
       updateSequenceItemPositionInLayer: (
         oldLayerId,
         newLayerId,
