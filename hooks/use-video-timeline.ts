@@ -112,7 +112,7 @@ const useItemDrag = (
         0,
         Math.round(deltaPositionX / pixelsPerFrame),
       );
-      const newEndFrame = newStartFrame + item.effectiveDuration;
+      // const newEndFrame = newStartFrame + item.effectiveDuration;
       // Check if the layer has changed
       const isLayerChanged = newLayerId !== oldLayerId;
       console.log("snapLayerIndex,newLayerId", {

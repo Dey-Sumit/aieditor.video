@@ -164,7 +164,7 @@ const NestedSequenceComposition = (
                     <SequenceRenderer
                       liteItem={item}
                       layerId={layerId as LayerId}
-                      sequenceItems={props.sequenceItems[layerId as LayerId]}
+                      sequenceItems={props.sequenceItems} // TODO : do we need send the entire sequenceItems ? or maybe we can use context or composition
                     />
                   </TransitionSeries.Sequence>
                   {item.transition?.outgoing && (

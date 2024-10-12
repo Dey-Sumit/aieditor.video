@@ -72,17 +72,12 @@ const useVideoStore = create<
               (newSeqLiteItem.startFrame + newSeqLiteItem.effectiveDuration);
           }
 
-          // Add to detailed items
-          if (!state.props.sequenceItems[layerId]) {
-            state.props.sequenceItems[layerId] = {};
-          }
-
           // Get default props based on content type
           const defaultProps =
             DEFAULT_CONTENT_PROPS[newSeqLiteItem.contentType];
 
           //@ts-ignore
-          state.props.sequenceItems[layerId][newSeqLiteItem.id] = {
+          state.props.sequenceItems[newSeqLiteItem.id] = {
             id: newSeqLiteItem.id,
             layerId: layerId,
             ...defaultProps,
@@ -130,7 +125,7 @@ const useVideoStore = create<
 
           // Remove from detailed items
           if (state.props.sequenceItems[layerId]) {
-            delete state.props.sequenceItems[layerId][itemId];
+            delete state.props.sequenceItems[itemId];
           }
 
           console.info(`Removed sequence item ${itemId} from layer ${layerId}`);
@@ -329,7 +324,7 @@ const useVideoStore = create<
       /* ------------------------------ Update operation of Transitions  ----------------------------- */
       updateTextEditableProps: (layerId, itemId, updates) => {
         set((state: StoreType) => {
-          const item = state.props.sequenceItems[layerId]?.[itemId];
+          const item = state.props.sequenceItems[itemId];
           if (!item || item.type !== "text") {
             console.warn(`Text item ${itemId} not found in layer ${layerId}`);
             return;
@@ -344,7 +339,7 @@ const useVideoStore = create<
 
       updateImageEditableProps: (layerId, itemId, updates) => {
         set((state: StoreType) => {
-          const item = state.props.sequenceItems[layerId]?.[itemId];
+          const item = state.props.sequenceItems[itemId];
           if (!item || item.type !== "image") {
             console.warn(`Image item ${itemId} not found in layer ${layerId}`);
             return;
@@ -359,7 +354,7 @@ const useVideoStore = create<
 
       updateAudioEditableProps: (layerId, itemId, updates) => {
         set((state: StoreType) => {
-          const item = state.props.sequenceItems[layerId]?.[itemId];
+          const item = state.props.sequenceItems[itemId];
           if (!item) {
             console.warn(`Audio item ${itemId} not found in layer ${layerId}`);
             return;
@@ -572,13 +567,8 @@ const useVideoStore = create<
           // Add the preset's liteLevel to the layer
           layer.liteItems.push(liteSequenceItem);
 
-          // Merge the preset's sequenceItems into the store
-          if (!state.props.sequenceItems[layerId]) {
-            state.props.sequenceItems[layerId] = {};
-          }
-
           Object.entries(preset.sequenceItems).forEach(([itemId, item]) => {
-            state.props.sequenceItems[layerId][itemId] = {
+            state.props.sequenceItems[itemId] = {
               ...item,
               layerId,
             };

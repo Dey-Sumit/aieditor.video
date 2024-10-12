@@ -1,6 +1,5 @@
 import { createSelector } from "reselect";
 import type {
-  FullSequenceItemType,
   LayerId,
   LayerType,
   LiteSequenceItemType,
@@ -9,18 +8,11 @@ import type {
 } from "~/types/timeline.types";
 
 const selectLayers = (state: StoreType) => state.props.layers;
-const selectSequenceItems = (state: StoreType) => state.props.sequenceItems;
 const selectTransitions = (state: StoreType) => state.props.transitions;
 
 export const selectLayerById = createSelector(
   [selectLayers, (_, layerId: LayerId) => layerId],
   (layers, layerId): LayerType | undefined => layers[layerId],
-);
-
-export const selectSequenceItemsForLayer = createSelector(
-  [selectSequenceItems, (_, layerId: LayerId) => layerId],
-  (sequenceItems, layerId): Record<string, FullSequenceItemType> =>
-    sequenceItems[layerId] || {},
 );
 
 export const selectTransitionsForLayer = createSelector(

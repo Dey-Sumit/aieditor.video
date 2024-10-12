@@ -15,8 +15,7 @@ const SequenceItemEditorText = () => {
   );
   const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
   const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
-  const sequenceItemsForLayer = sequenceItems[activeSeqItemLite.layerId];
-  const activeSequenceItem = sequenceItemsForLayer[activeSeqItemLite.itemId]
+  const activeSequenceItem = sequenceItems[activeSeqItemLite.itemId]
     .editableProps as TextEditablePropsType;
 
   const [editorContent, setEditorContent] = useState(

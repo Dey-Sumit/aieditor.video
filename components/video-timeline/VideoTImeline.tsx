@@ -14,7 +14,6 @@ const {
   TIMELINE: {
     TRACK_LAYER_HEIGHT,
     TIMELINE_CONTAINER_HEIGHT,
-    TRACK_LAYER_HEIGHT_IN_PX,
 
     LAYER_NAME_STACK_WIDTH,
   },
@@ -23,7 +22,6 @@ const {
 const VideoTimeline = () => {
   const { containerRef, pixelsPerFrame } = useTimeline();
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
-  const props = useVideoStore((state) => state.props);
 
   return (
     <section

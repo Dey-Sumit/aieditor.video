@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 import React from "react";
 import { useSequenceAddition } from "~/hooks/use-video-timeline";
-import { TIMELINE } from "~/lib/constants/timeline.constants";
 import { selectLiteItems } from "~/store/reselector/video-store.reselector";
 import useVideoStore from "~/store/video.store";
 import type { LayerId } from "~/types/timeline.types";
@@ -9,7 +8,6 @@ import AddItemContextMenu from "./add-item-context-menu";
 import AddItemPlaceholder from "./add-item-placeholder";
 import SequenceItem from "./sequence-item";
 
-const { LAYER_HEIGHT_IN_PX } = TIMELINE;
 interface LayerProps {
   layerId: LayerId;
   pixelsPerFrame: number;

@@ -109,14 +109,10 @@ export type NestedCompositionProjectType = {
     };
     layerOrder: string[]; // Array of layer IDs to maintain order
     sequenceItems: {
-      [layerId: string]: {
-        [key: string]: FullSequenceItemType;
-      };
+      [key: string]: FullSequenceItemType;
     };
     transitions: {
-      [layerId: string]: {
-        [key: string]: TransitionItemType;
-      };
+      [key: string]: TransitionItemType;
     };
   };
 };
@@ -138,8 +134,8 @@ export const NestedCompositionPropsSchema = z.object({
   }),
   layers: z.record(LayerSchema),
   layerOrder: z.array(z.string()),
-  sequenceItems: z.record(z.record(z.string(), z.any())),
-  transitions: z.record(z.record(z.string(), TransitionSchema)),
+  sequenceItems: z.record(z.string(), z.any()),
+  transitions: z.record(z.string(), TransitionSchema),
 });
 
 export type LayerId = string;
