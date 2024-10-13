@@ -65,7 +65,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
           }}
         >
           <AbsoluteFill
-            className="bg-black/10"
+            className=""
             style={{
               ...item.editableProps?.styles?.overlay,
             }}
@@ -147,8 +147,8 @@ const NestedSequenceComposition = (
   return (
     <AbsoluteFill className="bg-red-900">
       {[...layerOrder].reverse().map((layerId) => {
-        const layer = layers[layerId];
-        if (!layer || !layer.isVisible) return null;
+        /*         const layer = layers[layerId];
+        if (!layer || !layer.isVisible) return null; */
         return (
           <TransitionSeries key={layerId} name={layerId}>
             {layers[layerId].liteItems.map((item) => {
