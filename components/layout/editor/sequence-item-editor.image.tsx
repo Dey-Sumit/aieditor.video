@@ -1,8 +1,6 @@
-"use client";
-
 import { Editor, type OnMount } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -11,7 +9,9 @@ import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
 import type { ImageEditablePropsType } from "~/types/timeline.types";
 
-const SequenceItemEditorImage = () => {
+type EditorTab = "image" | "container" | "overlay";
+
+const SequenceItemEditor: React.FC = () => {
   const updateImageEditableProps = useVideoStore(
     (store) => store.updateImageEditableProps,
   );
@@ -20,32 +20,57 @@ const SequenceItemEditorImage = () => {
   const activeSequenceItem = sequenceItems[activeSeqItemLite.itemId]
     .editableProps as ImageEditablePropsType;
 
-  const [imageCssEditorContent, setImageCssEditorContent] = useState("");
+  const [editorContents, setEditorContents] = useState<
+    Record<EditorTab, string>
+  >({
+    image: "",
+    container: "",
+    overlay: "",
+  });
+
+  const [activeTab, setActiveTab] = useState<EditorTab>("image");
+
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   useEffect(() => {
-    console.log("useEffect runs");
+    const initializeEditorContents = () => {
+      const newEditorContents: Record<EditorTab, string> = {
+        image: "",
+        container: "",
+        overlay: "",
+      };
 
-    if (activeSequenceItem?.styles?.element) {
-      const cssString = Object.entries(activeSequenceItem.styles.element)
-        .map(([key, value]) => `  ${key}: ${value};`)
-        .join("\n");
-      console.log({ cssString });
+      Object.keys(newEditorContents).forEach((key) => {
+        const tab = key as EditorTab;
+        const styles = activeSequenceItem?.styles?.[tab];
+        if (styles) {
+          const cssString = Object.entries(styles)
+            .map(([cssKey, value]) => `  ${cssKey}: ${value};`)
+            .join("\n");
+          newEditorContents[tab] = `${tab} {\n${cssString}\n}`;
+        } else {
+          newEditorContents[tab] =
+            `${tab} {\n  /* Write your ${tab} styles here */\n}`;
+        }
+      });
 
-      setImageCssEditorContent(`image {\n${cssString}\n}`);
-    } else {
-      setImageCssEditorContent(
-        "image {\n  /* Write your image styles here */\n}",
-      );
-    }
+      setEditorContents(newEditorContents);
+    };
+
+    initializeEditorContents();
   }, [activeSequenceItem]);
-  console.log({ imageCssEditorContent });
 
   const handleSave = () => {
     if (editorRef.current) {
-      const css = editorRef.current.getValue();
-      console.log("Submitted CSS:", css);
-      const styles = extractCSS(css);
-      console.log("Extracted styles:", styles);
+      const updatedStyles: Record<string, Record<string, string>> = {};
+
+      Object.keys(editorContents).forEach((key) => {
+        const tab = key as EditorTab;
+        const css = editorContents[tab];
+        const styles = extractCSS(css);
+        updatedStyles[tab === "image" ? "element" : tab] = styles;
+      });
+      console.log({ updatedStyles });
 
       updateImageEditableProps(
         activeSeqItemLite.layerId,
@@ -53,39 +78,36 @@ const SequenceItemEditorImage = () => {
         {
           styles: {
             ...activeSequenceItem.styles,
-            element: styles,
+            ...updatedStyles,
           },
-          imageUrl: activeSequenceItem.imageUrl,
         },
       );
-      // Here you would typically send this data to your application state or backend
     }
   };
-
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const fixedCSSStructure = `image {
-
-
-}`;
 
   const handleEditorDidMount: OnMount = (editor, monacoInstance) => {
     editorRef.current = editor;
 
-    // Set the theme to a dark theme
-    monacoInstance.editor.setTheme("vs-dark");
+    // monacoInstance.editor.setTheme("vs-dark");
+    monacoInstance.editor.defineTheme("customDarkTheme", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [],
+      colors: {
+        "editor.background": "#000000",
+      },
+    });
+    monacoInstance.editor.setTheme("customDarkTheme");
 
-    // Configure the CSS language with linting
     monacoInstance.languages.css.cssDefaults.setOptions({
       validate: true,
       lint: {
-        // ... (keep the same linting options as before)
-
         compatibleVendorPrefixes: "warning",
         vendorPrefix: "warning",
         duplicateProperties: "warning",
         emptyRules: "ignore",
         importStatement: "warning",
-        boxModel: "warning",
+        boxModel: "ignore",
         universalSelector: "warning",
         zeroUnits: "warning",
         fontFaceProperties: "warning",
@@ -103,7 +125,6 @@ const SequenceItemEditorImage = () => {
 
     const model = editor.getModel();
     if (model) {
-      // Function to update read-only decorations
       const updateDecorations = () => {
         const lines = model.getLinesContent();
         editor.createDecorationsCollection([
@@ -124,36 +145,23 @@ const SequenceItemEditorImage = () => {
       };
 
       updateDecorations();
-      // Add custom undo/redo commands
-      editor.addCommand(
-        monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyZ,
-        () => {
-          editor.trigger("keyboard", "undo", null);
-        },
-      );
 
-      editor.addCommand(
-        monacoInstance.KeyMod.CtrlCmd |
-          monacoInstance.KeyMod.Shift |
-          monacoInstance.KeyCode.KeyZ,
-        () => {
-          editor.trigger("keyboard", "redo", null);
-        },
-      );
-
-      // Ensure the structure is always preserved
       editor.onDidChangeModelContent(() => {
         const currentContent = editor.getValue();
         const lines = currentContent.split("\n");
 
-        if (lines[0] !== "image {" || lines[lines.length - 1] !== "}") {
+        if (lines[0] !== `${activeTab} {` || lines[lines.length - 1] !== "}") {
           const middleContent = lines.slice(1, -1).join("\n");
-          editor.setValue(`image {\n${middleContent}\n}`);
+          editor.setValue(`${activeTab} {\n${middleContent}\n}`);
           updateDecorations();
         }
+
+        setEditorContents((prev) => ({
+          ...prev,
+          [activeTab]: editor.getValue(),
+        }));
       });
 
-      // Prevent editing of the first and last lines
       editor.onKeyDown((e) => {
         const selection = editor.getSelection();
         if (selection) {
@@ -181,61 +189,65 @@ const SequenceItemEditorImage = () => {
       </div>
 
       <div className="h-96 p-2">
-        <Tabs defaultValue="image" className="mx-auto w-full max-w-3xl">
+        <Tabs
+          value={activeTab}
+          onValueChange={(value) => setActiveTab(value as EditorTab)}
+          className="mx-auto w-full max-w-3xl"
+        >
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="image">Image CSS</TabsTrigger>
             <TabsTrigger value="container">Container CSS</TabsTrigger>
             <TabsTrigger value="overlay">Overlay CSS</TabsTrigger>
           </TabsList>
-          <TabsContent value="image">
-            <Card className="h-96 overflow-hidden">
-              <CardContent className="h-full p-0">
-                <Editor
-                  className="relative h-full w-full rounded-md border-2"
-                  height="100%"
-                  defaultLanguage="css"
-                  value={imageCssEditorContent}
-                  defaultValue={fixedCSSStructure}
-                  onMount={handleEditorDidMount}
-                  options={{
-                    minimap: { enabled: false },
-                    fontSize: 16,
-                    lineNumbers: "off",
-                    lineHeight: 22,
-                    padding: {
-                      top: 16,
-                      bottom: 16,
-                    },
-                    fontFamily:
-                      "'Fira Code', 'Consolas', 'Courier New', monospace",
-                    fontLigatures: true, // Enable this if you're using a font with ligatures like Fira Code
-                    renderLineHighlight: "none",
-                    scrollbar: {
-                      vertical: "hidden",
-                      horizontal: "hidden",
-                    },
-                    overviewRulerLanes: 0,
-                    hideCursorInOverviewRuler: true,
-                    scrollBeyondLastLine: false,
-                  }}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="container">
-            <Card className="h-96">
-              <CardContent></CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="overlay">
-            <Card className="h-96">
-              <CardContent></CardContent>
-            </Card>
-          </TabsContent>
+          {(["image", "container", "overlay"] as const).map((tab) => (
+            <TabsContent key={tab} value={tab}>
+              <Card className="h-96 overflow-hidden">
+                <CardContent className="h-full p-0">
+                  <Editor
+                    className="relative h-full w-full rounded-md border-2"
+                    height="100%"
+                    defaultLanguage="css"
+                    value={editorContents[tab]}
+                    onMount={handleEditorDidMount}
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 14,
+                      lineNumbers: "off",
+                      lineHeight: 22,
+                      padding: {
+                        top: 16,
+                        bottom: 16,
+                      },
+
+                      fontFamily:
+                        "'Fira Code', 'Consolas', 'Courier New', monospace",
+                      fontLigatures: true,
+                      renderLineHighlight: "none",
+                      scrollbar: {
+                        vertical: "hidden",
+                        horizontal: "hidden",
+                      },
+                      overviewRulerLanes: 0,
+                      hideCursorInOverviewRuler: true,
+                      scrollBeyondLastLine: false,
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
+      <style jsx global>{`
+        .monaco-editor .overflow-guard {
+          border-radius: 2rem !important;
+        }
+        .monaco-editor {
+          border-radius: 2rem !important;
+        }
+      `}</style>
     </div>
   );
 };
 
-export default SequenceItemEditorImage;
+export default SequenceItemEditor;
