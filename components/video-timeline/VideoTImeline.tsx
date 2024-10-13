@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTimeline } from "~/context/useTimeline";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
@@ -22,6 +23,10 @@ const {
 const VideoTimeline = () => {
   const { containerRef, pixelsPerFrame } = useTimeline();
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
+
+  const [hoverPlayheadPosition, setHoverPlayheadPosition] = useState<
+    number | null
+  >(null);
 
   return (
     <section
@@ -79,7 +84,7 @@ const VideoTimeline = () => {
             {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
             <div className="absolute inset-0">
               {orderedLayers.map((layerId) => (
-                <div key={layerId} className="relative h-8 border">
+                <div key={layerId} className="relative h-8 border-b">
                   <HoverLayer
                     key={layerId}
                     layerId={layerId}

@@ -43,6 +43,8 @@ export type FullSequenceItemType = {
       type: "video";
       editableProps: {
         videoUrl: string;
+        startsAtInFrames: number;
+        endsAtInFrames: number;
       };
     }
 );
@@ -55,6 +57,16 @@ export type ImageEditablePropsType = Extract<
 export type TextEditablePropsType = Extract<
   FullSequenceItemType,
   { type: "text" }
+>["editableProps"];
+
+export type VideoEditablePropsType = Extract<
+  FullSequenceItemType,
+  { type: "video" }
+>["editableProps"];
+
+export type AudioEditablePropsType = Extract<
+  FullSequenceItemType,
+  { type: "audio" }
 >["editableProps"];
 
 export type ContentType = "dummy" | "text" | "image" | "video" | "audio";
@@ -217,6 +229,11 @@ type StoreActions = {
   updateLayerMetadata: (
     layerId: LayerId,
     updates: Partial<Pick<LayerType, "name" | "isVisible">>,
+  ) => void;
+  splitSequenceItem: (
+    layerId: LayerId,
+    itemId: string,
+    splitAtInFrames: number,
   ) => void;
 };
 

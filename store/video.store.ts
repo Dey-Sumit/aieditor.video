@@ -700,6 +700,57 @@ const useVideoStore = create<
           };
         });
       },
+      splitSequenceItem(layerId, itemId, splitAtInFrames) {
+        set((state) => {
+          const layer = state.props.layers[layerId];
+
+          const itemIndex = layer.liteItems.findIndex(
+            (item) => item.id === itemId,
+          );
+
+          const item = layer.liteItems[itemIndex];
+
+          console.log("item to split", JSON.stringify(item, null, 2));
+
+          if (
+            item.sequenceType === "standalone"
+            //  && item.contentType === "video"
+          ) {
+            const newId = genId("s", "video");
+            const newItem: LiteSequenceItemType = {
+              ...item,
+              id: newId,
+              startFrame: splitAtInFrames, // TODO : VERIFY IT LATER : I think i need to fix this, as remotion works with 0 based startFrame
+              offset: 0,
+              sequenceDuration:
+                item.sequenceDuration - (splitAtInFrames - item.startFrame),
+              effectiveDuration:
+                item.sequenceDuration - (splitAtInFrames - item.startFrame),
+            };
+
+            item.sequenceDuration = splitAtInFrames - item.startFrame;
+            item.effectiveDuration = splitAtInFrames - item.startFrame; // TODO : need to handle this maybe for transitions
+
+            // duplicate the item in sequenceItems
+            state.props.sequenceItems[newId] =
+              state.props.sequenceItems[itemId];
+
+            console.log(`Split sequence item ${itemId} in layer ${layerId}`, {
+              newItem,
+            });
+
+            // Update the current item's effective duration
+            item.effectiveDuration = splitAtInFrames - item.startFrame;
+
+            // Insert the new item after the current item
+            layer.liteItems.splice(itemIndex + 1, 0, newItem);
+
+            // Update the offsets of subsequent items
+
+            console.log(`Split sequence item ${itemId} in layer ${layerId}`);
+          }
+        });
+      },
     })),
     {
       name: "VideoStore",

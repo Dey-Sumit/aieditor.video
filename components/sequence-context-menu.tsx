@@ -1,14 +1,15 @@
 import {
   ContextMenu,
-  ContextMenuTrigger,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuShortcut,
   ContextMenuSeparator,
+  ContextMenuShortcut,
   ContextMenuSub,
-  ContextMenuSubTrigger,
   ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
 } from "~/components/ui/context-menu";
+import { useTimeline } from "~/context/useTimeline";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
 import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
@@ -18,17 +19,21 @@ function SequenceContextMenuWrapper({
   layerId,
   itemId,
   transition,
+  startFrame,
 }: {
   children: React.ReactNode;
   layerId: LayerId;
   itemId: string;
   transition: LiteSequenceItemType["transition"];
+  startFrame: number;
 }) {
   const {
     removeSequenceItemFromLayer,
     addTransitionToLayer,
     removeTransitionFromLayer,
+    splitSequenceItem,
   } = useVideoStore();
+  const { playheadPosition, pixelsPerFrame } = useTimeline();
 
   const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
   const clearActiveSeqItem = useEditingStore(
@@ -42,10 +47,22 @@ function SequenceContextMenuWrapper({
     }
   };
 
+  const handleSplitSeqItem = () => {
+    console.log("handleSplitSeqItem: Splitting sequence item", layerId, itemId);
+
+    const playheadPositionInFrames = Math.floor(
+      playheadPosition.x / pixelsPerFrame,
+    );
+    splitSequenceItem(layerId, itemId, playheadPositionInFrames);
+  };
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
       <ContextMenuContent className="mb-4 w-64">
+        <ContextMenuItem inset onClick={handleSplitSeqItem}>
+          {/* <SquareScissors className=" h-4 w-4" /> */}
+          Split
+        </ContextMenuItem>
         <ContextMenuItem inset onClick={handleDeleteSeqItem}>
           Delete
           <ContextMenuShortcut>Del</ContextMenuShortcut>

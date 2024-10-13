@@ -72,8 +72,6 @@ const SequenceItem = ({
   };
 
   const onDragStop: ComponentProps<typeof Rnd>["onDragStop"] = (e, d) => {
-    console.log("drag stop", d);
-
     const centerY = d.y + TRACK_LAYER_HEIGHT_IN_PX / 2;
     const rawLayerIndex = centerY / TRACK_LAYER_HEIGHT_IN_PX;
     const snapLayerIndex = Math.floor(rawLayerIndex);
@@ -164,6 +162,7 @@ const SequenceItem = ({
         layerId={layerId}
         itemId={item.id}
         transition={item.transition}
+        startFrame={item.startFrame}
       >
         <div
           className="relative flex h-full w-full cursor-grab items-center justify-center truncate px-0 text-[10px] font-medium text-white"
