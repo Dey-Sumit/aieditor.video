@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import type { CSSProperties } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -36,3 +37,20 @@ export const scrollToBottom = (containerId: string): void => {
     });
   }
 };
+
+export function extractCSS(cssString: string) {
+  // Update regex to match kebab-case properties and their values
+  const regex = /([\w-]+)\s*:\s*([^;]+);/g;
+  const cssObject = {};
+  let match;
+
+  // Iterate over all matches and populate the cssObject
+  while ((match = regex.exec(cssString)) !== null) {
+    const property = match[1].trim();
+    const value = match[2].trim();
+    //@ts-ignore
+    cssObject[property] = value.replace(/"/g, ""); // Remove quotes
+  }
+
+  return cssObject as CSSProperties;
+}

@@ -1,7 +1,8 @@
 "use client";
-import Editor, { OnMount } from "@monaco-editor/react";
+import { type OnMount } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import React, { useRef } from "react";
+import ImageSequenceCSSEditor from "~/components/css-editor-image";
 
 const MonacoCSSEditorPOC: React.FC = () => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -123,7 +124,8 @@ const MonacoCSSEditorPOC: React.FC = () => {
     <div className="container mx-auto bg-gray-800 p-4 text-white">
       <h1 className="mb-4 text-2xl font-bold">CSS Editor POC</h1>
       <div className="mb-4 border border-gray-600" style={{ height: "400px" }}>
-        <Editor
+        <ImageSequenceCSSEditor />
+        {/*        <Editor
           height="100%"
           defaultLanguage="css"
           defaultValue={fixedCSSStructure}
@@ -138,7 +140,7 @@ const MonacoCSSEditorPOC: React.FC = () => {
             overviewRulerLanes: 0,
             contextmenu: true,
           }}
-        />
+        /> */}
       </div>
       <button
         onClick={handleSubmit}

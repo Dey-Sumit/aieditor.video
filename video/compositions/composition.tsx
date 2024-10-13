@@ -58,20 +58,15 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
       );
     case "image": {
       return (
-        <AbsoluteFill className="flex items-center justify-center">
+        <AbsoluteFill className="">
           <AbsoluteFill className="bg-black/10" />
           <Img
             src={item.editableProps.imageUrl}
             style={{
-              ...item.editableProps?.styles?.element,
-              width: "80%",
-              height: "80%",
-              borderRadius: "10px",
-              // width: "100%",
-              // height: "100%",
               objectFit: "cover",
+              ...item.editableProps?.styles?.element,
             }}
-            className="border-4 border-white"
+            className=""
           />
         </AbsoluteFill>
       );

@@ -183,7 +183,7 @@ type StoreActions = {
   updateImageEditableProps: (
     layerId: LayerId,
     itemId: string,
-    updates: any,
+    updates: Partial<ImageEditablePropsType>,
   ) => void;
   updateAudioEditableProps: (
     layerId: LayerId,

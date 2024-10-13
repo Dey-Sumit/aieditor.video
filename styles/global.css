@@ -3,6 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* TODO : SET THE FONT for code editor */
+/* @font-face {
+  font-family: 'Fira Code';
+  src: url('/path/to/FiraCode-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+ */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -122,6 +130,12 @@ p.is-empty {
 }
 
 .readonly-line {
-  opacity: 0.6;
-  background-color: #f0f0f0;
+  opacity: 1;
+  /* background-color: #6a6a6a; */
+}
+.monaco-editor .suggest-widget div.tree {
+    /* white-space: unset;
+    padding-bottom: 0; */
+    max-width: 300px;
+    margin-left: auto;
 }

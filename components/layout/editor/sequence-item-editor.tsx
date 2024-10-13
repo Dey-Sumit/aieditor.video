@@ -2,6 +2,7 @@
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
+import SequenceItemEditorImage from "./sequence-item-editor.image";
 import SequenceItemEditorText from "./sequence-item-editor.text";
 
 const {
@@ -27,6 +28,7 @@ const SequenceItemEditorRenderer = () => {
       <div className="h-screen"></div>
       <div className="h-screen border"></div> */}
       {activeSeqItem?.itemType === "text" && <SequenceItemEditorText />}
+      {activeSeqItem?.itemType === "image" && <SequenceItemEditorImage />}
     </section>
   );
 };

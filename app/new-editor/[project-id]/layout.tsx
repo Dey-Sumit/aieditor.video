@@ -6,7 +6,7 @@ import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline"
 import { LAYOUT } from "~/lib/constants/layout.constants";
 
 const DynamicSeqEditor = dynamic(
-  () => import("~/components/layout/editor/sequence-item-editor-new"),
+  () => import("~/components/layout/editor/sequence-item-editor"),
   {
     loading: () => <p>Loading...</p>,
   },
