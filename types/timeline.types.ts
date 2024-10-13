@@ -43,11 +43,31 @@ export type FullSequenceItemType = {
       type: "video";
       editableProps: {
         videoUrl: string;
-        startsAtInFrames: number;
-        endsAtInFrames: number;
+        videoStartsFromInFrames: number;
+        videoEndsAtInFrames: number;
       };
     }
 );
+
+export type TextSequenceItemType = Extract<
+  FullSequenceItemType,
+  { type: "text" }
+>;
+
+export type ImageSequenceItemType = Extract<
+  FullSequenceItemType,
+  { type: "image" }
+>;
+
+export type AudioSequenceItemType = Extract<
+  FullSequenceItemType,
+  { type: "audio" }
+>;
+
+export type VideoSequenceItemType = Extract<
+  FullSequenceItemType,
+  { type: "video" }
+>;
 
 export type ImageEditablePropsType = Extract<
   FullSequenceItemType,

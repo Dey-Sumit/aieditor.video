@@ -111,3 +111,9 @@ ACTION 4  :
         }
     ]
 }
+
+// 1 . on add get the video duration, and get the total frames by multiplying with 30(fps)
+// 2. on resize from end:
+    - add the delta to the video's videoEndsAtInFrames
+// 3. on resize from start:
+    - add the delta to the video's videoStartsAtInFrames

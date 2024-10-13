@@ -63,10 +63,7 @@ function SequenceContextMenuWrapper({
           {/* <SquareScissors className=" h-4 w-4" /> */}
           Split
         </ContextMenuItem>
-        <ContextMenuItem inset onClick={handleDeleteSeqItem}>
-          Delete
-          <ContextMenuShortcut>Del</ContextMenuShortcut>
-        </ContextMenuItem>
+
         {/*        <ContextMenuItem inset>
           Duplicate
           <ContextMenuShortcut>Ctrl+D</ContextMenuShortcut>
@@ -120,6 +117,18 @@ function SequenceContextMenuWrapper({
             </ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
+
+        <ContextMenuSeparator />
+        <ContextMenuItem
+          inset
+          className="text-red-700"
+          onClick={handleDeleteSeqItem}
+        >
+          Delete
+          <ContextMenuShortcut className="text-red-700">
+            Del
+          </ContextMenuShortcut>
+        </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   );

@@ -89,6 +89,8 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
             src={item.editableProps.videoUrl}
             style={item.editableProps?.styles?.element}
             className="object-cover"
+            startFrom={item.editableProps.videoStartsFromInFrames}
+            endAt={item.editableProps.videoEndsAtInFrames}
           />
         </AbsoluteFill>
       );
