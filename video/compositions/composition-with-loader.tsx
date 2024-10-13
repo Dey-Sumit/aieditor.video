@@ -1,6 +1,9 @@
-import { type CalculateMetadataFunction, Composition } from "remotion";
+import { Composition, type CalculateMetadataFunction } from "remotion";
 import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
-import { type NestedCompositionProjectType } from "~/types/timeline.types";
+import {
+  NestedCompositionPropsSchema,
+  type NestedCompositionProjectType,
+} from "~/types/timeline.types";
 import NestedSequenceComposition from "./composition";
 // const VIDEO_SRC =
 //   "https://video.twimg.com/ext_tw_video/1827606980677996544/pu/vid/avc1/320x568/ju53EmmBp9D5aOJA.mp4?tag=12";
@@ -30,7 +33,7 @@ const NewDynamicCompositionWithLoader = () => {
         width={props.compositionMetaData.width}
         height={props.compositionMetaData.height}
         defaultProps={props}
-        // schema={DynamicPropsSchema}
+        schema={NestedCompositionPropsSchema}
         calculateMetadata={calculateMetadata}
       />
     </>

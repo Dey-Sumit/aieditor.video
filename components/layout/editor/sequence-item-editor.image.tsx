@@ -42,7 +42,8 @@ const SequenceItemEditor: React.FC = () => {
 
       Object.keys(newEditorContents).forEach((key) => {
         const tab = key as EditorTab;
-        const styles = activeSequenceItem?.styles?.[tab];
+        const styles =
+          activeSequenceItem?.styles?.[tab === "image" ? "element" : tab];
         if (styles) {
           const cssString = Object.entries(styles)
             .map(([cssKey, value]) => `  ${cssKey}: ${value};`)
