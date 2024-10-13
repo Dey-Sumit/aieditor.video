@@ -317,12 +317,6 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       compositionId: "new-dynamic-composition",
     },
     layers: {
-      layerBackground: {
-        id: "layerBackground",
-        name: "Layer Background",
-        isVisible: true,
-        liteItems: [],
-      },
       layerMiddle: {
         id: "layerMiddle",
         name: "Layer Middle",
@@ -338,12 +332,6 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             offset: 0,
           },
         ],
-      },
-      layerForeground: {
-        id: "layerForeground",
-        name: "Layer Foreground",
-        isVisible: true,
-        liteItems: [],
       },
     },
     sequenceItems: {
@@ -371,7 +359,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       },
     },
     transitions: {},
-    layerOrder: ["layerForeground", "layerMiddle", "layerBackground"],
+    layerOrder: ["layerMiddle"],
   },
 };
 // export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {

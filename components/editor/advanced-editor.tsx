@@ -34,6 +34,7 @@ const Editor = ({ initialValue, onChange }: EditorProp) => {
     <EditorRoot>
       {/* @ts-ignore : something with json and string, It works though with error */}
       <EditorContent
+        immediatelyRender={false}
         className="rounded-sm border p-2 text-xs"
         {...(initialValue && { initialContent: initialValue })}
         extensions={extensions}

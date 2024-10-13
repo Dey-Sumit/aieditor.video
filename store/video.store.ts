@@ -748,128 +748,104 @@ const useVideoStore = create<
           };
         });
       },
-
-      splitSequenceItem(layerId, itemId, splitAtInFrames) {
+      // TODO : there is a a bug: split on item into two, delete the prev one, then resize from left and expand it. you will notice the video gets shifted.
+      splitSequenceItem: (layerId, itemId, splitAtInFramesTimeline) => {
         set((state) => {
+          // console.log("splitSequenceItem: Splitting sequence item", {
+          //   splitAtInFramesTimeline,
+          // });
+
           const layer = state.props.layers[layerId];
 
           const itemIndex = layer.liteItems.findIndex(
             (item) => item.id === itemId,
           );
 
-          const itemLite = layer.liteItems[itemIndex];
+          const originalLiteItem = layer.liteItems[itemIndex];
 
-          console.log("item to split", JSON.stringify(itemLite, null, 2));
+          const splitAtInLiteItem =
+            splitAtInFramesTimeline - originalLiteItem.startFrame;
+          console.log({
+            splitAtInFramesTimeline,
+            splitAtInLiteItem,
+          });
+
+          const originalItemDuration = originalLiteItem.sequenceDuration; // TODO : need to check if it's effective or sequence duration
+
+          originalLiteItem.effectiveDuration = splitAtInLiteItem;
+          originalLiteItem.sequenceDuration = splitAtInLiteItem;
+
+          // -------- new lite item ops -------
+
+          // @ts-ignore
+          const newItemId = genId("s", originalLiteItem.contentType);
+
+          const newItem: LiteSequenceItemType = {
+            ...originalLiteItem,
+            id: newItemId,
+            startFrame: splitAtInFramesTimeline,
+            offset: 0,
+            sequenceDuration: originalItemDuration - splitAtInLiteItem,
+            effectiveDuration: originalItemDuration - splitAtInLiteItem,
+          };
+
+          layer.liteItems.splice(itemIndex + 1, 0, newItem);
+
+          const originalSequenceItem = state.props.sequenceItems[itemId];
+
+          // duplicate the item in sequenceItems
+          state.props.sequenceItems[newItemId] = {
+            ...originalSequenceItem,
+            id: newItemId,
+          };
 
           if (
-            itemLite.sequenceType === "standalone" &&
-            itemLite.contentType !== "video"
+            originalLiteItem.sequenceType === "standalone" &&
+            originalLiteItem.contentType === "video"
           ) {
-            const newId = genId("s", itemLite.contentType);
-            const newItem: LiteSequenceItemType = {
-              ...itemLite,
-              id: newId,
-              startFrame: splitAtInFrames, // TODO : VERIFY IT LATER : I think i need to fix this, as remotion works with 0 based startFrame
-              offset: 0,
-              sequenceDuration:
-                itemLite.sequenceDuration -
-                (splitAtInFrames - itemLite.startFrame),
-              effectiveDuration:
-                itemLite.sequenceDuration -
-                (splitAtInFrames - itemLite.startFrame),
-            };
+            const tempOriginalVideoEndsAt = (
+              originalSequenceItem as VideoSequenceItemType
+            ).editableProps.videoEndsAtInFrames;
+            const tempOriginalStartsAt = (
+              originalSequenceItem as VideoSequenceItemType
+            ).editableProps.videoStartsFromInFrames;
 
-            itemLite.sequenceDuration = splitAtInFrames - itemLite.startFrame;
-            itemLite.effectiveDuration = splitAtInFrames - itemLite.startFrame; // TODO : need to handle this maybe for transitions
+            console.log("tempOriginalVideoEndsAt : ", tempOriginalVideoEndsAt);
 
-            const itemToSplitFullData = state.props.sequenceItems[itemId];
+            (
+              state.props.sequenceItems[itemId] as VideoSequenceItemType
+            ).editableProps.videoEndsAtInFrames =
+              tempOriginalStartsAt + splitAtInLiteItem;
 
-            // duplicate the item in sequenceItems
-            state.props.sequenceItems[newId] = {
-              ...itemToSplitFullData,
-              id: newId,
-            };
+            console.log(
+              "UPDATED : original starts at ",
+              (state.props.sequenceItems[itemId] as VideoSequenceItemType)
+                .editableProps.videoStartsFromInFrames,
+            );
 
-            console.log(`Split sequence item ${itemId} in layer ${layerId}`, {
-              newItem,
-            });
+            console.log(
+              "UPDATED : original ends at ",
+              (state.props.sequenceItems[itemId] as VideoSequenceItemType)
+                .editableProps.videoEndsAtInFrames,
+            );
 
-            // Update the current item's effective duration
-            itemLite.effectiveDuration = splitAtInFrames - itemLite.startFrame;
-
-            // Insert the new item after the current item
-            layer.liteItems.splice(itemIndex + 1, 0, newItem);
-
-            // Update the offsets of subsequent items
-
-            console.log(`Split sequence item ${itemId} in layer ${layerId}`);
-          } else {
-            if (
-              itemLite.sequenceType === "standalone" &&
-              itemLite.contentType === "video"
-            ) {
-              const itemToSplitSequence = state.props.sequenceItems[
-                itemId
-              ] as VideoSequenceItemType;
-
-              // TODO : handle this
-
-              const newId = genId("s", "video");
-              const newItem: LiteSequenceItemType = {
-                ...itemLite,
-                id: newId,
-                startFrame: splitAtInFrames, // TODO : VERIFY IT LATER : I think i need to fix this, as remotion works with 0 based startFrame
-                offset: 0,
-                sequenceDuration:
-                  itemLite.sequenceDuration -
-                  (splitAtInFrames - itemLite.startFrame),
-                effectiveDuration:
-                  itemLite.sequenceDuration -
-                  (splitAtInFrames - itemLite.startFrame),
-              };
-
-              itemLite.sequenceDuration = splitAtInFrames - itemLite.startFrame;
-              itemLite.effectiveDuration =
-                splitAtInFrames - itemLite.startFrame; // TODO : need to handle this maybe for transitions
-
-              // duplicate the item in sequenceItems
-              state.props.sequenceItems[newId] = {
-                ...itemToSplitSequence,
-                id: newId,
-                editableProps: {
-                  ...state.props.sequenceItems[itemId].editableProps,
-                  videoStartsFromInFrames:
-                    splitAtInFrames - itemLite.startFrame,
-
-                  // videoStartsFromInFrames:
-                  //   itemToSplitSequence.editableProps.videoStartsFromInFrames +
-                  //   splitAtInFrames,
-                  videoEndsAtInFrames:
-                    itemToSplitSequence.editableProps.videoEndsAtInFrames,
-                },
-              } as VideoSequenceItemType;
-              // modify the split item's ends at
-              itemToSplitSequence.editableProps.videoEndsAtInFrames =
-                splitAtInFrames - itemLite.startFrame;
-
-              console.log(
-                `Split sequence item ${itemId} in layer ${layerId}`,
-
-                state.props.sequenceItems[newId],
-              );
-
-              // Update the current item's effective duration
-              itemLite.effectiveDuration =
-                splitAtInFrames - itemLite.startFrame;
-
-              // Insert the new item after the current item
-              layer.liteItems.splice(itemIndex + 1, 0, newItem);
-
-              // Update the offsets of subsequent items
-
-              console.log(`Split sequence item ${itemId} in layer ${layerId}`);
-            }
+            state.props.sequenceItems[newItemId] = {
+              ...originalSequenceItem,
+              id: newItemId,
+              editableProps: {
+                ...state.props.sequenceItems[itemId].editableProps,
+                videoStartsFromInFrames:
+                  tempOriginalStartsAt + splitAtInLiteItem,
+                videoEndsAtInFrames: tempOriginalVideoEndsAt,
+              },
+            } as VideoSequenceItemType;
+            console.log("UPDATED : new Item starts at ", splitAtInLiteItem);
+            console.log("UPDATED : new Item ends at ", tempOriginalVideoEndsAt);
           }
+
+          console.log(`Split sequence item ${itemId} in layer ${layerId}`, {
+            newItem,
+          });
         });
       },
     })),

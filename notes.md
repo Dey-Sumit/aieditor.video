@@ -117,3 +117,42 @@ ACTION 4  :
     - add the delta to the video's videoEndsAtInFrames
 // 3. on resize from start:
     - add the delta to the video's videoStartsAtInFrames
+----
+Split of a video:
+
+- liteItems:[]
+
+- sequenceItem:{}
+// ----
+1. get the splitFrame in the entire timeline: TL_SPLIT
+2. get the splitFrame in the sequenceItem: // LI_SPLIT = TL_SPLIT - liteItem.startFrame 
+3. originalItemDuration = liteItem.duration : LI_DURATION
+
+4. update the item : // ORIGINAL_LI
+    - startFrame : NO_CHANGE
+    - duration = LI_SPLIT
+
+5. create a copy of the liteItem // NEW_LI
+    - startFrame = LI_SPLIT 
+    - duration = LI_DURATION - LI_SPLIT
+    - OFFSET = 0
+
+--- sequenceItems{}
+6.get the originalSequenceItem : sequenceItems.[ORIGINAL_LI.id] (no change needed if it's not a video/audio type)
+7. create a copy from the originalSequenceItem : // NEW_SI
+    - id = NEW_LI.id
+
+=====
+in case of video/audio:
+startsAt:
+endsAt:
+-----------
+tempEndsAt = originalSequenceItem.editableProps.endAt
+originalSequenceItem:
+    - startsAt: NO_CHANGE
+    - endAt: LI_SPLIT
+copiedSequenceItem:
+    - startsAt: LI_SPLIT
+    - endAt: tempEndsAt
+
+

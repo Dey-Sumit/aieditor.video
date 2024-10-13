@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Editor from "~/components/editor/advanced-editor";
 import { Button } from "~/components/ui/button";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import type { TextEditablePropsType } from "~/types/timeline.types";
+import type { TextSequenceItemType } from "~/types/timeline.types";
 
 const SequenceItemEditorText = () => {
   const updateTextEditableProps = useVideoStore(
@@ -13,34 +13,35 @@ const SequenceItemEditorText = () => {
   );
   const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
   const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
-  const activeSequenceItem = sequenceItems[activeSeqItemLite.itemId]
-    .editableProps as TextEditablePropsType;
 
-  const [editorContent, setEditorContent] = useState(
-    activeSequenceItem?.text || "",
+  const sequenceItem = sequenceItems[
+    activeSeqItemLite.itemId
+  ] as TextSequenceItemType;
+
+  console.log("activeSequenceItem editableProps", sequenceItem);
+
+  const [editorText, setEditorText] = useState(
+    sequenceItem?.editableProps?.text || "",
   );
+
   const handleSave = () => {
     updateTextEditableProps(
       activeSeqItemLite.layerId,
       activeSeqItemLite.itemId,
-      { text: editorContent },
+      { text: editorText },
     );
   };
 
+  /*   console.log("editorContent", editorText);
+
   useEffect(() => {
+    console.log("useEffect activeSeqItemLite", activeSeqItemLite);
+
     if (activeSeqItemLite) {
-      // TODO : FIX THIS
-      // @ts-ignore : fix this
-      setEditorContent(activeSequenceItem.editableProps?.text || "");
+      setEditorText(sequenceItem?.editableProps?.text || "");
     }
-  }, [
-    activeSeqItemLite,
-
-    // TODO : FIX THIS
-    // @ts-ignore : fix this
-    activeSequenceItem.editableProps?.text,
-  ]);
-
+  }, [activeSeqItemLite, sequenceItem?.editableProps?.text]);
+ */
   return (
     <>
       <div className="sticky inset-x-0 top-0 flex h-12 items-center justify-end gap-2 p-2">
@@ -52,12 +53,7 @@ const SequenceItemEditorText = () => {
         </Button>
       </div>
 
-      <form
-        className="space-y-6 px-2 pb-20"
-        onSubmit={(e) => e.preventDefault()}
-      >
-        <Editor initialValue={editorContent} onChange={setEditorContent} />
-      </form>
+      <Editor initialValue={editorText} onChange={setEditorText} />
     </>
   );
 };

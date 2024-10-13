@@ -1,24 +1,20 @@
 import {
-  TiptapImage,
-  TiptapLink,
-  UpdatedImage,
-  TaskList,
-  TaskItem,
-  HorizontalRule,
-  StarterKit,
-  Placeholder,
   AIHighlight,
   Color,
-  TextStyle,
   HighlightExtension,
+  HorizontalRule,
+  Placeholder,
+  StarterKit,
+  TaskItem,
+  TaskList,
+  TextStyle,
 } from "novel/extensions";
-import { UploadImagesPlugin } from "novel/plugins";
 
 import { cx } from "class-variance-authority";
 
 const aiHighlight = AIHighlight;
 const placeholder = Placeholder;
-const tiptapLink = TiptapLink.configure({
+/* const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class: cx(
       "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
@@ -45,7 +41,7 @@ const updatedImage = UpdatedImage.configure({
   HTMLAttributes: {
     class: cx("rounded-lg border border-muted"),
   },
-});
+}); */
 
 const taskList = TaskList.configure({
   HTMLAttributes: {
@@ -110,9 +106,9 @@ const starterKit = StarterKit.configure({
 export const defaultExtensions = [
   starterKit,
   placeholder,
-  tiptapLink,
+  /*   tiptapLink,
   tiptapImage,
-  updatedImage,
+  updatedImage, */
   taskList,
   taskItem,
   horizontalRule,

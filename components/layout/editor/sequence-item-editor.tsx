@@ -27,7 +27,9 @@ const SequenceItemEditorRenderer = () => {
       {/* <div className="sticky inset-x-0 top-0 h-12 border-b"></div>
       <div className="h-screen"></div>
       <div className="h-screen border"></div> */}
-      {activeSeqItem?.itemType === "text" && <SequenceItemEditorText />}
+      {activeSeqItem?.itemType === "text" && (
+        <SequenceItemEditorText key={activeSeqItem.itemId} />
+      )}
       {activeSeqItem?.itemType === "image" && <SequenceItemEditorImage />}
     </section>
   );
