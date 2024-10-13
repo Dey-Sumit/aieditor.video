@@ -312,7 +312,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 900,
+      duration: 300,
       compositionId: "new-dynamic-composition",
     },
     layers: {
@@ -321,7 +321,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
         name: "Layer Background",
         isVisible: true,
         liteItems: [
-          {
+          /* {
             id: "s-text-66056c6c-002d-4fc9-8152-9075771d6a8f",
             sequenceType: "standalone",
             contentType: "text",
@@ -329,7 +329,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             effectiveDuration: 150,
             sequenceDuration: 150,
             offset: 623,
-          },
+          }, */
         ],
       },
       layerMiddle: {
@@ -337,7 +337,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
         name: "Layer Middle",
         isVisible: true,
         liteItems: [
-          {
+          /* {
             id: "s-image-8d408a25-954b-4da0-a74a-c3c125377804",
             sequenceType: "standalone",
             contentType: "image",
@@ -354,7 +354,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             effectiveDuration: 150,
             sequenceDuration: 150,
             offset: 0,
-          },
+          }, */
         ],
       },
       layerForeground: {
@@ -375,7 +375,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
       },
     },
     sequenceItems: {
-      "id-brand": {
+      /*       "id-brand": {
         id: "id-brand",
         layerId: "layerForeground",
         type: "text",
@@ -472,7 +472,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             },
           },
         },
-      },
+      }, */
       "s-text-eaadc973-1830-4c46-a012-ccc3e48774c6": {
         id: "s-text-eaadc973-1830-4c46-a012-ccc3e48774c6",
         layerId: "layerForeground",
@@ -488,7 +488,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
           text: "<h1>Your text</h1>",
         },
       },
-      "id-train-window-smash": {
+      /*   "id-train-window-smash": {
         id: "id-train-window-smash",
         type: "video",
         layerId: "layerBackground",
@@ -506,7 +506,7 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
             },
           },
         },
-      },
+      }, */
       "s-image-8d408a25-954b-4da0-a74a-c3c125377804": {
         id: "s-image-8d408a25-954b-4da0-a74a-c3c125377804",
         layerId: "layerMiddle",
