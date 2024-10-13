@@ -145,7 +145,7 @@ const NestedSequenceComposition = (
   const { layers, layerOrder } = props;
 
   return (
-    <AbsoluteFill className="bg-red-900">
+    <AbsoluteFill className="">
       {[...layerOrder].reverse().map((layerId) => {
         /*         const layer = layers[layerId];
         if (!layer || !layer.isVisible) return null; */

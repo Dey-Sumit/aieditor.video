@@ -84,17 +84,12 @@ const useTimelineInteractions = (
   return { handlePlayheadDrag, handleTimeLayerClick };
 };
 const SNAP_THRESHOLD = 10; // Define a threshold in frames for snapping
-interface CollisionResult {
-  hasCollision: boolean;
-  snapTo: number | null;
-}
 
 const useItemDrag = (
   pixelsPerFrame: number,
   updateSequenceItemPositionInLayer: StoreType["updateSequenceItemPositionInLayer"],
 ) => {
   const layers = useVideoStore((store) => store.props.layers);
-  const props = useVideoStore((store) => store.props);
   const orderedLayers = useVideoStore((store) => store.props.layerOrder);
   const checkCollisionAndSnap = (
     layerItems: LiteSequenceItemType[],

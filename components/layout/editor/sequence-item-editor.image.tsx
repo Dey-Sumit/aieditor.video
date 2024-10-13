@@ -69,6 +69,7 @@ const SequenceItemEditor: React.FC = () => {
         const tab = key as EditorTab;
         const css = editorContents[tab];
         const styles = extractCSS(css);
+        //@ts-ignore
         updatedStyles[tab === "image" ? "element" : tab] = styles;
       });
       console.log({ updatedStyles });
@@ -131,7 +132,7 @@ const SequenceItemEditor: React.FC = () => {
         editor.createDecorationsCollection([
           {
             range: new monacoInstance.Range(1, 1, 1, Infinity),
-            options: { inlineClassName: "readonly-line", readOnly: true },
+            options: { inlineClassName: "readonly-line" },
           },
           {
             range: new monacoInstance.Range(
@@ -140,7 +141,7 @@ const SequenceItemEditor: React.FC = () => {
               lines.length,
               Infinity,
             ),
-            options: { inlineClassName: "readonly-line", readOnly: true },
+            options: { inlineClassName: "readonly-line" },
           },
         ]);
       };
