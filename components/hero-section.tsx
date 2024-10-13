@@ -52,7 +52,7 @@ export default function Hero() {
         <div
           className={cn(
             "relative my-8 flex h-[180px] flex-col items-center justify-center rounded-xl backdrop-blur-lg sm:my-12 sm:h-[350px] md:my-16 md:h-[450px] lg:h-[550px] xl:h-[650px]",
-            "before:absolute before:left-0 before:top-0 before:z-[-1] before:h-full before:w-full before:[background-image:linear-gradient(to_bottom,red,blue)] before:[filter:blur(160px)] md:before:[background-image:linear-gradient(to_bottom,red,blue,transparent_40%)]",
+            "before:absolute before:left-0 before:top-0 before:z-[-1] before:h-full before:w-full before:[background-image:linear-gradient(to_bottom,red,orange)] before:[filter:blur(160px)] md:before:[background-image:linear-gradient(to_bottom,red,orange,transparent_40%)]",
             // "before:animate-gradient-fade-in before:opacity-0",
           )}
         >
@@ -61,7 +61,7 @@ export default function Hero() {
             // className="block dark:hidden"
             animationStyle="from-center"
             videoSrc="https://www.youtube.com/embed/cu6fUq2lOyo"
-            thumbnailSrc="/home-page-assets/hero-image-orange-bg.png"
+            thumbnailSrc="/home-page-assets/hero-image-dark-bg.png"
             thumbnailAlt="Hero Video"
           />
 
