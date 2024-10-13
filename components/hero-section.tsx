@@ -31,7 +31,7 @@ export default function Hero() {
             </p>
           </div>
 
-          <Link href="new-editor/crazy-video-id/media">
+          <Link href="editor/crazy-video-id/media">
             <div className="relative z-10 w-full sm:w-auto">
               <AnimatedGradientText className="flex items-center justify-center rounded-full bg-white px-4 py-2 sm:py-3">
                 🧑‍🍳 <hr className="mx-2 h-4 w-[1px] shrink-0 bg-gray-300" />{" "}

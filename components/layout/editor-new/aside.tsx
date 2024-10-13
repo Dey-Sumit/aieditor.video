@@ -20,7 +20,7 @@ const AsideNew = () => {
   const router = useRouter();
   const params = useParams<{ "project-id": string }>();
   const handleNavigation = (path: string) => {
-    router.push(`/new-editor/${params["project-id"]}/${path}`);
+    router.push(`/editor/${params["project-id"]}/${path}`);
   };
   const pathname = usePathname();
 
