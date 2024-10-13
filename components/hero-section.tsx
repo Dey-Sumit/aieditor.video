@@ -1,10 +1,10 @@
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import AnimatedGradientText from "~/components/magicui/animated-gradient-text";
 import { BorderBeam } from "~/components/magicui/border-beam";
+import HeroVideoDialog from "~/components/magicui/hero-video-dialog";
 import Particles from "~/components/magicui/particles";
 import { cn } from "~/lib/utils";
-import { ChevronRight } from "lucide-react";
-import HeroVideoDialog from "~/components/magicui/hero-video-dialog";
-import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -61,7 +61,7 @@ export default function Hero() {
             // className="block dark:hidden"
             animationStyle="from-center"
             videoSrc="https://www.youtube.com/embed/cu6fUq2lOyo"
-            thumbnailSrc="/hero-image.png"
+            thumbnailSrc="/home-page-assets/hero-image-orange-bg.png"
             thumbnailAlt="Hero Video"
           />
 
