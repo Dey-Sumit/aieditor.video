@@ -321,47 +321,78 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
         id: "layerMiddle",
         name: "Layer Middle",
         isVisible: true,
-        liteItems: [
-          {
-            id: "s-video-e5742456-e47d-4181-9f15-482dcce816fd",
-            sequenceType: "standalone",
-            contentType: "video",
-            startFrame: 0,
-            effectiveDuration: 420,
-            sequenceDuration: 420,
-            offset: 0,
-          },
-        ],
+        liteItems: [],
+      },
+      layerBg: {
+        id: "layerBg",
+        name: "Layer Bg",
+        isVisible: true,
+        liteItems: [],
       },
     },
-    sequenceItems: {
-      "s-video-e5742456-e47d-4181-9f15-482dcce816fd": {
-        id: "s-video-e5742456-e47d-4181-9f15-482dcce816fd",
-        layerId: "layerMiddle",
-        type: "video",
-        editableProps: {
-          styles: {
-            container: {
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            element: {
-              objectFit: "cover",
-              width: "100%",
-              height: "100%",
-            },
-          },
-          videoStartsFromInFrames: 0,
-          videoEndsAtInFrames: 420,
-          videoUrl:
-            "https://video.twimg.com/ext_tw_video/1833369095175077888/pu/vid/avc1/320x574/cHPzhvM1KC_pCRV2.mp4?tag=12",
-        },
-      },
-    },
+    sequenceItems: {},
     transitions: {},
-    layerOrder: ["layerMiddle"],
+    layerOrder: ["layerMiddle", "layerBg"],
   },
 };
+// export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
+//   id: "id-dummy",
+//   title: "Dummy Project",
+
+//   props: {
+//     compositionMetaData: {
+//       width: 720,
+//       height: 1080,
+//       fps: 30,
+//       duration: 600,
+//       compositionId: "new-dynamic-composition",
+//     },
+//     layers: {
+//       layerMiddle: {
+//         id: "layerMiddle",
+//         name: "Layer Middle",
+//         isVisible: true,
+//         liteItems: [
+//           {
+//             id: "s-video-e5742456-e47d-4181-9f15-482dcce816fd",
+//             sequenceType: "standalone",
+//             contentType: "video",
+//             startFrame: 0,
+//             effectiveDuration: 420,
+//             sequenceDuration: 420,
+//             offset: 0,
+//           },
+//         ],
+//       },
+//     },
+//     sequenceItems: {
+//       "s-video-e5742456-e47d-4181-9f15-482dcce816fd": {
+//         id: "s-video-e5742456-e47d-4181-9f15-482dcce816fd",
+//         layerId: "layerMiddle",
+//         type: "video",
+//         editableProps: {
+//           styles: {
+//             container: {
+//               justifyContent: "center",
+//               alignItems: "center",
+//             },
+//             element: {
+//               objectFit: "cover",
+//               width: "100%",
+//               height: "100%",
+//             },
+//           },
+//           videoStartsFromInFrames: 0,
+//           videoEndsAtInFrames: 420,
+//           videoUrl:
+//             "https://video.twimg.com/ext_tw_video/1833369095175077888/pu/vid/avc1/320x574/cHPzhvM1KC_pCRV2.mp4?tag=12",
+//         },
+//       },
+//     },
+//     transitions: {},
+//     layerOrder: ["layerMiddle"],
+//   },
+// };
 // export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
 //   id: "id-dummy",
 //   title: "Dummy Project",

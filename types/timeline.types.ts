@@ -89,7 +89,13 @@ export type AudioEditablePropsType = Extract<
   { type: "audio" }
 >["editableProps"];
 
-export type ContentType = "dummy" | "text" | "image" | "video" | "audio";
+export type ContentType =
+  | "dummy"
+  | "text"
+  | "image"
+  | "video"
+  | "audio"
+  | "div";
 
 export type LiteSequenceItemType = {
   id: string;
