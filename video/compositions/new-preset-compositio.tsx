@@ -9,9 +9,9 @@ export const DEFAULT_PRESET_COMP_PROPS: CompositionType["props"] = {
         {
           id: "preset-c2e1d7931a93",
           sequenceType: "preset",
-          effectiveDuration: 600,
-          offset: 90,
-          sequenceDuration: 600,
+          effectiveDuration: 270,
+          sequenceDuration: 270,
+          offset: 0,
 
           // while creating a preset ,I just need layers,layerOrder and the sequence items
           layers: {
@@ -33,7 +33,6 @@ export const DEFAULT_PRESET_COMP_PROPS: CompositionType["props"] = {
                   id: "s-fg-0",
                   sequenceType: "standalone",
                   contentType: "text",
-
                   effectiveDuration: 90,
                   sequenceDuration: 90,
                   offset: 0,
@@ -42,19 +41,17 @@ export const DEFAULT_PRESET_COMP_PROPS: CompositionType["props"] = {
                   id: "s-fg-1",
                   sequenceType: "standalone",
                   contentType: "text",
-
                   effectiveDuration: 90,
                   sequenceDuration: 90,
-                  offset: 90,
+                  offset: 0,
                 },
                 {
                   id: "s-fg-2",
                   sequenceType: "standalone",
                   contentType: "text",
-
                   effectiveDuration: 90,
                   sequenceDuration: 90,
-                  offset: 180,
+                  offset: 0,
                 },
               ],
             },
@@ -379,7 +376,7 @@ const RenderNestedSequences: React.FC<{
   );
 };
 
-const RenderSequence: React.FC<{
+/* const RenderSequence: React.FC<{
   item: LiteSequenceItemType;
   sequenceItems: Record<string, FullSequenceItemType>;
 }> = ({ item, sequenceItems }) => {
@@ -401,16 +398,51 @@ const RenderSequence: React.FC<{
               ) : (
                 <RenderSequence item={item} sequenceItems={sequenceItems} />
               )}
-              {/* <RenderNestedSequences
-                item={item}
-                sequenceItems={sequenceItems}
-              /> */}
             </TransitionSeries.Sequence>
           </TransitionSeries>
         );
       });
     });
   }
+}; */
+
+const RenderSequence: React.FC<{
+  item: LiteSequenceItemType;
+  sequenceItems: Record<string, FullSequenceItemType>;
+}> = ({ item, sequenceItems }) => {
+  if (item.sequenceType === "standalone") {
+    return <SequenceContent item={sequenceItems[item.id]} />;
+  }
+
+  if (item.sequenceType === "preset") {
+    return (
+      <>
+        {item.layerOrder.map((layerId) => (
+          <TransitionSeries key={layerId} name={layerId}>
+            {item.layers[layerId].liteItems.map((subItem) => (
+              <TransitionSeries.Sequence
+                key={subItem.id}
+                durationInFrames={subItem.sequenceDuration}
+                name={subItem.id}
+                offset={subItem.offset}
+              >
+                {subItem.sequenceType === "standalone" ? (
+                  <SequenceContent item={sequenceItems[subItem.id]} />
+                ) : (
+                  <RenderSequence
+                    item={subItem}
+                    sequenceItems={sequenceItems}
+                  />
+                )}
+              </TransitionSeries.Sequence>
+            ))}
+          </TransitionSeries>
+        ))}
+      </>
+    );
+  }
+
+  return null; // Handle unexpected sequenceType
 };
 
 const NestedSequenceComposition: React.FC<{
