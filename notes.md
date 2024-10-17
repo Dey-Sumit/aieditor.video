@@ -156,3 +156,89 @@ copiedSequenceItem:
     - endAt: tempEndsAt
 
 
+
+
+---------
+
+const NestedSequenceCompositionWithHardcoded = () => {
+  return (
+    <AbsoluteFill className="font-serif">
+      <TransitionSeries name={"Layer F"}>
+        <TransitionSeries.Sequence
+          name={"Sequence 3"}
+          durationInFrames={270}
+          offset={90}
+        >
+          {/* -------------------------------- Preset Bg starts -------------------------------- */}
+          <TransitionSeries name="Preset Bg">
+            <TransitionSeries.Sequence
+              name={"Sequence 4"}
+              durationInFrames={270}
+              offset={0}
+              style={{
+                background: "rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <div></div>
+            </TransitionSeries.Sequence>
+          </TransitionSeries>
+          {/* -------------------------------- Preset Bg ends -------------------------------- */}
+
+          {/* -------------------------------- Preset Fg starts -------------------------------- */}
+          <TransitionSeries name="Preset Fg">
+            <TransitionSeries.Sequence
+              name={"Sequence 4"}
+              durationInFrames={90}
+              offset={0}
+              className=""
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                className="grid place-items-center p-10 text-5xl text-white"
+              >
+                Like.
+              </div>
+            </TransitionSeries.Sequence>
+            <TransitionSeries.Sequence
+              name={"Sequence 5"}
+              durationInFrames={90}
+              offset={0}
+              className=""
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                className="grid place-items-center p-10 text-5xl text-white"
+              >
+                Share.
+              </div>
+            </TransitionSeries.Sequence>
+            <TransitionSeries.Sequence
+              name={"Sequence 5"}
+              durationInFrames={90}
+              offset={0}
+              className=""
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                className="grid place-items-center p-10 text-5xl text-white"
+              >
+                Subscribe.
+              </div>
+            </TransitionSeries.Sequence>
+          </TransitionSeries>
+          {/* -------------------------------- Preset Fg ends -------------------------------- */}
+        </TransitionSeries.Sequence>
+      </TransitionSeries>
+    </AbsoluteFill>
+  );
+};
+-------

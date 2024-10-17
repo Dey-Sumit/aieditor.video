@@ -335,6 +335,216 @@ export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
     layerOrder: ["layerMiddle", "layerBg"],
   },
 };
+
+export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
+  id: "id-dummy",
+  title: "Dummy Project",
+
+  props: {
+    layers: {
+      layerMiddle: {
+        liteItems: [
+          {
+            id: "preset-c2e1d7931a93",
+            sequenceType: "preset",
+            effectiveDuration: 270,
+            sequenceDuration: 270,
+            offset: 0,
+            startFrame: 0,
+            // while creating a preset ,I just need layers,layerOrder and the sequence items
+            layers: {
+              layerBg: {
+                liteItems: [
+                  {
+                    startFrame: 0,
+                    id: "p-div-bg",
+                    sequenceType: "standalone",
+                    contentType: "div",
+                    effectiveDuration: 270,
+                    sequenceDuration: 270,
+                    offset: 0,
+                  },
+                ],
+              },
+              layerMiddle: {
+                liteItems: [
+                  {
+                    startFrame: 0,
+                    id: "s-fg-0",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                  {
+                    startFrame: 90,
+                    id: "s-fg-1",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                  {
+                    startFrame: 180,
+                    id: "s-fg-2",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                ],
+              },
+            },
+            layerOrder: ["layerBg", "layerMiddle"],
+            transition: {
+              outgoing: {
+                id: "transition-1",
+                duration: 15,
+              },
+            },
+          },
+        ],
+        id: "layerMiddle",
+        isVisible: true,
+        name: "Layer Middle",
+      },
+      layerBg: {
+        liteItems: [
+          {
+            id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
+            sequenceType: "standalone",
+            contentType: "image",
+            effectiveDuration: 600,
+            sequenceDuration: 600,
+            offset: 0,
+            startFrame: 0,
+          },
+        ],
+        id: "layerBg",
+        isVisible: true,
+        name: "Layer Bg",
+      },
+    },
+    layerOrder: ["layerBg", "layerMiddle"],
+    sequenceItems: {
+      "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93": {
+        id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
+        layerId: "layerBg",
+        type: "image",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+            overlay: {
+              backgroundColor: "rgba(0,0,0,0.6)",
+            },
+          },
+          imageUrl: "https://picsum.photos/600/1000",
+        },
+      },
+
+      "p-div-bg": {
+        id: "p-div-bg",
+        layerId: "layerBg",
+        type: "div",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(255,0,0,0.6)",
+            },
+          },
+        },
+      },
+
+      "s-fg-0": {
+        id: "s-fg-0",
+        layerId: "layerMiddle",
+        type: "text",
+        editableProps: {
+          text: "<h1>Like.</h1>",
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+        },
+      },
+
+      "s-fg-1": {
+        id: "s-fg-1",
+        layerId: "layerMiddle",
+        type: "text",
+        editableProps: {
+          text: "<h1>Share.</h1>",
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+        },
+      },
+
+      "s-fg-2": {
+        id: "s-fg-2",
+        layerId: "layerMiddle",
+        type: "text",
+        editableProps: {
+          text: "<h1>Subscribe.</h1>",
+
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+        },
+      },
+    },
+    compositionMetaData: {
+      width: 600,
+      height: 1000,
+      fps: 30,
+      duration: 600,
+      compositionId: "new-dynamic-composition",
+    },
+    transitions: {},
+  },
+};
+
 // export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
 //   id: "id-dummy",
 //   title: "Dummy Project",

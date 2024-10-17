@@ -47,6 +47,17 @@ export type FullSequenceItemType = {
         videoEndsAtInFrames: number;
       };
     }
+  | {
+      type: "audio";
+      editableProps: {
+        audioUrl: string;
+        audioStartsFromInFrames: number;
+        audioEndsAtInFrames: number;
+      };
+    }
+  | {
+      type: "div";
+    }
 );
 
 export type TextSequenceItemType = Extract<
@@ -101,6 +112,7 @@ export type LiteSequenceItemType = {
   id: string;
   sequenceDuration: number;
   effectiveDuration: number;
+  startFrame: number;
   offset: number;
   transition?: {
     incoming?: {
@@ -112,7 +124,6 @@ export type LiteSequenceItemType = {
       duration: number;
     };
   };
-  startFrame: number;
 } & (
   | {
       sequenceType: "standalone";
@@ -120,7 +131,12 @@ export type LiteSequenceItemType = {
     }
   | {
       sequenceType: "preset";
-      liteItems: LiteSequenceItemType[];
+      layers: {
+        [layerId: string]: {
+          liteItems: LiteSequenceItemType[];
+        };
+      };
+      layerOrder: string[];
     }
 );
 
@@ -143,7 +159,12 @@ export type NestedCompositionProjectType = {
       compositionId: string;
     };
     layers: {
-      [layerId: string]: LayerType;
+      [layerId: string]: {
+        id: string;
+        name: string;
+        isVisible: boolean;
+        liteItems: LiteSequenceItemType[];
+      };
     };
     layerOrder: string[]; // Array of layer IDs to maintain order
     sequenceItems: {
