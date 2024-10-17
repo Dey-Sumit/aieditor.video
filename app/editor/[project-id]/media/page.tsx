@@ -8,7 +8,6 @@ import {
   UploadIcon,
   VideoIcon,
 } from "lucide-react";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
@@ -57,7 +56,7 @@ const MediaItem: React.FC<{
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {type === "image" && (
+      {/* {type === "image" && (
         <Image
           src={item?.src?.medium}
           alt={`Image ${item.id}`}
@@ -65,7 +64,7 @@ const MediaItem: React.FC<{
           height={150}
           className="h-full w-full object-cover"
         />
-      )}
+      )} */}
       {type === "video" && (
         <video
           src={

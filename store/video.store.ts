@@ -598,6 +598,40 @@ const useVideoStore = create<
         });
       },
 
+      // addPresetToLayer: (layerId, presetDetails) => {
+      //   set((state: StoreType) => {
+      //     const layer = state.props.layers[layerId];
+      //     if (!layer) {
+      //       console.warn(`Layer ${layerId} not found`);
+      //       return;
+      //     }
+      //     let preset = { ...END_SCREEN_PRESET };
+      //     const { offset, startFrame } = presetDetails;
+
+      //     // Generate a random suffix for the key
+      //     const randomSuffix = Math.random().toString(36).substring(2, 8);
+
+      //     // Update the key in liteLevel with the random suffix
+      //     preset.liteLevel.id = `${preset.liteLevel.id}-${randomSuffix}`;
+
+      //     const liteSequenceItem: LiteSequenceItemType = {
+      //       ...preset.liteLevel,
+      //       startFrame,
+      //       offset,
+      //     };
+      //     // Add the preset's liteLevel to the layer
+      //     layer.liteItems.push(liteSequenceItem);
+
+      //     Object.entries(preset.sequenceItems).forEach(([itemId, item]) => {
+      //       state.props.sequenceItems[itemId] = {
+      //         ...item,
+      //         layerId,
+      //       };
+      //     });
+
+      //     console.log(`Added ${presetDetails} preset to layer ${layerId}`);
+      //   });
+      // },
       addPresetToLayer: (layerId, presetDetails) => {
         set((state: StoreType) => {
           const layer = state.props.layers[layerId];
@@ -730,6 +764,7 @@ const useVideoStore = create<
       //     layer.name = updates.name;
       //   });
       // },
+
       updateLayerMetadata: (layerId, updates) => {
         set((state) => {
           const layer = state.props.layers[layerId];

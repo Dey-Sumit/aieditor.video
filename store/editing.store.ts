@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import type { LayerId } from "~/types/timeline.types";
+import type { ContentType, LayerId } from "~/types/timeline.types";
 
-type NewItemType = "text" | "image" | "video" | "audio";
+type NewItemType = ContentType | "preset";
 
 interface EditingState {
   activeSeqItem: {

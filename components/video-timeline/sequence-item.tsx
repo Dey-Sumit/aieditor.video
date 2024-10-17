@@ -164,6 +164,7 @@ const SequenceItem = ({
         itemId={item.id}
         transition={item.transition}
         startFrame={item.startFrame}
+        type={item.sequenceType === "preset" ? "preset" : item.contentType}
       >
         <div
           className="relative flex h-full w-full cursor-grab items-center justify-center truncate px-0 text-[10px] font-medium text-white"

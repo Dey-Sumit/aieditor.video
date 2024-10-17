@@ -12,7 +12,11 @@ import {
 import { useTimeline } from "~/context/useTimeline";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
+import type {
+  ContentType,
+  LayerId,
+  LiteSequenceItemType,
+} from "~/types/timeline.types";
 
 function SequenceContextMenuWrapper({
   children,
@@ -20,12 +24,14 @@ function SequenceContextMenuWrapper({
   itemId,
   transition,
   startFrame,
+  type,
 }: {
   children: React.ReactNode;
   layerId: LayerId;
   itemId: string;
   transition: LiteSequenceItemType["transition"];
   startFrame: number;
+  type: "preset" | ContentType;
 }) {
   const {
     removeSequenceItemFromLayer,
@@ -33,9 +39,12 @@ function SequenceContextMenuWrapper({
     removeTransitionFromLayer,
     splitSequenceItem,
   } = useVideoStore();
+
   const { playheadPosition, pixelsPerFrame } = useTimeline();
 
   const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
+  console.log("activeSeqItem", activeSeqItem, itemId);
+
   const clearActiveSeqItem = useEditingStore(
     (store) => store.clearActiveSeqItem,
   );
@@ -59,10 +68,14 @@ function SequenceContextMenuWrapper({
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
       <ContextMenuContent className="mb-4 w-64">
-        <ContextMenuItem inset onClick={handleSplitSeqItem}>
-          {/* <SquareScissors className=" h-4 w-4" /> */}
-          Split
-        </ContextMenuItem>
+        {type !== "preset" && (
+          <>
+            <ContextMenuItem inset onClick={handleSplitSeqItem}>
+              Split
+            </ContextMenuItem>
+            <ContextMenuSeparator />
+          </>
+        )}
 
         {/*        <ContextMenuItem inset>
           Duplicate
@@ -84,7 +97,6 @@ function SequenceContextMenuWrapper({
           Lock/Unlock
           <ContextMenuShortcut>L</ContextMenuShortcut>
         </ContextMenuItem> */}
-        <ContextMenuSeparator />
 
         <ContextMenuSub>
           <ContextMenuSubTrigger inset> Transitions</ContextMenuSubTrigger>

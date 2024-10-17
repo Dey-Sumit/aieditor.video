@@ -347,8 +347,6 @@ export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
           {
             id: "preset-c2e1d7931a93",
             sequenceType: "preset",
-            effectiveDuration: 270,
-            sequenceDuration: 270,
             offset: 0,
             startFrame: 0,
             // while creating a preset ,I just need layers,layerOrder and the sequence items
@@ -399,12 +397,14 @@ export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
               },
             },
             layerOrder: ["layerBg", "layerMiddle"],
-            transition: {
-              outgoing: {
-                id: "transition-1",
-                duration: 15,
-              },
-            },
+            effectiveDuration: 270,
+            sequenceDuration: 270,
+            // transition: {
+            //   outgoing: {
+            //     id: "transition-1",
+            //     duration: 15,
+            //   },
+            // },
           },
         ],
         id: "layerMiddle",
