@@ -156,7 +156,7 @@ const NestedSequenceComposition = (
 
   return (
     <AbsoluteFill className="font-serif">
-      {layerOrder.map((layerId) => (
+      {[...layerOrder].reverse().map((layerId) => (
         <TransitionSeries key={layerId} name={layerId}>
           {layers[layerId].liteItems.map((item) => (
             <React.Fragment key={item.id}>

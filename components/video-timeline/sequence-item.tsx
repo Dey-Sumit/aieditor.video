@@ -13,7 +13,11 @@ import {
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
+import type {
+  LayerId,
+  LiteSequenceItemType,
+  LiteSequencePresetItemType,
+} from "~/types/timeline.types";
 import SequenceContextMenuWrapper from "../sequence-context-menu";
 /**
  * Map of item types to their corresponding CSS classes for styling.
@@ -27,7 +31,7 @@ export const ITEM_TYPE_TO_STYLES_MAP: Record<string, string> = {
     "bg-orange-600/50 border-orange-600 before:bg-orange-600 after:bg-orange-600",
   caption:
     "bg-green-600/50 border-green-600 before:bg-green-600 after:bg-green-600",
-  preset: "bg-gray-200 border-yellow-900 border mouse-grab",
+  preset: "bg-yellow-600/50 border-yellow-600  mouse-grab",
 };
 
 const {
@@ -119,6 +123,9 @@ const SequenceItem = ({
         x,
         y: layerIndex * TRACK_LAYER_HEIGHT_IN_PX, // layerIndex * 32(TRACK_LAYER_HEIGHT),
       }}
+      style={{
+        cursor: "grab",
+      }}
       size={{
         width,
         // height: TRACK_LAYER_HEIGHT,
@@ -128,6 +135,7 @@ const SequenceItem = ({
         bottom: false,
         bottomLeft: false,
         bottomRight: false,
+
         left: item.sequenceType !== "preset",
         right: item.sequenceType !== "preset",
         top: false,
@@ -136,13 +144,6 @@ const SequenceItem = ({
       }}
       onDragStop={onDragStop}
       onDragStart={onDragStart}
-      /*       onDrag={(e, d) => {
-        console.log("dragging", {
-          x: d.x,
-          deltaX: d.deltaX,
-        });
-        console.log("nextItemStartFrame", nextItemStartFrame);
-      }} */
       onResizeStop={onResizeStop}
       className={cn(
         "relative box-border rounded-[2px] border-2 shadow-inner hover:opacity-90 focus:bg-yellow-800",
@@ -151,8 +152,8 @@ const SequenceItem = ({
             ? item.contentType
             : item.sequenceType
         ],
-        "before:absolute before:inset-y-[2px] before:left-[2px] before:w-1 before:cursor-ew-resize before:rounded-lg before:content-['']",
-        "after:absolute after:inset-y-[2px] after:right-[2px] after:w-1 after:cursor-ew-resize after:rounded-lg after:content-['']",
+        "before:absolute before:inset-y-[2px] before:left-[2px] before:w-1 before:rounded-lg before:content-['']",
+        "after:absolute after:inset-y-[2px] after:right-[2px] after:w-1 after:rounded-lg after:content-['']",
         activeSeqItem?.itemId === item.id && "border-blue-500",
       )}
       dragGrid={[pixelsPerFrame, TRACK_LAYER_HEIGHT_IN_PX]}
@@ -177,7 +178,7 @@ const SequenceItem = ({
         >
           {item.sequenceType === "preset" ? (
             <PresetItem
-              liteItems={item.liteItems}
+              item={item}
               layerId={layerId}
               pixelsPerFrame={pixelsPerFrame}
             />
@@ -212,7 +213,8 @@ const SequenceItem = ({
 
 export default SequenceItem;
 
-const PresetItem = ({
+//@ts-ignore
+const _PresetItem = ({
   liteItems,
   layerId,
   pixelsPerFrame,
@@ -221,6 +223,7 @@ const PresetItem = ({
   layerId: LayerId;
   pixelsPerFrame: number;
 }) => {
+  // TODO : WTF is this?
   if (1 === 1)
     return (
       <div className="flex h-full w-full">
@@ -309,4 +312,16 @@ const PresetItem = ({
       })}
     </>
   );
+};
+
+const PresetItem = ({
+  item,
+  layerId,
+  pixelsPerFrame,
+}: {
+  item: LiteSequencePresetItemType;
+  layerId: string;
+  pixelsPerFrame: number;
+}) => {
+  return <div>{item.id}</div>;
 };

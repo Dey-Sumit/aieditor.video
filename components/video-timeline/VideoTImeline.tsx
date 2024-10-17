@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useTimeline } from "~/context/useTimeline";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
@@ -23,10 +22,6 @@ const {
 const VideoTimeline = () => {
   const { containerRef, pixelsPerFrame } = useTimeline();
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
-
-  const [hoverPlayheadPosition, setHoverPlayheadPosition] = useState<
-    number | null
-  >(null);
 
   return (
     <section

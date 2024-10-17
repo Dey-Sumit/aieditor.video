@@ -140,6 +140,11 @@ export type LiteSequenceItemType = {
     }
 );
 
+export type LiteSequencePresetItemType = Extract<
+  LiteSequenceItemType,
+  { sequenceType: "preset" }
+>;
+
 export type LayerType = {
   id: string;
   name: string;

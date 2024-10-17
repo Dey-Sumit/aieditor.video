@@ -428,7 +428,7 @@ export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
         name: "Layer Bg",
       },
     },
-    layerOrder: ["layerBg", "layerMiddle"],
+    layerOrder: ["layerMiddle", "layerBg"],
     sequenceItems: {
       "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93": {
         id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",

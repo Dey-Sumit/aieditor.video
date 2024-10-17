@@ -20,7 +20,7 @@ import {
   DEFAULT_CONTENT_PROPS,
 } from "../utils/timeline.utils";
 
-import { DUMMY_NESTED_PROJECT } from "~/data/mockdata.nested-composition";
+import { DEFAULT_PRESET_COMP_PROPS } from "~/data/mockdata.nested-composition";
 import { genId } from "~/utils/misc.utils";
 
 /**
@@ -34,7 +34,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...DUMMY_NESTED_PROJECT,
+      ...DEFAULT_PRESET_COMP_PROPS,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {
@@ -163,6 +163,7 @@ const useVideoStore = create<
               ...movedItem,
               startFrame: updates.startFrame,
             };
+            console.log("updateSequenceItemPositionInLayer", updatedItem);
 
             // Remove the item from its current position
             layer.liteItems.splice(oldIndex, 1);
@@ -173,6 +174,8 @@ const useVideoStore = create<
             // Determine the range of items that need updating
             const startUpdateIndex = Math.min(oldIndex, futureNewIndex);
             const endUpdateIndex = Math.max(oldIndex, futureNewIndex);
+            console.log("startUpdateIndex", startUpdateIndex);
+            console.log("endUpdateIndex", endUpdateIndex);
 
             if (updatedItem.transition?.incoming) {
               const prevItemBeforeChange =
@@ -189,22 +192,27 @@ const useVideoStore = create<
             if (updatedItem.transition?.outgoing) {
               const nextItem = layer.liteItems[endUpdateIndex + 1];
               // Update the next item
-              if (!nextItem) {
-                return;
+              if (nextItem) {
+                delete nextItem.transition?.incoming;
+                delete updatedItem.transition?.outgoing;
+                updatedItem.effectiveDuration = updatedItem.sequenceDuration;
               }
-
-              delete nextItem.transition?.incoming;
-              delete updatedItem.transition?.outgoing;
-              updatedItem.effectiveDuration = updatedItem.sequenceDuration;
             }
 
             // TODO : i don't think we need to update the offsets for all affected items, we can just update the offsets for the items that are affected by the transition eg. the next item
             // Update offsets for all affected items
+            console.log("layer.liteItems", layer.liteItems, {
+              startUpdateIndex,
+              endUpdateIndex,
+            });
+
             for (let i = startUpdateIndex; i <= endUpdateIndex; i++) {
               const currentItem = layer.liteItems[i];
               const prevItem = i > 0 ? layer.liteItems[i - 1] : null;
+              console.log("in the loop");
 
               currentItem.offset = calculateOffset(prevItem, currentItem);
+              console.log("currentItem", currentItem);
             }
 
             // If the last affected item isn't the last in the layer, update the next item's offset
