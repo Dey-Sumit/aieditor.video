@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { z } from "zod";
 
 const TransitionSchema = z.object({
@@ -21,9 +20,9 @@ export type FullSequenceContentType = {
   layerId: string;
   editableProps: {
     styles: {
-      container: CSSProperties;
-      element: CSSProperties;
-      overlay?: CSSProperties;
+      container: Record<string, any>;
+      element: Record<string, any>;
+      overlay?: Record<string, any>;
     };
   };
 } & (
@@ -309,3 +308,20 @@ type StoreActions = {
 export type NestedCompositionPropsType = NestedCompositionProjectType["props"];
 
 export type StoreType = NestedCompositionProjectType & StoreActions;
+
+/* export type NestedCompositionPropsType = Omit<
+  NestedCompositionProjectType["props"],
+  "layers"
+> & {
+  layers: {
+    [layerId: string]: Omit<
+      NestedCompositionProjectType["props"]["layers"][string],
+      "id" | "name" | "isVisible"
+    > & {
+      id?: string;
+      name?: string;
+      isVisible?: boolean;
+    };
+  };
+};
+ */

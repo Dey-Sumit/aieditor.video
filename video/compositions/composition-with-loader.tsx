@@ -1,5 +1,5 @@
 import { Composition, type CalculateMetadataFunction } from "remotion";
-import { FINAL_DUMMY_NESTED_PROJECT } from "~/data/nested-composition.data";
+import { TEST_PROJECT } from "~/data/nested-composition.data";
 import {
   NestedCompositionPropsSchema,
   type NestedCompositionProjectType,
@@ -17,7 +17,7 @@ const calculateMetadata: CalculateMetadataFunction<
 };
 
 const NewDynamicCompositionWithLoader = () => {
-  const { props } = FINAL_DUMMY_NESTED_PROJECT;
+  const { props } = TEST_PROJECT;
   return (
     <>
       <Composition

@@ -9,7 +9,6 @@ import type {
   LiteSequencePresetItemType,
   StoreType,
   TransitionItemType,
-  VideoEditablePropsType,
   VideoSequenceItemType,
 } from "../types/timeline.types";
 
@@ -20,7 +19,7 @@ import {
   DEFAULT_CONTENT_PROPS,
 } from "../utils/timeline.utils";
 
-import { FINAL_DUMMY_NESTED_PROJECT } from "~/data/nested-composition.data";
+import { TEST_PROJECT } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
 
 /**
@@ -34,7 +33,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...FINAL_DUMMY_NESTED_PROJECT,
+      ...TEST_PROJECT,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {
@@ -367,11 +366,7 @@ const useVideoStore = create<
             console.warn(`Audio item ${itemId} not found in layer ${layerId}`);
             return;
           }
-
-          item.editableProps = {
-            ...item.editableProps,
-            ...updates,
-          };
+          // TODO : handle this later
         });
       },
 
@@ -415,9 +410,8 @@ const useVideoStore = create<
               if (frameDelta > 0) {
                 // expanding from right
                 (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoEndsAtInFrames += frameDelta;
+                  state.props.sequenceItems[itemId] as VideoSequenceItemType
+                ).editableProps.videoEndsAtInFrames += frameDelta;
               } else {
                 // shrinking from right
                 /*  (
@@ -429,27 +423,25 @@ const useVideoStore = create<
               if (frameDelta < 0) {
                 // shrinking from left
                 (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoStartsFromInFrames += Math.abs(frameDelta);
+                  state.props.sequenceItems[itemId] as VideoSequenceItemType
+                ).editableProps.videoStartsFromInFrames += Math.abs(frameDelta);
               } else {
                 // expanding from left
                 // TODO : wtf!!!, Ideally I should not let the user expand from left if the videoStartsFromInFrames<0.
                 (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoStartsFromInFrames =
-                  (
-                    state.props.sequenceItems[itemId]
-                      .editableProps as VideoEditablePropsType
-                  ).videoStartsFromInFrames -
+                  state.props.sequenceItems[itemId] as VideoSequenceItemType
+                ).editableProps.videoStartsFromInFrames =
+                  (state.props.sequenceItems[itemId] as VideoSequenceItemType)
+                    .editableProps.videoStartsFromInFrames -
                     Math.abs(frameDelta) <
                   0
                     ? 0
                     : (
-                        state.props.sequenceItems[itemId]
-                          .editableProps as VideoEditablePropsType
-                      ).videoStartsFromInFrames - Math.abs(frameDelta);
+                        state.props.sequenceItems[
+                          itemId
+                        ] as VideoSequenceItemType
+                      ).editableProps.videoStartsFromInFrames -
+                      Math.abs(frameDelta);
               }
             }
           }
@@ -737,10 +729,6 @@ const useVideoStore = create<
                 [newLayerId]: newLayer,
               },
               layerOrder: newLayerOrder,
-              sequenceItems: {
-                ...state.props.sequenceItems,
-                [newLayerId]: {},
-              },
             },
           };
         });
@@ -900,7 +888,8 @@ const useVideoStore = create<
               ...originalSequenceItem,
               id: newItemId,
               editableProps: {
-                ...state.props.sequenceItems[itemId].editableProps,
+                ...(state.props.sequenceItems[itemId] as VideoSequenceItemType)
+                  .editableProps,
                 videoStartsFromInFrames:
                   tempOriginalStartsAt + splitAtInLiteItem,
                 videoEndsAtInFrames: tempOriginalVideoEndsAt,

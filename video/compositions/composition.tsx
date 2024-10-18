@@ -110,6 +110,7 @@ const RenderSequence: React.FC<{
 
     return (
       <NestedSequenceComposition
+        //@ts-ignore,the props are not needed.Visible prop later.
         layers={item.layers}
         layerOrder={item.layerOrder}
         sequenceItems={presetSequenceItem.sequenceItems}
@@ -127,11 +128,12 @@ const RenderSequence: React.FC<{
   return null;
 };
 
-const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = ({
-  layers,
-  layerOrder,
-  sequenceItems,
-}) => {
+const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
+  props,
+) => {
+  const { layers, layerOrder, sequenceItems } = props;
+  console.log("props", props);
+
   return (
     <AbsoluteFill className="font-serif">
       {[...layerOrder].reverse().map((layerId) => (

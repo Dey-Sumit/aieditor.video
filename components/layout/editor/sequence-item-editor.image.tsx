@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { extractCSS } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
-import type { ImageEditablePropsType } from "~/types/timeline.types";
+import type { ImageSequenceItemType } from "~/types/timeline.types";
 
 type EditorTab = "image" | "container" | "overlay";
 
@@ -17,8 +17,9 @@ const SequenceItemEditor: React.FC = () => {
   );
   const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
   const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
-  const activeSequenceItem = sequenceItems[activeSeqItemLite.itemId]
-    .editableProps as ImageEditablePropsType;
+  const activeSequenceItem = (
+    sequenceItems[activeSeqItemLite.itemId] as ImageSequenceItemType
+  ).editableProps;
 
   const [editorContents, setEditorContents] = useState<
     Record<EditorTab, string>
