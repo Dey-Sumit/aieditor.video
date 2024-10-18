@@ -9,24 +9,39 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { useSequenceAddition } from "~/hooks/use-video-timeline";
-import type { LayerId } from "~/types/timeline.types";
+import { PRESET_COLLECTION } from "~/data/nested-composition.data";
+import {
+  useSequenceAddition,
+  type HoverInfo,
+} from "~/hooks/use-video-timeline";
+import useVideoStore from "~/store/video.store";
 
 function AddItemContextMenu({
   children,
   onPresetAdd,
+  hoverInfo,
 }: {
   children: React.ReactNode;
-  layerId: LayerId;
   onPresetAdd: ReturnType<
     typeof useSequenceAddition
   >["mouseEventHandlers"]["onClick"];
+  hoverInfo: HoverInfo;
 }) {
-  const addPreset = (
-    presetName: "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND",
-  ) => {
-    // END_SCREEN_PRESET
-    console.log(presetName);
+  const { layerId, offsetFrames, startFrame } = hoverInfo || {};
+  const addPresetToLayer = useVideoStore((state) => state.addPresetToLayer);
+  const addPreset = (presetId: string) => {
+    const presetDetail = PRESET_COLLECTION[presetId];
+    console.log("presetDetail", presetDetail, presetId);
+
+    addPresetToLayer(
+      layerId,
+      {
+        id: presetId,
+        offset: offsetFrames,
+        startFrame,
+      },
+      presetDetail,
+    );
   };
 
   return (
@@ -84,7 +99,7 @@ function AddItemContextMenu({
             >
               Brut End Screen
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => addPreset("BRUT_FOREGROUND")}>
+            <ContextMenuItem onClick={() => addPreset("preset-1")}>
               Brut Foreground
             </ContextMenuItem>
             <ContextMenuItem>Some other popular preset</ContextMenuItem>

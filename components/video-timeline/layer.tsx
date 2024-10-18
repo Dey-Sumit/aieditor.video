@@ -57,7 +57,7 @@ export const HoverLayer: React.FC<HoverLayerProps> = React.memo(
 
     return (
       <>
-        <AddItemContextMenu layerId={layerId} onPresetAdd={onClick}>
+        <AddItemContextMenu hoverInfo={hoverInfo!} onPresetAdd={onClick}>
           {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
 
           <div
@@ -66,6 +66,8 @@ export const HoverLayer: React.FC<HoverLayerProps> = React.memo(
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
             onClick={(e) => {
+              console.log("onClick", e);
+
               onClick(e, {
                 sequenceType: "standalone",
               });

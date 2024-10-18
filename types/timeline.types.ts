@@ -131,6 +131,7 @@ export type LiteSequenceItemType = {
     }
   | {
       sequenceType: "preset";
+      presetId: string;
       layers: {
         [layerId: string]: {
           liteItems: LiteSequenceItemType[];
@@ -205,11 +206,12 @@ export const NestedCompositionPropsSchema = z.object({
 export type LayerId = string;
 
 export type PresetName = "BRUT_END_SCREEN_PRESET" | "BRUT_FOREGROUND";
-export type newPresetDetails = Omit<
-  Extract<LiteSequenceItemType, { sequenceType: "preset" }>,
-  "liteItems"
+export type PresetDetail = Omit<
+  LiteSequencePresetItemType,
+  "id" | "startFrame" | "offset" | "transition" | "sequenceType"
 > & {
   name: PresetName;
+  sequenceItems: Record<string, FullSequenceItemType>;
 };
 
 type StoreActions = {
@@ -265,7 +267,15 @@ type StoreActions = {
     frameDelta: number,
     direction: "left" | "right",
   ) => void;
-  addPresetToLayer: (layerId: LayerId, newPreset: newPresetDetails) => void;
+  addPresetToLayer: (
+    layerId: LayerId,
+    itemPosition: {
+      startFrame: number;
+      offset: number;
+      id: string;
+    },
+    newPreset: PresetDetail,
+  ) => void;
   addLayer: (
     data:
       | {

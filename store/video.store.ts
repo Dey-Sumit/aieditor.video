@@ -6,13 +6,13 @@ import type {
   LayerId,
   LayerType,
   LiteSequenceItemType,
+  LiteSequencePresetItemType,
   StoreType,
   TransitionItemType,
   VideoEditablePropsType,
   VideoSequenceItemType,
 } from "../types/timeline.types";
 
-import { END_SCREEN_PRESET } from "~/video/preset";
 import {
   binarySearch,
   calculateItemIndices,
@@ -20,7 +20,7 @@ import {
   DEFAULT_CONTENT_PROPS,
 } from "../utils/timeline.utils";
 
-import { DEFAULT_PRESET_COMP_PROPS } from "~/data/mockdata.nested-composition";
+import { DEFAULT_PRESET_COMP_PROPS } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
 
 /**
@@ -632,31 +632,52 @@ const useVideoStore = create<
       //     console.log(`Added ${presetDetails} preset to layer ${layerId}`);
       //   });
       // },
-      addPresetToLayer: (layerId, presetDetails) => {
+      addPresetToLayer: (layerId, itemPosition, presetDetails) => {
         set((state: StoreType) => {
+          console.log("addPresetToLayer", {
+            layerId,
+            itemPosition,
+            // presetDetails,
+          });
+
           const layer = state.props.layers[layerId];
           if (!layer) {
             console.warn(`Layer ${layerId} not found`);
             return;
           }
-          let preset = { ...END_SCREEN_PRESET };
-          const { offset, startFrame } = presetDetails;
 
-          // Generate a random suffix for the key
-          const randomSuffix = Math.random().toString(36).substring(2, 8);
+          // Use the binary search utility function
+          const insertIndex = binarySearch(
+            layer.liteItems,
+            itemPosition.startFrame,
+            (item) => item.startFrame,
+          );
 
-          // Update the key in liteLevel with the random suffix
-          preset.liteLevel.id = `${preset.liteLevel.id}-${randomSuffix}`;
-
-          const liteSequenceItem: LiteSequenceItemType = {
-            ...preset.liteLevel,
-            startFrame,
-            offset,
+          const { sequenceItems: presetSequenceItems, ...liteItemDetails } =
+            presetDetails;
+          const presetItem: LiteSequencePresetItemType = {
+            ...liteItemDetails,
+            startFrame: itemPosition.startFrame,
+            offset: itemPosition.offset,
+            id: itemPosition.id,
+            sequenceType: "preset",
           };
-          // Add the preset's liteLevel to the layer
-          layer.liteItems.push(liteSequenceItem);
 
-          Object.entries(preset.sequenceItems).forEach(([itemId, item]) => {
+          // Insert the new item
+          layer.liteItems.splice(insertIndex, 0, presetItem);
+
+          // Update only the offset of the next lite item
+          const nextItem = layer.liteItems[insertIndex + 1];
+          if (nextItem) {
+            nextItem.offset =
+              nextItem.startFrame -
+              (presetItem.startFrame + presetItem.effectiveDuration);
+          }
+
+          // Get default props based on content type
+
+          // spread the presetItem.sequenceItems to the sequenceItems
+          Object.entries(presetSequenceItems).forEach(([itemId, item]) => {
             state.props.sequenceItems[itemId] = {
               ...item,
               layerId,

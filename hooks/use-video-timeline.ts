@@ -4,6 +4,7 @@ import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
 import { useTimeline } from "~/context/useTimeline";
+import { PRESET_COLLECTION } from "~/data/nested-composition.data";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import { useEditingStore } from "~/store/editing.store";
@@ -292,7 +293,7 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
   };
 }
 
-interface HoverInfo {
+export interface HoverInfo {
   layerId: LayerId;
   startFrame: number;
   durationInFrames: number;
@@ -394,6 +395,8 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
             presetName: PresetName;
           },
     ) => {
+      console.log("adding new item", newItemType);
+
       if (!lastHoverInfoRef.current) {
         console.error("hoverInfo is null, cannot add new item");
         return;
@@ -420,15 +423,20 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         setActiveSeqItem(layerId, newItemId, contentType);
       } else {
         const newItemId = genId("p", "preset");
-        addPresetToLayer(layerId, {
-          id: newItemId,
-          startFrame: adjustedStartFrame,
-          sequenceDuration: placeholderDuration,
-          effectiveDuration: placeholderDuration,
-          offset: offsetFrames ?? 0,
-          name: "BRUT_END_SCREEN_PRESET",
-          sequenceType: "preset",
-        });
+        const presetDetail = PRESET_COLLECTION["preset-1"];
+        addPresetToLayer(
+          layerId,
+          {
+            id: newItemId,
+            startFrame: adjustedStartFrame,
+            // sequenceDuration: placeholderDuration,
+            // effectiveDuration: placeholderDuration,
+            offset: offsetFrames ?? 0,
+            // name: "BRUT_END_SCREEN_PRESET",
+            // sequenceType: "preset",
+          },
+          presetDetail,
+        );
       }
       handleTimeLayerClick(e);
     },
