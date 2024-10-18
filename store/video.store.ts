@@ -20,7 +20,7 @@ import {
   DEFAULT_CONTENT_PROPS,
 } from "../utils/timeline.utils";
 
-import { DEFAULT_PRESET_COMP_PROPS } from "~/data/nested-composition.data";
+import { FINAL_DUMMY_NESTED_PROJECT } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
 
 /**
@@ -34,7 +34,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...DEFAULT_PRESET_COMP_PROPS,
+      ...FINAL_DUMMY_NESTED_PROJECT,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {
@@ -653,8 +653,11 @@ const useVideoStore = create<
             (item) => item.startFrame,
           );
 
-          const { sequenceItems: presetSequenceItems, ...liteItemDetails } =
-            presetDetails;
+          const {
+            sequenceItems: presetSequenceItems,
+            name,
+            ...liteItemDetails
+          } = presetDetails;
           const presetItem: LiteSequencePresetItemType = {
             ...liteItemDetails,
             startFrame: itemPosition.startFrame,

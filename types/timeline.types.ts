@@ -16,7 +16,7 @@ const TransitionSchema = z.object({
 
 export type TransitionItemType = z.infer<typeof TransitionSchema>;
 
-export type FullSequenceItemType = {
+export type FullSequenceContentType = {
   id: string;
   layerId: string;
   editableProps: {
@@ -61,42 +61,42 @@ export type FullSequenceItemType = {
 );
 
 export type TextSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "text" }
 >;
 
 export type ImageSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "image" }
 >;
 
 export type AudioSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "audio" }
 >;
 
 export type VideoSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "video" }
 >;
 
 export type ImageEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "image" }
 >["editableProps"];
 
 export type TextEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "text" }
 >["editableProps"];
 
 export type VideoEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "video" }
 >["editableProps"];
 
 export type AudioEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "audio" }
 >["editableProps"];
 
@@ -173,14 +173,21 @@ export type NestedCompositionProjectType = {
       };
     };
     layerOrder: string[]; // Array of layer IDs to maintain order
-    sequenceItems: {
-      [key: string]: FullSequenceItemType;
-    };
+    sequenceItems: Record<string, StyledSequenceItem>;
     transitions: {
       [key: string]: TransitionItemType;
     };
   };
 };
+
+export type StyledSequenceItem =
+  | FullSequenceContentType
+  | {
+      id: string;
+      presetId: string;
+      type: "preset";
+      sequenceItems: Record<string, FullSequenceContentType>;
+    };
 
 export const LayerSchema = z.object({
   id: z.string(),
@@ -211,7 +218,7 @@ export type PresetDetail = Omit<
   "id" | "startFrame" | "offset" | "transition" | "sequenceType"
 > & {
   name: PresetName;
-  sequenceItems: Record<string, FullSequenceItemType>;
+  sequenceItems: Record<string, FullSequenceContentType>;
 };
 
 type StoreActions = {

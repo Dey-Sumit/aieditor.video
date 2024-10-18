@@ -304,53 +304,14 @@ import type { NestedCompositionProjectType } from "~/types/timeline.types";
 //     },
 //   };
 
-export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
+export const FINAL_DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
   id: "id-dummy",
   title: "Dummy Project",
-
-  props: {
-    compositionMetaData: {
-      width: 720,
-      height: 1080,
-      fps: 30,
-      duration: 600,
-      compositionId: "new-dynamic-composition",
-    },
-    layers: {
-      layerMiddle: {
-        id: "layerMiddle",
-        name: "Layer Middle",
-        isVisible: true,
-        liteItems: [],
-      },
-      layerBg: {
-        id: "layerBg",
-        name: "Layer Bg",
-        isVisible: true,
-        liteItems: [],
-      },
-    },
-    sequenceItems: {},
-    transitions: {},
-    layerOrder: ["layerMiddle", "layerBg"],
-  },
-};
-
-export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
-  id: "id-dummy",
-  title: "Dummy Project",
-
   props: {
     layers: {
       layerMiddle: {
         liteItems: [
           {
-            id: "p-c2e1d7931a93",
-            presetId: "preset-1",
-            sequenceType: "preset",
-            offset: 0,
-            startFrame: 0,
-            // while creating a preset ,I just need layers,layerOrder and the sequence items
             layers: {
               layerBg: {
                 liteItems: [
@@ -400,12 +361,68 @@ export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
             layerOrder: ["layerBg", "layerMiddle"],
             effectiveDuration: 270,
             sequenceDuration: 270,
-            // transition: {
-            //   outgoing: {
-            //     id: "transition-1",
-            //     duration: 15,
-            //   },
-            // },
+            presetId: "preset-1",
+
+            startFrame: 40,
+            offset: 40,
+            id: "p-preset-7b3e8bd4-e1c7-4583-8d80-8f22c03631f7",
+            sequenceType: "preset",
+          },
+          {
+            layers: {
+              layerBg: {
+                liteItems: [
+                  {
+                    startFrame: 0,
+                    id: "p-div-bg",
+                    sequenceType: "standalone",
+                    contentType: "div",
+                    effectiveDuration: 270,
+                    sequenceDuration: 270,
+                    offset: 0,
+                  },
+                ],
+              },
+              layerMiddle: {
+                liteItems: [
+                  {
+                    startFrame: 0,
+                    id: "s-fg-0",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                  {
+                    startFrame: 90,
+                    id: "s-fg-1",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                  {
+                    startFrame: 180,
+                    id: "s-fg-2",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                ],
+              },
+            },
+            layerOrder: ["layerBg", "layerMiddle"],
+            effectiveDuration: 270,
+            sequenceDuration: 270,
+            presetId: "preset-1",
+            startFrame: 317,
+            offset: 7,
+            id: "p-preset-06bb934d-fdd0-4a29-8124-7a1ed74b5af0",
+            sequenceType: "preset",
           },
         ],
         id: "layerMiddle",
@@ -453,11 +470,251 @@ export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
           imageUrl: "https://picsum.photos/600/1000",
         },
       },
+      "p-preset-7b3e8bd4-e1c7-4583-8d80-8f22c03631f7": {
+        type: "preset",
+        id: "p-preset-7b3e8bd4-e1c7-4583-8d80-8f22c03631f7",
+        presetId: "preset-1",
+        sequenceItems: {
+          "p-div-bg": {
+            id: "p-div-bg",
+            layerId: "layerMiddle",
+            type: "div",
+            editableProps: {
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(255,0,0,0.6)",
+                },
+              },
+            },
+          },
+          "s-fg-0": {
+            id: "s-fg-0",
+            layerId: "layerMiddle",
+            type: "text",
+            editableProps: {
+              text: "<h1>Like.</h1>",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                },
+              },
+            },
+          },
+          "s-fg-1": {
+            id: "s-fg-1",
+            layerId: "layerMiddle",
+            type: "text",
+            editableProps: {
+              text: "<h1>Share.</h1>",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                },
+              },
+            },
+          },
+          "s-fg-2": {
+            id: "s-fg-2",
+            layerId: "layerMiddle",
+            type: "text",
+            editableProps: {
+              text: "<h1>Subscribe.</h1>",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                },
+              },
+            },
+          },
+        },
+      },
+      "p-preset-06bb934d-fdd0-4a29-8124-7a1ed74b5af0": {
+        type: "preset",
+        id: "p-preset-7b3e8bd4-e1c7-4583-8d80-8f22c03631f7",
+        presetId: "preset-1",
+        sequenceItems: {
+          "p-div-bg": {
+            id: "p-div-bg",
+            layerId: "layerMiddle",
+            type: "div",
+            editableProps: {
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(255,0,0,0.6)",
+                },
+              },
+            },
+          },
+          "s-fg-0": {
+            id: "s-fg-0",
+            layerId: "layerMiddle",
+            type: "text",
+            editableProps: {
+              text: "<h1>Like.</h1>",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                },
+              },
+            },
+          },
+          "s-fg-1": {
+            id: "s-fg-1",
+            layerId: "layerMiddle",
+            type: "text",
+            editableProps: {
+              text: "<h1>Share.</h1>",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                },
+              },
+            },
+          },
+          "s-fg-2": {
+            id: "s-fg-2",
+            layerId: "layerMiddle",
+            type: "text",
+            editableProps: {
+              text: "<h1>Subscribe.</h1>",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    compositionMetaData: {
+      width: 600,
+      height: 1000,
+      fps: 30,
+      duration: 600,
+      compositionId: "new-dynamic-composition",
+    },
+    transitions: {},
+  },
+};
 
-      "p-div-bg": {
-        id: "p-div-bg",
+export const _DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
+  id: "id-dummy",
+  title: "Dummy Project",
+
+  props: {
+    compositionMetaData: {
+      width: 720,
+      height: 1080,
+      fps: 30,
+      duration: 600,
+      compositionId: "new-dynamic-composition",
+    },
+    layers: {
+      layerMiddle: {
+        id: "layerMiddle",
+        name: "Layer Middle",
+        isVisible: true,
+        liteItems: [],
+      },
+      layerBg: {
+        id: "layerBg",
+        name: "Layer Bg",
+        isVisible: true,
+        liteItems: [],
+      },
+    },
+    sequenceItems: {},
+    transitions: {},
+    layerOrder: ["layerMiddle", "layerBg"],
+  },
+};
+
+export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
+  id: "id-dummy",
+  title: "Dummy Project",
+
+  props: {
+    layers: {
+      layerMiddle: {
+        liteItems: [],
+        id: "layerMiddle",
+        isVisible: true,
+        name: "Layer Middle",
+      },
+      layerBg: {
+        liteItems: [
+          {
+            id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
+            sequenceType: "standalone",
+            contentType: "image",
+            effectiveDuration: 600,
+            sequenceDuration: 600,
+            offset: 0,
+            startFrame: 0,
+          },
+        ],
+        id: "layerBg",
+        isVisible: true,
+        name: "Layer Bg",
+      },
+    },
+    layerOrder: ["layerMiddle", "layerBg"],
+    sequenceItems: {
+      "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93": {
+        id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
         layerId: "layerBg",
-        type: "div",
+        type: "image",
         editableProps: {
           styles: {
             container: {
@@ -468,70 +725,12 @@ export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
               objectFit: "contain",
               width: "100%",
               height: "100%",
-              backgroundColor: "rgba(255,0,0,0.6)",
+            },
+            overlay: {
+              backgroundColor: "rgba(0,0,0,0.6)",
             },
           },
-        },
-      },
-
-      "s-fg-0": {
-        id: "s-fg-0",
-        layerId: "layerMiddle",
-        type: "text",
-        editableProps: {
-          text: "<h1>Like.</h1>",
-          styles: {
-            container: {
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            element: {
-              objectFit: "contain",
-              width: "100%",
-              height: "100%",
-            },
-          },
-        },
-      },
-
-      "s-fg-1": {
-        id: "s-fg-1",
-        layerId: "layerMiddle",
-        type: "text",
-        editableProps: {
-          text: "<h1>Share.</h1>",
-          styles: {
-            container: {
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            element: {
-              objectFit: "contain",
-              width: "100%",
-              height: "100%",
-            },
-          },
-        },
-      },
-
-      "s-fg-2": {
-        id: "s-fg-2",
-        layerId: "layerMiddle",
-        type: "text",
-        editableProps: {
-          text: "<h1>Subscribe.</h1>",
-
-          styles: {
-            container: {
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            element: {
-              objectFit: "contain",
-              width: "100%",
-              height: "100%",
-            },
-          },
+          imageUrl: "https://picsum.photos/600/1000",
         },
       },
     },

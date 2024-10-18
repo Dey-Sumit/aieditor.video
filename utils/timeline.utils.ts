@@ -1,5 +1,5 @@
 import type {
-  FullSequenceItemType,
+  FullSequenceContentType,
   LayerId,
   LiteSequenceItemType,
   NestedCompositionProjectType,
@@ -252,7 +252,7 @@ export function calculatePlaceholderDuration(
 // Default props for different content types
 export const DEFAULT_CONTENT_PROPS: Record<
   string,
-  Omit<FullSequenceItemType, "id" | "layerId">
+  Omit<FullSequenceContentType, "id" | "layerId">
 > = {
   text: {
     type: "text",

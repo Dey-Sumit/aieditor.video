@@ -4,6 +4,7 @@ import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
 import { useTimeline } from "~/context/useTimeline";
+import { PRESET_COLLECTION } from "~/data/preset.book";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import { useEditingStore } from "~/store/editing.store";
@@ -16,7 +17,6 @@ import type {
 } from "~/types/timeline.types";
 import { genId } from "~/utils/misc.utils";
 import { calculatePlaceholderDuration } from "~/utils/timeline.utils";
-import { PRESET_COLLECTION } from "~/video/preset";
 
 const { MAX_PLACEHOLDER_FRAMES: MAX_PLACEHOLDER_DURATION_IN_FRAMES } = TIMELINE;
 const {
