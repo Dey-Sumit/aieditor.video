@@ -20,28 +20,38 @@ export const DownloadButton: React.FC<{
   state: State;
   undo: () => void;
 }> = ({ state, undo }) => {
-  if (state.status === "rendering") {
-    return <Button disabled>Download video</Button>;
-  }
+  // if (state.status === "rendering") {
+  //   return (
+  //     <Button disabled size="sm">
+  //       Rendering...
+  //     </Button>
+  //   );
+  // }
 
-  if (state.status !== "done") {
-    throw new Error("Download button should not be rendered when not done");
-  }
-
-  return (
-    <div className="flex gap-2">
-      <Button onClick={undo} variant={"outline"} size="icon">
-        <RefreshCcwIcon color="white" />
-      </Button>
-      <Spacing></Spacing>
-      <a href={state.url}>
-        <Button className="gap-1.5" size="sm">
-          Download video
-          <Megabytes sizeInBytes={state.size}></Megabytes>
+  // if (state.status !== "done") {
+  //   throw new Error("Download button should not be rendered when not done");
+  // }
+  if (state.status === "done")
+    return (
+      <div className="flex items-center gap-2">
+        <Button
+          onClick={undo}
+          variant={"outline"}
+          size="icon"
+          className="size-5"
+        >
+          <RefreshCcwIcon color="white" />
         </Button>
-      </a>
-    </div>
-  );
+        <Spacing></Spacing>
+        <a href={state.url}>
+          <Button className="h-8 gap-1.5 text-sm" size="sm">
+            Download video
+            <Megabytes sizeInBytes={state.size}></Megabytes>
+          </Button>
+        </a>
+      </div>
+    );
+  return null;
 };
 
 // const UndoIcon: React.FC = () => {

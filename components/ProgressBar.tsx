@@ -13,7 +13,7 @@ export const ProgressBar: React.FC<{
     <div className="flex w-full items-center justify-center">
       <div className="bg-unfocused-border-color h-2.5 w-full appearance-none rounded-md">
         <div
-          className="h-2.5 rounded-md bg-foreground transition-all duration-100 ease-in-out"
+          className="h-2 rounded-md bg-foreground transition-all duration-100 ease-in-out"
           style={fill}
         ></div>
       </div>
