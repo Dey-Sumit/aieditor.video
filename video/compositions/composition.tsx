@@ -153,6 +153,7 @@ const NestedSequenceComposition = (
   props: NestedCompositionProjectType["props"],
 ) => {
   const { layers, layerOrder, sequenceItems } = props;
+  console.log(props);
 
   return (
     <AbsoluteFill className="font-serif">

@@ -546,6 +546,388 @@ export const DEFAULT_PRESET_COMP_PROPS: NestedCompositionProjectType = {
   },
 };
 
+export const TEST_PROJECT: NestedCompositionProjectType = {
+  id: "id-test-1",
+  title: "Test Project 1",
+  props: {
+    layers: {
+      layerMiddle: {
+        liteItems: [
+          {
+            id: "s-image-0f9747bb-4464-4419-b12b-cae9496ad350",
+            sequenceType: "standalone",
+            contentType: "image",
+            startFrame: 34,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 34,
+          },
+          {
+            id: "s-video-fd5a35b0-33bc-430a-b6f2-c335632c7278",
+            sequenceType: "standalone",
+            contentType: "video",
+            startFrame: 303,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 119,
+          },
+        ],
+        id: "layerMiddle",
+        isVisible: true,
+        name: "Layer Middle",
+      },
+      layerBg: {
+        liteItems: [
+          {
+            id: "s-video-3fe62077-68f6-4643-9562-6b8dbeb962c3",
+            sequenceType: "standalone",
+            contentType: "video",
+            startFrame: 0,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 0,
+          },
+        ],
+        id: "layerBg",
+        isVisible: true,
+        name: "Layer Bg",
+      },
+      "l-0e6a65d1-d7f0-4d24-a6c0-0165388a170a": {
+        id: "l-0e6a65d1-d7f0-4d24-a6c0-0165388a170a",
+        name: "Layer 3",
+        liteItems: [
+          {
+            id: "s-text-ce6bea24-def6-462b-88cc-1b8c6eea30fa",
+            sequenceType: "standalone",
+            contentType: "text",
+            startFrame: 62,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 62,
+          },
+          {
+            id: "s-image-e925115c-158f-4e29-aa73-d0162563663c",
+            sequenceType: "standalone",
+            contentType: "image",
+            startFrame: 320,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 108,
+          },
+        ],
+        isVisible: true,
+      },
+      "l-73f7e274-bb88-4f1b-9ec5-3c70b57b2a27": {
+        id: "l-73f7e274-bb88-4f1b-9ec5-3c70b57b2a27",
+        name: "Layer 4",
+        liteItems: [
+          {
+            id: "s-text-b0a80f5b-8014-4d32-9983-9e9c43bb76e8",
+            sequenceType: "standalone",
+            contentType: "text",
+            startFrame: 338,
+            effectiveDuration: 150,
+            sequenceDuration: 150,
+            offset: 338,
+          },
+        ],
+        isVisible: true,
+      },
+      "l-dda20e33-8de6-4bd6-8803-8e815b65a065": {
+        id: "l-dda20e33-8de6-4bd6-8803-8e815b65a065",
+        name: "Layer 5",
+        liteItems: [
+          {
+            layers: {
+              layerBg: {
+                liteItems: [
+                  {
+                    startFrame: 0,
+                    id: "p-div-bg",
+                    sequenceType: "standalone",
+                    contentType: "div",
+                    effectiveDuration: 270,
+                    sequenceDuration: 270,
+                    offset: 0,
+                  },
+                ],
+              },
+              layerMiddle: {
+                liteItems: [
+                  {
+                    startFrame: 0,
+                    id: "s-fg-0",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                  {
+                    startFrame: 90,
+                    id: "s-fg-1",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                  {
+                    startFrame: 180,
+                    id: "s-fg-2",
+                    sequenceType: "standalone",
+                    contentType: "text",
+                    effectiveDuration: 90,
+                    sequenceDuration: 90,
+                    offset: 0,
+                  },
+                ],
+              },
+            },
+            layerOrder: ["layerBg", "layerMiddle"],
+            effectiveDuration: 270,
+            sequenceDuration: 270,
+            presetId: "preset-1",
+            startFrame: 330,
+            offset: 330,
+            id: "p-preset-c122d0c3-e798-4b1a-ad2b-fbeb4d460d37",
+            sequenceType: "preset",
+          },
+        ],
+        isVisible: true,
+      },
+    },
+    layerOrder: [
+      "l-dda20e33-8de6-4bd6-8803-8e815b65a065",
+      "l-73f7e274-bb88-4f1b-9ec5-3c70b57b2a27",
+      "l-0e6a65d1-d7f0-4d24-a6c0-0165388a170a",
+      "layerMiddle",
+      "layerBg",
+    ],
+    sequenceItems: {
+      "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93": {
+        id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
+        layerId: "layerBg",
+        type: "image",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+            overlay: {
+              backgroundColor: "rgba(0,0,0,0.6)",
+            },
+          },
+          imageUrl: "https://picsum.photos/600/1000",
+        },
+      },
+      "p-div-bg": {
+        id: "p-div-bg",
+        layerId: "l-dda20e33-8de6-4bd6-8803-8e815b65a065",
+        type: "div",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(255,0,0,0.6)",
+            },
+          },
+        },
+      },
+      "s-fg-0": {
+        id: "s-fg-0",
+        layerId: "l-dda20e33-8de6-4bd6-8803-8e815b65a065",
+        type: "text",
+        editableProps: {
+          text: "<h1>Like.</h1>",
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+        },
+      },
+      "s-fg-1": {
+        id: "s-fg-1",
+        layerId: "l-dda20e33-8de6-4bd6-8803-8e815b65a065",
+        type: "text",
+        editableProps: {
+          text: "<h1>Share.</h1>",
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+        },
+      },
+      "s-fg-2": {
+        id: "s-fg-2",
+        layerId: "l-dda20e33-8de6-4bd6-8803-8e815b65a065",
+        type: "text",
+        editableProps: {
+          text: "<h1>Subscribe.</h1>",
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+        },
+      },
+      "l-0e6a65d1-d7f0-4d24-a6c0-0165388a170a": {},
+      "l-73f7e274-bb88-4f1b-9ec5-3c70b57b2a27": {},
+      "s-text-ce6bea24-def6-462b-88cc-1b8c6eea30fa": {
+        id: "s-text-ce6bea24-def6-462b-88cc-1b8c6eea30fa",
+        layerId: "l-0e6a65d1-d7f0-4d24-a6c0-0165388a170a",
+        type: "text",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {},
+          },
+          text: "<h1>Your text</h1>",
+        },
+      },
+      "s-image-0f9747bb-4464-4419-b12b-cae9496ad350": {
+        id: "s-image-0f9747bb-4464-4419-b12b-cae9496ad350",
+        layerId: "l-0e6a65d1-d7f0-4d24-a6c0-0165388a170a",
+        type: "image",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+          imageUrl:
+            "https://images.pexels.com/photos/28689135/pexels-photo-28689135.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+        },
+      },
+      "s-video-3fe62077-68f6-4643-9562-6b8dbeb962c3": {
+        id: "s-video-3fe62077-68f6-4643-9562-6b8dbeb962c3",
+        layerId: "layerBg",
+        type: "video",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "cover",
+              width: "100%",
+              height: "100%",
+            },
+          },
+          videoUrl:
+            "https://videos.pexels.com/video-files/6963395/6963395-hd_1080_1920_25fps.mp4",
+        },
+      },
+      "s-video-fd5a35b0-33bc-430a-b6f2-c335632c7278": {
+        id: "s-video-fd5a35b0-33bc-430a-b6f2-c335632c7278",
+        layerId: "layerMiddle",
+        type: "video",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "cover",
+              width: "100%",
+              height: "100%",
+            },
+          },
+          videoUrl:
+            "https://videos.pexels.com/video-files/6963395/6963395-hd_1080_1920_25fps.mp4",
+        },
+      },
+      "s-image-e925115c-158f-4e29-aa73-d0162563663c": {
+        id: "s-image-e925115c-158f-4e29-aa73-d0162563663c",
+        layerId: "l-0e6a65d1-d7f0-4d24-a6c0-0165388a170a",
+        type: "image",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+          imageUrl:
+            "https://images.pexels.com/photos/28689135/pexels-photo-28689135.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+        },
+      },
+      "s-text-b0a80f5b-8014-4d32-9983-9e9c43bb76e8": {
+        id: "s-text-b0a80f5b-8014-4d32-9983-9e9c43bb76e8",
+        layerId: "l-73f7e274-bb88-4f1b-9ec5-3c70b57b2a27",
+        type: "text",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {},
+          },
+          text: "<h1>Your text</h1>",
+        },
+      },
+      "l-dda20e33-8de6-4bd6-8803-8e815b65a065": {},
+    },
+    compositionMetaData: {
+      width: 600,
+      height: 1000,
+      fps: 30,
+      duration: 600,
+      compositionId: "new-dynamic-composition",
+    },
+    transitions: {},
+  },
+};
+
 // export const DUMMY_NESTED_PROJECT: NestedCompositionProjectType = {
 //   id: "id-dummy",
 //   title: "Dummy Project",
