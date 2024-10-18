@@ -9,12 +9,10 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { PRESET_COLLECTION } from "~/data/nested-composition.data";
 import {
   useSequenceAddition,
   type HoverInfo,
 } from "~/hooks/use-video-timeline";
-import useVideoStore from "~/store/video.store";
 
 function AddItemContextMenu({
   children,
@@ -27,22 +25,22 @@ function AddItemContextMenu({
   >["mouseEventHandlers"]["onClick"];
   hoverInfo: HoverInfo;
 }) {
-  const { layerId, offsetFrames, startFrame } = hoverInfo || {};
-  const addPresetToLayer = useVideoStore((state) => state.addPresetToLayer);
-  const addPreset = (presetId: string) => {
-    const presetDetail = PRESET_COLLECTION[presetId];
-    console.log("presetDetail", presetDetail, presetId);
+  // const { layerId, offsetFrames, startFrame } = hoverInfo || {};
+  // const addPresetToLayer = useVideoStore((state) => state.addPresetToLayer);
+  // const addPreset = (presetId: string) => {
+  //   const presetDetail = PRESET_COLLECTION[presetId];
+  //   console.log("presetDetail", presetDetail, presetId);
 
-    addPresetToLayer(
-      layerId,
-      {
-        id: presetId,
-        offset: offsetFrames,
-        startFrame,
-      },
-      presetDetail,
-    );
-  };
+  //   addPresetToLayer(
+  //     layerId,
+  //     {
+  //       id: presetId,
+  //       offset: offsetFrames,
+  //       startFrame,
+  //     },
+  //     presetDetail,
+  //   );
+  // };
 
   return (
     <ContextMenu>
@@ -93,15 +91,15 @@ function AddItemContextMenu({
               onClick={(e) =>
                 onPresetAdd(e, {
                   sequenceType: "preset",
-                  presetName: "BRUT_END_SCREEN_PRESET",
+                  presetId: "preset-1",
                 })
               }
             >
               Brut End Screen
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => addPreset("preset-1")}>
+            {/* <ContextMenuItem onClick={() => addPreset("preset-1")}>
               Brut Foreground
-            </ContextMenuItem>
+            </ContextMenuItem> */}
             <ContextMenuItem>Some other popular preset</ContextMenuItem>
             <ContextMenuItem>A custom preset as well</ContextMenuItem>
           </ContextMenuSubContent>

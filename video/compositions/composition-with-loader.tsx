@@ -1,5 +1,5 @@
 import { Composition, type CalculateMetadataFunction } from "remotion";
-import { DEFAULT_PRESET_COMP_PROPS } from "~/data/mockdata.nested-composition";
+import { DEFAULT_PRESET_COMP_PROPS } from "~/data/nested-composition.data";
 import {
   NestedCompositionPropsSchema,
   type NestedCompositionProjectType,

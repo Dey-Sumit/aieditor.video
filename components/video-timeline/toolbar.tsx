@@ -44,8 +44,12 @@ interface ToolbarCategory {
 }
 
 const Toolbar: React.FC = () => {
-  const setNewItemType = useEditingStore((state) => state.setNewItemType);
-  const newItemType = useEditingStore((state) => state.newItemType);
+  const setSelectedContentType = useEditingStore(
+    (state) => state.setSelectedContentType,
+  );
+  const selectedContentType = useEditingStore(
+    (state) => state.selectedContentType,
+  );
   // const { currentFrame } = useTimeline();
 
   const toolbarCategories: ToolbarCategory[] = [
@@ -65,25 +69,25 @@ const Toolbar: React.FC = () => {
         {
           Icon: Type,
           label: "Text",
-          onClick: () => setNewItemType("text"),
+          onClick: () => setSelectedContentType("text"),
           iconClassName: "text-green-500",
         },
         {
           Icon: ImageIcon,
           label: "Image",
-          onClick: () => setNewItemType("image"),
+          onClick: () => setSelectedContentType("image"),
           iconClassName: "text-purple-500",
         },
         {
           Icon: Video,
           label: "Video",
-          onClick: () => setNewItemType("video"),
+          onClick: () => setSelectedContentType("video"),
           iconClassName: "text-pink-500",
         },
         {
           Icon: Music,
           label: "Audio",
-          onClick: () => setNewItemType("audio"),
+          onClick: () => setSelectedContentType("audio"),
           iconClassName: "text-orange-500",
         },
       ],
@@ -158,7 +162,8 @@ const Toolbar: React.FC = () => {
                       onClick={item.onClick}
                       className={cn(
                         "h-8 w-8",
-                        newItemType === item.label.toLowerCase() && "bg-muted",
+                        selectedContentType === item.label.toLowerCase() &&
+                          "bg-muted",
                       )}
                     >
                       <item.Icon size={14} className={item.iconClassName} />

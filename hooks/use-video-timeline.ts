@@ -4,7 +4,6 @@ import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
 import { useTimeline } from "~/context/useTimeline";
-import { PRESET_COLLECTION } from "~/data/nested-composition.data";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import { useEditingStore } from "~/store/editing.store";
@@ -13,11 +12,11 @@ import type {
   ContentType,
   LayerId,
   LiteSequenceItemType,
-  PresetName,
   StoreType,
 } from "~/types/timeline.types";
 import { genId } from "~/utils/misc.utils";
 import { calculatePlaceholderDuration } from "~/utils/timeline.utils";
+import { PRESET_COLLECTION } from "~/video/preset";
 
 const { MAX_PLACEHOLDER_FRAMES: MAX_PLACEHOLDER_DURATION_IN_FRAMES } = TIMELINE;
 const {
@@ -306,7 +305,9 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
   const lastHoverInfoRef = useRef<HoverInfo | null>(null);
 
-  const selectedNewItemType = useEditingStore((state) => state.newItemType);
+  const selectedNewItemType = useEditingStore(
+    (state) => state.selectedContentType,
+  );
 
   const { draggingLayerId, handleTimeLayerClick } = useTimeline();
 
@@ -385,17 +386,17 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
   const handleAddNewItem = useCallback(
     (
       e: React.MouseEvent<HTMLDivElement>,
-      newItemType:
+      selectedContentType:
         | {
             sequenceType: "standalone";
             contentType?: ContentType;
           }
         | {
             sequenceType: "preset";
-            presetName: PresetName;
+            presetId: string;
           },
     ) => {
-      console.log("adding new item", newItemType);
+      console.log("adding new item", selectedContentType);
 
       if (!lastHoverInfoRef.current) {
         console.error("hoverInfo is null, cannot add new item");
@@ -408,8 +409,9 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         offsetFrames,
       } = lastHoverInfoRef.current;
 
-      if (newItemType.sequenceType === "standalone") {
-        const contentType = newItemType.contentType || selectedNewItemType;
+      if (selectedContentType.sequenceType === "standalone") {
+        const contentType =
+          selectedContentType.contentType || selectedNewItemType;
         const newItemId = genId("s", contentType);
         addSequenceItemToLayer(layerId, {
           id: newItemId,
@@ -422,8 +424,9 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         });
         setActiveSeqItem(layerId, newItemId, contentType);
       } else {
+        const presetId = selectedContentType.presetId;
         const newItemId = genId("p", "preset");
-        const presetDetail = PRESET_COLLECTION["preset-1"];
+        const presetDetail = PRESET_COLLECTION[presetId];
         addPresetToLayer(
           layerId,
           {

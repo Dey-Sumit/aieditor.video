@@ -3,15 +3,15 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import type { ContentType, LayerId } from "~/types/timeline.types";
 
-type NewItemType = ContentType | "preset";
+type SelectedContentType = ContentType;
 
 interface EditingState {
   activeSeqItem: {
     layerId: LayerId;
     itemId: string;
-    itemType: NewItemType;
+    itemType: SelectedContentType;
   } | null;
-  newItemType: NewItemType;
+  selectedContentType: SelectedContentType;
   // aboutToUse: {};
 }
 
@@ -22,7 +22,7 @@ interface EditingActions {
     itemType: string,
   ) => void;
   clearActiveSeqItem: () => void;
-  setNewItemType: (type: NewItemType) => void;
+  setSelectedContentType: (type: SelectedContentType) => void;
 }
 
 type EditingStore = EditingState & EditingActions;
@@ -34,7 +34,7 @@ export const useEditingStore = create<
   devtools(
     immer((set) => ({
       activeSeqItem: null,
-      newItemType: "text",
+      selectedContentType: "text",
 
       setActiveSeqItem: (layerId, itemId, itemType) => {
         set((state) => {
@@ -49,9 +49,9 @@ export const useEditingStore = create<
         });
       },
 
-      setNewItemType: (type) => {
+      setSelectedContentType: (type) => {
         set((state) => {
-          state.newItemType = type;
+          state.selectedContentType = type;
         });
       },
     })),
@@ -63,10 +63,10 @@ export const useEditingStore = create<
 const {
   activeSeqItemId,
   activeLayerId,
-  newItemType,
+  selectedContentType,
   setActiveSeqItem,
   clearActiveSeqItem,
-  setNewItemType
+  setSelectedContentType
 } = useEditingStore(); */
 
 //! Future implementation ideas

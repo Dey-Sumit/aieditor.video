@@ -1,128 +1,136 @@
-import type {
-  FullSequenceItemType,
-  LiteSequenceItemType,
-} from "~/types/timeline.types";
+import type { PresetDetail } from "~/types/timeline.types";
 
-type Preset = {
-  liteLevel: Omit<
-    Extract<
-      LiteSequenceItemType,
-      {
-        sequenceType: "preset";
-      }
-    >,
-    "offset" | "startFrame"
-  > & {
-    offset: "VAR_OFFSET";
-    startFrame: "VAR_START_FRAME";
-  };
-  sequenceItems: {
-    [key: string]: FullSequenceItemType;
-  };
-};
-/* ------------------------ Brut End Screen Preset ----------------------- */
-export const END_SCREEN_PRESET: Preset = {
-  liteLevel: {
-    sequenceType: "preset",
-    effectiveDuration: 60,
-    sequenceDuration: 60,
-    id: "id-preset-end-screen",
-    offset: "VAR_OFFSET", //  0 as this is a variable while adding to the timeline
-    startFrame: "VAR_START_FRAME", // 0 as this is a variable while adding to the timeline
-    liteItems: [
-      {
-        sequenceType: "standalone",
-        id: "id-like",
-        sequenceDuration: 20,
-        effectiveDuration: 20,
-        startFrame: 360,
-        offset: 0,
-        contentType: "text",
-      },
-      {
-        sequenceType: "standalone",
-        id: "id-share",
-        offset: 0,
-        startFrame: 380,
-        sequenceDuration: 20,
-        effectiveDuration: 20,
-        contentType: "text",
-      },
-      {
-        sequenceType: "standalone",
-        id: "id-subscribe",
-        offset: 0,
-        startFrame: 400, // TODO : hardcoded
-        sequenceDuration: 20,
-        effectiveDuration: 20,
-        contentType: "text",
-      },
-    ],
-    // write the best code
-  },
-
-  sequenceItems: {
-    "id-like": {
-      id: "id-like",
-      type: "text",
-      layerId: "layerForeground",
-      editableProps: {
-        styles: {
-          container: {
-            flex: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            // backgroundColor: "rgba(255, 0, 0, 0.1)",
+export const PRESET_COLLECTION: Record<string, PresetDetail> = {
+  "preset-1": {
+    layers: {
+      layerBg: {
+        liteItems: [
+          {
+            startFrame: 0,
+            id: "p-div-bg",
+            sequenceType: "standalone",
+            contentType: "div",
+            effectiveDuration: 270,
+            sequenceDuration: 270,
+            offset: 0,
           },
-          element: {
-            fontSize: "70px",
-            fontWeight: "bold",
-            color: "white",
+        ],
+      },
+      layerMiddle: {
+        liteItems: [
+          {
+            startFrame: 0,
+            id: "s-fg-0",
+            sequenceType: "standalone",
+            contentType: "text",
+            effectiveDuration: 90,
+            sequenceDuration: 90,
+            offset: 0,
           },
-        },
-        text: "Like.",
+          {
+            startFrame: 90,
+            id: "s-fg-1",
+            sequenceType: "standalone",
+            contentType: "text",
+            effectiveDuration: 90,
+            sequenceDuration: 90,
+            offset: 0,
+          },
+          {
+            startFrame: 180,
+            id: "s-fg-2",
+            sequenceType: "standalone",
+            contentType: "text",
+            effectiveDuration: 90,
+            sequenceDuration: 90,
+            offset: 0,
+          },
+        ],
       },
     },
-
-    "id-share": {
-      id: "id-share",
-      type: "text",
-      layerId: "layerForeground",
-      editableProps: {
-        text: "Share.",
-        styles: {
-          container: {
-            flex: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            // backgroundColor: "rgba(0, 255, 0, 0.1)",
-          },
-          element: {
-            fontSize: "70px",
-            fontWeight: "bold",
-            color: "white",
+    layerOrder: ["layerBg", "layerMiddle"],
+    effectiveDuration: 270,
+    sequenceDuration: 270,
+    presetId: "preset-1",
+    name: "BRUT_END_SCREEN_PRESET",
+    sequenceItems: {
+      "p-div-bg": {
+        id: "p-div-bg",
+        layerId: "layerBg",
+        type: "div",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(255,0,0,0.6)",
+            },
           },
         },
       },
-    },
 
-    "id-subscribe": {
-      id: "id-subscribe",
-      type: "text",
-      layerId: "layerForeground",
-      editableProps: {
-        text: "Subscribe.",
-        styles: {
-          container: {
-            flex: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            // backgroundColor: "rgba(0, 0, 0, 0.5)",
+      "s-fg-0": {
+        id: "s-fg-0",
+        layerId: "layerMiddle",
+        type: "text",
+        editableProps: {
+          text: "<h1>Like.</h1>",
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
           },
-          element: {
-            fontSize: "70px",
-            fontWeight: "bold",
-            color: "white",
+        },
+      },
+
+      "s-fg-1": {
+        id: "s-fg-1",
+        layerId: "layerMiddle",
+        type: "text",
+        editableProps: {
+          text: "<h1>Share.</h1>",
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
+          },
+        },
+      },
+
+      "s-fg-2": {
+        id: "s-fg-2",
+        layerId: "layerMiddle",
+        type: "text",
+        editableProps: {
+          text: "<h1>Subscribe.</h1>",
+
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              objectFit: "contain",
+              width: "100%",
+              height: "100%",
+            },
           },
         },
       },

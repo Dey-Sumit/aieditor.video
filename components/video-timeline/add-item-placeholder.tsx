@@ -18,13 +18,15 @@ const AddItemPlaceholder: React.FC<AddItemPlaceholderProps> = ({
   startX,
   width,
 }) => {
-  const newItemType = useEditingStore((store) => store.newItemType);
+  const selectedContentType = useEditingStore(
+    (store) => store.selectedContentType,
+  );
   return (
     <div
       className={cn(
         `pointer-events-none absolute left-0 top-0 flex h-full items-center justify-center rounded-[2px] border-[1.5px] border-dashed`,
         // "border-blue-500 bg-blue-700/40",
-        PLACEHOLDER_ITEM_TYPE_TO_STYLES_MAP[newItemType],
+        PLACEHOLDER_ITEM_TYPE_TO_STYLES_MAP[selectedContentType],
       )}
       style={{
         left: `${startX}px`,
