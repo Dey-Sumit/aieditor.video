@@ -34,7 +34,7 @@ export const useEditingStore = create<
   devtools(
     immer((set) => ({
       activeSeqItem: null,
-      selectedContentType: "text",
+      selectedContentType: "image",
 
       setActiveSeqItem: (layerId, itemId, itemType) => {
         set((state) => {

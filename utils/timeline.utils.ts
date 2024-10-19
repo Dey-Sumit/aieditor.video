@@ -277,7 +277,7 @@ export const DEFAULT_CONTENT_PROPS: Record<
           alignItems: "center",
         },
         element: {
-          objectFit: "contain",
+          "object-fit": "contain",
           width: "100%",
           height: "100%",
         },

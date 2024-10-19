@@ -182,9 +182,10 @@ export type NestedCompositionProjectType = {
 export type StyledSequenceItem =
   | FullSequenceContentType
   | {
+      type: "preset";
+      layerId: string;
       id: string;
       presetId: string;
-      type: "preset";
       sequenceItems: Record<string, FullSequenceContentType>;
     };
 
