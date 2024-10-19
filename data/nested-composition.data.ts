@@ -522,14 +522,51 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
   props: {
     layers: {
       "l-c8319623-268e-41be-a608-5f32142c90b1": {
-        liteItems: [],
+        liteItems: [
+          {
+            id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
+            sequenceType: "standalone",
+            contentType: "image",
+            effectiveDuration: 300,
+            sequenceDuration: 300,
+            offset: 10,
+            startFrame: 10,
+          },
+        ],
         id: "l-c8319623-268e-41be-a608-5f32142c90b1",
         isVisible: true,
         name: "Layer bg",
       },
     },
     layerOrder: ["l-c8319623-268e-41be-a608-5f32142c90b1"],
-    sequenceItems: {},
+    sequenceItems: {
+      "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93": {
+        id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
+        layerId: "l-c8319623-268e-41be-a608-5f32142c90b1",
+        type: "image",
+        editableProps: {
+          styles: {
+            container: {},
+            element: {
+              "object-fit": "contain",
+              width: "100%",
+              height: "100%",
+            },
+            overlay: {},
+          },
+          imageUrl:
+            "https://images.pexels.com/photos/28689135/pexels-photo-28689135.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+        },
+        animations: [
+          {
+            type: "scale",
+            from: 0.7, // Start scale at 90%
+            to: 1, // End scale at 100%
+            duration: 30, // Scale over 30 frames
+          },
+        ],
+      },
+    },
     compositionMetaData: {
       width: 720,
       height: 1080,

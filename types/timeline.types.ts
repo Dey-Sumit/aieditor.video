@@ -25,6 +25,13 @@ export type FullSequenceContentType = {
       overlay?: Record<string, any>;
     };
   };
+  // TODO : later we need to make this only for standalone sequence items. Preset will not have this.
+  animations?: Array<{
+    type: string; // Type of animation (e.g., "scale", "fade-in", etc.)
+    from: number; // Starting value of the animation (e.g., scale from 0.9)
+    to: number; // Ending value of the animation (e.g., scale to 1)
+    duration: number; // Duration in frames for the animation
+  }>;
 } & (
   | {
       type: "text";

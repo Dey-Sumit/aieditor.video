@@ -1,15 +1,17 @@
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import DOMPurify from "dompurify";
-import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
+import { AbsoluteFill, OffthreadVideo } from "remotion";
 
 import { slide } from "@remotion/transitions/slide";
 
 import React from "react";
 import type {
+  ImageSequenceItemType,
   LiteSequenceItemType,
   NestedCompositionProjectType,
   StyledSequenceItem,
 } from "~/types/timeline.types";
+import { AnimatedImage } from "./animated-sequnce-item-renderer";
 
 // TODO : use this
 export const SafeHTMLRenderer = ({ html }: { html: string }) => {
@@ -54,25 +56,8 @@ const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
         </AbsoluteFill>
       );
     case "image":
-      return (
-        <AbsoluteFill
-          className=""
-          style={item.editableProps?.styles?.container}
-        >
-          <AbsoluteFill
-            className=""
-            style={item.editableProps?.styles?.overlay}
-          />
-          <Img
-            src={item.editableProps.imageUrl}
-            style={{
-              objectFit: "cover",
-              ...item.editableProps?.styles?.element,
-            }}
-            className="box-content"
-          />
-        </AbsoluteFill>
-      );
+      return <AnimatedImage item={item as ImageSequenceItemType} />;
+
     case "video":
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
