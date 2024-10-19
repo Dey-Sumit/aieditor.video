@@ -4,6 +4,10 @@ import {
   NestedCompositionPropsSchema,
   type NestedCompositionProjectType,
 } from "~/types/timeline.types";
+import {
+  AnimatedImageComposition,
+  testSequenceItems,
+} from "../animation-compositions/image";
 import NestedSequenceComposition from "./composition";
 
 const calculateMetadata: CalculateMetadataFunction<
@@ -30,6 +34,19 @@ const NewDynamicCompositionWithLoader = () => {
         defaultProps={props}
         schema={NestedCompositionPropsSchema}
         calculateMetadata={calculateMetadata}
+      />
+      <Composition
+        id="MyComp"
+        component={AnimatedImageComposition}
+        durationInFrames={120}
+        fps={30}
+        width={720}
+        height={1080}
+        defaultProps={{
+          item: testSequenceItems[
+            "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93"
+          ],
+        }}
       />
     </>
   );

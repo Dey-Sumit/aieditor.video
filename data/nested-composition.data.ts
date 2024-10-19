@@ -560,10 +560,29 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
         animations: [
           {
             type: "scale",
-            from: 0.7, // Start scale at 90%
-            to: 1, // End scale at 100%
-            duration: 30, // Scale over 30 frames
+            from: 0.7,
+            to: 1,
+            duration: 30,
           },
+          {
+            type: "blur", // Custom blur animation
+            from: 10, // Start with no blur
+            to: 0, // End with a 10px blur
+            duration: 30,
+          },
+          // {
+          //   type: "fade-in",
+          //   from: 0, // Start opacity at 0
+          //   to: 1, // End opacity at 1
+          //   duration: 60, // Fade in over 60 frames
+          //   // startAfter: "scale", // Start after "scale" animation completes
+          // },
+          /* {
+            type: "translateX",
+            from: -100, // Starting X position
+            to: 0, // Ending X position
+            duration: 30,
+          }, */
         ],
       },
     },
