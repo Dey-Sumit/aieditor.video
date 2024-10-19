@@ -1,6 +1,7 @@
 import {
   AbsoluteFill,
   Img,
+  interpolate,
   spring,
   useCurrentFrame,
   useVideoConfig,
@@ -12,6 +13,7 @@ type AnimationType = {
   from: number; // Starting value (e.g., scale from 0.9)
   to: number; // Ending value (e.g., scale to 1)
   duration: number; // Duration in frames for the animation
+  startAt: number; // Start the animation at a specific frame
 };
 
 interface ApplyAnimationsProps {
@@ -20,7 +22,13 @@ interface ApplyAnimationsProps {
   frame: number; // Current frame (from Remotion's useCurrentFrame)
   fps: number; // Frames per second (from useVideoConfig)
 }
-export const testSequenceItems: Record<string, ImageSequenceItemType> = {
+
+export const testSequenceItems: Record<
+  string,
+  ImageSequenceItemType & {
+    animations: AnimationType[];
+  }
+> = {
   "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93": {
     id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
     layerId: "l-c8319623-268e-41be-a608-5f32142c90b1",
@@ -40,26 +48,26 @@ export const testSequenceItems: Record<string, ImageSequenceItemType> = {
     },
     animations: [
       {
-        type: "scale",
-        from: 0.7,
-        to: 1,
-        duration: 30, // Scale over 30 frames
-        // startAfter: 0, // Starts immediately
-      },
-      {
         type: "fade-in",
         from: 0,
         to: 1,
-        duration: 60,
-        //  startAfter: "scale", // Start after the 'scale' animation completes
+        duration: 300,
+        startAt: 0, // Starts at frame 40
       },
       {
-        type: "rotate",
-        from: 30,
-        to: 0,
-        duration: 60,
-        //   triggerAtProgress: { animationType: "fade-in", progress: 0.5 }, // Start when 'fade-in' reaches 50%
+        type: "scale",
+        from: 1,
+        to: 0.7,
+        duration: 240,
+        startAt: 120, // Starts immediately at frame 0
       },
+      // {
+      //   type: "rotate",
+      //   from: 30,
+      //   to: 0,
+      //   duration: 60,
+      //   startAt: 100, // Start rotating at frame 100
+      // },
     ],
   },
 };
@@ -80,7 +88,7 @@ export const AnimatedImageComposition = ({
   });
 
   return (
-    <AbsoluteFill className="bg-gray-950">
+    <AbsoluteFill className="">
       <Img
         src={item.editableProps.imageUrl}
         style={{
@@ -93,6 +101,8 @@ export const AnimatedImageComposition = ({
   );
 };
 
+// import { interpolate, spring } from "remotion";
+
 export const applyAnimations = ({
   animations,
   frame,
@@ -102,9 +112,18 @@ export const applyAnimations = ({
   let opacity = 1; // Default opacity
 
   animations.forEach((animation) => {
+    // Check if the current frame is after the `startAt` frame
+    const localFrame = frame - (animation.startAt ?? 0); // Default `startAt` to 0
+
+    if (localFrame < 0) {
+      // If the animation hasn't started yet, skip this animation
+      return;
+    }
+
+    // Apply each animation type
     if (animation.type === "scale") {
       const scale = spring({
-        frame,
+        frame: localFrame, // Frame starts when `startAt` is reached
         fps,
         from: animation.from,
         to: animation.to,
@@ -114,17 +133,19 @@ export const applyAnimations = ({
     }
 
     if (animation.type === "fade-in") {
-      opacity = spring({
-        frame,
-        fps,
-        from: animation.from,
-        to: animation.to,
-        durationInFrames: animation.duration,
-      });
+      opacity = interpolate(
+        localFrame, // Frame starts when `startAt` is reached
+        [0, animation.duration], // Map frame range from 0 to animation duration
+        [animation.from, animation.to], // Opacity changes from `from` to `to`
+        {
+          extrapolateRight: "clamp", // Ensure the value stops at the end
+        },
+      );
     }
+
     if (animation.type === "rotate") {
       const rotate = spring({
-        frame,
+        frame: localFrame,
         fps,
         from: animation.from,
         to: animation.to,
@@ -136,6 +157,6 @@ export const applyAnimations = ({
 
   return {
     transform: transform.trim(),
-    opacity, // Add opacity if a fade-in animation is present
+    opacity, // Return final opacity
   };
 };

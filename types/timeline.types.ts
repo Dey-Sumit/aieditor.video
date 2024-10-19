@@ -31,6 +31,7 @@ export type FullSequenceContentType = {
     from: number; // Starting value of the animation (e.g., scale from 0.9)
     to: number; // Ending value of the animation (e.g., scale to 1)
     duration: number; // Duration in frames for the animation
+    startAt: number; // Start the animation at a specific frame
   }>;
 } & (
   | {

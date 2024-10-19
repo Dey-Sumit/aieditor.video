@@ -38,7 +38,7 @@ const NewDynamicCompositionWithLoader = () => {
       <Composition
         id="MyComp"
         component={AnimatedImageComposition}
-        durationInFrames={120}
+        durationInFrames={600}
         fps={30}
         width={720}
         height={1080}

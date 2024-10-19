@@ -117,10 +117,10 @@ const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
   props,
 ) => {
   const { layers, layerOrder, sequenceItems } = props;
-  console.log("props", props);
+  // console.log("props", props);
 
   return (
-    <AbsoluteFill className="bg-black font-serif">
+    <AbsoluteFill className="font-serif">
       {[...layerOrder].reverse().map((layerId) => (
         <TransitionSeries key={layerId} name={layerId}>
           {layers[layerId].liteItems.map((item) => (

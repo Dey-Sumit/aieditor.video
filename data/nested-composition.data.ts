@@ -559,30 +559,26 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
         },
         animations: [
           {
-            type: "scale",
-            from: 0.7,
+            type: "fade",
+            from: 0,
             to: 1,
-            duration: 30,
+            duration: 60,
+            startAt: 0, // Starts at frame 40
           },
           {
-            type: "blur", // Custom blur animation
-            from: 10, // Start with no blur
-            to: 0, // End with a 10px blur
-            duration: 30,
+            type: "fade",
+            from: 1,
+            to: 0,
+            duration: 60,
+            startAt: 240, // Starts at frame 40
           },
-          // {
-          //   type: "fade-in",
-          //   from: 0, // Start opacity at 0
-          //   to: 1, // End opacity at 1
-          //   duration: 60, // Fade in over 60 frames
-          //   // startAfter: "scale", // Start after "scale" animation completes
-          // },
-          /* {
-            type: "translateX",
-            from: -100, // Starting X position
-            to: 0, // Ending X position
-            duration: 30,
-          }, */
+          {
+            type: "scale",
+            from: 1,
+            to: 0.7,
+            duration: 60,
+            startAt: 30, // Starts immediately at frame 0
+          },
         ],
       },
     },
@@ -596,3 +592,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
     transitions: {},
   },
 };
+
+/*
+
+
+ADD ANIMATION :
+ - ENTER ANIMATION 
+  - 30s duration
+    - 0s - 30s
+
+ - EXIT ANIMATION (for this I need to know the duration of the sequence)
+  - 30s duration
+    - 270s - 300s
+    
+- FULL ANIMATION
+  - 300s duration
+    - 0s - 300s
+
+
+
+
+
+*/
