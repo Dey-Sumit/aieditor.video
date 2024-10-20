@@ -28,8 +28,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
     (state) => state.selectedContentType,
   );
 
-  const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
-
   const { draggingLayerId, handleTimeLayerClick } = useTimeline();
 
   const validateAndAddItem = useNewItemValidation();
@@ -136,7 +134,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
       }
       handleTimeLayerClick(e); // so that the playhead moves to the newly added item
     },
-    [layerId, setActiveSeqItem, selectedNewItemType, handleTimeLayerClick],
+    [layerId, selectedNewItemType, handleTimeLayerClick, validateAndAddItem],
   );
 
   const mouseEventHandlers = useMemo(
@@ -154,12 +152,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
     handleAddNewItem,
   };
 }
-
-// if (selectedContentType.sequenceType === "standalone") {
-//   console.log("adding video item");
-//   // const data = await getVideoMetadata(VIDEO_URL);
-//   // console.log({ data });
-// }
 
 export const useNewItemValidation = () => {
   const addSequenceItemToLayer = useVideoStore(
@@ -242,9 +234,16 @@ export const useNewItemValidation = () => {
                         height: "100%",
                       },
                     },
+                    positionAndDimensions: {
+                      top: 10,
+                      left: 10,
+                      width: 100,
+                      height: 100,
+                    },
                     imageUrl:
                       "https://images.pexels.com/photos/20787/pexels-photo.jpg",
                   },
+
                   id: newItemId,
                   layerId,
                 },
@@ -308,6 +307,6 @@ export const useNewItemValidation = () => {
         // presetId = selectedContentType.presetId;
       }
     },
-    [addSequenceItemToLayer],
+    [addSequenceItemToLayer, addPresetToLayer, setActiveSeqItem],
   );
 };

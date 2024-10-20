@@ -51,8 +51,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex flex-1">
           {/* -------------------- video player and timeline starts -------------------- */}
 
-          <section className="editorBg flex-1">
+          <section className="_editorBg relative flex-1 bg-green-900">
             <VideoAndTimeline />
+            <div className="pointer-events-none absolute inset-0 bg-yellow-500/80"></div>
           </section>
 
           {/* -------------------- video player and timeline ends -------------------- */}

@@ -18,11 +18,18 @@ export type TransitionItemType = z.infer<typeof TransitionSchema>;
 export type FullSequenceContentType = {
   id: string;
   layerId: string;
+  isDragging?: boolean;
   editableProps: {
     styles: {
       container: Record<string, any>;
       element: Record<string, any>;
       overlay?: Record<string, any>;
+    };
+    positionAndDimensions?: {
+      top: number;
+      left: number;
+      width: number;
+      height: number;
     };
   };
   // TODO : later we need to make this only for standalone sequence items. Preset will not have this.

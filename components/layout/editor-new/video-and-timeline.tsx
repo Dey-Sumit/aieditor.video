@@ -3,6 +3,7 @@
 import { type ErrorFallback, Player, type PlayerRef } from "@remotion/player";
 import { useRef } from "react";
 import { AbsoluteFill } from "remotion";
+import { DragAndDropDemo } from "~/components/player/demo";
 import { Separator } from "~/components/ui/separator";
 import { PlayerFullscreen } from "~/components/video-timeline/player-controls/full-screen";
 import { MuteButton } from "~/components/video-timeline/player-controls/mute";
@@ -22,8 +23,13 @@ const VideoAndTimeline = () => {
 
   return (
     <>
-      <div className="h-full">
-        <VideoPreview playerRef={playerRef} />
+      <div className="relative h-full">
+        <DragAndDropDemo />
+        {/* <VideoPreview playerRef={playerRef} /> */}
+        {/* 
+        <div className="absolute left-96 top-96 h-96 w-96 border-2">
+          <Button onClick={() => playerRef.current?.play()}>Play</Button>
+        </div> */}
       </div>
       {/* -------------------- timeline -------------------- */}
 

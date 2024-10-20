@@ -31,6 +31,9 @@ const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
     // This case should not occur here as it's handled in RenderSequence
     return null;
   }
+  const {
+    editableProps: { positionAndDimensions },
+  } = item;
 
   switch (item.type) {
     case "div":
@@ -60,6 +63,10 @@ const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
           className=""
           style={{
             ...item.editableProps?.styles?.container,
+            left: positionAndDimensions?.left,
+            top: positionAndDimensions?.top,
+            width: positionAndDimensions?.width,
+            height: positionAndDimensions?.height,
           }}
         >
           <AbsoluteFill
@@ -141,7 +148,7 @@ const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
   // console.log("props", props);
 
   return (
-    <AbsoluteFill className="font-serif">
+    <AbsoluteFill className="bg-black font-serif">
       {[...layerOrder].reverse().map((layerId) => (
         <TransitionSeries key={layerId} name={layerId}>
           {layers[layerId].liteItems.map((item) => (
