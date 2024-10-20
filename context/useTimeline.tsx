@@ -1,10 +1,10 @@
 import type { PlayerRef } from "@remotion/player";
 import React, { createContext, useContext, useState } from "react";
-import { useNewVideoTimeline } from "~/hooks/use-video-timeline";
+import { useVideoTimeline } from "~/hooks/use-video-timeline";
 import type { LayerId } from "~/types/timeline.types";
 
 const VideoTimelineContext = createContext<
-  ReturnType<typeof useNewVideoTimeline> & {
+  ReturnType<typeof useVideoTimeline> & {
     draggingLayerId: LayerId | null;
     setDraggingLayerId: (layerId: LayerId | null) => void;
   }
@@ -21,7 +21,7 @@ export const VideoTimelineProvider = ({
 }) => {
   const [draggingLayerId, setDraggingLayerId] = useState<LayerId | null>(null);
 
-  const timelineValue = useNewVideoTimeline(playerRef);
+  const timelineValue = useVideoTimeline(playerRef);
   const value = {
     ...timelineValue,
     draggingLayerId,

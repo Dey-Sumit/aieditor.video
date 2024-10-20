@@ -16,9 +16,9 @@ import {
   binarySearch,
   calculateItemIndices,
   calculateOffset,
-  DEFAULT_CONTENT_PROPS,
 } from "../utils/timeline.utils";
 
+import { toast } from "sonner";
 import { EMPTY_PROJECT } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
 
@@ -47,7 +47,7 @@ const useVideoStore = create<
       },
 
       /* ------------------------------ CRUD operation of Timeline  ----------------------------- */
-      addSequenceItemToLayer: (layerId, newSeqLiteItem) => {
+      addSequenceItemToLayer: (layerId, newSeqLiteItem, contentProps) => {
         set((state: StoreType) => {
           const layer = state.props.layers[layerId];
           if (!layer) {
@@ -67,22 +67,55 @@ const useVideoStore = create<
 
           // Update only the offset of the next lite item
           const nextItem = layer.liteItems[insertIndex + 1];
+
           if (nextItem) {
             nextItem.offset =
               nextItem.startFrame -
               (newSeqLiteItem.startFrame + newSeqLiteItem.effectiveDuration);
           }
 
-          // Get default props based on content type
-          const defaultProps =
-            DEFAULT_CONTENT_PROPS[newSeqLiteItem.contentType];
+          // entry to sequence items
+          // state.props.sequenceItems[newSeqLiteItem.id] = {
+          //   // type: contentProps.type,
+          //   id: newSeqLiteItem.id,
+          //   layerId: layerId,
+          //   editableProps: contentProps.editableProps,
+          //   animations: contentProps.animations,
+          //   type: contentProps.type,
+          // };
 
-          //@ts-ignore
-          state.props.sequenceItems[newSeqLiteItem.id] = {
-            id: newSeqLiteItem.id,
-            layerId: layerId,
-            ...defaultProps,
-          };
+          if (contentProps.type === "video") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "video",
+              animations: [],
+              totalVideoDurationInFrames:
+                contentProps.totalVideoDurationInFrames,
+              editableProps: contentProps.editableProps,
+            };
+          } else if (contentProps.type === "text") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "text",
+              editableProps: contentProps.editableProps,
+            };
+          } else if (contentProps.type === "image") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "image",
+              editableProps: contentProps.editableProps,
+            };
+          } else if (contentProps.type === "audio") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "audio",
+              editableProps: contentProps.editableProps,
+            };
+          }
 
           console.log(
             `Added sequence item ${newSeqLiteItem.id} to layer ${layerId}`,
@@ -481,6 +514,34 @@ const useVideoStore = create<
           const item = layer.liteItems[itemIndex];
           const nextItem = layer.liteItems[itemIndex + 1];
 
+          if (
+            direction === "left" &&
+            item.sequenceType === "standalone" &&
+            item.contentType === "video"
+          ) {
+            const videoItem = state.props.sequenceItems[
+              itemId
+            ] as VideoSequenceItemType;
+            console.log(
+              "videoItem.editableProps.videoStartsFromInFrames - frameDelta",
+              frameDelta,
+              videoItem.editableProps.videoStartsFromInFrames,
+              videoItem.editableProps.videoStartsFromInFrames - frameDelta,
+            );
+
+            // check if the video starts from 0, then we can't move it to left
+            // Preventing negative startFrame value for video. Error: Sorry about this! An error occurred: startFrom must be greater than equal to 0 instead got -91.
+            if (
+              videoItem.editableProps.videoStartsFromInFrames - frameDelta <
+              0
+            ) {
+              toast.error(
+                "Hey , you can't move the video to the left, as it will start from negative frames",
+              );
+              return;
+            }
+          }
+
           // Update startFrame and duration
           if (direction === "left") {
             item.startFrame -= frameDelta;
@@ -503,13 +564,18 @@ const useVideoStore = create<
             const videoItem = state.props.sequenceItems[
               itemId
             ] as VideoSequenceItemType;
-            if (videoItem && "editableProps" in videoItem) {
-              if (direction === "left") {
-                videoItem.editableProps.videoStartsFromInFrames -= frameDelta;
-              } else {
-                // direction === "right"
-                videoItem.editableProps.videoEndsAtInFrames += frameDelta;
-              }
+
+            if (direction === "left") {
+              console.log(
+                "CULPRIT",
+                videoItem.editableProps.videoStartsFromInFrames,
+                frameDelta,
+              );
+
+              videoItem.editableProps.videoStartsFromInFrames -= frameDelta;
+            } else {
+              // direction === "right"
+              videoItem.editableProps.videoEndsAtInFrames += frameDelta;
             }
           }
 

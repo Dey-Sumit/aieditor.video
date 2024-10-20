@@ -53,6 +53,7 @@ export type FullSequenceContentType = {
         videoStartsFromInFrames: number;
         videoEndsAtInFrames: number;
       };
+      totalVideoDurationInFrames: number;
     }
   | {
       type: "audio";
@@ -229,12 +230,13 @@ export type PresetDetail = Omit<
   sequenceItems: Record<string, FullSequenceContentType>;
 };
 
-type StoreActions = {
+export type StoreActions = {
   loadProject: (project: NestedCompositionProjectType) => void;
   updateProject: (updates: Partial<NestedCompositionProjectType>) => void;
   addSequenceItemToLayer: (
     layerId: LayerId,
     item: Extract<LiteSequenceItemType, { sequenceType: "standalone" }>,
+    contentProps: FullSequenceContentType,
   ) => void;
   removeSequenceItemFromLayer: (layerId: LayerId, itemId: string) => void;
   updateSequenceItemPositionInLayer: (

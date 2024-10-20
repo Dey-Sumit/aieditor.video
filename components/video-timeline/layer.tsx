@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 import React from "react";
-import { useSequenceAddition } from "~/hooks/use-video-timeline";
+// import { useSequenceAddition } from "~/hooks/use-video-timeline";
+import { useSequenceAddition } from "~/hooks/timeline/dom-layer/use-item-addition";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { selectLiteItems } from "~/store/reselector/video-store.reselector";
 import useVideoStore from "~/store/video.store";
@@ -52,7 +53,6 @@ export const HoverLayer: React.FC<HoverLayerProps> = React.memo(
     const {
       hoverInfo,
       mouseEventHandlers: { onMouseMove, onMouseLeave, onClick },
-      isPointWithinItem,
     } = useSequenceAddition(layerId, pixelsPerFrame);
 
     return (
@@ -75,7 +75,7 @@ export const HoverLayer: React.FC<HoverLayerProps> = React.memo(
           />
           {/* -------------------------- Item adding placeholder for handing clicks and hover -------------------------- */}
 
-          {hoverInfo && !isPointWithinItem(hoverInfo.startX) && (
+          {hoverInfo && (
             <AddItemPlaceholder
               startX={hoverInfo.startX}
               width={hoverInfo.width}

@@ -1,28 +1,19 @@
 import { type PlayerRef } from "@remotion/player";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback } from "react";
 import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
-import { getVideoMetadata } from "@remotion/media-utils";
-import { useTimeline } from "~/context/useTimeline";
-import { PRESET_COLLECTION } from "~/data/preset.book";
 import { LAYOUT } from "~/lib/constants/layout.constants";
-import { TIMELINE } from "~/lib/constants/timeline.constants";
-import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
 import type {
-  ContentType,
   LayerId,
   LiteSequenceItemType,
   StoreType,
 } from "~/types/timeline.types";
-import { genId } from "~/utils/misc.utils";
-import { calculatePlaceholderDuration } from "~/utils/timeline.utils";
 import { useSeqItemResizeHandler } from "./timeline/dom-layer/use-sequence-resize";
 import { useTimelineMetrics } from "./timeline/dom-layer/use-timeline-metrics";
 import { useTimelineSynchronization } from "./timeline/dom-layer/use-timeline-sync";
 
-const { MAX_PLACEHOLDER_FRAMES: MAX_PLACEHOLDER_DURATION_IN_FRAMES } = TIMELINE;
 const {
   TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
 } = LAYOUT;
@@ -185,8 +176,9 @@ const useItemDrag = (
   return useThrottle(handleItemDrag, 50);
 };
 
-export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
+export function useVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
   const props = useVideoStore((store) => store.props);
+
   const updateSequenceItemPositionInLayer = useVideoStore(
     (store) => store.updateSequenceItemPositionInLayer,
   );
@@ -194,6 +186,7 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
   const {
     compositionMetaData: { duration: durationInFrames },
   } = props!;
+
   const currentFrame = useCurrentPlayerFrame(playerRef);
 
   const {
@@ -233,195 +226,5 @@ export function useNewVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
     handlePlayheadDrag,
     handleTimeLayerClick,
     currentFrame,
-  };
-}
-
-export interface HoverInfo {
-  layerId: LayerId;
-  startFrame: number;
-  durationInFrames: number;
-  offsetFrames: number;
-  startX: number;
-  width: number;
-}
-
-export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
-  const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
-  const lastHoverInfoRef = useRef<HoverInfo | null>(null);
-
-  const selectedNewItemType = useEditingStore(
-    (state) => state.selectedContentType,
-  );
-
-  const { draggingLayerId, handleTimeLayerClick } = useTimeline();
-
-  const liteItems = useVideoStore(
-    (state) => state.props.layers[layerId]?.liteItems,
-  );
-
-  const duration = useVideoStore(
-    (state) => state.props.compositionMetaData.duration,
-  );
-  const addSequenceItemToLayer = useVideoStore(
-    (state) => state.addSequenceItemToLayer,
-  );
-  const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
-  const addPresetToLayer = useVideoStore((state) => state.addPresetToLayer);
-
-  const isPointWithinItem = useCallback(
-    (x: number): boolean => {
-      const frame = Math.floor(x / pixelsPerFrame);
-      return liteItems.some(
-        (item) =>
-          frame >= item.startFrame &&
-          frame < item.startFrame + item.effectiveDuration,
-      );
-    },
-    [liteItems, pixelsPerFrame],
-  );
-
-  const handleBackgroundLayerMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (draggingLayerId !== null && draggingLayerId !== layerId) return;
-
-      const rect = e.currentTarget?.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-
-      if (isPointWithinItem(x)) {
-        setHoverInfo(null);
-        return;
-      }
-
-      const startFrame = Math.floor(x / pixelsPerFrame);
-
-      const placeholderInfo = calculatePlaceholderDuration(
-        liteItems,
-        startFrame,
-        duration,
-        MAX_PLACEHOLDER_DURATION_IN_FRAMES,
-      );
-      const newHoverInfo = {
-        layerId,
-        startFrame: placeholderInfo.adjustedStartFrame,
-        durationInFrames: placeholderInfo.duration,
-        offsetFrames: placeholderInfo.offsetFrames,
-        startX: placeholderInfo.adjustedStartFrame * pixelsPerFrame,
-        width: placeholderInfo.duration * pixelsPerFrame,
-      };
-      setHoverInfo(newHoverInfo);
-      lastHoverInfoRef.current = newHoverInfo;
-    },
-    [
-      liteItems,
-      layerId,
-      duration,
-      pixelsPerFrame,
-      isPointWithinItem,
-      draggingLayerId,
-    ],
-  );
-
-  const throttledMouseMove = useThrottle(handleBackgroundLayerMouseMove, 20);
-
-  const handleMouseLeave = useCallback(() => {
-    setHoverInfo(null);
-  }, []);
-
-  const handleAddNewItem = useCallback(
-    async (
-      e: React.MouseEvent<HTMLDivElement>,
-      selectedContentType:
-        | {
-            sequenceType: "standalone";
-            contentType?: ContentType;
-          }
-        | {
-            sequenceType: "preset";
-            presetId: string;
-          },
-    ) => {
-      console.log("adding new item", selectedContentType);
-
-      if (!lastHoverInfoRef.current) {
-        console.error("hoverInfo is null, cannot add new item");
-        return;
-      }
-      const VIDEO_URL =
-        "https://videos.pexels.com/video-files/4065220/4065220-sd_506_960_25fps.mp4";
-
-      if (
-        selectedContentType.sequenceType === "standalone"
-        // &&
-        // selectedContentType.contentType === "video"
-      ) {
-        console.log("adding video item");
-        const data = await getVideoMetadata(VIDEO_URL);
-        console.log({ data });
-      }
-
-      const {
-        startFrame: adjustedStartFrame,
-        durationInFrames: placeholderDuration,
-        offsetFrames,
-      } = lastHoverInfoRef.current;
-
-      if (selectedContentType.sequenceType === "standalone") {
-        const contentType =
-          selectedContentType.contentType || selectedNewItemType;
-        const newItemId = genId("s", contentType);
-        addSequenceItemToLayer(layerId, {
-          id: newItemId,
-          sequenceType: "standalone",
-          contentType,
-          startFrame: adjustedStartFrame,
-          effectiveDuration: placeholderDuration,
-          sequenceDuration: placeholderDuration, // Assuming no transitions initially
-          offset: offsetFrames ?? 0,
-        });
-        setActiveSeqItem(layerId, newItemId, contentType);
-      } else {
-        const presetId = selectedContentType.presetId;
-        
-        const presetDetail = PRESET_COLLECTION[presetId];
-        addPresetToLayer(
-          layerId,
-          {
-            
-            startFrame: adjustedStartFrame,
-            // sequenceDuration: placeholderDuration,
-            // effectiveDuration: placeholderDuration,
-            offset: offsetFrames ?? 0,
-            // name: "BRUT_END_SCREEN_PRESET",
-            // sequenceType: "preset",
-          },
-          presetDetail,
-        );
-      }
-      handleTimeLayerClick(e);
-    },
-    [
-      layerId,
-      addSequenceItemToLayer,
-      setActiveSeqItem,
-      addPresetToLayer,
-      selectedNewItemType,
-      handleTimeLayerClick,
-    ],
-  );
-
-  const mouseEventHandlers = useMemo(
-    () => ({
-      onMouseMove: throttledMouseMove,
-      onMouseLeave: handleMouseLeave,
-      onClick: handleAddNewItem,
-    }),
-    [throttledMouseMove, handleMouseLeave, handleAddNewItem],
-  );
-
-  return {
-    hoverInfo,
-    isPointWithinItem,
-    mouseEventHandlers,
-    handleAddNewItem,
   };
 }

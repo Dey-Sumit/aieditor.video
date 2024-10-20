@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import "../styles/global.css";
 import "../styles/prosemirror.css";
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>{children}</body>
+      <Toaster richColors />
       {/* <Analytics />
       <SpeedInsights /> */}
     </html>

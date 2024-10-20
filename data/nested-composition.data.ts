@@ -521,8 +521,15 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
   id: "id-dummy",
   title: "Dummy Project",
   props: {
-    layers: {},
-    layerOrder: [],
+    layers: {
+      "l-ac121030-0325-4cbd-b334-c4d91400fa5c": {
+        id: "l-ac121030-0325-4cbd-b334-c4d91400fa5c",
+        name: "Layer 4",
+        liteItems: [],
+        isVisible: true,
+      },
+    },
+    layerOrder: ["l-ac121030-0325-4cbd-b334-c4d91400fa5c"],
     sequenceItems: {},
     compositionMetaData: {
       width: 720,
