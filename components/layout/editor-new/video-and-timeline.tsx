@@ -3,7 +3,6 @@
 import { type ErrorFallback, Player, type PlayerRef } from "@remotion/player";
 import { useRef } from "react";
 import { AbsoluteFill } from "remotion";
-import { DragAndDropDemo } from "~/components/player/demo";
 import { Separator } from "~/components/ui/separator";
 import { PlayerFullscreen } from "~/components/video-timeline/player-controls/full-screen";
 import { MuteButton } from "~/components/video-timeline/player-controls/mute";
@@ -14,7 +13,6 @@ import Toolbar from "~/components/video-timeline/toolbar";
 import VideoTimeline from "~/components/video-timeline/VideoTImeline";
 import { VideoTimelineProvider } from "~/context/useTimeline";
 import useVideoStore from "~/store/video.store";
-import { NestedCompositionPropsSchema } from "~/types/timeline.types";
 import NestedSequenceComposition from "~/video/compositions/composition";
 
 const VideoAndTimeline = () => {
@@ -24,8 +22,8 @@ const VideoAndTimeline = () => {
   return (
     <>
       <div className="relative h-full">
-        <DragAndDropDemo />
-        {/* <VideoPreview playerRef={playerRef} /> */}
+        {/* <DragAndDropDemo /> */}
+        <VideoPreview playerRef={playerRef} />
         {/* 
         <div className="absolute left-96 top-96 h-96 w-96 border-2">
           <Button onClick={() => playerRef.current?.play()}>Play</Button>
@@ -62,7 +60,7 @@ const VideoPreview = ({
 }: {
   playerRef: React.RefObject<PlayerRef>;
 }) => {
-  const { props } = useVideoStore();
+  const { props, updatePositionAndDimensions } = useVideoStore();
 
   if (!props) {
     return <div>Loading project...</div>;
@@ -87,8 +85,11 @@ const VideoPreview = ({
         initiallyMuted
         errorFallback={errorFallback}
         ref={playerRef}
-        schema={NestedCompositionPropsSchema}
-        inputProps={props}
+        // schema={NestedCompositionPropsSchema}
+        inputProps={{
+          props,
+          updatePositionAndDimensions: updatePositionAndDimensions,
+        }}
         browserMediaControlsBehavior={{
           mode: "register-media-session",
         }}

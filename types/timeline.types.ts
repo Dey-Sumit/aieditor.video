@@ -320,6 +320,14 @@ export type StoreActions = {
     itemId: string,
     splitAtInFrames: number,
   ) => void;
+
+  updatePositionAndDimensions: (
+    layerId: LayerId,
+    itemId: string,
+    updates: Partial<
+      FullSequenceContentType["editableProps"]["positionAndDimensions"]
+    >,
+  ) => void;
 };
 
 export type NestedCompositionPropsType = NestedCompositionProjectType["props"];

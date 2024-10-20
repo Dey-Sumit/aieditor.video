@@ -36,7 +36,7 @@ const wait = async (milliSeconds: number) => {
 
 export const useRendering = (
   id: string,
-  inputProps: NestedCompositionPropsType,
+  inputProps: { props: NestedCompositionPropsType },
 ) => {
   const [state, setState] = useState<State>({
     status: "init",

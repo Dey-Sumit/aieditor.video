@@ -53,7 +53,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
           <section className="_editorBg relative flex-1 bg-green-900">
             <VideoAndTimeline />
-            <div className="pointer-events-none absolute inset-0 bg-yellow-500/80"></div>
+            <div className="pointer-events-none absolute inset-0"></div>
           </section>
 
           {/* -------------------- video player and timeline ends -------------------- */}

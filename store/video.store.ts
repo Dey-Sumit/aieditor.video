@@ -3,6 +3,7 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import type {
+  FullSequenceContentType,
   LayerId,
   LayerType,
   LiteSequenceItemType,
@@ -1012,6 +1013,30 @@ const useVideoStore = create<
           console.log(`Split sequence item ${itemId} in layer ${layerId}`, {
             newItem,
           });
+        });
+      },
+
+      updatePositionAndDimensions: (layerId, itemId, updates) => {
+        set((state) => {
+          const item = state.props.sequenceItems[
+            itemId
+          ] as FullSequenceContentType;
+          if (!item) {
+            console.warn(`Item ${itemId} not found in layer ${layerId}`);
+            return;
+          }
+
+          item.editableProps = {
+            ...item.editableProps,
+            positionAndDimensions: {
+              ...item.editableProps.positionAndDimensions!,
+              ...updates!,
+            },
+          };
+          console.log(
+            `Updated position and dimensions for item ${itemId} in layer ${layerId}:`,
+            updates,
+          );
         });
       },
     })),

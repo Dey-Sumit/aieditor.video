@@ -5,9 +5,12 @@ import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
 import { slide } from "@remotion/transitions/slide";
 
 import React from "react";
+import DragResizeComponent from "~/components/new-player/drag-and-resize";
 import type {
+  FullSequenceContentType,
   LiteSequenceItemType,
   NestedCompositionProjectType,
+  StoreActions,
   StyledSequenceItem,
 } from "~/types/timeline.types";
 
@@ -22,74 +25,45 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
   return <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} />;
 };
 
-type NestedCompositionProjectProps = NestedCompositionProjectType["props"];
-
-const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
-  item,
-}) => {
+const SequenceItemRenderer: React.FC<{
+  item: StyledSequenceItem;
+  onChange: (updates: Partial<FullSequenceContentType>) => void;
+}> = ({ item, onChange }) => {
   if (item.type === "preset") {
-    // This case should not occur here as it's handled in RenderSequence
     return null;
   }
-  const {
-    editableProps: { positionAndDimensions },
-  } = item;
 
-  switch (item.type) {
-    case "div":
-      return (
-        <AbsoluteFill style={item.editableProps?.styles?.container}>
-          <div style={item.editableProps?.styles?.element}></div>
-        </AbsoluteFill>
-      );
-    case "text":
-      return (
-        <AbsoluteFill
-          style={item.editableProps?.styles?.container}
-          className="dark"
-        >
-          <div style={item.editableProps?.styles?.element}>
-            <div
-              dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
-              className="prose prose-2xl space-y-0 whitespace-pre-wrap dark:prose-invert [&>*]:my-0"
+  const renderContent = () => {
+    switch (item.type) {
+      case "div":
+        return <div style={item.editableProps?.styles?.element}></div>;
+      case "text":
+        return (
+          <div
+            style={item.editableProps?.styles?.element}
+            dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
+            className="prose prose-2xl space-y-0 whitespace-pre-wrap dark:prose-invert [&>*]:my-0"
+          />
+        );
+      case "image":
+        return (
+          <>
+            <AbsoluteFill
+              style={item.editableProps?.styles?.overlay}
+              className=""
             />
-          </div>
-        </AbsoluteFill>
-      );
-    case "image":
-      // return <AnimatedImage item={item as ImageSequenceItemType} />;
-      return (
-        <AbsoluteFill
-          className=""
-          style={{
-            ...item.editableProps?.styles?.container,
-            left: positionAndDimensions?.left,
-            top: positionAndDimensions?.top,
-            width: positionAndDimensions?.width,
-            height: positionAndDimensions?.height,
-          }}
-        >
-          <AbsoluteFill
-            className=""
-            style={{
-              ...item.editableProps?.styles?.overlay,
-            }}
-          />
-          <Img
-            src={item.editableProps.imageUrl}
-            style={{
-              objectFit: "cover",
-              ...item.editableProps?.styles?.element,
-            }}
-            className="box-content"
-          />
-        </AbsoluteFill>
-      );
-
-    case "video":
-      return (
-        <AbsoluteFill style={item.editableProps?.styles?.container}>
-          <AbsoluteFill className="bg-black/30" />
+            <Img
+              src={item.editableProps.imageUrl}
+              style={{
+                objectFit: "cover",
+                ...item.editableProps?.styles?.element,
+              }}
+              className="box-content"
+            />
+          </>
+        );
+      case "video":
+        return (
           <OffthreadVideo
             src={item.editableProps.videoUrl}
             style={item.editableProps?.styles?.element}
@@ -97,20 +71,41 @@ const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
             startFrom={item.editableProps.videoStartsFromInFrames}
             endAt={item.editableProps.videoEndsAtInFrames}
           />
-        </AbsoluteFill>
-      );
-    default:
-      return null;
-  }
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <DragResizeComponent item={item} onChange={onChange}>
+      <AbsoluteFill
+        style={item.editableProps?.styles?.container}
+        className="bg-green-800"
+      >
+        {renderContent()}
+      </AbsoluteFill>
+    </DragResizeComponent>
+  );
 };
 
 const RenderSequence: React.FC<{
   item: LiteSequenceItemType;
   sequenceItems: Record<string, StyledSequenceItem>;
-}> = ({ item, sequenceItems }) => {
+  onChangeSequenceItem: (
+    itemId: string,
+    updates: Partial<FullSequenceContentType>,
+  ) => void;
+}> = ({ item, sequenceItems, onChangeSequenceItem }) => {
   if (item.sequenceType === "standalone") {
     const sequenceItem = sequenceItems[item.id];
-    return sequenceItem ? <SequenceItemRenderer item={sequenceItem} /> : null;
+    return sequenceItem ? (
+      <SequenceItemRenderer
+        onChange={(updates) => onChangeSequenceItem(item.id, updates)}
+        item={sequenceItem}
+        
+      />
+    ) : null;
   }
 
   if (item.sequenceType === "preset") {
@@ -141,24 +136,58 @@ const RenderSequence: React.FC<{
   return null;
 };
 
-const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
+const NestedSequenceComposition = ({
   props,
-) => {
+  updatePositionAndDimensions,
+}: {
+  props: NestedCompositionProjectType["props"];
+  updatePositionAndDimensions: StoreActions["updatePositionAndDimensions"];
+}) => {
   const { layers, layerOrder, sequenceItems } = props;
   // console.log("props", props);
 
   return (
     <AbsoluteFill className="bg-black font-serif">
       {[...layerOrder].reverse().map((layerId) => (
-        <TransitionSeries key={layerId} name={layerId}>
+        <TransitionSeries key={layerId} name={layerId} layout="none">
           {layers[layerId].liteItems.map((item) => (
             <React.Fragment key={item.id}>
               <TransitionSeries.Sequence
                 durationInFrames={item.sequenceDuration}
                 name={item.id}
                 offset={item.offset}
+                layout="none"
               >
-                <RenderSequence item={item} sequenceItems={sequenceItems} />
+                {/* <div
+                  style={{
+                    position: "relative",
+                    zIndex: activeItemId === item.id ? 1 : "auto",
+                  }}
+                > */}
+                <RenderSequence
+                  item={item}
+                  sequenceItems={sequenceItems}
+                  onChangeSequenceItem={
+                    (itemId, updates) => {
+                      console.log("onChangeSequenceItem", {
+                        layerId,
+                        itemId,
+                        updates,
+                      });
+                      updatePositionAndDimensions(layerId, itemId, {
+                        height:
+                          updates.editableProps?.positionAndDimensions?.height,
+                        width:
+                          updates.editableProps?.positionAndDimensions?.width,
+                        left: updates.editableProps?.positionAndDimensions
+                          ?.left,
+                        top: updates.editableProps?.positionAndDimensions?.top,
+                      });
+                    }
+                    // onChangeSequenceItem(layerId, itemId, updates)
+                  }
+                />
+                {/* </div> */}
               </TransitionSeries.Sequence>
               {item.transition?.outgoing && (
                 <TransitionSeries.Transition

@@ -1,13 +1,6 @@
 import { Composition, type CalculateMetadataFunction } from "remotion";
-import { TEST_CASE_PROJECT } from "~/data/nested-composition.data";
-import {
-  NestedCompositionPropsSchema,
-  type NestedCompositionProjectType,
-} from "~/types/timeline.types";
-import {
-  AnimatedImageComposition,
-  testSequenceItems,
-} from "../animation-compositions/image";
+import useVideoStore from "~/store/video.store";
+import { type NestedCompositionProjectType } from "~/types/timeline.types";
 import NestedSequenceComposition from "./composition";
 
 const calculateMetadata: CalculateMetadataFunction<
@@ -16,12 +9,21 @@ const calculateMetadata: CalculateMetadataFunction<
   return {
     // Change the metadata
     // durationInFrames: props.compositionMetaData.duration,
-    durationInFrames: props.compositionMetaData.duration,
+    // durationInFrames: props.compositionMetaData.duration,
+    durationInFrames: 20 * 30,
   };
 };
 
 const NewDynamicCompositionWithLoader = () => {
-  const { props } = TEST_CASE_PROJECT;
+  const props = useVideoStore((store) => store.props);
+  const updatePositionAndDimensions = useVideoStore(
+    (store) => store.updatePositionAndDimensions,
+  );
+  if (!props) {
+    return <div>Loading project...</div>;
+  }
+  console.log("NewDynamicCompositionWithLoader props", props);
+
   return (
     <>
       <Composition
@@ -31,11 +33,15 @@ const NewDynamicCompositionWithLoader = () => {
         fps={props.compositionMetaData.fps}
         width={props.compositionMetaData.width}
         height={props.compositionMetaData.height}
-        defaultProps={props}
-        schema={NestedCompositionPropsSchema}
-        calculateMetadata={calculateMetadata}
+        // defaultProps={{ props, updatePositionAndDimensions }}
+        defaultProps={{
+          props,
+          updatePositionAndDimensions,
+        }}
+        // schema={NestedCompositionPropsSchema}
+        // calculateMetadata={calculateMetadata}
       />
-      <Composition
+      {/* <Composition
         id="MyComp"
         component={AnimatedImageComposition}
         durationInFrames={600}
@@ -47,7 +53,7 @@ const NewDynamicCompositionWithLoader = () => {
             "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93"
           ],
         }}
-      />
+      /> */}
     </>
   );
 };

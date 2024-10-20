@@ -9,10 +9,10 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import {
+import type {
+  HoverInfo,
   useSequenceAddition,
-  type HoverInfo,
-} from "~/hooks/use-video-timeline";
+} from "~/hooks/timeline/dom-layer/use-item-addition";
 
 function AddItemContextMenu({
   children,

@@ -10,10 +10,9 @@ const { PROJECT_HEADER_HEIGHT } = LAYOUT;
 const ProjectHeader = () => {
   const { props } = useVideoStore();
 
-  const { renderMedia, state, undo } = useRendering(
-    "new-dynamic-composition",
+  const { renderMedia, state, undo } = useRendering("new-dynamic-composition", {
     props,
-  );
+  });
 
   return (
     <div
