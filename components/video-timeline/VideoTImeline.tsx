@@ -7,7 +7,6 @@ import TimeLayer from "../time-layer";
 import Layer, { HoverLayer } from "./layer";
 import LayerNamesStack from "./layer-names-stack";
 import LayerToolbar from "./layer-toolbar";
-import Toolbar from "./toolbar";
 
 const {
   SIDE_NAVBAR_WIDTH,
@@ -19,7 +18,7 @@ const {
   },
 } = LAYOUT;
 
-const VideoTimeline = () => {
+const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
   const { containerRef, pixelsPerFrame } = useTimeline();
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
 
@@ -31,7 +30,8 @@ const VideoTimeline = () => {
       <div className="flex h-full flex-col">
         {/* ------------------------- Sticky(absolute) section starts ------------------------  */}
         <div className="w-full border-b">
-          <Toolbar />
+          {/* -------------------------TOOL BAR------------------------  */}
+          {children}
           {/* ------------------------- TIME LAYER ------------------------  */}
           <div
             className="flex"
