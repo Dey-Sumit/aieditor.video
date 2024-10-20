@@ -47,7 +47,8 @@ export const useTimelineSynchronization = ({
   // Handle timeline click
   const handleTimeLayerClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      const containerRect = e.currentTarget.getBoundingClientRect();
+      // TODO : Fix the optional chaining
+      const containerRect = e.currentTarget?.getBoundingClientRect();
       const clickX = e.clientX - containerRect.left;
       const newX = Math.max(0, Math.min(clickX, containerWidth));
       setPlayheadPosition({ x: newX, y: 0 });

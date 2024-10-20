@@ -284,7 +284,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (draggingLayerId !== null && draggingLayerId !== layerId) return;
 
-      const rect = e.currentTarget.getBoundingClientRect();
+      const rect = e.currentTarget?.getBoundingClientRect();
       const x = e.clientX - rect.left;
 
       if (isPointWithinItem(x)) {
@@ -381,12 +381,12 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
         setActiveSeqItem(layerId, newItemId, contentType);
       } else {
         const presetId = selectedContentType.presetId;
-        const newItemId = genId("p", "preset");
+        
         const presetDetail = PRESET_COLLECTION[presetId];
         addPresetToLayer(
           layerId,
           {
-            id: newItemId,
+            
             startFrame: adjustedStartFrame,
             // sequenceDuration: placeholderDuration,
             // effectiveDuration: placeholderDuration,

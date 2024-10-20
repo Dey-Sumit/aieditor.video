@@ -287,7 +287,6 @@ type StoreActions = {
     itemPosition: {
       startFrame: number;
       offset: number;
-      id: string;
     },
     newPreset: PresetDetail,
   ) => void;

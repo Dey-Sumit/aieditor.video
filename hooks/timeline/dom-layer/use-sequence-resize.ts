@@ -15,7 +15,6 @@ type handleResizeArgs = {
 // 1. DOM Event Handler Layer, takes care of frame delta calculation, throttling.
 export const useSeqItemResizeHandler = (pixelsPerFrame: number) => {
   const validateAndUpdateResize = useSeqItemResizeValidation();
-  console.log({ pixelsPerFrame });
 
   const handleResize = useCallback(
     ({
