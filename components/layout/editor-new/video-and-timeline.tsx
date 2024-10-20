@@ -72,7 +72,7 @@ const VideoPreview = ({
         style={{
           width: "100%",
           height: "100%",
-          // backgroundColor: "rgba(0,0,0,0.6)",
+          // backgroundColor: "rgba(0,0,0,1)",
         }}
         className=""
         controls={false}
@@ -83,9 +83,9 @@ const VideoPreview = ({
         ref={playerRef}
         schema={NestedCompositionPropsSchema}
         inputProps={props}
-        // browserMediaControlsBehavior={{
-        //   mode: "register-media-session",
-        // }}
+        browserMediaControlsBehavior={{
+          mode: "register-media-session",
+        }}
       />
     </>
   );
