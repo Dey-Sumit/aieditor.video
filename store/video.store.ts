@@ -373,90 +373,170 @@ const useVideoStore = create<
       updateVideoEditableProps: (layerId, itemId, updates) => {},
 
       // frameDelta can be positive or negative, positive means increase the duration, negative means decrease the duration
+      // updateSequenceItemDuration: (layerId, itemId, frameDelta, direction) => {
+      //   set((state: StoreType) => {
+      //     const layer = state.props.layers[layerId]!;
+
+      //     const itemIndex = layer.liteItems.findIndex(
+      //       (item) => item.id === itemId,
+      //     )!;
+
+      //     const item = layer.liteItems[itemIndex];
+      //     const nextItem = layer.liteItems[itemIndex + 1];
+
+      //     // Update sequenceDuration and startFrame
+      //     // TODO : simplify this logic xD
+      //     if (frameDelta > 0) {
+      //       if (direction === "left") {
+      //         item.startFrame -= frameDelta;
+      //       }
+      //     } else {
+      //       if (direction === "left") {
+      //         item.startFrame -= frameDelta;
+      //       }
+      //     }
+      //     if (direction === "left") {
+      //       item.offset -= frameDelta;
+      //     }
+
+      //     item.effectiveDuration += frameDelta;
+      //     item.sequenceDuration += frameDelta;
+
+      //     if (
+      //       item.sequenceType === "standalone" &&
+      //       item.contentType === "video"
+      //     ) {
+      //       if (direction === "right") {
+      //         if (frameDelta > 0) {
+      //           // expanding from right
+      //           (
+      //             state.props.sequenceItems[itemId] as VideoSequenceItemType
+      //           ).editableProps.videoEndsAtInFrames += frameDelta;
+      //         } else {
+      //           // shrinking from right
+      //           /*  (
+      //             state.props.sequenceItems[itemId]
+      //               .editableProps as VideoEditablePropsType
+      //           ).videoEndsAtInFrames += Math.abs(frameDelta); */
+      //         }
+      //       } else {
+      //         if (frameDelta < 0) {
+      //           // shrinking from left
+      //           (
+      //             state.props.sequenceItems[itemId] as VideoSequenceItemType
+      //           ).editableProps.videoStartsFromInFrames += Math.abs(frameDelta);
+      //         } else {
+      //           // expanding from left
+      //           // TODO : wtf!!!, Ideally I should not let the user expand from left if the videoStartsFromInFrames<0.
+      //           (
+      //             state.props.sequenceItems[itemId] as VideoSequenceItemType
+      //           ).editableProps.videoStartsFromInFrames =
+      //             (state.props.sequenceItems[itemId] as VideoSequenceItemType)
+      //               .editableProps.videoStartsFromInFrames -
+      //               Math.abs(frameDelta) <
+      //             0
+      //               ? 0
+      //               : (
+      //                   state.props.sequenceItems[
+      //                     itemId
+      //                   ] as VideoSequenceItemType
+      //                 ).editableProps.videoStartsFromInFrames -
+      //                 Math.abs(frameDelta);
+      //         }
+      //       }
+      //     }
+
+      //     // Update the next item's offset if it exists
+      //     if (nextItem) {
+      //       // TODO : might need to handle the transition case
+      //       nextItem.offset =
+      //         nextItem.startFrame - (item.startFrame + item.effectiveDuration);
+      //     }
+
+      //     console.log(`Updated item ${itemId} in layer ${layerId}:`);
+      //   });
+      // },
+
+      /**
+       * Frame Delta Scenarios:
+       *
+       * Left Resize (direction === "left"):
+       * - Positive frameDelta: Expanding to the left
+       *   The item's left edge moves earlier in time (to the left).
+       *   Example: frameDelta = 10, item starts 10 frames earlier, duration increases by 10.
+       *
+       * - Negative frameDelta: Shrinking from the left
+       *   The item's left edge moves later in time (to the right).
+       *   Example: frameDelta = -10, item starts 10 frames later, duration decreases by 10.
+       *
+       * Right Resize (direction === "right"):
+       * - Positive frameDelta: Expanding to the right
+       *   The item's right edge moves later in time (to the right).
+       *   Example: frameDelta = 10, duration increases by 10, end frame is 10 frames later.
+       *
+       * - Negative frameDelta: Shrinking from the right
+       *   The item's right edge moves earlier in time (to the left).
+       *   Example: frameDelta = -10, duration decreases by 10, end frame is 10 frames earlier.
+       *
+       * Note: The frameDelta value has already been validated and adjusted for snapping
+       * in the useSeqItemResizeValidation hook before reaching this function.
+       */
       updateSequenceItemDuration: (layerId, itemId, frameDelta, direction) => {
-        set((state: StoreType) => {
-          const layer = state.props.layers[layerId]!;
+        set((state) => {
+          console.log("updateSequenceItemDuration", { frameDelta, direction });
+
+          const layer = state.props.layers[layerId];
+          if (!layer) return; // Exit if layer not found
 
           const itemIndex = layer.liteItems.findIndex(
             (item) => item.id === itemId,
-          )!;
+          );
+          if (itemIndex === -1) return; // Exit if item not found
 
           const item = layer.liteItems[itemIndex];
           const nextItem = layer.liteItems[itemIndex + 1];
 
-          // Update sequenceDuration and startFrame
-          // TODO : simplify this logic xD
-          if (frameDelta > 0) {
-            if (direction === "left") {
-              item.startFrame -= frameDelta;
-            }
-          } else {
-            if (direction === "left") {
-              item.startFrame -= frameDelta;
-            }
-          }
+          // Update startFrame and duration
           if (direction === "left") {
+            item.startFrame -= frameDelta;
             item.offset -= frameDelta;
+            item.effectiveDuration += frameDelta;
+            item.sequenceDuration += frameDelta;
+          } else {
+            // direction === "right"
+            item.effectiveDuration += frameDelta;
+            item.sequenceDuration += frameDelta;
           }
 
-          item.effectiveDuration += frameDelta;
-          item.sequenceDuration += frameDelta;
+          console.log("Updated item", item);
 
+          // Handle video specific updates
           if (
             item.sequenceType === "standalone" &&
             item.contentType === "video"
           ) {
-            if (direction === "right") {
-              if (frameDelta > 0) {
-                // expanding from right
-                (
-                  state.props.sequenceItems[itemId] as VideoSequenceItemType
-                ).editableProps.videoEndsAtInFrames += frameDelta;
+            const videoItem = state.props.sequenceItems[
+              itemId
+            ] as VideoSequenceItemType;
+            if (videoItem && "editableProps" in videoItem) {
+              if (direction === "left") {
+                videoItem.editableProps.videoStartsFromInFrames -= frameDelta;
               } else {
-                // shrinking from right
-                /*  (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoEndsAtInFrames += Math.abs(frameDelta); */
-              }
-            } else {
-              if (frameDelta < 0) {
-                // shrinking from left
-                (
-                  state.props.sequenceItems[itemId] as VideoSequenceItemType
-                ).editableProps.videoStartsFromInFrames += Math.abs(frameDelta);
-              } else {
-                // expanding from left
-                // TODO : wtf!!!, Ideally I should not let the user expand from left if the videoStartsFromInFrames<0.
-                (
-                  state.props.sequenceItems[itemId] as VideoSequenceItemType
-                ).editableProps.videoStartsFromInFrames =
-                  (state.props.sequenceItems[itemId] as VideoSequenceItemType)
-                    .editableProps.videoStartsFromInFrames -
-                    Math.abs(frameDelta) <
-                  0
-                    ? 0
-                    : (
-                        state.props.sequenceItems[
-                          itemId
-                        ] as VideoSequenceItemType
-                      ).editableProps.videoStartsFromInFrames -
-                      Math.abs(frameDelta);
+                // direction === "right"
+                videoItem.editableProps.videoEndsAtInFrames += frameDelta;
               }
             }
           }
 
           // Update the next item's offset if it exists
           if (nextItem) {
-            // TODO : might need to handle the transition case
             nextItem.offset =
               nextItem.startFrame - (item.startFrame + item.effectiveDuration);
           }
 
-          console.log(`Updated item ${itemId} in layer ${layerId}:`);
+          console.log(`Updated item ${itemId} in layer ${layerId}:`, item);
         });
       },
-
       /* ------------------------------ CRUD operation of Transitions  ----------------------------- */
       updateTransitionInLayer: (layerId, transition, updates) => {},
 

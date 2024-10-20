@@ -529,8 +529,8 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
             contentType: "image",
             effectiveDuration: 300,
             sequenceDuration: 300,
-            offset: 10,
-            startFrame: 10,
+            offset: 0,
+            startFrame: 0,
           },
         ],
         id: "l-c8319623-268e-41be-a608-5f32142c90b1",
@@ -581,6 +581,47 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
           },
         ],
       },
+      // "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93": {
+      //   id: "s-image-c12ff9f0-21f0-44bd-83dd-c2e1d7931a93",
+      //   layerId: "l-c8319623-268e-41be-a608-5f32142c90b1",
+      //   type: "image",
+      //   editableProps: {
+      //     styles: {
+      //       container: {},
+      //       element: {
+      //         "object-fit": "contain",
+      //         width: "100%",
+      //         height: "100%",
+      //       },
+      //       overlay: {},
+      //     },
+      //     imageUrl:
+      //       "https://images.pexels.com/photos/28689135/pexels-photo-28689135.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+      //   },
+      //   animations: [
+      //     {
+      //       type: "fade",
+      //       from: 0,
+      //       to: 1,
+      //       duration: 60,
+      //       startAt: 0, // Starts at frame 40
+      //     },
+      //     {
+      //       type: "fade",
+      //       from: 1,
+      //       to: 0,
+      //       duration: 60,
+      //       startAt: 240, // Starts at frame 40
+      //     },
+      //     {
+      //       type: "scale",
+      //       from: 1,
+      //       to: 0.7,
+      //       duration: 60,
+      //       startAt: 30, // Starts immediately at frame 0
+      //     },
+      //   ],
+      // },
     },
     compositionMetaData: {
       width: 720,
@@ -604,6 +645,8 @@ ADD ANIMATION :
  - EXIT ANIMATION (for this I need to know the duration of the sequence)
   - 30s duration
     - 270s - 300s
+
+- what if the for the exit animation, we can a type based animation. then we are getting the duration in the component and subtract it. 
     
 - FULL ANIMATION
   - 300s duration
