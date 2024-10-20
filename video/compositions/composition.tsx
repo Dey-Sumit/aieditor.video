@@ -6,9 +6,9 @@ import { slide } from "@remotion/transitions/slide";
 
 import React from "react";
 import type {
-  FullSequenceItemType,
   LiteSequenceItemType,
   NestedCompositionProjectType,
+  StyledSequenceItem,
 } from "~/types/timeline.types";
 
 // TODO : use this
@@ -22,10 +22,16 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
   return <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} />;
 };
 
-// Individual item renderer
-const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
+type NestedCompositionProjectProps = NestedCompositionProjectType["props"];
+
+const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
   item,
 }) => {
+  if (item.type === "preset") {
+    // This case should not occur here as it's handled in RenderSequence
+    return null;
+  }
+
   switch (item.type) {
     case "div":
       return (
@@ -40,13 +46,6 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
           className="dark"
         >
           <div style={item.editableProps?.styles?.element}>
-            {/* TODO : FIX THIS */}
-            {/* {item.editableProps.text.startsWith("<") ? (
-              <SafeHTMLRenderer html={item.editableProps.text} />
-            ) : (
-              <SafeHTMLRenderer html={item.editableProps.text} />
-              // item.editableProps.text
-            )} */}
             <div
               dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
               className="prose prose-2xl space-y-0 whitespace-pre-wrap dark:prose-invert [&>*]:my-0"
@@ -54,7 +53,8 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
           </div>
         </AbsoluteFill>
       );
-    case "image": {
+    case "image":
+      // return <AnimatedImage item={item as ImageSequenceItemType} />;
       return (
         <AbsoluteFill
           className=""
@@ -78,7 +78,7 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
           />
         </AbsoluteFill>
       );
-    }
+
     case "video":
       return (
         <AbsoluteFill style={item.editableProps?.styles?.container}>
@@ -92,8 +92,6 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
           />
         </AbsoluteFill>
       );
-    // case "audio":
-    //   return <audio src={item.editableProps.audioUrl} />;
     default:
       return null;
   }
@@ -101,58 +99,46 @@ const SequenceItemRenderer: React.FC<{ item: FullSequenceItemType }> = ({
 
 const RenderSequence: React.FC<{
   item: LiteSequenceItemType;
-  sequenceItems: Record<string, FullSequenceItemType>;
+  sequenceItems: Record<string, StyledSequenceItem>;
 }> = ({ item, sequenceItems }) => {
   if (item.sequenceType === "standalone") {
-    return <SequenceItemRenderer item={sequenceItems[item.id]} />;
+    const sequenceItem = sequenceItems[item.id];
+    return sequenceItem ? <SequenceItemRenderer item={sequenceItem} /> : null;
   }
 
   if (item.sequenceType === "preset") {
+    const presetSequenceItem = sequenceItems[item.id] as StyledSequenceItem & {
+      type: "preset";
+    };
+    if (!presetSequenceItem || presetSequenceItem.type !== "preset") {
+      return null;
+    }
+
     return (
-      <>
-        {item.layerOrder.map((layerId) => (
-          <TransitionSeries key={layerId} name={layerId}>
-            {item.layers[layerId].liteItems.map((subItem) => (
-              <React.Fragment key={subItem.id}>
-                <TransitionSeries.Sequence
-                  key={subItem.id}
-                  durationInFrames={subItem.sequenceDuration}
-                  name={subItem.id}
-                  offset={subItem.offset}
-                >
-                  {subItem.sequenceType === "standalone" ? (
-                    <SequenceItemRenderer item={sequenceItems[subItem.id]} />
-                  ) : (
-                    <RenderSequence
-                      item={subItem}
-                      sequenceItems={sequenceItems}
-                    />
-                  )}
-                </TransitionSeries.Sequence>
-                {subItem.transition?.outgoing && (
-                  <TransitionSeries.Transition
-                    presentation={slide()}
-                    timing={linearTiming({
-                      durationInFrames:
-                        subItem.transition?.outgoing.duration * 2,
-                    })}
-                  />
-                )}
-              </React.Fragment>
-            ))}
-          </TransitionSeries>
-        ))}
-      </>
+      <NestedSequenceComposition
+        //@ts-ignore,the props are not needed.Visible prop later.
+        layers={item.layers}
+        layerOrder={item.layerOrder}
+        sequenceItems={presetSequenceItem.sequenceItems}
+        compositionMetaData={{
+          width: 0, // You might want to pass these values from parent
+          height: 0,
+          fps: 0,
+          duration: item.sequenceDuration,
+          compositionId: item.id,
+        }}
+      />
     );
   }
 
-  return null; // Handle unexpected sequenceType
+  return null;
 };
 
-const NestedSequenceComposition = (
-  props: NestedCompositionProjectType["props"],
+const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
+  props,
 ) => {
   const { layers, layerOrder, sequenceItems } = props;
+  // console.log("props", props);
 
   return (
     <AbsoluteFill className="font-serif">
@@ -161,22 +147,17 @@ const NestedSequenceComposition = (
           {layers[layerId].liteItems.map((item) => (
             <React.Fragment key={item.id}>
               <TransitionSeries.Sequence
-                key={item.id}
                 durationInFrames={item.sequenceDuration}
                 name={item.id}
                 offset={item.offset}
               >
-                <RenderSequence
-                  key={item.id}
-                  item={item}
-                  sequenceItems={sequenceItems}
-                />
+                <RenderSequence item={item} sequenceItems={sequenceItems} />
               </TransitionSeries.Sequence>
               {item.transition?.outgoing && (
                 <TransitionSeries.Transition
                   presentation={slide()}
                   timing={linearTiming({
-                    durationInFrames: item.transition?.outgoing.duration * 2,
+                    durationInFrames: item.transition.outgoing.duration * 2,
                   })}
                 />
               )}

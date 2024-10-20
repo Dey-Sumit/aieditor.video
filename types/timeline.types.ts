@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { z } from "zod";
 
 const TransitionSchema = z.object({
@@ -16,16 +15,24 @@ const TransitionSchema = z.object({
 
 export type TransitionItemType = z.infer<typeof TransitionSchema>;
 
-export type FullSequenceItemType = {
+export type FullSequenceContentType = {
   id: string;
   layerId: string;
   editableProps: {
     styles: {
-      container: CSSProperties;
-      element: CSSProperties;
-      overlay?: CSSProperties;
+      container: Record<string, any>;
+      element: Record<string, any>;
+      overlay?: Record<string, any>;
     };
   };
+  // TODO : later we need to make this only for standalone sequence items. Preset will not have this.
+  animations?: Array<{
+    type: string; // Type of animation (e.g., "scale", "fade-in", etc.)
+    from: number; // Starting value of the animation (e.g., scale from 0.9)
+    to: number; // Ending value of the animation (e.g., scale to 1)
+    duration: number; // Duration in frames for the animation
+    startAt: number; // Start the animation at a specific frame
+  }>;
 } & (
   | {
       type: "text";
@@ -46,6 +53,7 @@ export type FullSequenceItemType = {
         videoStartsFromInFrames: number;
         videoEndsAtInFrames: number;
       };
+      totalVideoDurationInFrames: number;
     }
   | {
       type: "audio";
@@ -61,42 +69,42 @@ export type FullSequenceItemType = {
 );
 
 export type TextSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "text" }
 >;
 
 export type ImageSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "image" }
 >;
 
 export type AudioSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "audio" }
 >;
 
 export type VideoSequenceItemType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "video" }
 >;
 
 export type ImageEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "image" }
 >["editableProps"];
 
 export type TextEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "text" }
 >["editableProps"];
 
 export type VideoEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "video" }
 >["editableProps"];
 
 export type AudioEditablePropsType = Extract<
-  FullSequenceItemType,
+  FullSequenceContentType,
   { type: "audio" }
 >["editableProps"];
 
@@ -173,14 +181,22 @@ export type NestedCompositionProjectType = {
       };
     };
     layerOrder: string[]; // Array of layer IDs to maintain order
-    sequenceItems: {
-      [key: string]: FullSequenceItemType;
-    };
+    sequenceItems: Record<string, StyledSequenceItem>;
     transitions: {
       [key: string]: TransitionItemType;
     };
   };
 };
+
+export type StyledSequenceItem =
+  | FullSequenceContentType
+  | {
+      type: "preset";
+      layerId: string;
+      id: string;
+      presetId: string;
+      sequenceItems: Record<string, FullSequenceContentType>;
+    };
 
 export const LayerSchema = z.object({
   id: z.string(),
@@ -211,15 +227,16 @@ export type PresetDetail = Omit<
   "id" | "startFrame" | "offset" | "transition" | "sequenceType"
 > & {
   name: PresetName;
-  sequenceItems: Record<string, FullSequenceItemType>;
+  sequenceItems: Record<string, FullSequenceContentType>;
 };
 
-type StoreActions = {
+export type StoreActions = {
   loadProject: (project: NestedCompositionProjectType) => void;
   updateProject: (updates: Partial<NestedCompositionProjectType>) => void;
   addSequenceItemToLayer: (
     layerId: LayerId,
     item: Extract<LiteSequenceItemType, { sequenceType: "standalone" }>,
+    contentProps: FullSequenceContentType,
   ) => void;
   removeSequenceItemFromLayer: (layerId: LayerId, itemId: string) => void;
   updateSequenceItemPositionInLayer: (
@@ -272,7 +289,6 @@ type StoreActions = {
     itemPosition: {
       startFrame: number;
       offset: number;
-      id: string;
     },
     newPreset: PresetDetail,
   ) => void;
@@ -302,3 +318,20 @@ type StoreActions = {
 export type NestedCompositionPropsType = NestedCompositionProjectType["props"];
 
 export type StoreType = NestedCompositionProjectType & StoreActions;
+
+/* export type NestedCompositionPropsType = Omit<
+  NestedCompositionProjectType["props"],
+  "layers"
+> & {
+  layers: {
+    [layerId: string]: Omit<
+      NestedCompositionProjectType["props"]["layers"][string],
+      "id" | "name" | "isVisible"
+    > & {
+      id?: string;
+      name?: string;
+      isVisible?: boolean;
+    };
+  };
+};
+ */

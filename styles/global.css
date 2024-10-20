@@ -139,3 +139,12 @@ p.is-empty {
     max-width: 300px;
     margin-left: auto;
 }
+
+
+.react-draggable > div > div:first-child {
+  left: -2px !important;
+}
+
+.react-draggable > div > div:nth-child(2) {
+  right: -2px !important;
+}

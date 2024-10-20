@@ -3,6 +3,13 @@
 import { type ErrorFallback, Player, type PlayerRef } from "@remotion/player";
 import { useRef } from "react";
 import { AbsoluteFill } from "remotion";
+import { Separator } from "~/components/ui/separator";
+import { PlayerFullscreen } from "~/components/video-timeline/player-controls/full-screen";
+import { MuteButton } from "~/components/video-timeline/player-controls/mute";
+import { PlayPauseButton } from "~/components/video-timeline/player-controls/play-pause-button";
+import TimeDisplay from "~/components/video-timeline/player-controls/time-display";
+import { VolumeSlider } from "~/components/video-timeline/player-controls/volume-slider";
+import Toolbar from "~/components/video-timeline/toolbar";
 import VideoTimeline from "~/components/video-timeline/VideoTImeline";
 import { VideoTimelineProvider } from "~/context/useTimeline";
 import useVideoStore from "~/store/video.store";
@@ -22,7 +29,22 @@ const VideoAndTimeline = () => {
 
       {props && (
         <VideoTimelineProvider playerRef={playerRef}>
-          <VideoTimeline />
+          <VideoTimeline>
+            <Toolbar>
+              <div className="flex items-center space-x-3">
+                <PlayPauseButton playerRef={playerRef} />
+                <TimeDisplay
+                  playerRef={playerRef}
+                  fps={props.compositionMetaData.fps}
+                  durationInFrames={props.compositionMetaData.duration}
+                />
+                <MuteButton playerRef={playerRef} />
+                <VolumeSlider playerRef={playerRef} />
+                <PlayerFullscreen playerRef={playerRef} />
+                <Separator orientation="vertical" className="h-8" />
+              </div>
+            </Toolbar>
+          </VideoTimeline>
         </VideoTimelineProvider>
       )}
     </>
@@ -50,10 +72,10 @@ const VideoPreview = ({
         style={{
           width: "100%",
           height: "100%",
-          // backgroundColor: "rgba(0,0,0,0.6)",
+          // backgroundColor: "rgba(0,0,0,1)",
         }}
         className=""
-        controls
+        controls={false}
         autoPlay={false}
         loop
         initiallyMuted
@@ -61,6 +83,9 @@ const VideoPreview = ({
         ref={playerRef}
         schema={NestedCompositionPropsSchema}
         inputProps={props}
+        browserMediaControlsBehavior={{
+          mode: "register-media-session",
+        }}
       />
     </>
   );

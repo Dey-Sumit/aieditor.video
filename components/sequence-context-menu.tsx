@@ -43,7 +43,6 @@ function SequenceContextMenuWrapper({
   const { playheadPosition, pixelsPerFrame } = useTimeline();
 
   const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
-  console.log("activeSeqItem", activeSeqItem, itemId);
 
   const clearActiveSeqItem = useEditingStore(
     (store) => store.clearActiveSeqItem,

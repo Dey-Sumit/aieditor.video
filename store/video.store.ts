@@ -9,7 +9,6 @@ import type {
   LiteSequencePresetItemType,
   StoreType,
   TransitionItemType,
-  VideoEditablePropsType,
   VideoSequenceItemType,
 } from "../types/timeline.types";
 
@@ -17,10 +16,10 @@ import {
   binarySearch,
   calculateItemIndices,
   calculateOffset,
-  DEFAULT_CONTENT_PROPS,
 } from "../utils/timeline.utils";
 
-import { DEFAULT_PRESET_COMP_PROPS } from "~/data/nested-composition.data";
+import { toast } from "sonner";
+import { EMPTY_PROJECT } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
 
 /**
@@ -34,7 +33,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...DEFAULT_PRESET_COMP_PROPS,
+      ...EMPTY_PROJECT,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {
@@ -48,7 +47,7 @@ const useVideoStore = create<
       },
 
       /* ------------------------------ CRUD operation of Timeline  ----------------------------- */
-      addSequenceItemToLayer: (layerId, newSeqLiteItem) => {
+      addSequenceItemToLayer: (layerId, newSeqLiteItem, contentProps) => {
         set((state: StoreType) => {
           const layer = state.props.layers[layerId];
           if (!layer) {
@@ -68,22 +67,55 @@ const useVideoStore = create<
 
           // Update only the offset of the next lite item
           const nextItem = layer.liteItems[insertIndex + 1];
+
           if (nextItem) {
             nextItem.offset =
               nextItem.startFrame -
               (newSeqLiteItem.startFrame + newSeqLiteItem.effectiveDuration);
           }
 
-          // Get default props based on content type
-          const defaultProps =
-            DEFAULT_CONTENT_PROPS[newSeqLiteItem.contentType];
+          // entry to sequence items
+          // state.props.sequenceItems[newSeqLiteItem.id] = {
+          //   // type: contentProps.type,
+          //   id: newSeqLiteItem.id,
+          //   layerId: layerId,
+          //   editableProps: contentProps.editableProps,
+          //   animations: contentProps.animations,
+          //   type: contentProps.type,
+          // };
 
-          //@ts-ignore
-          state.props.sequenceItems[newSeqLiteItem.id] = {
-            id: newSeqLiteItem.id,
-            layerId: layerId,
-            ...defaultProps,
-          };
+          if (contentProps.type === "video") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "video",
+              animations: [],
+              totalVideoDurationInFrames:
+                contentProps.totalVideoDurationInFrames,
+              editableProps: contentProps.editableProps,
+            };
+          } else if (contentProps.type === "text") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "text",
+              editableProps: contentProps.editableProps,
+            };
+          } else if (contentProps.type === "image") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "image",
+              editableProps: contentProps.editableProps,
+            };
+          } else if (contentProps.type === "audio") {
+            state.props.sequenceItems[newSeqLiteItem.id] = {
+              id: newSeqLiteItem.id,
+              layerId,
+              type: "audio",
+              editableProps: contentProps.editableProps,
+            };
+          }
 
           console.log(
             `Added sequence item ${newSeqLiteItem.id} to layer ${layerId}`,
@@ -146,86 +178,156 @@ const useVideoStore = create<
         updates,
       ) => {
         set((state: StoreType) => {
-          // CASE 1 : Change position on x axis
           if (oldLayerId === newLayerId) {
             const layer = state.props.layers[oldLayerId];
 
-            const { oldIndex, futureNewIndex } = calculateItemIndices(
-              layer.liteItems,
-              itemId,
-              updates.startFrame,
-            );
+            const { oldIndex: pastIdx, futureNewIndex: futureIdx } =
+              calculateItemIndices(layer.liteItems, itemId, updates.startFrame);
 
-            const movedItem = layer.liteItems[oldIndex];
+            const movedItem = layer.liteItems[pastIdx];
 
             // Create the updated item
             const updatedItem = {
               ...movedItem,
               startFrame: updates.startFrame,
             };
-            console.log("updateSequenceItemPositionInLayer", updatedItem);
 
-            // Remove the item from its current position
-            layer.liteItems.splice(oldIndex, 1);
+            console.log({ updates });
+            // If the indices are the same, no need to reorder, just update the item
+            if (pastIdx === futureIdx) {
+              layer.liteItems[pastIdx] = updatedItem;
 
-            // Insert the item at its new position
-            layer.liteItems.splice(futureNewIndex, 0, updatedItem);
+              // Update the current item's offset
+              updatedItem.offset = calculateOffset(
+                layer.liteItems[pastIdx - 1],
+                updatedItem,
+              );
 
-            // Determine the range of items that need updating
-            const startUpdateIndex = Math.min(oldIndex, futureNewIndex);
-            const endUpdateIndex = Math.max(oldIndex, futureNewIndex);
-            console.log("startUpdateIndex", startUpdateIndex);
-            console.log("endUpdateIndex", endUpdateIndex);
-
-            if (updatedItem.transition?.incoming) {
-              const prevItemBeforeChange =
-                layer.liteItems[startUpdateIndex - 1];
-              if (prevItemBeforeChange) {
-                delete prevItemBeforeChange?.transition?.outgoing;
-                prevItemBeforeChange.effectiveDuration =
-                  prevItemBeforeChange.sequenceDuration;
-              }
-              delete updatedItem.transition?.incoming;
-            }
-
-            // Remove outgoing transition if it exists
-            if (updatedItem.transition?.outgoing) {
-              const nextItem = layer.liteItems[endUpdateIndex + 1];
-              // Update the next item
+              // Optionally update the next item's offset if it exists
+              const nextItem = layer.liteItems[pastIdx + 1];
               if (nextItem) {
-                delete nextItem.transition?.incoming;
-                delete updatedItem.transition?.outgoing;
-                updatedItem.effectiveDuration = updatedItem.sequenceDuration;
+                nextItem.offset = calculateOffset(updatedItem, nextItem);
+              }
+
+              /* --------------------------- handle transitions --------------------------- */
+              if (updatedItem.transition?.incoming) {
+                const prevItem = layer.liteItems[pastIdx - 1];
+                if (prevItem) {
+                  delete prevItem.transition?.outgoing;
+                  prevItem.effectiveDuration = prevItem.sequenceDuration;
+                }
+                delete updatedItem.transition?.incoming;
+                // TODO : adjust the startFrame of the updated item
+              }
+
+              if (updatedItem.transition?.outgoing) {
+                const nextItem = layer.liteItems[pastIdx + 1];
+                if (nextItem) {
+                  delete nextItem.transition?.incoming;
+                  delete updatedItem.transition?.outgoing;
+                  updatedItem.effectiveDuration = updatedItem.sequenceDuration;
+                  // TODO : adjust the startFrame of the next item
+                  // updatedItem.startFrame = nextItem.startFrame;
+                }
+              }
+            } else {
+              // "id0" id1 id2 -> id1 "id0" id2
+              const nextItemOfPastIdx = layer.liteItems[pastIdx + 1];
+              const nextItemOfFutureIdx =
+                layer.liteItems[
+                  futureIdx > pastIdx ? futureIdx + 1 : futureIdx
+                ]; // as before inserting the item, the futureIdx will be the index of the next item
+
+              // Remove the item from its current position
+              layer.liteItems.splice(pastIdx, 1);
+
+              // Insert the item at its new position
+              layer.liteItems.splice(futureIdx, 0, updatedItem);
+
+              if (nextItemOfPastIdx) {
+                nextItemOfPastIdx.offset = calculateOffset(
+                  layer.liteItems[pastIdx - 1],
+                  nextItemOfPastIdx,
+                );
+              }
+
+              updatedItem.offset = calculateOffset(
+                layer.liteItems[futureIdx - 1],
+                updatedItem,
+              );
+
+              if (nextItemOfFutureIdx) {
+                nextItemOfFutureIdx.offset = calculateOffset(
+                  updatedItem,
+                  nextItemOfFutureIdx,
+                );
+              }
+
+              /* --------------------------- handle transitions --------------------------- */
+              if (futureIdx > pastIdx) {
+                if (updatedItem.transition?.incoming) {
+                  const prevItem = layer.liteItems[pastIdx - 1];
+                  if (prevItem) {
+                    delete prevItem.transition?.outgoing;
+                    prevItem.effectiveDuration = prevItem.sequenceDuration;
+                  }
+                  delete updatedItem.transition?.incoming;
+                  // TODO : adjust the startFrame of the updated item
+                }
+
+                if (updatedItem.transition?.outgoing) {
+                  const nextItem = layer.liteItems[pastIdx];
+                  if (nextItem) {
+                    delete nextItem.transition?.incoming;
+                    delete updatedItem.transition?.outgoing;
+                    updatedItem.effectiveDuration =
+                      updatedItem.sequenceDuration;
+                    // TODO : adjust the startFrame of the next item
+                    // updatedItem.startFrame = nextItem.startFrame;
+                  }
+                }
+              } else {
+                if (updatedItem.transition?.incoming) {
+                  console.log("futureIdx<pastIdx, incoming transition");
+
+                  const prevItem = layer.liteItems[pastIdx];
+                  if (prevItem) {
+                    delete prevItem.transition?.outgoing;
+                    prevItem.effectiveDuration = prevItem.sequenceDuration;
+                  }
+                  delete updatedItem.transition?.incoming;
+                  // TODO : adjust the startFrame of the updated item
+                }
+                if (updatedItem.transition?.outgoing) {
+                  console.log("futureIdx<pastIdx, outgoing transition");
+                  const nextItem = layer.liteItems[pastIdx + 1];
+                  if (nextItem) {
+                    delete nextItem.transition?.incoming;
+                    delete updatedItem.transition?.outgoing;
+                    updatedItem.effectiveDuration =
+                      updatedItem.sequenceDuration;
+                    // TODO : adjust the startFrame of the next item
+                    // updatedItem.startFrame = nextItem.startFrame;
+                  }
+                }
               }
             }
 
-            // TODO : i don't think we need to update the offsets for all affected items, we can just update the offsets for the items that are affected by the transition eg. the next item
-            // Update offsets for all affected items
-            console.log("layer.liteItems", layer.liteItems, {
-              startUpdateIndex,
-              endUpdateIndex,
-            });
-
-            for (let i = startUpdateIndex; i <= endUpdateIndex; i++) {
-              const currentItem = layer.liteItems[i];
-              const prevItem = i > 0 ? layer.liteItems[i - 1] : null;
-              console.log("in the loop");
-
-              currentItem.offset = calculateOffset(prevItem, currentItem);
-              console.log("currentItem", currentItem);
-            }
-
-            // If the last affected item isn't the last in the layer, update the next item's offset
-            if (endUpdateIndex < layer.liteItems.length - 1) {
-              const nextItem = layer.liteItems[endUpdateIndex + 1];
-              const lastAffectedItem = layer.liteItems[endUpdateIndex];
-              nextItem.offset = calculateOffset(lastAffectedItem, nextItem);
-            }
+            // handle transitions
+            // if (updatedItem.transition?.incoming) {
+            //   const pastPrevItem = layer.liteItems[];
+            //   if (prevItem) {
+            //     delete prevItem.transition?.outgoing;
+            //     prevItem.effectiveDuration = prevItem.sequenceDuration;
+            //   }
+            //   delete updatedItem.transition?.incoming;
+            // }
 
             console.log(
               `Updated sequence item ${itemId} in layer ${oldLayerId}`,
             );
           } else {
+            // ! THIS PART IS NOT REFACTORED
             // CASE 2 : Change position on y axis
             // NEED TO REFACTOR this. we need to make functions more modular, as changing layer means, insert in new layer and remove from old layer
             // Get references to the old and new layers
@@ -367,101 +469,123 @@ const useVideoStore = create<
             console.warn(`Audio item ${itemId} not found in layer ${layerId}`);
             return;
           }
-
-          item.editableProps = {
-            ...item.editableProps,
-            ...updates,
-          };
+          // TODO : handle this later
         });
       },
 
       updateVideoEditableProps: (layerId, itemId, updates) => {},
 
-      // frameDelta can be positive or negative, positive means increase the duration, negative means decrease the duration
+      /**
+       * Frame Delta Scenarios:
+       *
+       * Left Resize (direction === "left"):
+       * - Positive frameDelta: Expanding to the left
+       *   The item's left edge moves earlier in time (to the left).
+       *   Example: frameDelta = 10, item starts 10 frames earlier, duration increases by 10.
+       *
+       * - Negative frameDelta: Shrinking from the left
+       *   The item's left edge moves later in time (to the right).
+       *   Example: frameDelta = -10, item starts 10 frames later, duration decreases by 10.
+       *
+       * Right Resize (direction === "right"):
+       * - Positive frameDelta: Expanding to the right
+       *   The item's right edge moves later in time (to the right).
+       *   Example: frameDelta = 10, duration increases by 10, end frame is 10 frames later.
+       *
+       * - Negative frameDelta: Shrinking from the right
+       *   The item's right edge moves earlier in time (to the left).
+       *   Example: frameDelta = -10, duration decreases by 10, end frame is 10 frames earlier.
+       *
+       * Note: The frameDelta value has already been validated and adjusted for snapping
+       * in the useSeqItemResizeValidation hook before reaching this function.
+       */
       updateSequenceItemDuration: (layerId, itemId, frameDelta, direction) => {
-        set((state: StoreType) => {
-          const layer = state.props.layers[layerId]!;
+        set((state) => {
+          console.log("updateSequenceItemDuration", { frameDelta, direction });
+
+          const layer = state.props.layers[layerId];
+          if (!layer) return; // Exit if layer not found
 
           const itemIndex = layer.liteItems.findIndex(
             (item) => item.id === itemId,
-          )!;
+          );
+          if (itemIndex === -1) return; // Exit if item not found
 
           const item = layer.liteItems[itemIndex];
           const nextItem = layer.liteItems[itemIndex + 1];
 
-          // Update sequenceDuration and startFrame
-          // TODO : simplify this logic xD
-          if (frameDelta > 0) {
-            if (direction === "left") {
-              item.startFrame -= frameDelta;
-            }
-          } else {
-            if (direction === "left") {
-              item.startFrame -= frameDelta;
+          if (
+            direction === "left" &&
+            item.sequenceType === "standalone" &&
+            item.contentType === "video"
+          ) {
+            const videoItem = state.props.sequenceItems[
+              itemId
+            ] as VideoSequenceItemType;
+            console.log(
+              "videoItem.editableProps.videoStartsFromInFrames - frameDelta",
+              frameDelta,
+              videoItem.editableProps.videoStartsFromInFrames,
+              videoItem.editableProps.videoStartsFromInFrames - frameDelta,
+            );
+
+            // check if the video starts from 0, then we can't move it to left
+            // Preventing negative startFrame value for video. Error: Sorry about this! An error occurred: startFrom must be greater than equal to 0 instead got -91.
+            if (
+              videoItem.editableProps.videoStartsFromInFrames - frameDelta <
+              0
+            ) {
+              toast.error(
+                "Hey , you can't move the video to the left, as it will start from negative frames",
+              );
+              return;
             }
           }
+
+          // Update startFrame and duration
           if (direction === "left") {
+            item.startFrame -= frameDelta;
             item.offset -= frameDelta;
+            item.effectiveDuration += frameDelta;
+            item.sequenceDuration += frameDelta;
+          } else {
+            // direction === "right"
+            item.effectiveDuration += frameDelta;
+            item.sequenceDuration += frameDelta;
           }
 
-          item.effectiveDuration += frameDelta;
-          item.sequenceDuration += frameDelta;
+          console.log("Updated item", item);
 
+          // Handle video specific updates
           if (
             item.sequenceType === "standalone" &&
             item.contentType === "video"
           ) {
-            if (direction === "right") {
-              if (frameDelta > 0) {
-                // expanding from right
-                (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoEndsAtInFrames += frameDelta;
-              } else {
-                // shrinking from right
-                /*  (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoEndsAtInFrames += Math.abs(frameDelta); */
-              }
+            const videoItem = state.props.sequenceItems[
+              itemId
+            ] as VideoSequenceItemType;
+
+            if (direction === "left") {
+              console.log(
+                "CULPRIT",
+                videoItem.editableProps.videoStartsFromInFrames,
+                frameDelta,
+              );
+
+              videoItem.editableProps.videoStartsFromInFrames -= frameDelta;
             } else {
-              if (frameDelta < 0) {
-                // shrinking from left
-                (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoStartsFromInFrames += Math.abs(frameDelta);
-              } else {
-                // expanding from left
-                // TODO : wtf!!!, Ideally I should not let the user expand from left if the videoStartsFromInFrames<0.
-                (
-                  state.props.sequenceItems[itemId]
-                    .editableProps as VideoEditablePropsType
-                ).videoStartsFromInFrames =
-                  (
-                    state.props.sequenceItems[itemId]
-                      .editableProps as VideoEditablePropsType
-                  ).videoStartsFromInFrames -
-                    Math.abs(frameDelta) <
-                  0
-                    ? 0
-                    : (
-                        state.props.sequenceItems[itemId]
-                          .editableProps as VideoEditablePropsType
-                      ).videoStartsFromInFrames - Math.abs(frameDelta);
-              }
+              // direction === "right"
+              videoItem.editableProps.videoEndsAtInFrames += frameDelta;
             }
           }
 
           // Update the next item's offset if it exists
           if (nextItem) {
-            // TODO : might need to handle the transition case
             nextItem.offset =
               nextItem.startFrame - (item.startFrame + item.effectiveDuration);
           }
 
-          console.log(`Updated item ${itemId} in layer ${layerId}:`);
+          console.log(`Updated item ${itemId} in layer ${layerId}:`, item);
         });
       },
 
@@ -598,47 +722,15 @@ const useVideoStore = create<
         });
       },
 
-      // addPresetToLayer: (layerId, presetDetails) => {
-      //   set((state: StoreType) => {
-      //     const layer = state.props.layers[layerId];
-      //     if (!layer) {
-      //       console.warn(`Layer ${layerId} not found`);
-      //       return;
-      //     }
-      //     let preset = { ...END_SCREEN_PRESET };
-      //     const { offset, startFrame } = presetDetails;
-
-      //     // Generate a random suffix for the key
-      //     const randomSuffix = Math.random().toString(36).substring(2, 8);
-
-      //     // Update the key in liteLevel with the random suffix
-      //     preset.liteLevel.id = `${preset.liteLevel.id}-${randomSuffix}`;
-
-      //     const liteSequenceItem: LiteSequenceItemType = {
-      //       ...preset.liteLevel,
-      //       startFrame,
-      //       offset,
-      //     };
-      //     // Add the preset's liteLevel to the layer
-      //     layer.liteItems.push(liteSequenceItem);
-
-      //     Object.entries(preset.sequenceItems).forEach(([itemId, item]) => {
-      //       state.props.sequenceItems[itemId] = {
-      //         ...item,
-      //         layerId,
-      //       };
-      //     });
-
-      //     console.log(`Added ${presetDetails} preset to layer ${layerId}`);
-      //   });
-      // },
       addPresetToLayer: (layerId, itemPosition, presetDetails) => {
         set((state: StoreType) => {
           console.log("addPresetToLayer", {
             layerId,
             itemPosition,
-            // presetDetails,
+            presetDetails,
           });
+
+          const newItemId = genId("p", "preset");
 
           const layer = state.props.layers[layerId];
           if (!layer) {
@@ -653,13 +745,17 @@ const useVideoStore = create<
             (item) => item.startFrame,
           );
 
-          const { sequenceItems: presetSequenceItems, ...liteItemDetails } =
-            presetDetails;
+          const {
+            sequenceItems: presetSequenceItems,
+            name,
+            ...liteItemDetails
+          } = presetDetails;
+
           const presetItem: LiteSequencePresetItemType = {
             ...liteItemDetails,
             startFrame: itemPosition.startFrame,
             offset: itemPosition.offset,
-            id: itemPosition.id,
+            id: newItemId,
             sequenceType: "preset",
           };
 
@@ -677,12 +773,20 @@ const useVideoStore = create<
           // Get default props based on content type
 
           // spread the presetItem.sequenceItems to the sequenceItems
-          Object.entries(presetSequenceItems).forEach(([itemId, item]) => {
-            state.props.sequenceItems[itemId] = {
-              ...item,
-              layerId,
-            };
-          });
+          // Object.entries(presetSequenceItems).forEach(([itemId, item]) => {
+          //   state.props.sequenceItems[itemId] = {
+          //     ...item,
+          //     layerId,
+          //   };
+          // });
+
+          state.props.sequenceItems[newItemId] = {
+            type: "preset",
+            id: newItemId,
+            layerId,
+            presetId: presetDetails.presetId,
+            sequenceItems: presetSequenceItems,
+          };
 
           console.log(`Added ${presetDetails} preset to layer ${layerId}`);
         });
@@ -734,10 +838,6 @@ const useVideoStore = create<
                 [newLayerId]: newLayer,
               },
               layerOrder: newLayerOrder,
-              sequenceItems: {
-                ...state.props.sequenceItems,
-                [newLayerId]: {},
-              },
             },
           };
         });
@@ -812,6 +912,7 @@ const useVideoStore = create<
           };
         });
       },
+
       // TODO : there is a a bug: split on item into two, delete the prev one, then resize from left and expand it. you will notice the video gets shifted.
       splitSequenceItem: (layerId, itemId, splitAtInFramesTimeline) => {
         set((state) => {
@@ -897,7 +998,8 @@ const useVideoStore = create<
               ...originalSequenceItem,
               id: newItemId,
               editableProps: {
-                ...state.props.sequenceItems[itemId].editableProps,
+                ...(state.props.sequenceItems[itemId] as VideoSequenceItemType)
+                  .editableProps,
                 videoStartsFromInFrames:
                   tempOriginalStartsAt + splitAtInLiteItem,
                 videoEndsAtInFrames: tempOriginalVideoEndsAt,

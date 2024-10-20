@@ -4,7 +4,7 @@ date: '2024-10-15'
 title: 'Enhanced Video Editing Features'
 description: 'This release brings advanced editing capabilities and performance improvements.'
 changes:
-  - 'Added multi-track video editing'
+  - 'This is my first version'
   - 'Implemented real-time video effects'
   - 'Improved rendering performance'
   - 'Introduced custom export settings'

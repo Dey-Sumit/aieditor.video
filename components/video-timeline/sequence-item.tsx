@@ -47,13 +47,15 @@ const SequenceItem = ({
   layerId: LayerId;
   nextItemStartFrame: number | undefined;
 }) => {
-  const { throttledItemDrag, pixelsPerFrame, setDraggingLayerId } =
-    useTimeline();
+  const {
+    throttledItemDrag,
+    pixelsPerFrame,
+    setDraggingLayerId,
+    itemResizeHandler,
+  } = useTimeline();
   const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
   const activeSeqItem = useEditingStore((state) => state.activeSeqItem);
-  const updateSequenceItemDuration = useVideoStore(
-    (state) => state.updateSequenceItemDuration,
-  );
+
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
 
   /* The adjustment of the x position is to account for the transition duration.
@@ -83,7 +85,7 @@ const SequenceItem = ({
 
     if (d.x !== x || layerId !== newLayerId)
       throttledItemDrag(layerId, item.id, d.x, d.y);
-    //  throttledItemDrag(layerId, item.id, d.x, d.y);
+
     setDraggingLayerId(null);
   };
 
@@ -94,25 +96,15 @@ const SequenceItem = ({
     delta,
     position,
   ) => {
-    const frameDelta = Math.floor(delta.width / pixelsPerFrame);
-
-    if (direction === "left" && frameDelta > item.offset) {
-      return;
-    } else if (
-      direction === "right" &&
-      nextItemStartFrame &&
-      frameDelta + item.startFrame + item.effectiveDuration > nextItemStartFrame
-    ) {
-      return;
-    }
-
-    updateSequenceItemDuration(
+    itemResizeHandler({
       layerId,
-      item.id,
-      frameDelta,
-      direction as "left" | "right",
-    );
+      item,
+      deltaPixels: delta.width,
+      direction: direction as "left" | "right",
+      nextItemStartFrame,
+    });
   };
+
   const layerIndex = orderedLayers.indexOf(layerId);
 
   return (

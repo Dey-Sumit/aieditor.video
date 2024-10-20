@@ -43,7 +43,7 @@ interface ToolbarCategory {
   items: ToolbarItem[];
 }
 
-const Toolbar: React.FC = () => {
+const Toolbar = ({ children }: { children: React.ReactNode }) => {
   const setSelectedContentType = useEditingStore(
     (state) => state.setSelectedContentType,
   );
@@ -144,39 +144,80 @@ const Toolbar: React.FC = () => {
     },
   ];
 
+  // const playerControlCategories: ToolbarCategory[] = [
+  //   {
+  //     name: "Playback",
+  //     items: [
+  //       {
+  //         Icon: MousePointer2,
+  //         label: "Select",
+  //         onClick: () => console.log("Select clicked"),
+  //       },
+  //       {
+  //         Icon: PlayIcon, // Replace with actual play icon
+  //         label: "Play",
+  //         onClick: () => console.log("Play clicked"),
+  //       },
+  //       {
+  //         Icon: PauseIcon, // Replace with actual pause icon
+  //         label: "Pause",
+  //         onClick: () => console.log("Pause clicked"),
+  //       },
+  //       {
+  //         Icon: CurrentTimeIcon, // Replace with actual current time icon
+  //         label: "Current Time",
+  //         onClick: () => console.log("Current Time clicked"),
+  //       },
+  //       {
+  //         Icon: VolumeMuteIcon, // Replace with actual volume mute icon
+  //         label: "Mute",
+  //         onClick: () => console.log("Mute clicked"),
+  //       },
+  //       {
+  //         Icon: VolumeUnmuteIcon, // Replace with actual volume unmute icon
+  //         label: "Unmute",
+  //         onClick: () => console.log("Unmute clicked"),
+  //       },
+  //     ],
+  //   },
+  // ];
+
   return (
     <TooltipProvider>
-      <div className="flex items-center justify-end space-x-1 p-1 shadow-sm">
-        {toolbarCategories.map((category, categoryIndex) => (
-          <React.Fragment key={category.name}>
-            {categoryIndex > 0 && (
-              <Separator orientation="vertical" className="h-8" />
-            )}
-            <div className="flex items-center space-x-1">
-              {category.items.map((item) => (
-                <Tooltip key={item.label}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={item.onClick}
-                      className={cn(
-                        "h-8 w-8",
-                        selectedContentType === item.label.toLowerCase() &&
-                          "bg-muted",
-                      )}
-                    >
-                      <item.Icon size={14} className={item.iconClassName} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{item.label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              ))}
-            </div>
-          </React.Fragment>
-        ))}
+      <div className="flex items-center justify-between space-x-1 p-1 shadow-sm">
+        <React.Fragment>{children}</React.Fragment>
+        <div className="flex items-center space-x-1">
+          {toolbarCategories.map((category, categoryIndex) => (
+            <React.Fragment key={category.name}>
+              {categoryIndex > 0 && (
+                <Separator orientation="vertical" className="h-8" />
+              )}
+              <div className="flex items-center space-x-2">
+                {category.items.map((item) => (
+                  <Tooltip key={item.label}>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={item.onClick}
+                        className={cn(
+                          "h-8 w-8",
+                          selectedContentType === item.label.toLowerCase() &&
+                            "bg-muted",
+                        )}
+                      >
+                        <item.Icon size={14} className={item.iconClassName} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{item.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </TooltipProvider>
   );
