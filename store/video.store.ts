@@ -19,7 +19,7 @@ import {
   DEFAULT_CONTENT_PROPS,
 } from "../utils/timeline.utils";
 
-import { EMPTY_PROJECT } from "~/data/nested-composition.data";
+import { TEST_CASE_PROJECT } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
 
 /**
@@ -33,7 +33,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...EMPTY_PROJECT,
+      ...TEST_CASE_PROJECT,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {

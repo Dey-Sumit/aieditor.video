@@ -96,13 +96,13 @@ const SequenceItem = ({
     delta,
     position,
   ) => {
-    itemResizeHandler(
+    itemResizeHandler({
       layerId,
-      item.id,
-      delta.width,
-      direction as "left" | "right",
+      item,
+      deltaPixels: delta.width,
+      direction: direction as "left" | "right",
       nextItemStartFrame,
-    );
+    });
   };
 
   const layerIndex = orderedLayers.indexOf(layerId);

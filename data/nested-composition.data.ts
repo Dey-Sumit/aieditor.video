@@ -1,6 +1,7 @@
 import type { NestedCompositionProjectType } from "~/types/timeline.types";
 
-export const TEST_PROJECT: NestedCompositionProjectType = {
+//! CAUTION: DON'T update the project , it will effect the test cases. Once you update the project , always run and adjust the test cases
+export const TEST_CASE_PROJECT: NestedCompositionProjectType = {
   id: "id-dummy",
   title: "Dummy Project",
   props: {
