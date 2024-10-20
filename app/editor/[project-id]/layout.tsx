@@ -1,5 +1,7 @@
+"use client"; // TODO : remove this line, bad for performance
 import dynamic from "next/dynamic";
 import React from "react";
+import Dropzone from "~/components/dropzone";
 import AsideNew from "~/components/layout/editor-new/aside";
 import ProjectHeader from "~/components/layout/editor-new/project-header";
 import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline";
@@ -19,6 +21,11 @@ const {
 } = LAYOUT;
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const handleFilesDrop = (files: File[]) => {
+    // Handle the dropped files here
+    console.log("Dropped files:", files);
+    // You can now process these files, upload them, etc.
+  };
   return (
     <div className="flex h-screen">
       {/* -------------------- side navbar -------------------- */}
@@ -53,7 +60,22 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
           <section className="_editorBg relative flex-1 bg-green-900">
             <VideoAndTimeline />
-            <div className="pointer-events-none absolute inset-0"></div>
+
+            <Dropzone
+              onFilesDrop={handleFilesDrop}
+              multiple={true}
+              accept="image/*"
+              maxSize={10 * 1024 * 1024} // 10MB
+            />
+
+            {/* <div className="pointer-events-none absolute inset-0">
+              <Dropzone
+                onFilesDrop={handleFilesDrop}
+                multiple={true}
+                accept="image/*"
+                maxSize={10 * 1024 * 1024} // 10MB
+              />
+            </div> */}
           </section>
 
           {/* -------------------- video player and timeline ends -------------------- */}
