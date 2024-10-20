@@ -217,6 +217,12 @@ export const useNewItemValidation = () => {
                       element: {},
                     },
                     text: "<h1>Your text</h1>",
+                    positionAndDimensions: {
+                      top: 10,
+                      left: 10,
+                      width: 720,
+                      height: 1080,
+                    },
                   },
                   id: newItemId,
                   layerId,
@@ -237,8 +243,8 @@ export const useNewItemValidation = () => {
                     positionAndDimensions: {
                       top: 10,
                       left: 10,
-                      width: 100,
-                      height: 100,
+                      width: 720,
+                      height: 1080,
                     },
                     imageUrl:
                       "https://images.pexels.com/photos/20787/pexels-photo.jpg",
@@ -282,6 +288,12 @@ export const useNewItemValidation = () => {
                     height: "100%",
                   },
                   overlay: {},
+                },
+                positionAndDimensions: {
+                  top: 10,
+                  left: 10,
+                  width: 720,
+                  height: 1080,
                 },
                 videoUrl: VIDEO_URL,
               },

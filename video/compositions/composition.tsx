@@ -79,10 +79,7 @@ const SequenceItemRenderer: React.FC<{
 
   return (
     <DragResizeComponent item={item} onChange={onChange}>
-      <AbsoluteFill
-        style={item.editableProps?.styles?.container}
-        className="bg-green-800"
-      >
+      <AbsoluteFill style={item.editableProps?.styles?.container} className="">
         {renderContent()}
       </AbsoluteFill>
     </DragResizeComponent>
@@ -103,7 +100,6 @@ const RenderSequence: React.FC<{
       <SequenceItemRenderer
         onChange={(updates) => onChangeSequenceItem(item.id, updates)}
         item={sequenceItem}
-        
       />
     ) : null;
   }

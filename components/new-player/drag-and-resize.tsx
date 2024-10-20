@@ -175,7 +175,7 @@ const DragResizeComponent: React.FC<DragResizeProps> = ({
   );
 
   return (
-    <div style={style} onPointerDown={startDragging} className="bg-red-500">
+    <div style={style} onPointerDown={startDragging} className="">
       {children}
       <ResizeHandle
         type="top-left"
