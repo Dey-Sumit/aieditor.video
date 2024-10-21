@@ -79,7 +79,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
           {/* -------------------- video player and timeline ends -------------------- */}
 
-          <div className="hidden border-l">
+          <div className="border-l">
             {/* -------------------- project header container starts -------------------- */}
 
             <ProjectHeader />
