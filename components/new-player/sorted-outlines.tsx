@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Sequence } from "remotion";
 import type {
+  LayerType,
   LiteSequenceItemType,
   StyledSequenceItem,
 } from "~/types/timeline.types";
@@ -8,12 +9,9 @@ import { SelectionOutline } from "./selection-outline";
 
 // Helper function to sort items, placing the selected item on top
 const displaySelectedItemOnTop = (
-  items: LiteSequenceItemType[],
+  items: (LiteSequenceItemType & { layerId: string })[],
   selectedItem: string | null,
-  sequenceItems: Record<string, StyledSequenceItem>,
-): LiteSequenceItemType[] => {
-  console.log("selectedItem", selectedItem);
-
+): (LiteSequenceItemType & { layerId: string })[] => {
   const selectedItems = items.filter((item) => item.id === selectedItem);
   const unselectedItems = items.filter((item) => item.id !== selectedItem);
 
@@ -21,7 +19,8 @@ const displaySelectedItemOnTop = (
 };
 
 type SortedOutlinesProps = {
-  liteItems: LiteSequenceItemType[];
+  layers: Record<string, LayerType>;
+  layerOrder: string[];
   sequenceItems: Record<string, StyledSequenceItem>;
   selectedItem: string | null;
   changeItem: (
@@ -30,45 +29,56 @@ type SortedOutlinesProps = {
     updater: (item: StyledSequenceItem) => StyledSequenceItem,
   ) => void;
   setSelectedItem: React.Dispatch<React.SetStateAction<string | null>>;
-  layerId: string;
 };
 
 export const SortedOutlines: React.FC<SortedOutlinesProps> = ({
-  liteItems,
+  layers,
+  layerOrder,
   sequenceItems,
   selectedItem,
   changeItem,
   setSelectedItem,
 }) => {
+  // Flatten all liteItems from all layers into a single array
+  const allLiteItems = useMemo(() => {
+    return layerOrder.flatMap((layerId) =>
+      layers[layerId].liteItems.map((item) => ({
+        ...item,
+        layerId, // Add layerId to each item for reference
+      })),
+    );
+  }, [layers, layerOrder]);
+
   // Sort items to display the selected item on top
   const itemsToDisplay = useMemo(
-    () => displaySelectedItemOnTop(liteItems, selectedItem, sequenceItems),
-    [liteItems, selectedItem, sequenceItems],
+    () => displaySelectedItemOnTop(allLiteItems, selectedItem),
+    [allLiteItems, selectedItem],
   );
-  console.log({ itemsToDisplay });
 
   return (
     <>
-      {[...itemsToDisplay].map((liteItem) => {
-        const fullItem = sequenceItems[liteItem.id];
-        if (!fullItem) return null;
+      {(selectedItem ? itemsToDisplay : [...itemsToDisplay].reverse()).map(
+        (liteItem) => {
+          const fullItem = sequenceItems[liteItem.id];
+          if (!fullItem) return null;
 
-        return (
-          <Sequence
-            key={liteItem.id}
-            from={liteItem.startFrame}
-            durationInFrames={liteItem.sequenceDuration}
-            layout="none"
-          >
-            <SelectionOutline
-              item={fullItem}
-              changeItem={changeItem}
-              setSelectedItem={setSelectedItem}
-              selectedItem={selectedItem}
-            />
-          </Sequence>
-        );
-      })}
+          return (
+            <Sequence
+              key={liteItem.id}
+              from={liteItem.startFrame}
+              durationInFrames={liteItem.sequenceDuration}
+              layout="none"
+            >
+              <SelectionOutline
+                item={fullItem}
+                changeItem={changeItem}
+                setSelectedItem={setSelectedItem}
+                selectedItem={selectedItem}
+              />
+            </Sequence>
+          );
+        },
+      )}
     </>
   );
 };

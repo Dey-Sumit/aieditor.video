@@ -180,7 +180,7 @@ const NestedSequenceComposition = ({
       setSelectedItem(null);
     },
     [setSelectedItem],
-  );
+  ); // Flatten all liteItems from all layers into a single array
 
   return (
     <AbsoluteFill className="border" onPointerDown={onPointerDown}>
@@ -211,21 +211,14 @@ const NestedSequenceComposition = ({
         ))}
       </AbsoluteFill>
 
-      {[...layerOrder].reverse().map(
-        (
-          layerId, // TODO : .reverse() is creating a issues, removing it creates another issue
-        ) => (
-          <SortedOutlines
-            key={layerId}
-            liteItems={layers[layerId].liteItems}
-            sequenceItems={sequenceItems}
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-            changeItem={changeItem}
-            layerId={layerId}
-          />
-        ),
-      )}
+      <SortedOutlines
+        layers={layers}
+        layerOrder={layerOrder}
+        sequenceItems={sequenceItems}
+        selectedItem={selectedItem}
+        setSelectedItem={setSelectedItem}
+        changeItem={changeItem}
+      />
     </AbsoluteFill>
   );
 };
