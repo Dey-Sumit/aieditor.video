@@ -1,10 +1,15 @@
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import DOMPurify from "dompurify";
-import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
+import {
+  AbsoluteFill,
+  getRemotionEnvironment,
+  Img,
+  OffthreadVideo,
+} from "remotion";
 
 import { slide } from "@remotion/transitions/slide";
 
-import React from "react";
+import React, { type CSSProperties } from "react";
 import type {
   LiteSequenceItemType,
   NestedCompositionProjectType,
@@ -138,10 +143,24 @@ const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
   props,
 ) => {
   const { layers, layerOrder, sequenceItems } = props;
+  const { isStudio, isPlayer, isRendering } = getRemotionEnvironment();
+  console.log({
+    isStudio,
+    isPlayer,
+    isRendering,
+  });
+
+  const compositionStyle: CSSProperties = isPlayer
+    ? { border: "0.01px solid gray" }
+    : {};
+
+  console.log({ compositionStyle });
+
   // console.log("props", props);
 
   return (
-    <AbsoluteFill className="font-serif">
+    // <div className="h-full w-full bg-gray-950 outline-4 outline-red-800">
+    <AbsoluteFill className="font-serif" style={compositionStyle}>
       {[...layerOrder].reverse().map((layerId) => (
         <TransitionSeries key={layerId} name={layerId}>
           {layers[layerId].liteItems.map((item) => (
@@ -166,6 +185,7 @@ const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
         </TransitionSeries>
       ))}
     </AbsoluteFill>
+    // </div>
   );
 };
 

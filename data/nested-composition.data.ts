@@ -524,12 +524,21 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
     layers: {
       "l-ac121030-0325-4cbd-b334-c4d91400fa5c": {
         id: "l-ac121030-0325-4cbd-b334-c4d91400fa5c",
-        name: "Layer 4",
+        name: "Layer 1",
+        liteItems: [],
+        isVisible: true,
+      },
+      "l-ac121030-0325-4cbd-b334-c4d91400fa51": {
+        id: "l-ac121030-0325-4cbd-b334-c4d91400fa51",
+        name: "Layer 2",
         liteItems: [],
         isVisible: true,
       },
     },
-    layerOrder: ["l-ac121030-0325-4cbd-b334-c4d91400fa5c"],
+    layerOrder: [
+      "l-ac121030-0325-4cbd-b334-c4d91400fa5c",
+      "l-ac121030-0325-4cbd-b334-c4d91400fa51",
+    ],
     sequenceItems: {},
     compositionMetaData: {
       width: 720,
@@ -564,3 +573,5 @@ ADD ANIMATION :
 
 
 */
+
+// src/components/canvas.tsx
