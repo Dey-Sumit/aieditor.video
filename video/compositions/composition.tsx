@@ -7,7 +7,6 @@ import { slide } from "@remotion/transitions/slide";
 import React, { useCallback, useState } from "react";
 import { SortedOutlines } from "~/components/new-player/sorted-outlines";
 import useThrottle from "~/hooks/use-throttle";
-import { cn } from "~/lib/utils";
 import useVideoStore from "~/store/video.store";
 import type {
   LiteSequenceItemType,
@@ -42,7 +41,7 @@ const SequenceItemRenderer: React.FC<{
           <div
             style={item.editableProps?.styles?.element}
             dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
-            className="prose prose-2xl space-y-0 whitespace-pre-wrap dark:prose-invert [&>*]:my-0"
+            className="prose prose-2xl prose-invert space-y-0 whitespace-pre-wrap [&>*]:my-0"
           />
         );
       case "image":
@@ -78,19 +77,14 @@ const SequenceItemRenderer: React.FC<{
   };
 
   return (
-    // <DragResizeComponent item={item} onChange={onChange}>
     <AbsoluteFill
       style={{
         ...item.editableProps?.styles?.container,
         ...item.editableProps?.positionAndDimensions,
       }}
-      className={cn({
-        "bg-yellow-600": item.type === "text",
-      })}
     >
       {renderContent()}
     </AbsoluteFill>
-    // </DragResizeComponent>
   );
 };
 
@@ -135,11 +129,11 @@ const layerContainer: React.CSSProperties = {
   overflow: "hidden",
 };
 
-const NestedSequenceComposition = ({
-  props,
-}: {
-  props: NestedCompositionProjectType["props"];
-}) => {
+const NestedSequenceComposition = (
+  props: NestedCompositionProjectType["props"],
+) => {
+  console.log("NestedSequenceComposition", props);
+
   const updatePositionAndDimensions = useVideoStore(
     (state) => state.updatePositionAndDimensions,
   );

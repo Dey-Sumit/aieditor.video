@@ -1,5 +1,5 @@
 "use client";
-import { DownloadIcon, PencilIcon } from "lucide-react";
+import { ArrowUpFromDot, PencilIcon } from "lucide-react";
 import { DownloadButton } from "~/components/DownloadButton";
 import { ProgressBar } from "~/components/ProgressBar";
 import { Button } from "~/components/ui/button";
@@ -10,9 +10,10 @@ const { PROJECT_HEADER_HEIGHT } = LAYOUT;
 const ProjectHeader = () => {
   const { props } = useVideoStore();
 
-  const { renderMedia, state, undo } = useRendering("new-dynamic-composition", {
+  const { renderMedia, state, undo } = useRendering(
+    "new-dynamic-composition",
     props,
-  });
+  );
 
   return (
     <div
@@ -38,7 +39,7 @@ const ProjectHeader = () => {
           >
             {state.status === "rendering" ? "Cooking..." : "Export"}
 
-            <DownloadIcon className="size-4" />
+            <ArrowUpFromDot className="size-4" />
           </Button>
         )}
       </div>

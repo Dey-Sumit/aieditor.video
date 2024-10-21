@@ -32,9 +32,7 @@ export const renderVideo = async ({
   inputProps,
 }: {
   id: string;
-  inputProps: {
-    props: NestedCompositionPropsType;
-  };
+  inputProps: NestedCompositionPropsType;
 }) => {
   const body: z.infer<typeof RenderRequest> = {
     id,

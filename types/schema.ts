@@ -3,9 +3,7 @@ import { NestedCompositionPropsSchema } from "./timeline.types";
 
 export const RenderRequest = z.object({
   id: z.string(),
-  inputProps: z.object({
-    props: NestedCompositionPropsSchema,
-  }),
+  inputProps: NestedCompositionPropsSchema,
 });
 
 export const ProgressRequest = z.object({

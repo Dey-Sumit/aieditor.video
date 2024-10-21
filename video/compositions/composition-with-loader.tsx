@@ -1,6 +1,9 @@
 import { Composition, type CalculateMetadataFunction } from "remotion";
-import useVideoStore from "~/store/video.store";
-import { type NestedCompositionProjectType } from "~/types/timeline.types";
+import { EMPTY_PROJECT } from "~/data/nested-composition.data";
+import {
+  NestedCompositionPropsSchema,
+  type NestedCompositionProjectType,
+} from "~/types/timeline.types";
 import NestedSequenceComposition from "./composition";
 
 const calculateMetadata: CalculateMetadataFunction<
@@ -9,18 +12,12 @@ const calculateMetadata: CalculateMetadataFunction<
   return {
     // Change the metadata
     // durationInFrames: props.compositionMetaData.duration,
-    // durationInFrames: props.compositionMetaData.duration,
-    durationInFrames: 20 * 30,
+    durationInFrames: props.compositionMetaData.duration,
   };
 };
 
 const NewDynamicCompositionWithLoader = () => {
-  const props = useVideoStore((store) => store.props);
-
-  if (!props) {
-    return <div>Loading project...</div>;
-  }
-
+  const { props } = EMPTY_PROJECT;
   return (
     <>
       <Composition
@@ -30,12 +27,9 @@ const NewDynamicCompositionWithLoader = () => {
         fps={props.compositionMetaData.fps}
         width={props.compositionMetaData.width}
         height={props.compositionMetaData.height}
-        // defaultProps={{ props, updatePositionAndDimensions }}
-        defaultProps={{
-          props,
-        }}
-        // schema={NestedCompositionPropsSchema}
-        // calculateMetadata={calculateMetadata}
+        defaultProps={props}
+        schema={NestedCompositionPropsSchema}
+        calculateMetadata={calculateMetadata}
       />
       {/* <Composition
         id="MyComp"

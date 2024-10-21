@@ -13,6 +13,7 @@ import Toolbar from "~/components/video-timeline/toolbar";
 import VideoTimeline from "~/components/video-timeline/VideoTImeline";
 import { VideoTimelineProvider } from "~/context/useTimeline";
 import useVideoStore from "~/store/video.store";
+import { NestedCompositionPropsSchema } from "~/types/timeline.types";
 import NestedSequenceComposition from "~/video/compositions/composition";
 
 const VideoAndTimeline = () => {
@@ -86,11 +87,8 @@ const VideoPreview = ({
         errorFallback={errorFallback}
         ref={playerRef}
         overflowVisible
-        // schema={NestedCompositionPropsSchema}
-        inputProps={{
-          props,
-          updatePositionAndDimensions: updatePositionAndDimensions,
-        }}
+        schema={NestedCompositionPropsSchema}
+        inputProps={props}
         browserMediaControlsBehavior={{
           mode: "register-media-session",
         }}

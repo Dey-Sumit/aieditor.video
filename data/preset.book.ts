@@ -68,7 +68,7 @@ export const PRESET_COLLECTION: Record<string, PresetDetail> = {
               objectFit: "contain",
               width: "100%",
               height: "100%",
-              backgroundColor: "rgba(255,0,0,0.6)",
+              backgroundColor: "rgba(255,0,0,0.1)",
             },
           },
         },
