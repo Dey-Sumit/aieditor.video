@@ -58,7 +58,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex flex-1">
           {/* -------------------- video player and timeline starts -------------------- */}
 
-          <section className="_editorBg relative flex-1 bg-green-900">
+          <section className="relative flex-1">
             <VideoAndTimeline />
 
             <Dropzone

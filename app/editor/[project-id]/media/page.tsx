@@ -176,10 +176,10 @@ const MediaLibrary: React.FC = () => {
       }
     };
 
-    // fetchMedia();
+    fetchMedia();
   }, []);
 
-  if (1 === 1) return null;
+  // if (1 === 1) return null;
 
   return (
     <div className="w-full">
