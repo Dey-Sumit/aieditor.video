@@ -226,6 +226,7 @@ export const useNewItemValidation = () => {
                   },
                   id: newItemId,
                   layerId,
+                  isDragging: false,
                 }
               : {
                   type: "image",
@@ -249,6 +250,7 @@ export const useNewItemValidation = () => {
                     imageUrl:
                       "https://images.pexels.com/photos/20787/pexels-photo.jpg",
                   },
+                  isDragging: false,
 
                   id: newItemId,
                   layerId,
@@ -301,6 +303,7 @@ export const useNewItemValidation = () => {
               id: newItemId,
               layerId,
               animations: [],
+              isDragging: false,
             },
           );
         }

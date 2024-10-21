@@ -94,6 +94,7 @@ const useVideoStore = create<
               totalVideoDurationInFrames:
                 contentProps.totalVideoDurationInFrames,
               editableProps: contentProps.editableProps,
+              isDragging: false,
             };
           } else if (contentProps.type === "text") {
             state.props.sequenceItems[newSeqLiteItem.id] = {
@@ -101,6 +102,7 @@ const useVideoStore = create<
               layerId,
               type: "text",
               editableProps: contentProps.editableProps,
+              isDragging: false,
             };
           } else if (contentProps.type === "image") {
             state.props.sequenceItems[newSeqLiteItem.id] = {
@@ -108,6 +110,7 @@ const useVideoStore = create<
               layerId,
               type: "image",
               editableProps: contentProps.editableProps,
+              isDragging: false,
             };
           } else if (contentProps.type === "audio") {
             state.props.sequenceItems[newSeqLiteItem.id] = {
@@ -115,6 +118,7 @@ const useVideoStore = create<
               layerId,
               type: "audio",
               editableProps: contentProps.editableProps,
+              isDragging: false,
             };
           }
 
@@ -787,6 +791,15 @@ const useVideoStore = create<
             layerId,
             presetId: presetDetails.presetId,
             sequenceItems: presetSequenceItems,
+            editableProps: {
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+            isDragging: false,
           };
 
           console.log(`Added ${presetDetails} preset to layer ${layerId}`);
@@ -1016,7 +1029,7 @@ const useVideoStore = create<
         });
       },
 
-      updatePositionAndDimensions: (layerId, itemId, updates) => {
+      updatePositionAndDimensions: (layerId, itemId, updates, isDragging) => {
         set((state) => {
           const item = state.props.sequenceItems[
             itemId
@@ -1033,6 +1046,7 @@ const useVideoStore = create<
               ...updates!,
             },
           };
+          item.isDragging = isDragging;
           console.log(
             `Updated position and dimensions for item ${itemId} in layer ${layerId}:`,
             updates,

@@ -18,7 +18,7 @@ export type TransitionItemType = z.infer<typeof TransitionSchema>;
 export type FullSequenceContentType = {
   id: string;
   layerId: string;
-  isDragging?: boolean;
+  isDragging: boolean;
   editableProps: {
     styles: {
       container: Record<string, any>;
@@ -203,6 +203,15 @@ export type StyledSequenceItem =
       id: string;
       presetId: string;
       sequenceItems: Record<string, FullSequenceContentType>;
+      editableProps: {
+        positionAndDimensions?: {
+          top: number;
+          left: number;
+          width: number;
+          height: number;
+        };
+      };
+      isDragging: boolean;
     };
 
 export const LayerSchema = z.object({
@@ -327,6 +336,7 @@ export type StoreActions = {
     updates: Partial<
       FullSequenceContentType["editableProps"]["positionAndDimensions"]
     >,
+    isDragging: boolean,
   ) => void;
 };
 

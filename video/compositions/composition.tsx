@@ -4,10 +4,10 @@ import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
 
 import { slide } from "@remotion/transitions/slide";
 
-import React from "react";
-import DragResizeComponent from "~/components/new-player/drag-and-resize";
+import React, { useCallback, useState } from "react";
+import { SortedOutlines } from "~/components/new-player/sorted-outlines";
+import useThrottle from "~/hooks/use-throttle";
 import type {
-  FullSequenceContentType,
   LiteSequenceItemType,
   NestedCompositionProjectType,
   StoreActions,
@@ -27,8 +27,7 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
 
 const SequenceItemRenderer: React.FC<{
   item: StyledSequenceItem;
-  onChange: (updates: Partial<FullSequenceContentType>) => void;
-}> = ({ item, onChange }) => {
+}> = ({ item }) => {
   if (item.type === "preset") {
     return null;
   }
@@ -78,30 +77,27 @@ const SequenceItemRenderer: React.FC<{
   };
 
   return (
-    <DragResizeComponent item={item} onChange={onChange}>
-      <AbsoluteFill style={item.editableProps?.styles?.container} className="">
-        {renderContent()}
-      </AbsoluteFill>
-    </DragResizeComponent>
+    // <DragResizeComponent item={item} onChange={onChange}>
+    <AbsoluteFill
+      style={{
+        ...item.editableProps?.styles?.container,
+        ...item.editableProps?.positionAndDimensions,
+      }}
+      className=""
+    >
+      {renderContent()}
+    </AbsoluteFill>
+    // </DragResizeComponent>
   );
 };
 
 const RenderSequence: React.FC<{
   item: LiteSequenceItemType;
   sequenceItems: Record<string, StyledSequenceItem>;
-  onChangeSequenceItem: (
-    itemId: string,
-    updates: Partial<FullSequenceContentType>,
-  ) => void;
-}> = ({ item, sequenceItems, onChangeSequenceItem }) => {
+}> = ({ item, sequenceItems }) => {
   if (item.sequenceType === "standalone") {
     const sequenceItem = sequenceItems[item.id];
-    return sequenceItem ? (
-      <SequenceItemRenderer
-        onChange={(updates) => onChangeSequenceItem(item.id, updates)}
-        item={sequenceItem}
-      />
-    ) : null;
+    return sequenceItem ? <SequenceItemRenderer item={sequenceItem} /> : null;
   }
 
   if (item.sequenceType === "preset") {
@@ -132,6 +128,10 @@ const RenderSequence: React.FC<{
   return null;
 };
 
+const layerContainer: React.CSSProperties = {
+  overflow: "hidden",
+};
+
 const NestedSequenceComposition = ({
   props,
   updatePositionAndDimensions,
@@ -139,63 +139,94 @@ const NestedSequenceComposition = ({
   props: NestedCompositionProjectType["props"];
   updatePositionAndDimensions: StoreActions["updatePositionAndDimensions"];
 }) => {
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const throttledUpdatePositionAndDimensions = useThrottle(
+    updatePositionAndDimensions,
+    0,
+  );
+
   const { layers, layerOrder, sequenceItems } = props;
-  // console.log("props", props);
+  const changeItem = useCallback(
+    (
+      layerId: string,
+      itemId: string,
+      updater: (item: StyledSequenceItem) => StyledSequenceItem,
+    ) => {
+      const item = sequenceItems[itemId];
+      if (!item) return;
+      // console.log("changeItem called", { layerId, itemId, updater });
+
+      const updatedItem = updater(item);
+      const positionUpdates = updatedItem.editableProps.positionAndDimensions;
+
+      if (positionUpdates) {
+        // console.log("positionUpdates", {
+        //   layerId,
+        //   itemId,
+        //   positionUpdates,
+        //   isDragging: updatedItem.isDragging,
+        // });
+
+        updatePositionAndDimensions(
+          layerId,
+          itemId,
+          positionUpdates,
+          updatedItem.isDragging,
+        );
+      }
+    },
+    [sequenceItems, updatePositionAndDimensions],
+  );
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.button !== 0) {
+        return;
+      }
+
+      setSelectedItem(null);
+    },
+    [setSelectedItem],
+  );
 
   return (
-    <AbsoluteFill className="bg-black font-serif">
-      {[...layerOrder].reverse().map((layerId) => (
-        <TransitionSeries key={layerId} name={layerId} layout="none">
-          {layers[layerId].liteItems.map((item) => (
-            <React.Fragment key={item.id}>
-              <TransitionSeries.Sequence
-                durationInFrames={item.sequenceDuration}
-                name={item.id}
-                offset={item.offset}
-                layout="none"
-              >
-                {/* <div
-                  style={{
-                    position: "relative",
-                    zIndex: activeItemId === item.id ? 1 : "auto",
-                  }}
-                > */}
-                <RenderSequence
-                  item={item}
-                  sequenceItems={sequenceItems}
-                  onChangeSequenceItem={
-                    (itemId, updates) => {
-                      console.log("onChangeSequenceItem", {
-                        layerId,
-                        itemId,
-                        updates,
-                      });
-                      updatePositionAndDimensions(layerId, itemId, {
-                        height:
-                          updates.editableProps?.positionAndDimensions?.height,
-                        width:
-                          updates.editableProps?.positionAndDimensions?.width,
-                        left: updates.editableProps?.positionAndDimensions
-                          ?.left,
-                        top: updates.editableProps?.positionAndDimensions?.top,
-                      });
-                    }
-                    // onChangeSequenceItem(layerId, itemId, updates)
-                  }
-                />
-                {/* </div> */}
-              </TransitionSeries.Sequence>
-              {item.transition?.outgoing && (
-                <TransitionSeries.Transition
-                  presentation={slide()}
-                  timing={linearTiming({
-                    durationInFrames: item.transition.outgoing.duration * 2,
-                  })}
-                />
-              )}
-            </React.Fragment>
-          ))}
-        </TransitionSeries>
+    <AbsoluteFill className="bg-green-800" onPointerDown={onPointerDown}>
+      <AbsoluteFill className="font-serif" style={layerContainer}>
+        {[...layerOrder].reverse().map((layerId) => (
+          <TransitionSeries key={layerId} name={layerId} layout="none">
+            {layers[layerId].liteItems.map((item) => (
+              <React.Fragment key={item.id}>
+                <TransitionSeries.Sequence
+                  durationInFrames={item.sequenceDuration}
+                  name={item.id}
+                  offset={item.offset}
+                  layout="none"
+                >
+                  <RenderSequence item={item} sequenceItems={sequenceItems} />
+                </TransitionSeries.Sequence>
+                {item.transition?.outgoing && (
+                  <TransitionSeries.Transition
+                    presentation={slide()}
+                    timing={linearTiming({
+                      durationInFrames: item.transition.outgoing.duration * 2,
+                    })}
+                  />
+                )}
+              </React.Fragment>
+            ))}
+          </TransitionSeries>
+        ))}
+      </AbsoluteFill>
+
+      {layerOrder.map((layerId) => (
+        <SortedOutlines
+          key={layerId}
+          liteItems={layers[layerId].liteItems}
+          sequenceItems={sequenceItems}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          changeItem={changeItem}
+          layerId={layerId}
+        />
       ))}
     </AbsoluteFill>
   );

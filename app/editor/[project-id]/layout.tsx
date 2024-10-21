@@ -1,7 +1,6 @@
 "use client"; // TODO : remove this line, bad for performance
 import dynamic from "next/dynamic";
 import React from "react";
-import Dropzone from "~/components/dropzone";
 import AsideNew from "~/components/layout/editor-new/aside";
 import ProjectHeader from "~/components/layout/editor-new/project-header";
 import VideoAndTimeline from "~/components/layout/editor-new/video-and-timeline";
@@ -61,12 +60,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <section className="relative flex-1">
             <VideoAndTimeline />
 
-            <Dropzone
+            {/* <Dropzone
               onFilesDrop={handleFilesDrop}
               multiple={true}
               accept="image/*"
               maxSize={10 * 1024 * 1024} // 10MB
-            />
+            /> */}
 
             {/* <div className="pointer-events-none absolute inset-0">
               <Dropzone
@@ -80,7 +79,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
           {/* -------------------- video player and timeline ends -------------------- */}
 
-          <div className="border-l">
+          <div className="hidden border-l">
             {/* -------------------- project header container starts -------------------- */}
 
             <ProjectHeader />

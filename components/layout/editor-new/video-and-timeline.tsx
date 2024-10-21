@@ -85,6 +85,7 @@ const VideoPreview = ({
         initiallyMuted
         errorFallback={errorFallback}
         ref={playerRef}
+        overflowVisible
         // schema={NestedCompositionPropsSchema}
         inputProps={{
           props,
