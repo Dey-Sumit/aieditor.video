@@ -94,7 +94,6 @@ const useVideoStore = create<
               totalVideoDurationInFrames:
                 contentProps.totalVideoDurationInFrames,
               editableProps: contentProps.editableProps,
-              isDragging: false,
             };
           } else if (contentProps.type === "text") {
             state.props.sequenceItems[newSeqLiteItem.id] = {
@@ -102,7 +101,6 @@ const useVideoStore = create<
               layerId,
               type: "text",
               editableProps: contentProps.editableProps,
-              isDragging: false,
             };
           } else if (contentProps.type === "image") {
             state.props.sequenceItems[newSeqLiteItem.id] = {
@@ -110,7 +108,6 @@ const useVideoStore = create<
               layerId,
               type: "image",
               editableProps: contentProps.editableProps,
-              isDragging: false,
             };
           } else if (contentProps.type === "audio") {
             state.props.sequenceItems[newSeqLiteItem.id] = {
@@ -118,7 +115,6 @@ const useVideoStore = create<
               layerId,
               type: "audio",
               editableProps: contentProps.editableProps,
-              isDragging: false,
             };
           }
 
@@ -197,7 +193,6 @@ const useVideoStore = create<
               startFrame: updates.startFrame,
             };
 
-            console.log({ updates });
             // If the indices are the same, no need to reorder, just update the item
             if (pastIdx === futureIdx) {
               layer.liteItems[pastIdx] = updatedItem;
@@ -293,8 +288,6 @@ const useVideoStore = create<
                 }
               } else {
                 if (updatedItem.transition?.incoming) {
-                  console.log("futureIdx<pastIdx, incoming transition");
-
                   const prevItem = layer.liteItems[pastIdx];
                   if (prevItem) {
                     delete prevItem.transition?.outgoing;
@@ -304,7 +297,6 @@ const useVideoStore = create<
                   // TODO : adjust the startFrame of the updated item
                 }
                 if (updatedItem.transition?.outgoing) {
-                  console.log("futureIdx<pastIdx, outgoing transition");
                   const nextItem = layer.liteItems[pastIdx + 1];
                   if (nextItem) {
                     delete nextItem.transition?.incoming;
@@ -346,7 +338,6 @@ const useVideoStore = create<
 
             // Get the item that's being moved
             const movedItem = oldLayer.liteItems[itemIndexInOldLayer];
-            console.log("movedItem", movedItem);
 
             // If the item hasn't moved and the layer hasn't changed, do nothing
             if (
@@ -362,8 +353,6 @@ const useVideoStore = create<
               startFrame: updates.startFrame,
             };
 
-            console.log("updatedItem", updatedItem);
-
             // Find the new index for the item in the new layer
 
             const insertIndex = binarySearch(
@@ -378,8 +367,6 @@ const useVideoStore = create<
             );
 
             updatedItem.offset = newOffset;
-
-            console.log("futureNewIndex", insertIndex);
 
             // Insert the item at its new position in the new layer
             newLayer.liteItems.splice(insertIndex, 0, updatedItem);
@@ -506,8 +493,6 @@ const useVideoStore = create<
        */
       updateSequenceItemDuration: (layerId, itemId, frameDelta, direction) => {
         set((state) => {
-          console.log("updateSequenceItemDuration", { frameDelta, direction });
-
           const layer = state.props.layers[layerId];
           if (!layer) return; // Exit if layer not found
 
@@ -559,8 +544,6 @@ const useVideoStore = create<
             item.sequenceDuration += frameDelta;
           }
 
-          console.log("Updated item", item);
-
           // Handle video specific updates
           if (
             item.sequenceType === "standalone" &&
@@ -571,12 +554,6 @@ const useVideoStore = create<
             ] as VideoSequenceItemType;
 
             if (direction === "left") {
-              console.log(
-                "CULPRIT",
-                videoItem.editableProps.videoStartsFromInFrames,
-                frameDelta,
-              );
-
               videoItem.editableProps.videoStartsFromInFrames -= frameDelta;
             } else {
               // direction === "right"
@@ -590,7 +567,7 @@ const useVideoStore = create<
               nextItem.startFrame - (item.startFrame + item.effectiveDuration);
           }
 
-          console.log(`Updated item ${itemId} in layer ${layerId}:`, item);
+          console.log(`Updated item ${itemId} in layer ${layerId}:`);
         });
       },
 
@@ -729,12 +706,6 @@ const useVideoStore = create<
 
       addPresetToLayer: (layerId, itemPosition, presetDetails) => {
         set((state: StoreType) => {
-          console.log("addPresetToLayer", {
-            layerId,
-            itemPosition,
-            presetDetails,
-          });
-
           const newItemId = genId("p", "preset");
 
           const layer = state.props.layers[layerId];
@@ -799,7 +770,6 @@ const useVideoStore = create<
                 height: 1080,
               },
             },
-            isDragging: false,
           };
 
           console.log(`Added ${presetDetails} preset to layer ${layerId}`);
@@ -1029,13 +999,26 @@ const useVideoStore = create<
         });
       },
 
-      updatePositionAndDimensions: (layerId, itemId, updates, isDragging) => {
+      updatePositionAndDimensions: (layerId, itemId, updates) => {
         set((state) => {
           const item = state.props.sequenceItems[
             itemId
           ] as FullSequenceContentType;
           if (!item) {
             console.warn(`Item ${itemId} not found in layer ${layerId}`);
+            return;
+          }
+
+          // if there is no change in the position and dimensions, then return
+          if (
+            updates?.top === item.editableProps.positionAndDimensions?.top &&
+            updates?.left === item.editableProps.positionAndDimensions?.left &&
+            updates?.width ===
+              item.editableProps.positionAndDimensions?.width &&
+            updates?.height === item.editableProps.positionAndDimensions?.height
+          ) {
+            console.log("No change in position and dimensions");
+
             return;
           }
 
@@ -1046,10 +1029,9 @@ const useVideoStore = create<
               ...updates!,
             },
           };
-          item.isDragging = isDragging;
+
           console.log(
             `Updated position and dimensions for item ${itemId} in layer ${layerId}:`,
-            updates,
           );
         });
       },

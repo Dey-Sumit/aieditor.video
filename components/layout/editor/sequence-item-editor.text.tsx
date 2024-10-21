@@ -18,7 +18,7 @@ const SequenceItemEditorText = () => {
     activeSeqItemLite.itemId
   ] as TextSequenceItemType;
 
-  console.log("activeSequenceItem editableProps", sequenceItem);
+  // console.log("activeSequenceItem editableProps", sequenceItem);
 
   const [editorText, setEditorText] = useState(
     sequenceItem?.editableProps?.text || "",
@@ -32,16 +32,6 @@ const SequenceItemEditorText = () => {
     );
   };
 
-  /*   console.log("editorContent", editorText);
-
-  useEffect(() => {
-    console.log("useEffect activeSeqItemLite", activeSeqItemLite);
-
-    if (activeSeqItemLite) {
-      setEditorText(sequenceItem?.editableProps?.text || "");
-    }
-  }, [activeSeqItemLite, sequenceItem?.editableProps?.text]);
- */
   return (
     <>
       <div className="sticky inset-x-0 top-0 flex h-12 items-center justify-end gap-2 p-2">

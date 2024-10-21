@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { useCurrentScale } from "remotion";
+import { useEditingStore } from "~/store/editing.store";
 import type { StyledSequenceItem } from "~/types/timeline.types";
 
 // Define the size of the resize handle
@@ -22,6 +23,10 @@ export const ResizeHandle: React.FC<ResizeHandleProps> = ({
 }) => {
   // Get the current scale of the composition
   const scale = useCurrentScale();
+
+  const setDraggingItemIdInPlayer = useEditingStore(
+    (state) => state.setDraggingItemIdInPlayer,
+  );
 
   // Calculate the size of the handle, accounting for the current scale
   const size = Math.round(HANDLE_SIZE / scale);
@@ -97,7 +102,8 @@ export const ResizeHandle: React.FC<ResizeHandleProps> = ({
 
         const isLeft = type === "top-left" || type === "bottom-left";
         const isTop = type === "top-left" || type === "top-right";
-
+        setDraggingItemIdInPlayer(item.id);
+        // @ts-ignore - TODO : time mile toh fix karna
         setItem(item.layerId, item.id, (i) => {
           const currentDimensions = i.editableProps.positionAndDimensions!;
           const newWidth =
@@ -124,17 +130,13 @@ export const ResizeHandle: React.FC<ResizeHandleProps> = ({
                 ),
               },
             },
-            isDragging: true,
           };
         });
       };
 
       // Handle pointer up to stop resizing
       const onPointerUp = () => {
-        setItem(item.layerId, item.id, (i) => ({
-          ...i,
-          isDragging: false,
-        }));
+        setDraggingItemIdInPlayer(null);
         window.removeEventListener("pointermove", onPointerMove);
       };
 
@@ -142,7 +144,7 @@ export const ResizeHandle: React.FC<ResizeHandleProps> = ({
       window.addEventListener("pointermove", onPointerMove, { passive: true });
       window.addEventListener("pointerup", onPointerUp, { once: true });
     },
-    [item, scale, setItem, type],
+    [item, scale, setItem, type, setDraggingItemIdInPlayer],
   );
 
   // Render the resize handle

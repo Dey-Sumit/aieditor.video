@@ -7,10 +7,11 @@ import { slide } from "@remotion/transitions/slide";
 import React, { useCallback, useState } from "react";
 import { SortedOutlines } from "~/components/new-player/sorted-outlines";
 import useThrottle from "~/hooks/use-throttle";
+import { cn } from "~/lib/utils";
+import useVideoStore from "~/store/video.store";
 import type {
   LiteSequenceItemType,
   NestedCompositionProjectType,
-  StoreActions,
   StyledSequenceItem,
 } from "~/types/timeline.types";
 
@@ -83,7 +84,9 @@ const SequenceItemRenderer: React.FC<{
         ...item.editableProps?.styles?.container,
         ...item.editableProps?.positionAndDimensions,
       }}
-      className=""
+      className={cn({
+        "bg-yellow-600": item.type === "text",
+      })}
     >
       {renderContent()}
     </AbsoluteFill>
@@ -134,18 +137,21 @@ const layerContainer: React.CSSProperties = {
 
 const NestedSequenceComposition = ({
   props,
-  updatePositionAndDimensions,
 }: {
   props: NestedCompositionProjectType["props"];
-  updatePositionAndDimensions: StoreActions["updatePositionAndDimensions"];
 }) => {
+  const updatePositionAndDimensions = useVideoStore(
+    (state) => state.updatePositionAndDimensions,
+  );
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
   const throttledUpdatePositionAndDimensions = useThrottle(
     updatePositionAndDimensions,
-    0,
+    40,
   );
 
   const { layers, layerOrder, sequenceItems } = props;
+
   const changeItem = useCallback(
     (
       layerId: string,
@@ -154,29 +160,17 @@ const NestedSequenceComposition = ({
     ) => {
       const item = sequenceItems[itemId];
       if (!item) return;
-      // console.log("changeItem called", { layerId, itemId, updater });
 
       const updatedItem = updater(item);
       const positionUpdates = updatedItem.editableProps.positionAndDimensions;
 
       if (positionUpdates) {
-        // console.log("positionUpdates", {
-        //   layerId,
-        //   itemId,
-        //   positionUpdates,
-        //   isDragging: updatedItem.isDragging,
-        // });
-
-        updatePositionAndDimensions(
-          layerId,
-          itemId,
-          positionUpdates,
-          updatedItem.isDragging,
-        );
+        throttledUpdatePositionAndDimensions(layerId, itemId, positionUpdates);
       }
     },
-    [sequenceItems, updatePositionAndDimensions],
+    [sequenceItems, throttledUpdatePositionAndDimensions],
   );
+
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (e.button !== 0) {
@@ -189,7 +183,7 @@ const NestedSequenceComposition = ({
   );
 
   return (
-    <AbsoluteFill className="bg-green-800" onPointerDown={onPointerDown}>
+    <AbsoluteFill className="border" onPointerDown={onPointerDown}>
       <AbsoluteFill className="font-serif" style={layerContainer}>
         {[...layerOrder].reverse().map((layerId) => (
           <TransitionSeries key={layerId} name={layerId} layout="none">
@@ -217,17 +211,21 @@ const NestedSequenceComposition = ({
         ))}
       </AbsoluteFill>
 
-      {layerOrder.map((layerId) => (
-        <SortedOutlines
-          key={layerId}
-          liteItems={layers[layerId].liteItems}
-          sequenceItems={sequenceItems}
-          selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem}
-          changeItem={changeItem}
-          layerId={layerId}
-        />
-      ))}
+      {[...layerOrder].reverse().map(
+        (
+          layerId, // TODO : .reverse() is creating a issues, removing it creates another issue
+        ) => (
+          <SortedOutlines
+            key={layerId}
+            liteItems={layers[layerId].liteItems}
+            sequenceItems={sequenceItems}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            changeItem={changeItem}
+            layerId={layerId}
+          />
+        ),
+      )}
     </AbsoluteFill>
   );
 };

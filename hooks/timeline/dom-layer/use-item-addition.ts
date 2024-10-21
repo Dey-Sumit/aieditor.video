@@ -218,15 +218,14 @@ export const useNewItemValidation = () => {
                     },
                     text: "<h1>Your text</h1>",
                     positionAndDimensions: {
-                      top: 10,
-                      left: 10,
+                      top: 0,
+                      left: 0,
                       width: 720,
                       height: 1080,
                     },
                   },
                   id: newItemId,
                   layerId,
-                  isDragging: false,
                 }
               : {
                   type: "image",
@@ -242,15 +241,14 @@ export const useNewItemValidation = () => {
                       },
                     },
                     positionAndDimensions: {
-                      top: 10,
-                      left: 10,
+                      top: 0,
+                      left: 0,
                       width: 720,
                       height: 1080,
                     },
                     imageUrl:
                       "https://images.pexels.com/photos/20787/pexels-photo.jpg",
                   },
-                  isDragging: false,
 
                   id: newItemId,
                   layerId,
@@ -292,8 +290,8 @@ export const useNewItemValidation = () => {
                   overlay: {},
                 },
                 positionAndDimensions: {
-                  top: 10,
-                  left: 10,
+                  top: 0,
+                  left: 0,
                   width: 720,
                   height: 1080,
                 },
@@ -303,7 +301,6 @@ export const useNewItemValidation = () => {
               id: newItemId,
               layerId,
               animations: [],
-              isDragging: false,
             },
           );
         }

@@ -12,6 +12,8 @@ const displaySelectedItemOnTop = (
   selectedItem: string | null,
   sequenceItems: Record<string, StyledSequenceItem>,
 ): LiteSequenceItemType[] => {
+  console.log("selectedItem", selectedItem);
+
   const selectedItems = items.filter((item) => item.id === selectedItem);
   const unselectedItems = items.filter((item) => item.id !== selectedItem);
 
@@ -37,23 +39,17 @@ export const SortedOutlines: React.FC<SortedOutlinesProps> = ({
   selectedItem,
   changeItem,
   setSelectedItem,
-  layerId,
 }) => {
   // Sort items to display the selected item on top
   const itemsToDisplay = useMemo(
     () => displaySelectedItemOnTop(liteItems, selectedItem, sequenceItems),
     [liteItems, selectedItem, sequenceItems],
   );
-
-  // Check if any item is currently being dragged
-  const isDragging = useMemo(
-    () => liteItems.some((item) => sequenceItems[item.id]?.isDragging),
-    [liteItems, sequenceItems],
-  );
+  console.log({ itemsToDisplay });
 
   return (
     <>
-      {itemsToDisplay.map((liteItem) => {
+      {[...itemsToDisplay].map((liteItem) => {
         const fullItem = sequenceItems[liteItem.id];
         if (!fullItem) return null;
 
@@ -69,7 +65,6 @@ export const SortedOutlines: React.FC<SortedOutlinesProps> = ({
               changeItem={changeItem}
               setSelectedItem={setSelectedItem}
               selectedItem={selectedItem}
-              isDragging={isDragging}
             />
           </Sequence>
         );

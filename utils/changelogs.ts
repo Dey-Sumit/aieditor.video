@@ -5,7 +5,6 @@ import { remark } from "remark";
 import html from "remark-html";
 
 const changelogsDirectory = path.join(process.cwd(), "changelogs");
-console.log("changelogsDirectory", changelogsDirectory);
 
 export function getSortedChangelogsData() {
   const fileNames = fs.readdirSync(changelogsDirectory);

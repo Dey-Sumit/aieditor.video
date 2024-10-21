@@ -16,13 +16,10 @@ const calculateMetadata: CalculateMetadataFunction<
 
 const NewDynamicCompositionWithLoader = () => {
   const props = useVideoStore((store) => store.props);
-  const updatePositionAndDimensions = useVideoStore(
-    (store) => store.updatePositionAndDimensions,
-  );
+
   if (!props) {
     return <div>Loading project...</div>;
   }
-  console.log("NewDynamicCompositionWithLoader props", props);
 
   return (
     <>
@@ -36,7 +33,6 @@ const NewDynamicCompositionWithLoader = () => {
         // defaultProps={{ props, updatePositionAndDimensions }}
         defaultProps={{
           props,
-          updatePositionAndDimensions,
         }}
         // schema={NestedCompositionPropsSchema}
         // calculateMetadata={calculateMetadata}

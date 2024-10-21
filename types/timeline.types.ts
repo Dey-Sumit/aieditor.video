@@ -18,7 +18,6 @@ export type TransitionItemType = z.infer<typeof TransitionSchema>;
 export type FullSequenceContentType = {
   id: string;
   layerId: string;
-  isDragging: boolean;
   editableProps: {
     styles: {
       container: Record<string, any>;
@@ -211,7 +210,6 @@ export type StyledSequenceItem =
           height: number;
         };
       };
-      isDragging: boolean;
     };
 
 export const LayerSchema = z.object({
@@ -336,7 +334,6 @@ export type StoreActions = {
     updates: Partial<
       FullSequenceContentType["editableProps"]["positionAndDimensions"]
     >,
-    isDragging: boolean,
   ) => void;
 };
 

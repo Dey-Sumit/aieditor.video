@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { useCurrentScale } from "remotion";
+import { useEditingStore } from "~/store/editing.store";
 import type { StyledSequenceItem } from "~/types/timeline.types";
 import { ResizeHandle } from "./resize-handle";
 
@@ -12,8 +13,14 @@ export const SelectionOutline: React.FC<{
   ) => void;
   setSelectedItem: React.Dispatch<React.SetStateAction<string | null>>;
   selectedItem: string | null;
-  isDragging: boolean;
-}> = ({ item, changeItem, setSelectedItem, selectedItem, isDragging }) => {
+}> = ({ item, changeItem, setSelectedItem, selectedItem }) => {
+  const draggingItemIdInPlayer = useEditingStore(
+    (state) => state.draggingItemIdInPlayer,
+  );
+  const setDraggingItemIdInPlayer = useEditingStore(
+    (state) => state.setDraggingItemIdInPlayer,
+  );
+
   // Get the current scale of the player
   const scale = useCurrentScale();
   // Calculate the border size based on the current scale
@@ -45,13 +52,19 @@ export const SelectionOutline: React.FC<{
       position: "absolute",
       // Show outline when hovered (and not dragging) or selected
       outline:
-        (hovered && !isDragging) || isSelected
+        (hovered && !draggingItemIdInPlayer) || isSelected
           ? `${scaledBorder}px solid #0B84F3`
           : undefined,
       userSelect: "none",
       touchAction: "none",
     };
-  }, [item.editableProps, hovered, isDragging, isSelected, scaledBorder]);
+  }, [
+    item.editableProps,
+    hovered,
+    draggingItemIdInPlayer,
+    isSelected,
+    scaledBorder,
+  ]);
 
   // Function to handle the start of dragging
   const startDragging = useCallback(
@@ -60,13 +73,11 @@ export const SelectionOutline: React.FC<{
       const initialY = e.clientY;
 
       const onPointerMove = (pointerMoveEvent: PointerEvent) => {
-        console.log("SelectionOutline -> onPointerMove");
-
         const offsetX = (pointerMoveEvent.clientX - initialX) / scale;
         const offsetY = (pointerMoveEvent.clientY - initialY) / scale;
+        //@ts-ignore - TODO : time mile toh fix karna
         changeItem(item.layerId, item.id, (item) => {
-          console.log("SelectionOutline -> onPointerMove -> changeItem", item);
-
+          setDraggingItemIdInPlayer(item.id);
           const newPositionAndDimensions = {
             ...item.editableProps.positionAndDimensions!,
             left: Math.round(
@@ -76,10 +87,6 @@ export const SelectionOutline: React.FC<{
               (item.editableProps.positionAndDimensions?.top || 0) + offsetY,
             ),
           };
-          console.log(
-            "SelectionOutline -> onPointerMove -> newPositionAndDimensions",
-            newPositionAndDimensions,
-          );
 
           return {
             ...item,
@@ -93,41 +100,38 @@ export const SelectionOutline: React.FC<{
       };
 
       const onPointerUp = (pointerMoveEvent: PointerEvent) => {
-        const offsetX = (pointerMoveEvent.clientX - initialX) / scale;
-        const offsetY = (pointerMoveEvent.clientY - initialY) / scale;
-        changeItem(item.layerId, item.id, (item) => {
-          console.log("SelectionOutline -> onPointerUp -> changeItem", item);
+        // const offsetX = (pointerMoveEvent.clientX - initialX) / scale;
+        // const offsetY = (pointerMoveEvent.clientY - initialY) / scale;
+        // //@ts-ignore - TODO : time mile toh fix karna
+        // changeItem(item.layerId, item.id, (item) => {
+        //   setDraggingItemIdInPlayer(null);
+        //   const newPositionAndDimensions = {
+        //     ...item.editableProps.positionAndDimensions!,
+        //     left: Math.round(
+        //       (item.editableProps.positionAndDimensions?.left || 0) + offsetX,
+        //     ),
+        //     top: Math.round(
+        //       (item.editableProps.positionAndDimensions?.top || 0) + offsetY,
+        //     ),
+        //   };
 
-          const newPositionAndDimensions = {
-            ...item.editableProps.positionAndDimensions!,
-            left: Math.round(
-              (item.editableProps.positionAndDimensions?.left || 0) + offsetX,
-            ),
-            top: Math.round(
-              (item.editableProps.positionAndDimensions?.top || 0) + offsetY,
-            ),
-          };
-          console.log(
-            "SelectionOutline -> onPointerMove -> newPositionAndDimensions",
-            newPositionAndDimensions,
-          );
-
-          return {
-            ...item,
-            editableProps: {
-              ...item.editableProps,
-              positionAndDimensions: newPositionAndDimensions,
-            },
-            isDragging: true,
-          };
-        });
+        //   return {
+        //     ...item,
+        //     editableProps: {
+        //       ...item.editableProps,
+        //       positionAndDimensions: newPositionAndDimensions,
+        //     },
+        //     isDragging: true,
+        //   };
+        // });
+        setDraggingItemIdInPlayer(null);
         window.removeEventListener("pointermove", onPointerMove);
       };
 
       window.addEventListener("pointermove", onPointerMove, { passive: true });
       window.addEventListener("pointerup", onPointerUp, { once: true });
     },
-    [item, scale, changeItem],
+    [item, scale, changeItem, setDraggingItemIdInPlayer],
   );
 
   // Handle pointer down event
@@ -152,6 +156,7 @@ export const SelectionOutline: React.FC<{
       onPointerEnter={onMouseEnter}
       onPointerLeave={onMouseLeave}
       style={style}
+      id={item.type}
     >
       {/* Render resize handles only when the item is selected */}
       {isSelected ? (
