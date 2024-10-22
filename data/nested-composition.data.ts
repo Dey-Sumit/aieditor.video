@@ -535,7 +535,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 600,
+      duration: 30 * 10,
       compositionId: "new-dynamic-composition",
     },
     transitions: {},

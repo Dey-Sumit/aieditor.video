@@ -213,6 +213,7 @@ export const useNewItemValidation = () => {
                       container: {
                         justifyContent: "center",
                         alignItems: "center",
+                        backgroundColor: "rgba(0,0,0,0.2)",
                       },
                       element: {},
                     },
@@ -247,8 +248,18 @@ export const useNewItemValidation = () => {
                       height: 1080,
                     },
                     imageUrl:
-                      "https://images.pexels.com/photos/20787/pexels-photo.jpg",
+                      "https://i.cdn.newsbytesapp.com/images/l5720240602024051.jpeg",
+                    // "https ://images.pexels.com/photos/20787/pexels-photo.jpg",
                   },
+                  animations: [
+                    {
+                      type: "scale",
+                      from: 1,
+                      to: 0.7,
+                      duration: 240,
+                      startAt: 120, // Starts immediately at frame 0
+                    },
+                  ],
 
                   id: newItemId,
                   layerId,

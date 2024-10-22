@@ -41,7 +41,8 @@ const SequenceItemRenderer: React.FC<{
           <div
             style={item.editableProps?.styles?.element}
             dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
-            className="prose prose-2xl prose-invert space-y-0 whitespace-pre-wrap [&>*]:my-0"
+            // TODO : added flex and justify-center and all here, might not be needed
+            className="prose prose-2xl prose-invert flex items-center justify-center space-y-0 whitespace-pre-wrap [&>*]:my-0"
           />
         );
       case "image":

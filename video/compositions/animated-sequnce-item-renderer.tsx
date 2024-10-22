@@ -364,6 +364,8 @@ export const AnimatedImage = ({ item }: { item: ImageSequenceItemType }) => {
     fps,
   });
 
+  console.log({ animations: item.animations });
+
   return (
     <AbsoluteFill>
       <Img

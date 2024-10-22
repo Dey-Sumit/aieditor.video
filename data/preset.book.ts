@@ -68,7 +68,7 @@ export const PRESET_COLLECTION: Record<string, PresetDetail> = {
               objectFit: "contain",
               width: "100%",
               height: "100%",
-              backgroundColor: "rgba(255,0,0,0.1)",
+              backgroundColor: "rgba(0,0,0,0.2)",
             },
           },
         },
@@ -84,6 +84,7 @@ export const PRESET_COLLECTION: Record<string, PresetDetail> = {
             container: {
               justifyContent: "center",
               alignItems: "center",
+              display: "flex",
             },
             element: {
               objectFit: "contain",

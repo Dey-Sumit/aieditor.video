@@ -66,9 +66,9 @@ const ProjectHeader = () => {
                 className="gap-2"
                 disabled={
                   state.status === "invoking" || state.status === "rendering"
-                }
+                } 
               >
-                {state.status === "rendering" ? "Cooking..." : "Export"}
+                {state.status === "rendering" ? "Cooking..." : "Prepare Export"}
 
                 <ArrowUpFromDot className="size-4" />
               </Button>
@@ -105,6 +105,7 @@ const ProjectHeader = () => {
                   disabled={
                     state.status === "invoking" || state.status === "rendering"
                   }
+                  onClick={renderMedia}
                 >
                   {state.status === "rendering" ? "Cooking..." : "Export"}
 
