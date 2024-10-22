@@ -51,7 +51,7 @@ const TimeLayer = () => {
   return (
     <div
       onClick={handleTimeLayerClick}
-      className="relative z-10 w-full border-t text-[8px] text-gray-500"
+      className="relative z-10 w-full border-t bg-black text-[8px] text-gray-500"
     >
       {timeMarkers.map((marker, index) => (
         <div
