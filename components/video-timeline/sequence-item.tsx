@@ -47,6 +47,8 @@ const SequenceItem = ({
   layerId: LayerId;
   nextItemStartFrame: number | undefined;
 }) => {
+  // console.log("SequenceItem re-renders", item.id); // TODO : it should not re-render when item position change in canvas . It's a big performance issue
+
   const {
     throttledItemDrag,
     pixelsPerFrame,
@@ -203,6 +205,11 @@ const SequenceItem = ({
     </Rnd>
   );
 };
+
+// memoize the component
+// const MemoizedSequenceItem = memo(SequenceItem, (prevProps, nextProps) => {
+//   return prevProps.item.id === nextProps.item.id;
+// });
 
 export default SequenceItem;
 

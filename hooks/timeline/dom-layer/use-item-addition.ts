@@ -28,8 +28,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
     (state) => state.selectedContentType,
   );
 
-  const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
-
   const { draggingLayerId, handleTimeLayerClick } = useTimeline();
 
   const validateAndAddItem = useNewItemValidation();
@@ -136,7 +134,7 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
       }
       handleTimeLayerClick(e); // so that the playhead moves to the newly added item
     },
-    [layerId, setActiveSeqItem, selectedNewItemType, handleTimeLayerClick],
+    [layerId, selectedNewItemType, handleTimeLayerClick, validateAndAddItem],
   );
 
   const mouseEventHandlers = useMemo(
@@ -154,12 +152,6 @@ export function useSequenceAddition(layerId: LayerId, pixelsPerFrame: number) {
     handleAddNewItem,
   };
 }
-
-// if (selectedContentType.sequenceType === "standalone") {
-//   console.log("adding video item");
-//   // const data = await getVideoMetadata(VIDEO_URL);
-//   // console.log({ data });
-// }
 
 export const useNewItemValidation = () => {
   const addSequenceItemToLayer = useVideoStore(
@@ -221,10 +213,17 @@ export const useNewItemValidation = () => {
                       container: {
                         justifyContent: "center",
                         alignItems: "center",
+                        backgroundColor: "rgba(0,0,0,0.2)",
                       },
                       element: {},
                     },
                     text: "<h1>Your text</h1>",
+                    positionAndDimensions: {
+                      top: 0,
+                      left: 0,
+                      width: 720,
+                      height: 1080,
+                    },
                   },
                   id: newItemId,
                   layerId,
@@ -242,9 +241,26 @@ export const useNewItemValidation = () => {
                         height: "100%",
                       },
                     },
+                    positionAndDimensions: {
+                      top: 0,
+                      left: 0,
+                      width: 720,
+                      height: 1080,
+                    },
                     imageUrl:
-                      "https://images.pexels.com/photos/20787/pexels-photo.jpg",
+                      "https://i.cdn.newsbytesapp.com/images/l5720240602024051.jpeg",
+                    // "https ://images.pexels.com/photos/20787/pexels-photo.jpg",
                   },
+                  animations: [
+                    {
+                      type: "scale",
+                      from: 1,
+                      to: 0.7,
+                      duration: 240,
+                      startAt: 120, // Starts immediately at frame 0
+                    },
+                  ],
+
                   id: newItemId,
                   layerId,
                 },
@@ -284,6 +300,12 @@ export const useNewItemValidation = () => {
                   },
                   overlay: {},
                 },
+                positionAndDimensions: {
+                  top: 0,
+                  left: 0,
+                  width: 720,
+                  height: 1080,
+                },
                 videoUrl: VIDEO_URL,
               },
               totalVideoDurationInFrames: data.durationInSeconds * 30,
@@ -308,6 +330,6 @@ export const useNewItemValidation = () => {
         // presetId = selectedContentType.presetId;
       }
     },
-    [addSequenceItemToLayer],
+    [addSequenceItemToLayer, addPresetToLayer, setActiveSeqItem],
   );
 };

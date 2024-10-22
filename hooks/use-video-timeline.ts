@@ -92,7 +92,6 @@ const useItemDrag = (
       const newLayerId = orderedLayers[snapLayerIndex];
 
       const isLayerChanged = newLayerId !== oldLayerId;
-      console.log({ deltaPositionX });
 
       const newStartFrame = Math.max(
         0,

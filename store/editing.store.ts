@@ -12,7 +12,7 @@ interface EditingState {
     itemType: SelectedContentType;
   } | null;
   selectedContentType: SelectedContentType;
-  // aboutToUse: {};
+  draggingItemIdInPlayer: string | null;
 }
 
 interface EditingActions {
@@ -23,6 +23,7 @@ interface EditingActions {
   ) => void;
   clearActiveSeqItem: () => void;
   setSelectedContentType: (type: SelectedContentType) => void;
+  setDraggingItemIdInPlayer: (itemId: string | null) => void;
 }
 
 type EditingStore = EditingState & EditingActions;
@@ -35,7 +36,7 @@ export const useEditingStore = create<
     immer((set) => ({
       activeSeqItem: null,
       selectedContentType: "image",
-
+      draggingItemIdInPlayer: null,
       setActiveSeqItem: (layerId, itemId, itemType) => {
         set((state) => {
           // @ts-ignore : // TODO fix this
@@ -52,6 +53,12 @@ export const useEditingStore = create<
       setSelectedContentType: (type) => {
         set((state) => {
           state.selectedContentType = type;
+        });
+      },
+
+      setDraggingItemIdInPlayer: (itemId) => {
+        set((state) => {
+          state.draggingItemIdInPlayer = itemId;
         });
       },
     })),

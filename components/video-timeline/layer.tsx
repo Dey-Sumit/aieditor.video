@@ -52,12 +52,16 @@ export const HoverLayer: React.FC<HoverLayerProps> = React.memo(
   ({ layerId, pixelsPerFrame }) => {
     const {
       hoverInfo,
-      mouseEventHandlers: { onMouseMove, onMouseLeave, onClick },
+      mouseEventHandlers: {
+        onMouseMove,
+        onMouseLeave,
+        onClick: onClickHandler,
+      },
     } = useSequenceAddition(layerId, pixelsPerFrame);
 
     return (
       <>
-        <AddItemContextMenu hoverInfo={hoverInfo!} onPresetAdd={onClick}>
+        <AddItemContextMenu hoverInfo={hoverInfo!} onPresetAdd={onClickHandler}>
           {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
 
           <div
@@ -66,9 +70,7 @@ export const HoverLayer: React.FC<HoverLayerProps> = React.memo(
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
             onClick={(e) => {
-              console.log("onClick", e);
-
-              onClick(e, {
+              onClickHandler(e, {
                 sequenceType: "standalone",
               });
             }}

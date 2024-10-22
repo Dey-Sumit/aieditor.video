@@ -1,15 +1,13 @@
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import DOMPurify from "dompurify";
-import {
-  AbsoluteFill,
-  getRemotionEnvironment,
-  Img,
-  OffthreadVideo,
-} from "remotion";
+import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
 
 import { slide } from "@remotion/transitions/slide";
 
-import React, { type CSSProperties } from "react";
+import React, { useCallback, useState } from "react";
+import { SortedOutlines } from "~/components/new-player/sorted-outlines";
+import useThrottle from "~/hooks/use-throttle";
+import useVideoStore from "~/store/video.store";
 import type {
   LiteSequenceItemType,
   NestedCompositionProjectType,
@@ -27,67 +25,45 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
   return <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} />;
 };
 
-type NestedCompositionProjectProps = NestedCompositionProjectType["props"];
-
-const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
-  item,
-}) => {
+const SequenceItemRenderer: React.FC<{
+  item: StyledSequenceItem;
+}> = ({ item }) => {
   if (item.type === "preset") {
-    // This case should not occur here as it's handled in RenderSequence
     return null;
   }
 
-  switch (item.type) {
-    case "div":
-      return (
-        <AbsoluteFill style={item.editableProps?.styles?.container}>
-          <div style={item.editableProps?.styles?.element}></div>
-        </AbsoluteFill>
-      );
-    case "text":
-      return (
-        <AbsoluteFill
-          style={item.editableProps?.styles?.container}
-          className="dark"
-        >
-          <div style={item.editableProps?.styles?.element}>
-            <div
-              dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
-              className="prose prose-2xl space-y-0 whitespace-pre-wrap dark:prose-invert [&>*]:my-0"
+  const renderContent = () => {
+    switch (item.type) {
+      case "div":
+        return <div style={item.editableProps?.styles?.element}></div>;
+      case "text":
+        return (
+          <div
+            style={item.editableProps?.styles?.element}
+            dangerouslySetInnerHTML={{ __html: item.editableProps.text }}
+            // TODO : added flex and justify-center and all here, might not be needed
+            className="prose prose-2xl prose-invert flex items-center justify-center space-y-0 whitespace-pre-wrap [&>*]:my-0"
+          />
+        );
+      case "image":
+        return (
+          <>
+            <AbsoluteFill
+              style={item.editableProps?.styles?.overlay}
+              className=""
             />
-          </div>
-        </AbsoluteFill>
-      );
-    case "image":
-      // return <AnimatedImage item={item as ImageSequenceItemType} />;
-      return (
-        <AbsoluteFill
-          className=""
-          style={{
-            ...item.editableProps?.styles?.container,
-          }}
-        >
-          <AbsoluteFill
-            className=""
-            style={{
-              ...item.editableProps?.styles?.overlay,
-            }}
-          />
-          <Img
-            src={item.editableProps.imageUrl}
-            style={{
-              objectFit: "cover",
-              ...item.editableProps?.styles?.element,
-            }}
-            className="box-content"
-          />
-        </AbsoluteFill>
-      );
-
-    case "video":
-      return (
-        <AbsoluteFill style={item.editableProps?.styles?.container}>
-          <AbsoluteFill className="bg-black/30" />
+            <Img
+              src={item.editableProps.imageUrl}
+              style={{
+                objectFit: "cover",
+                ...item.editableProps?.styles?.element,
+              }}
+              className="box-content"
+            />
+          </>
+        );
+      case "video":
+        return (
           <OffthreadVideo
             src={item.editableProps.videoUrl}
             style={item.editableProps?.styles?.element}
@@ -95,11 +71,22 @@ const SequenceItemRenderer: React.FC<{ item: StyledSequenceItem }> = ({
             startFrom={item.editableProps.videoStartsFromInFrames}
             endAt={item.editableProps.videoEndsAtInFrames}
           />
-        </AbsoluteFill>
-      );
-    default:
-      return null;
-  }
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <AbsoluteFill
+      style={{
+        ...item.editableProps?.styles?.container,
+        ...item.editableProps?.positionAndDimensions,
+      }}
+    >
+      {renderContent()}
+    </AbsoluteFill>
+  );
 };
 
 const RenderSequence: React.FC<{
@@ -139,53 +126,95 @@ const RenderSequence: React.FC<{
   return null;
 };
 
-const NestedSequenceComposition: React.FC<NestedCompositionProjectProps> = (
-  props,
+const layerContainer: React.CSSProperties = {
+  overflow: "hidden",
+};
+
+const NestedSequenceComposition = (
+  props: NestedCompositionProjectType["props"],
 ) => {
+  console.log("NestedSequenceComposition", props);
+
+  const updatePositionAndDimensions = useVideoStore(
+    (state) => state.updatePositionAndDimensions,
+  );
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  const throttledUpdatePositionAndDimensions = useThrottle(
+    updatePositionAndDimensions,
+    40,
+  );
+
   const { layers, layerOrder, sequenceItems } = props;
-  const { isStudio, isPlayer, isRendering } = getRemotionEnvironment();
-  console.log({
-    isStudio,
-    isPlayer,
-    isRendering,
-  });
 
-  const compositionStyle: CSSProperties = isPlayer
-    ? { border: "0.01px solid gray" }
-    : {};
+  const changeItem = useCallback(
+    (
+      layerId: string,
+      itemId: string,
+      updater: (item: StyledSequenceItem) => StyledSequenceItem,
+    ) => {
+      const item = sequenceItems[itemId];
+      if (!item) return;
 
-  console.log({ compositionStyle });
+      const updatedItem = updater(item);
+      const positionUpdates = updatedItem.editableProps.positionAndDimensions;
 
-  // console.log("props", props);
+      if (positionUpdates) {
+        throttledUpdatePositionAndDimensions(layerId, itemId, positionUpdates);
+      }
+    },
+    [sequenceItems, throttledUpdatePositionAndDimensions],
+  );
+
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.button !== 0) {
+        return;
+      }
+
+      setSelectedItem(null);
+    },
+    [setSelectedItem],
+  ); // Flatten all liteItems from all layers into a single array
 
   return (
-    // <div className="h-full w-full bg-gray-950 outline-4 outline-red-800">
-    <AbsoluteFill className="font-serif" style={compositionStyle}>
-      {[...layerOrder].reverse().map((layerId) => (
-        <TransitionSeries key={layerId} name={layerId}>
-          {layers[layerId].liteItems.map((item) => (
-            <React.Fragment key={item.id}>
-              <TransitionSeries.Sequence
-                durationInFrames={item.sequenceDuration}
-                name={item.id}
-                offset={item.offset}
-              >
-                <RenderSequence item={item} sequenceItems={sequenceItems} />
-              </TransitionSeries.Sequence>
-              {item.transition?.outgoing && (
-                <TransitionSeries.Transition
-                  presentation={slide()}
-                  timing={linearTiming({
-                    durationInFrames: item.transition.outgoing.duration * 2,
-                  })}
-                />
-              )}
-            </React.Fragment>
-          ))}
-        </TransitionSeries>
-      ))}
+    <AbsoluteFill className="border" onPointerDown={onPointerDown}>
+      <AbsoluteFill className="font-serif" style={layerContainer}>
+        {[...layerOrder].reverse().map((layerId) => (
+          <TransitionSeries key={layerId} name={layerId} layout="none">
+            {layers[layerId].liteItems.map((item) => (
+              <React.Fragment key={item.id}>
+                <TransitionSeries.Sequence
+                  durationInFrames={item.sequenceDuration}
+                  name={item.id}
+                  offset={item.offset}
+                  layout="none"
+                >
+                  <RenderSequence item={item} sequenceItems={sequenceItems} />
+                </TransitionSeries.Sequence>
+                {item.transition?.outgoing && (
+                  <TransitionSeries.Transition
+                    presentation={slide()}
+                    timing={linearTiming({
+                      durationInFrames: item.transition.outgoing.duration * 2,
+                    })}
+                  />
+                )}
+              </React.Fragment>
+            ))}
+          </TransitionSeries>
+        ))}
+      </AbsoluteFill>
+
+      <SortedOutlines
+        layers={layers}
+        layerOrder={layerOrder}
+        sequenceItems={sequenceItems}
+        selectedItem={selectedItem}
+        setSelectedItem={setSelectedItem}
+        changeItem={changeItem}
+      />
     </AbsoluteFill>
-    // </div>
   );
 };
 

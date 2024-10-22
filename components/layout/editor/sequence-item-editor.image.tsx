@@ -73,7 +73,6 @@ const SequenceItemEditor: React.FC = () => {
         //@ts-ignore
         updatedStyles[tab === "image" ? "element" : tab] = styles;
       });
-      console.log({ updatedStyles });
 
       updateImageEditableProps(
         activeSeqItemLite.layerId,

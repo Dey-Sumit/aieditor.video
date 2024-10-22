@@ -24,6 +24,12 @@ export type FullSequenceContentType = {
       element: Record<string, any>;
       overlay?: Record<string, any>;
     };
+    positionAndDimensions?: {
+      top: number;
+      left: number;
+      width: number;
+      height: number;
+    };
   };
   // TODO : later we need to make this only for standalone sequence items. Preset will not have this.
   animations?: Array<{
@@ -196,6 +202,14 @@ export type StyledSequenceItem =
       id: string;
       presetId: string;
       sequenceItems: Record<string, FullSequenceContentType>;
+      editableProps: {
+        positionAndDimensions?: {
+          top: number;
+          left: number;
+          width: number;
+          height: number;
+        };
+      };
     };
 
 export const LayerSchema = z.object({
@@ -312,6 +326,14 @@ export type StoreActions = {
     layerId: LayerId,
     itemId: string,
     splitAtInFrames: number,
+  ) => void;
+
+  updatePositionAndDimensions: (
+    layerId: LayerId,
+    itemId: string,
+    updates: Partial<
+      FullSequenceContentType["editableProps"]["positionAndDimensions"]
+    >,
   ) => void;
 };
 

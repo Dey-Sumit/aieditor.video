@@ -22,8 +22,13 @@ const VideoAndTimeline = () => {
 
   return (
     <>
-      <div className="h-full">
+      <div className="relative h-full">
+        {/* <DragAndDropDemo /> */}
         <VideoPreview playerRef={playerRef} />
+        {/* 
+        <div className="absolute left-96 top-96 h-96 w-96 border-2">
+          <Button onClick={() => playerRef.current?.play()}>Play</Button>
+        </div> */}
       </div>
       {/* -------------------- timeline -------------------- */}
 
@@ -56,7 +61,7 @@ const VideoPreview = ({
 }: {
   playerRef: React.RefObject<PlayerRef>;
 }) => {
-  const { props } = useVideoStore();
+  const { props, updatePositionAndDimensions } = useVideoStore();
 
   if (!props) {
     return <div>Loading project...</div>;
@@ -81,6 +86,7 @@ const VideoPreview = ({
         initiallyMuted
         errorFallback={errorFallback}
         ref={playerRef}
+        overflowVisible
         schema={NestedCompositionPropsSchema}
         inputProps={props}
         browserMediaControlsBehavior={{
