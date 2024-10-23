@@ -531,7 +531,17 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
       "l-ac121030-0325-4cbd-b334-c4d91400fa51": {
         id: "l-ac121030-0325-4cbd-b334-c4d91400fa51",
         name: "Layer 2",
-        liteItems: [],
+        liteItems: [
+          {
+            contentType: "video",
+            id: "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f",
+            offset: 0,
+            sequenceDuration: 1434,
+            effectiveDuration: 1434,
+            sequenceType: "standalone",
+            startFrame: 0,
+          },
+        ],
         isVisible: true,
       },
     },
@@ -539,12 +549,45 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
       "l-ac121030-0325-4cbd-b334-c4d91400fa5c",
       "l-ac121030-0325-4cbd-b334-c4d91400fa51",
     ],
-    sequenceItems: {},
+    sequenceItems: {
+      "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f": {
+        id: "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f",
+        layerId: "l-ac121030-0325-4cbd-b334-c4d91400fa51",
+        type: "video",
+        animations: [],
+        totalVideoDurationInFrames: 6910.2585,
+        editableProps: {
+          videoEndsAtInFrames: 6923,
+          videoStartsFromInFrames: 5489,
+          styles: {
+            container: {
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {
+              width: "100%",
+              height: "100%",
+            },
+            overlay: {},
+          },
+          positionAndDimensions: {
+            top: 0,
+            left: 0,
+            width: 720,
+            height: 1080,
+          },
+          videoUrl:
+            "https://video-editor-user-upload-assets.s3.ap-south-1.amazonaws.com/better-call-saul-360p-with-audio.mp4?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFcaCmFwLXNvdXRoLTEiSDBGAiEAsFUEpVdT0meu%2Bdu%2Fglwf7jVT7RdPZEwZeaWpIYhJGZYCIQDx7flC8JbjduvFpWMvbi0t3xpBq1G1MAkdnjjLOjEyASrtAgjA%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDA1ODI2NDI1MjM3MSIMTjK1NTk%2FEjc7vbSbKsECYCClfeXH35nKX6kZAngXIK9TGZ%2B2OVEiAFdIXJNtWZrrENoBfjPs2sTIf69cs5SFf3w6i7Klu1ms3CowpEzJVU9dqSUzaJJc%2BQ6TTIS0YvSbgQXzB1Du05rY5jKB5VrjyfxguVOUMiskYI6Ey5nDHfwL1LTRBuFZER6bcT2lbCKgNZw%2BKogcW00vwqVLELA3dhTfbEYHASJPfzvXhX0eRcvX%2FaCCogV3WJE6KYMNBCLgTANpJefVlKFYOGgqzVvO7vmR%2Fk%2BLnkL3WMhlneLDLn8GI8muQBCIy1fiEpq0JDWGFZmISXAcgr6BEecKbw5FYED7wP1rybD7iyUZ8DmEtLc%2Bt%2BXU9rkkuo5WqAW5as%2BXQ9VKT0rFzJSHA5n3i37vu%2F750qFoj7pa7iRy9SoJhOcVRlxtW%2FRxbuQneuTZ2MtqMI6T5LgGOrICjxcngERxWe9uwrA0IDVbW9zKLrGlffyEK09pqrkrXkakecjO3KohEJVwup6NlA5sepsVyitw0DcE5ravJQW2VSZbrHUW33qahNU%2FfWgSt1dQZAnYDoFnbb8JDJBFnYLg7FBq1c%2BsQjXlXD3Fw%2B59aTdb6Xe1kcVg7wEi1Ylmtb2m9AKLXOC0ouN02CL22Ma9UMJJFbxDZy5f9xduJmIIOH5yNS39Qdh%2BHxlkiVbFmCHkngerjt3bxgIvfPCDw8y9P4ViDhkGiArpE%2BmSSHq%2F0uAi4Za7kxXrDqA8Q9ezby5SMkJW%2FP8hs3tsddcyGLGly6KvHPsF1CD5VHiw0iKLwF29XTTF9akvLVP2NQjfAGpwPvyZyBxQMgOnoZUmoepfGsaZ%2FQLZkw7xopHYv4b4AhoO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241023T144607Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIAQ3EGR57J6USMW655%2F20241023%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=9f8621b40d90257bdf308cf9d8258059870593553d1fce2dd85d309e1cc0a779",
+        },
+      },
+    },
     compositionMetaData: {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 30 * 10,
+      duration: 30 * 60,
       compositionId: "new-dynamic-composition",
     },
     transitions: {},

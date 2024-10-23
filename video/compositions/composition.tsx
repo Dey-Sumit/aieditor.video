@@ -1,6 +1,11 @@
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import DOMPurify from "dompurify";
-import { AbsoluteFill, Img, OffthreadVideo } from "remotion";
+import {
+  AbsoluteFill,
+  getRemotionEnvironment,
+  Img,
+  OffthreadVideo,
+} from "remotion";
 
 import { slide } from "@remotion/transitions/slide";
 
@@ -205,15 +210,16 @@ const NestedSequenceComposition = (
           </TransitionSeries>
         ))}
       </AbsoluteFill>
-
-      <SortedOutlines
-        layers={layers}
-        layerOrder={layerOrder}
-        sequenceItems={sequenceItems}
-        selectedItem={selectedItem}
-        setSelectedItem={setSelectedItem}
-        changeItem={changeItem}
-      />
+      {getRemotionEnvironment().isPlayer ? (
+        <SortedOutlines
+          layers={layers}
+          layerOrder={layerOrder}
+          sequenceItems={sequenceItems}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          changeItem={changeItem}
+        />
+      ) : null}
     </AbsoluteFill>
   );
 };

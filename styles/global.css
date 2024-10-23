@@ -131,6 +131,13 @@ background-image:  repeating-linear-gradient(45deg, #111111 25%, transparent 25%
 background-position: 0 0, 8px 8px;
 background-size: 16px 16px;
 }
+/* .editorBg{
+  background-color: #0c0c0c;
+opacity: 0.9;
+background-image:  repeating-linear-gradient(45deg, #050505 25%, transparent 25%, transparent 75%, #050505 75%, #050505), repeating-linear-gradient(45deg, #050505 25%, #0c0c0c 25%, #0c0c0c 75%, #050505 75%, #050505);
+background-position: 0 0, 7px 7px;
+background-size: 14px 14px;
+} */
 
 p.is-empty {
   @apply text-lg
