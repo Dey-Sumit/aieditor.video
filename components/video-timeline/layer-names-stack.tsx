@@ -1,13 +1,15 @@
 "use client";
 
-import { TIMELINE } from "~/lib/constants/timeline.constants";
 import useVideoStore from "~/store/video.store";
 
-const { LAYER_HEIGHT_IN_PX } = TIMELINE;
+const {
+  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
+} = LAYOUT;
 
 import { Reorder, useDragControls } from "framer-motion";
 import { EyeOff, GripVertical } from "lucide-react";
 import React, { useRef } from "react";
+import { LAYOUT } from "~/lib/constants/layout.constants";
 import type { LayerType } from "~/types/timeline.types";
 import LayerContentMenuWrapper from "../layer-context-menu-wrapper";
 
@@ -26,7 +28,7 @@ const LayerItem: React.FC<LayerItemProps> = ({ layer, constraintsRef }) => {
       dragControls={controls}
       dragConstraints={constraintsRef}
       style={{
-        height: `${LAYER_HEIGHT_IN_PX}px`,
+        height: `${TRACK_LAYER_HEIGHT_IN_PX}px`,
         width: "100%",
       }}
       className="border-b"

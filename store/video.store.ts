@@ -999,6 +999,67 @@ const useVideoStore = create<
         });
       },
 
+      linkCaptionToMedia: (
+        layerId,
+        sequenceId,
+        captionLayerPayload = { captions: [] },
+      ) => {
+        set((state: StoreType) => {
+          const layer = state.props.layers[layerId];
+          if (!layer) {
+            console.warn(`Layer ${layerId} not found`);
+            return;
+          }
+
+          // Find the sequence item
+          const itemIndex = layer.liteItems.findIndex(
+            (item) => item.id === sequenceId,
+          );
+          if (itemIndex === -1) {
+            console.warn(
+              `Sequence item ${sequenceId} not found in layer ${layerId}`,
+            );
+            return;
+          }
+
+          const item = layer.liteItems[itemIndex];
+
+          // Check if it's a video or audio item
+          if (
+            item.sequenceType === "standalone" &&
+            (item.contentType === "video" || item.contentType === "audio")
+          ) {
+            // Generate a unique caption layer ID
+            const captionLayerId = `caption-${sequenceId}-${Date.now()}`;
+
+            // Create a new caption layer
+            const newCaptionLayer: LayerType = {
+              id: captionLayerId,
+              name: `Captions for ${sequenceId}`,
+              isVisible: true,
+              liteItems: [],
+            };
+
+            // Add the caption layer to state
+            state.props.layers[captionLayerId] = newCaptionLayer;
+
+            // Add the caption layer to the layer order
+
+            let newLayerOrder = [...state.props.layerOrder];
+            newLayerOrder.unshift(captionLayerId);
+
+            // Update the media item with the caption layer reference
+            item.linkedCaptionLayer = captionLayerId;
+
+            console.log(
+              `Linked caption layer ${captionLayerId} to media item ${sequenceId}`,
+            );
+          } else {
+            console.warn(`Item ${sequenceId} is not a video or audio item`);
+          }
+        });
+      },
+
       updatePositionAndDimensions: (layerId, itemId, updates) => {
         set((state) => {
           const item = state.props.sequenceItems[

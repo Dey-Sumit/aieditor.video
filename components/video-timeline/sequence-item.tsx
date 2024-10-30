@@ -139,17 +139,7 @@ const SequenceItem = ({
       onDragStop={onDragStop}
       onDragStart={onDragStart}
       onResizeStop={onResizeStop}
-      className={cn(
-        "relative box-border rounded-[2px] border-2 shadow-inner hover:opacity-90 focus:bg-yellow-800",
-        ITEM_TYPE_TO_STYLES_MAP[
-          item.sequenceType === "standalone"
-            ? item.contentType
-            : item.sequenceType
-        ],
-        "before:absolute before:inset-y-[2px] before:left-[2px] before:w-1 before:rounded-lg before:content-['']",
-        "after:absolute after:inset-y-[2px] after:right-[2px] after:w-1 after:rounded-lg after:content-['']",
-        activeSeqItem?.itemId === item.id && "border-blue-500",
-      )}
+      className={cn("relative box-border w-full")}
       dragGrid={[pixelsPerFrame, TRACK_LAYER_HEIGHT_IN_PX]}
     >
       <SequenceContextMenuWrapper
@@ -161,7 +151,7 @@ const SequenceItem = ({
         type={item.sequenceType === "preset" ? "preset" : item.contentType}
       >
         <div
-          className="relative flex h-full w-full cursor-grab items-center justify-center truncate px-0 text-[10px] font-medium text-white"
+          className="relative flex h-full w-full items-center justify-center truncate px-0 text-[10px] font-medium text-white"
           onClick={(e) => {
             e.stopPropagation();
             setActiveSeqItem(
@@ -178,13 +168,34 @@ const SequenceItem = ({
               pixelsPerFrame={pixelsPerFrame}
             />
           ) : (
-            <div className="flex items-center gap-1">
-              {/* {item.id.slice(0, 7)} */}
-              {item.contentType === "video" && <Video size={14} />}
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              {item.contentType === "image" && <Image size={14} />}
-              {item.contentType === "text" && <ALargeSmall size={14} />}
-              {item.contentType === "audio" && <AudioLines size={14} />}
+            <div className="flex h-full w-full flex-col">
+              {item.contentType === "video" && item.linkedCaptionLayer && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log("clicked...");
+                  }}
+                  className="h-6 w-full rounded-sm border-2 border-yellow-500 bg-yellow-300/50 hover:bg-opacity-90"
+                >
+                  <div className="h-full w-full rounded-none"></div>
+                </button>
+              )}
+              <div
+                //   className="flex h-full w-full cursor-grab items-center justify-center"
+                className={cn(
+                  "relative box-border flex h-full w-full items-center justify-center rounded-[2px] border-2 shadow-inner hover:opacity-90 focus:bg-yellow-800",
+                  ITEM_TYPE_TO_STYLES_MAP[item.contentType],
+                  "before:absolute before:inset-y-[2px] before:left-[2px] before:w-1 before:rounded-lg before:content-['']",
+                  "after:absolute after:inset-y-[2px] after:right-[2px] after:w-1 after:rounded-lg after:content-['']",
+                  activeSeqItem?.itemId === item.id && "border-blue-500",
+                )}
+              >
+                {item.contentType === "video" && <Video size={14} />}
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                {item.contentType === "image" && <Image size={14} />}
+                {item.contentType === "text" && <ALargeSmall size={14} />}
+                {item.contentType === "audio" && <AudioLines size={14} />}
+              </div>
             </div>
           )}
         </div>

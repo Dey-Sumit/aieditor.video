@@ -122,6 +122,28 @@ export type ContentType =
   | "audio"
   | "div";
 
+type StandaloneVideoAudioType = {
+  sequenceType: "standalone";
+  contentType: "video" | "audio";
+  linkedCaptionLayer?: string; // Optional caption layer ID
+};
+
+type StandaloneOtherType = {
+  sequenceType: "standalone";
+  contentType: Exclude<ContentType, "video" | "audio">;
+};
+
+type PresetType = {
+  sequenceType: "preset";
+  presetId: string;
+  layers: {
+    [layerId: string]: {
+      liteItems: LiteSequenceItemType[];
+    };
+  };
+  layerOrder: string[];
+};
+
 export type LiteSequenceItemType = {
   id: string;
   sequenceDuration: number;
@@ -138,22 +160,7 @@ export type LiteSequenceItemType = {
       duration: number;
     };
   };
-} & (
-  | {
-      sequenceType: "standalone";
-      contentType: ContentType;
-    }
-  | {
-      sequenceType: "preset";
-      presetId: string;
-      layers: {
-        [layerId: string]: {
-          liteItems: LiteSequenceItemType[];
-        };
-      };
-      layerOrder: string[];
-    }
-);
+} & (StandaloneVideoAudioType | StandaloneOtherType | PresetType);
 
 export type LiteSequencePresetItemType = Extract<
   LiteSequenceItemType,
@@ -334,6 +341,14 @@ export type StoreActions = {
     updates: Partial<
       FullSequenceContentType["editableProps"]["positionAndDimensions"]
     >,
+  ) => void;
+
+  linkCaptionToMedia: (
+    layerId: string,
+    sequenceId: string,
+    captionLayerPayload?: {
+      captions: []; // Empty array for now, can be expanded later
+    },
   ) => void;
 };
 

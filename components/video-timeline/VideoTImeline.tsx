@@ -13,7 +13,7 @@ const {
   TIMELINE: {
     TRACK_LAYER_HEIGHT,
     TIMELINE_CONTAINER_HEIGHT,
-
+    TRACK_LAYER_HEIGHT_IN_PX,
     LAYER_NAME_STACK_WIDTH,
   },
 } = LAYOUT;
@@ -73,13 +73,19 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
             className="relative flex-1"
             ref={containerRef}
             style={{
-              height: orderedLayers.length * 32,
+              height: orderedLayers.length * TRACK_LAYER_HEIGHT_IN_PX,
             }}
           >
             {/* -------------------------- Background Layer for handing clicks and hover -------------------------- */}
             <div className="absolute inset-0">
               {orderedLayers.map((layerId) => (
-                <div key={layerId} className="relative h-8 border-b">
+                <div
+                  key={layerId}
+                  className="relative border-b"
+                  style={{
+                    height: TRACK_LAYER_HEIGHT_IN_PX,
+                  }}
+                >
                   <HoverLayer
                     key={layerId}
                     layerId={layerId}

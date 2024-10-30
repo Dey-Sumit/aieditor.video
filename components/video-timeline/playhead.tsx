@@ -1,7 +1,9 @@
 import { Rnd } from "react-rnd";
 import { useTimeline } from "~/context/useTimeline";
-import { TIMELINE } from "~/lib/constants/timeline.constants";
-const { PLAY_HEAD_WIDTH } = TIMELINE;
+import { LAYOUT } from "~/lib/constants/layout.constants";
+const {
+  TIMELINE: { PLAY_HEAD_WIDTH_IN_PX },
+} = LAYOUT;
 
 const PlayHead = () => {
   const { handlePlayheadDrag, playheadPosition } = useTimeline();
@@ -10,7 +12,7 @@ const PlayHead = () => {
       default={{
         x: 10,
         y: 0,
-        width: PLAY_HEAD_WIDTH,
+        width: PLAY_HEAD_WIDTH_IN_PX,
         height: 400,
       }}
       dragAxis="x"

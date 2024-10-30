@@ -540,6 +540,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
             effectiveDuration: 1434,
             sequenceType: "standalone",
             startFrame: 0,
+            linkedCaptionLayer: "12",
           },
         ],
         isVisible: true,
