@@ -33,11 +33,15 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
 const SequenceItemRenderer: React.FC<{
   item: StyledSequenceItem;
 }> = ({ item }) => {
+  console.log("SequenceItemRenderer", item);
+
   if (item.type === "preset") {
     return null;
   }
 
   const renderContent = () => {
+    console.log("item", item);
+
     switch (item.type) {
       case "div":
         return <div style={item.editableProps?.styles?.element}></div>;
@@ -77,9 +81,24 @@ const SequenceItemRenderer: React.FC<{
             endAt={item.editableProps.videoEndsAtInFrames}
           />
         );
+
       default:
         return null;
     }
+  };
+
+  const CaptionRenderer = () => {
+    if (item.type !== "caption") {
+      return null;
+    }
+
+    return (
+      <div style={item.editableProps?.styles?.element}>
+        {Object.values(item.sequenceItems).map((sequenceItem) => (
+          <SequenceItemRenderer key={sequenceItem.id} item={sequenceItem} />
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -107,7 +126,11 @@ const RenderSequence: React.FC<{
     const presetSequenceItem = sequenceItems[item.id] as StyledSequenceItem & {
       type: "preset";
     };
-    if (!presetSequenceItem || presetSequenceItem.type !== "preset") {
+    console.log({ sequenceItems, item });
+
+    if (!presetSequenceItem) {
+      console.log("null");
+
       return null;
     }
 
@@ -138,7 +161,7 @@ const layerContainer: React.CSSProperties = {
 const NestedSequenceComposition = (
   props: NestedCompositionProjectType["props"],
 ) => {
-  console.log("NestedSequenceComposition", props);
+  console.log("props", props);
 
   const updatePositionAndDimensions = useVideoStore(
     (state) => state.updatePositionAndDimensions,
@@ -185,30 +208,46 @@ const NestedSequenceComposition = (
   return (
     <AbsoluteFill className="border" onPointerDown={onPointerDown}>
       <AbsoluteFill className="font-serif" style={layerContainer}>
-        {[...layerOrder].reverse().map((layerId) => (
-          <TransitionSeries key={layerId} name={layerId} layout="none">
-            {layers[layerId].liteItems.map((item) => (
-              <React.Fragment key={item.id}>
-                <TransitionSeries.Sequence
-                  durationInFrames={item.sequenceDuration}
-                  name={item.id}
-                  offset={item.offset}
-                  layout="none"
-                >
-                  <RenderSequence item={item} sequenceItems={sequenceItems} />
-                </TransitionSeries.Sequence>
-                {item.transition?.outgoing && (
-                  <TransitionSeries.Transition
-                    presentation={slide()}
-                    timing={linearTiming({
-                      durationInFrames: item.transition.outgoing.duration * 2,
-                    })}
-                  />
-                )}
-              </React.Fragment>
-            ))}
-          </TransitionSeries>
-        ))}
+        {[...layerOrder].reverse().map((layerId) => {
+          if (layers[layerId].layerType === "caption")
+            return (
+              <CaptionRenderer
+                layerId={layerId}
+                liteItems={layers[layerId].liteItems}
+                sequenceItems={sequenceItems[layerId].sequenceItems}
+              />
+            );
+          return (
+            <TransitionSeries key={layerId} name={layerId} layout="none">
+              {layers[layerId].liteItems.map((item) => {
+                return (
+                  <React.Fragment key={item.id}>
+                    <TransitionSeries.Sequence
+                      durationInFrames={item.sequenceDuration}
+                      name={item.id}
+                      offset={item.offset}
+                      layout="none"
+                    >
+                      <RenderSequence
+                        item={item}
+                        sequenceItems={sequenceItems}
+                      />
+                    </TransitionSeries.Sequence>
+                    {item.transition?.outgoing && (
+                      <TransitionSeries.Transition
+                        presentation={slide()}
+                        timing={linearTiming({
+                          durationInFrames:
+                            item.transition.outgoing.duration * 2,
+                        })}
+                      />
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </TransitionSeries>
+          );
+        })}
       </AbsoluteFill>
       {getRemotionEnvironment().isPlayer ? (
         <SortedOutlines
@@ -225,3 +264,37 @@ const NestedSequenceComposition = (
 };
 
 export default NestedSequenceComposition;
+
+const CaptionRenderer = ({
+  sequenceItems,
+  liteItems,
+  layerId,
+}: {
+  sequenceItems: Record<string, StyledSequenceItem>;
+  liteItems: LiteSequenceItemType[];
+  layerId: string;
+}) => {
+  console.log("CaptionRenderer", liteItems, sequenceItems);
+
+  return (
+    <TransitionSeries key={layerId} name={layerId} layout="none">
+      {liteItems.map((item) => {
+        const sequenceItem = sequenceItems[item.id];
+
+        return (
+          <React.Fragment key={item.id}>
+            <TransitionSeries.Sequence
+              durationInFrames={30}
+              key={item.id}
+              name={item.id}
+              offset={item.offset}
+              className="bg-red-500/20 text-6xl font-bold text-white"
+            >
+              <SequenceItemRenderer item={sequenceItem} />
+            </TransitionSeries.Sequence>
+          </React.Fragment>
+        );
+      })}
+    </TransitionSeries>
+  );
+};

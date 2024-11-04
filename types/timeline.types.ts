@@ -72,6 +72,10 @@ export type FullSequenceContentType = {
   | {
       type: "div";
     }
+  | {
+      type: "caption"; // array of text sequences
+      sequenceItems: Record<string, FullSequenceContentType>;
+    }
 );
 
 export type TextSequenceItemType = Extract<
@@ -120,17 +124,33 @@ export type ContentType =
   | "image"
   | "video"
   | "audio"
-  | "div";
+  | "div"
+  | "caption";
 
 type StandaloneVideoAudioType = {
   sequenceType: "standalone";
   contentType: "video" | "audio";
-  linkedCaptionLayer?: string; // Optional caption layer ID
+  linkedCaptionLayerId: string; // Optional caption layer ID
 };
 
 type StandaloneOtherType = {
   sequenceType: "standalone";
   contentType: Exclude<ContentType, "video" | "audio">;
+};
+
+type StandaloneCaptionType = {
+  sequenceType: "standalone";
+  contentType: "caption";
+  linkedVideoId: string;
+  //! THERE WILL NEVER BE A CAPTION PRESET, NEITHER IT WILL HAVE MULTIPLE LAYERS
+  //! IT WILL ALWAYS HAVE ONE LAYER BUT FOR THE sake of simplicity, we are keeping it same as preset
+  //! (you know nested sequence type of)
+  layers: {
+    [layerId: string]: {
+      liteItems: LiteSequenceItemType[];
+    };
+  };
+  layerOrder: string[];
 };
 
 type PresetType = {
@@ -160,7 +180,12 @@ export type LiteSequenceItemType = {
       duration: number;
     };
   };
-} & (StandaloneVideoAudioType | StandaloneOtherType | PresetType);
+} & (
+  | StandaloneVideoAudioType
+  | StandaloneOtherType
+  | StandaloneCaptionType
+  | PresetType
+);
 
 export type LiteSequencePresetItemType = Extract<
   LiteSequenceItemType,
@@ -191,6 +216,7 @@ export type NestedCompositionProjectType = {
         name: string;
         isVisible: boolean;
         liteItems: LiteSequenceItemType[];
+        layerType: "normal" | "caption";
       };
     };
     layerOrder: string[]; // Array of layer IDs to maintain order
@@ -223,6 +249,7 @@ export const LayerSchema = z.object({
   id: z.string(),
   name: z.string(),
   liteItems: z.array(z.any()),
+  layerType: z.enum(["normal", "caption"]),
 });
 
 // TODO : create a type from this schema and use it in the above NestedCompositionProjectType
@@ -272,7 +299,9 @@ export type StoreActions = {
     itemId: string,
     position: "incoming" | "outgoing",
   ) => void;
+
   removeTransitionFromLayer: (layerId: LayerId, transitionId: string) => void;
+
   updateTransitionInLayer: (
     layerId: LayerId,
     transitionId: string,

@@ -1,7 +1,7 @@
 import type { NestedCompositionProjectType } from "~/types/timeline.types";
 
 //! CAUTION: DON'T update the project , it will effect the test cases. Once you update the project , always run and adjust the test cases
-export const TEST_CASE_PROJECT: NestedCompositionProjectType = {
+/* export const TEST_CASE_PROJECT: NestedCompositionProjectType = {
   id: "id-dummy",
   title: "Dummy Project",
   props: {
@@ -515,22 +515,43 @@ export const TEST_CASE_PROJECT: NestedCompositionProjectType = {
     },
     transitions: {},
   },
-};
+}; */
 
 export const EMPTY_PROJECT: NestedCompositionProjectType = {
   id: "id-dummy",
   title: "Dummy Project",
   props: {
     layers: {
-      "l-ac121030-0325-4cbd-b334-c4d91400fa5c": {
-        id: "l-ac121030-0325-4cbd-b334-c4d91400fa5c",
-        name: "Layer 1",
-        liteItems: [],
+      "L-CAPTION-1": {
+        id: "L-CAPTION-1",
+        name: "Layer Caption",
+        liteItems: [
+          {
+            sequenceType: "standalone",
+            contentType: "text",
+            effectiveDuration: 250, // need to calculate this
+            id: "s-text-1",
+            offset: 0, // need to calculate this
+            sequenceDuration: 250, // need to calculate this
+            startFrame: 0, // need to calculate this
+          },
+          {
+            sequenceType: "standalone",
+            contentType: "text",
+            effectiveDuration: 250, // need to calculate this
+            id: "s-text-2",
+            offset: 10, // need to calculate this
+            sequenceDuration: 250, // need to calculate this
+            startFrame: 260, // need to calculate this
+          },
+        ],
         isVisible: true,
+        layerType: "caption",
       },
       "l-ac121030-0325-4cbd-b334-c4d91400fa51": {
         id: "l-ac121030-0325-4cbd-b334-c4d91400fa51",
         name: "Layer 2",
+        layerType: "normal",
         liteItems: [
           {
             contentType: "video",
@@ -540,26 +561,23 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
             effectiveDuration: 1434,
             sequenceType: "standalone",
             startFrame: 0,
-            linkedCaptionLayer: "12",
+            linkedCaptionLayerId: "L-CAPTION-1",
           },
         ],
         isVisible: true,
       },
     },
-    layerOrder: [
-      "l-ac121030-0325-4cbd-b334-c4d91400fa5c",
-      "l-ac121030-0325-4cbd-b334-c4d91400fa51",
-    ],
+    layerOrder: ["L-CAPTION-1", "l-ac121030-0325-4cbd-b334-c4d91400fa51"],
     sequenceItems: {
       "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f": {
         id: "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f",
         layerId: "l-ac121030-0325-4cbd-b334-c4d91400fa51",
         type: "video",
         animations: [],
-        totalVideoDurationInFrames: 6910.2585,
+        totalVideoDurationInFrames: 150,
         editableProps: {
-          videoEndsAtInFrames: 6923,
-          videoStartsFromInFrames: 5489,
+          videoEndsAtInFrames: 150,
+          videoStartsFromInFrames: 0,
           styles: {
             container: {
               width: "100%",
@@ -580,7 +598,65 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
             height: 1080,
           },
           videoUrl:
-            "https://video-editor-user-upload-assets.s3.ap-south-1.amazonaws.com/better-call-saul-360p-with-audio.mp4?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFcaCmFwLXNvdXRoLTEiSDBGAiEAsFUEpVdT0meu%2Bdu%2Fglwf7jVT7RdPZEwZeaWpIYhJGZYCIQDx7flC8JbjduvFpWMvbi0t3xpBq1G1MAkdnjjLOjEyASrtAgjA%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDA1ODI2NDI1MjM3MSIMTjK1NTk%2FEjc7vbSbKsECYCClfeXH35nKX6kZAngXIK9TGZ%2B2OVEiAFdIXJNtWZrrENoBfjPs2sTIf69cs5SFf3w6i7Klu1ms3CowpEzJVU9dqSUzaJJc%2BQ6TTIS0YvSbgQXzB1Du05rY5jKB5VrjyfxguVOUMiskYI6Ey5nDHfwL1LTRBuFZER6bcT2lbCKgNZw%2BKogcW00vwqVLELA3dhTfbEYHASJPfzvXhX0eRcvX%2FaCCogV3WJE6KYMNBCLgTANpJefVlKFYOGgqzVvO7vmR%2Fk%2BLnkL3WMhlneLDLn8GI8muQBCIy1fiEpq0JDWGFZmISXAcgr6BEecKbw5FYED7wP1rybD7iyUZ8DmEtLc%2Bt%2BXU9rkkuo5WqAW5as%2BXQ9VKT0rFzJSHA5n3i37vu%2F750qFoj7pa7iRy9SoJhOcVRlxtW%2FRxbuQneuTZ2MtqMI6T5LgGOrICjxcngERxWe9uwrA0IDVbW9zKLrGlffyEK09pqrkrXkakecjO3KohEJVwup6NlA5sepsVyitw0DcE5ravJQW2VSZbrHUW33qahNU%2FfWgSt1dQZAnYDoFnbb8JDJBFnYLg7FBq1c%2BsQjXlXD3Fw%2B59aTdb6Xe1kcVg7wEi1Ylmtb2m9AKLXOC0ouN02CL22Ma9UMJJFbxDZy5f9xduJmIIOH5yNS39Qdh%2BHxlkiVbFmCHkngerjt3bxgIvfPCDw8y9P4ViDhkGiArpE%2BmSSHq%2F0uAi4Za7kxXrDqA8Q9ezby5SMkJW%2FP8hs3tsddcyGLGly6KvHPsF1CD5VHiw0iKLwF29XTTF9akvLVP2NQjfAGpwPvyZyBxQMgOnoZUmoepfGsaZ%2FQLZkw7xopHYv4b4AhoO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241023T144607Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIAQ3EGR57J6USMW655%2F20241023%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=9f8621b40d90257bdf308cf9d8258059870593553d1fce2dd85d309e1cc0a779",
+            "https://video-editor-user-upload-assets.s3.ap-south-1.amazonaws.com/Sumit%27s%20Video%20-%20Oct%2026%2C%202024.mp4?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEHwaCmFwLXNvdXRoLTEiRzBFAiEAzQ060Guqnj%2B4jW0XnM6LH5ZLSXoB7DCTqvwE70UnkUACIE9ER3Q6nFU34QX0PiBUXJGlnnlS%2BtpIU3QlRLAKF0zBKtQDCPX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMDU4MjY0MjUyMzcxIgw%2FugWXO4ts3dN6w1UqqAPcZoPjLSoCtg2iTCW5pVREunskpfX0ws%2FylpnDDIxWyhVaJDOGWZYHp%2F10IMdDBDc6dA%2BrSE03zG2YNchRNpDUewTLhDz12jgxVMzMQ2W2CUcqcxh%2BLgyfx44alTGL6XT1ILKY9NArmdSEDX1tnK5yLY6UmQ7URkotDdOrjcwgKDo4yW3DoFc5OdCDhchSVHCdpxAQA0BJQOCyAUiPCtcQQSKrBFTxZu2tzhsJ%2BJCqlpRA37FLc8lWdN%2FhcBa1cD%2Fa%2F6Nu4EmCZFfneB1CPWTxAc5eQRGbaqKFICLSlr48U%2BH%2BmXkGPn6CNW8SG1b7aqI%2B%2B2x3TjYqtS3WGj1noWXsXOPBdWEXE1lPsNqpjhXUeFOOfDf2EXKzsNQx9Rd1Gg6gKPq48wSSL5lLWvdo4XbX09%2Ffy64fktQud2Gh6kUVSSYrsP%2Fc1tW%2FhRWWr0mLMIpSo5qdFtWr1ACcVNvNYipZge5xd%2Fax3zJ7M1q9JbqCVKJQ1oB8NZINpCkC9jdbUiBJxnPR3L2PT1sSrlEX8W2JuyQ6FnZk0EJVvUDfTtLlTnRzgbBQ5fd%2FMLjYpLkGOuQCW1kPRoVDIU6gqOolizkG1ynSTnnY5xn6nz8rciJmLWT9GBj4qQU4MxPW4l5UV%2B9PnWbJoSDjO%2FYuk0D3JBIMSiZ59GyKT6zExEUAvdATeLor1sU78WVM7VSlqFrRcDl7qHPDZ2SOCHO%2FN6UcvyYAX49yPPfn0tKBb294GLqeYGyXJY09Q1Rh2Ag9q%2FSzUzUY7rCJyQIGlcBMbK5rfnFUqxVqQoGhrijqUzgt26M2F4hGU5IrxWovx5DX5fBA9c%2B09Oj7bXcnQ6h6mZr3AJej2fgs%2BgPJJgQdxEbY7%2Fi88ge9W2bfMi%2FK2TKltMah90j8ssZx7009U1Yh2Vlk4iqx2LKuFn9QkGlPpwO1nzH7D4yiZl%2B2lTdL4iOpL9ul8y3E5B%2F9C2as9Hz459ZG6SvPl%2BuWn0Zmd4L6uZjaKuBu1fOlNj5Oik6Zd8bg81HObXjXMPZPys%2FxIc6y5DZ4PY1x8HN6tu4%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ3EGR57J2VEONAXS%2F20241104%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20241104T202043Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=b9eec8a41513e36eb72df8380ed3e27b0a0cb5ad9cedc75758dde6e934dfabcf",
+        },
+      },
+
+      //! NOTE : SAME AS CAPTION LAYER ID, similar to preset nested seq items
+      "L-CAPTION-1": {
+        id: "L-CAPTION-1",
+        type: "caption",
+        layerId: "L-CAPTION-1",
+        editableProps: {
+          styles: {
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            element: {},
+          },
+        },
+        sequenceItems: {
+          "s-text-1": {
+            id: "s-text-1",
+            layerId: "L-CAPTION-1",
+            type: "text",
+            editableProps: {
+              text: "Your text",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                  color: "white",
+                },
+              },
+            },
+          },
+          "s-text-2": {
+            id: "s-text-1",
+            layerId: "L-CAPTION-1",
+            type: "text",
+            editableProps: {
+              text: "Your text",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                  color: "white",
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -588,7 +664,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
       width: 720,
       height: 1080,
       fps: 30,
-      duration: 30 * 60,
+      duration: 30 * 5,
       compositionId: "new-dynamic-composition",
     },
     transitions: {},
@@ -618,4 +694,135 @@ ADD ANIMATION :
 
 */
 
-// src/components/canvas.tsx
+// WHEEL feature REFERENCE : src/components/canvas.tsx
+
+export const CAPTION_DATA = {
+  captions: [
+    {
+      confidence: null,
+      endMs: 159.9999964237213,
+      startMs: 0,
+      text: "And",
+      timestampMs: 79.99999821186066,
+    },
+    {
+      confidence: null,
+      endMs: 280.0000011920929,
+      startMs: 159.9999964237213,
+      text: " when",
+      timestampMs: 219.9999988079071,
+    },
+    {
+      confidence: null,
+      endMs: 479.99998927116394,
+      startMs: 280.0000011920929,
+      text: " they",
+      timestampMs: 379.9999952316284,
+    },
+    {
+      confidence: null,
+      endMs: 680.0000071525574,
+      startMs: 479.99998927116394,
+      text: " pulled",
+      timestampMs: 579.9999982118607,
+    },
+    {
+      confidence: null,
+      endMs: 860.0000143051147,
+      startMs: 680.0000071525574,
+      text: " the",
+      timestampMs: 770.0000107288361,
+    },
+    {
+      confidence: null,
+      endMs: 1100.000023841858,
+      startMs: 860.0000143051147,
+      text: " hood",
+      timestampMs: 980.0000190734863,
+    },
+    {
+      confidence: null,
+      endMs: 1460.0000381469727,
+      startMs: 1100.000023841858,
+      text: " off,",
+      timestampMs: 1280.0000309944153,
+    },
+    {
+      confidence: null,
+      endMs: 1720.0000286102295,
+      startMs: 1720.0000286102295,
+      text: " I",
+      timestampMs: 1720.0000286102295,
+    },
+    {
+      confidence: null,
+      endMs: 1940.000057220459,
+      startMs: 1720.0000286102295,
+      text: " was",
+      timestampMs: 1830.0000429153442,
+    },
+    {
+      confidence: null,
+      endMs: 2299.999952316284,
+      startMs: 1940.000057220459,
+      text: " kneeling",
+      timestampMs: 2120.0000047683716,
+    },
+    {
+      confidence: null,
+      endMs: 2500,
+      startMs: 2299.999952316284,
+      text: " in",
+      timestampMs: 2399.999976158142,
+    },
+    {
+      confidence: null,
+      endMs: 2599.9999046325684,
+      startMs: 2500,
+      text: " front",
+      timestampMs: 2549.999952316284,
+    },
+    {
+      confidence: null,
+      endMs: 2720.0000286102295,
+      startMs: 2599.9999046325684,
+      text: " of",
+      timestampMs: 2659.999966621399,
+    },
+    {
+      confidence: null,
+      endMs: 2799.999952316284,
+      startMs: 2720.0000286102295,
+      text: " an",
+      timestampMs: 2759.999990463257,
+    },
+    {
+      confidence: null,
+      endMs: 3079.9999237060547,
+      startMs: 2799.999952316284,
+      text: " open",
+      timestampMs: 2939.9999380111694,
+    },
+    {
+      confidence: null,
+      endMs: 3380.000114440918,
+      startMs: 3079.9999237060547,
+      text: " grave",
+      timestampMs: 3230.0000190734863,
+    },
+    {
+      confidence: null,
+      endMs: 3500,
+      startMs: 3380.000114440918,
+      text: " with",
+      timestampMs: 3440.000057220459,
+    },
+    {
+      confidence: null,
+      endMs: 3500,
+      startMs: 3500,
+      text: " a",
+      timestampMs: 3500,
+    },
+  ],
+};

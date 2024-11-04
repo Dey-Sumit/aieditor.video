@@ -169,7 +169,7 @@ const SequenceItem = ({
             />
           ) : (
             <div className="flex h-full w-full flex-col">
-              {item.contentType === "video" && item.linkedCaptionLayer && (
+              {item.contentType === "video" && item.linkedCaptionLayerId && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();

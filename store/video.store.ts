@@ -1049,7 +1049,7 @@ const useVideoStore = create<
             newLayerOrder.unshift(captionLayerId);
 
             // Update the media item with the caption layer reference
-            item.linkedCaptionLayer = captionLayerId;
+            item.linkedCaptionLayerId = captionLayerId;
 
             console.log(
               `Linked caption layer ${captionLayerId} to media item ${sequenceId}`,

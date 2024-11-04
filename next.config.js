@@ -8,6 +8,9 @@ const nextConfig = {
   images: {
     remotePatterns: [{ hostname: "images.pexels.com" }],
   },
+  experimental: {
+    serverActions: true,
+  },
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

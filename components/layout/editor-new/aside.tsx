@@ -1,5 +1,6 @@
 "use client";
 import {
+  Captions,
   HeadphonesIcon,
   LifeBuoyIcon,
   Settings2Icon,
@@ -77,6 +78,7 @@ const AsideNew = () => {
             },
           }}
         />
+
         <TooltipButton
           icon={<WandIcon className="size-5" />}
           toolTipContent="Effects"
@@ -89,6 +91,7 @@ const AsideNew = () => {
             },
           }}
         />
+
         <TooltipButton
           icon={<HeadphonesIcon className="size-5" />}
           toolTipContent="Audio"
@@ -101,6 +104,20 @@ const AsideNew = () => {
             },
           }}
         />
+
+        <TooltipButton
+          icon={<Captions className="size-5" />}
+          toolTipContent="Captions"
+          buttonProps={{
+            size: "icon",
+            variant: "ghost",
+            className: cn("rounded-lg", activeTab === "captions" && "bg-muted"),
+            onClick: () => {
+              handleNavigation("captions");
+            },
+          }}
+        />
+
         <TooltipButton
           icon={<Settings2Icon className="size-5" />}
           toolTipContent="Settings"
