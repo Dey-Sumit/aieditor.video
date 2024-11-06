@@ -1,5 +1,135 @@
 import type { NestedCompositionProjectType } from "~/types/timeline.types";
 
+export const CAPTION_DATA = {
+  captions: [
+    {
+      confidence: null,
+      endMs: 159.9999964237213,
+      startMs: 0,
+      text: "And",
+      timestampMs: 79.99999821186066,
+    },
+    {
+      confidence: null,
+      endMs: 280.0000011920929,
+      startMs: 159.9999964237213,
+      text: " when",
+      timestampMs: 219.9999988079071,
+    },
+    {
+      confidence: null,
+      endMs: 479.99998927116394,
+      startMs: 280.0000011920929,
+      text: " they",
+      timestampMs: 379.9999952316284,
+    },
+    {
+      confidence: null,
+      endMs: 680.0000071525574,
+      startMs: 479.99998927116394,
+      text: " pulled",
+      timestampMs: 579.9999982118607,
+    },
+    {
+      confidence: null,
+      endMs: 860.0000143051147,
+      startMs: 680.0000071525574,
+      text: " the",
+      timestampMs: 770.0000107288361,
+    },
+    {
+      confidence: null,
+      endMs: 1100.000023841858,
+      startMs: 860.0000143051147,
+      text: " hood",
+      timestampMs: 980.0000190734863,
+    },
+    {
+      confidence: null,
+      endMs: 1460.0000381469727,
+      startMs: 1100.000023841858,
+      text: " off,",
+      timestampMs: 1280.0000309944153,
+    },
+    {
+      confidence: null,
+      endMs: 1720.0000286102295,
+      startMs: 1720.0000286102295,
+      text: " I",
+      timestampMs: 1720.0000286102295,
+    },
+    {
+      confidence: null,
+      endMs: 1940.000057220459,
+      startMs: 1720.0000286102295,
+      text: " was",
+      timestampMs: 1830.0000429153442,
+    },
+    {
+      confidence: null,
+      endMs: 2299.999952316284,
+      startMs: 1940.000057220459,
+      text: " kneeling",
+      timestampMs: 2120.0000047683716,
+    },
+    {
+      confidence: null,
+      endMs: 2500,
+      startMs: 2299.999952316284,
+      text: " in",
+      timestampMs: 2399.999976158142,
+    },
+    {
+      confidence: null,
+      endMs: 2599.9999046325684,
+      startMs: 2500,
+      text: " front",
+      timestampMs: 2549.999952316284,
+    },
+    {
+      confidence: null,
+      endMs: 2720.0000286102295,
+      startMs: 2599.9999046325684,
+      text: " of",
+      timestampMs: 2659.999966621399,
+    },
+    {
+      confidence: null,
+      endMs: 2799.999952316284,
+      startMs: 2720.0000286102295,
+      text: " an",
+      timestampMs: 2759.999990463257,
+    },
+    {
+      confidence: null,
+      endMs: 3079.9999237060547,
+      startMs: 2799.999952316284,
+      text: " open",
+      timestampMs: 2939.9999380111694,
+    },
+    {
+      confidence: null,
+      endMs: 3380.000114440918,
+      startMs: 3079.9999237060547,
+      text: " grave",
+      timestampMs: 3230.0000190734863,
+    },
+    {
+      confidence: null,
+      endMs: 3500,
+      startMs: 3380.000114440918,
+      text: " with",
+      timestampMs: 3440.000057220459,
+    },
+    {
+      confidence: null,
+      endMs: 3500,
+      startMs: 3500,
+      text: " a",
+      timestampMs: 3500,
+    },
+  ],
+};
 //! CAUTION: DON'T update the project , it will effect the test cases. Once you update the project , always run and adjust the test cases
 /* export const TEST_CASE_PROJECT: NestedCompositionProjectType = {
   id: "id-dummy",
@@ -527,22 +657,166 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
         name: "Layer Caption",
         liteItems: [
           {
+            id: "s-caption-s-text-27e8de78-7098-479f-915b-7a29a9203d60",
             sequenceType: "standalone",
             contentType: "text",
-            effectiveDuration: 250, // need to calculate this
-            id: "s-text-1",
-            offset: 0, // need to calculate this
-            sequenceDuration: 250, // need to calculate this
-            startFrame: 0, // need to calculate this
+            sequenceDuration: 5,
+            effectiveDuration: 5,
+            startFrame: 0,
+            offset: 0,
           },
           {
+            id: "s-caption-s-text-f7365203-231c-406e-b403-3dcf44639ce5",
             sequenceType: "standalone",
             contentType: "text",
-            effectiveDuration: 250, // need to calculate this
-            id: "s-text-2",
-            offset: 10, // need to calculate this
-            sequenceDuration: 250, // need to calculate this
-            startFrame: 260, // need to calculate this
+            sequenceDuration: 3,
+            effectiveDuration: 3,
+            startFrame: 5,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-16031904-8119-463e-8325-b09f8f359b16",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 6,
+            effectiveDuration: 6,
+            startFrame: 8,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-bc3b9146-fa62-4116-8bad-fb2cbe1bd17e",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 6,
+            effectiveDuration: 6,
+            startFrame: 14,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-7f4e0e7f-0da5-49b4-891e-bae97dfc7185",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 6,
+            effectiveDuration: 6,
+            startFrame: 20,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-57989992-ba56-41b2-b06e-b842cde558af",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 7,
+            effectiveDuration: 7,
+            startFrame: 26,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-5d60c534-cdcb-432c-be5e-02cc35b21008",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 11,
+            effectiveDuration: 11,
+            startFrame: 33,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-38aed57f-3e62-403f-99aa-e8bdefce7ce5",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 1,
+            effectiveDuration: 1,
+            startFrame: 52,
+            offset: 8,
+          },
+          {
+            id: "s-caption-s-text-4156190a-f610-496c-b664-75211c224f72",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 6,
+            effectiveDuration: 6,
+            startFrame: 52,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-e1a6f844-37ee-4e36-97ee-9af60227c4f0",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 11,
+            effectiveDuration: 11,
+            startFrame: 58,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-6f6bc8b9-7b6b-47ff-85f2-2428d9df4804",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 6,
+            effectiveDuration: 6,
+            startFrame: 69,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-33499c29-8550-4016-aa94-8a6b6c3eb262",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 3,
+            effectiveDuration: 3,
+            startFrame: 75,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-116cc573-1314-4027-bc02-ed6c96206ae7",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 4,
+            effectiveDuration: 4,
+            startFrame: 78,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-75ff9b9d-c120-421e-9e45-ce61c45bbb51",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 2,
+            effectiveDuration: 2,
+            startFrame: 82,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-9ee19540-7e68-48eb-b284-13481d700e80",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 8,
+            effectiveDuration: 8,
+            startFrame: 84,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-a6d47c91-4775-4e7c-9d3b-6eec076f591d",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 9,
+            effectiveDuration: 9,
+            startFrame: 92,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-5c77e9b9-4038-4759-b031-2c8f750ae468",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 4,
+            effectiveDuration: 4,
+            startFrame: 101,
+            offset: 0,
+          },
+          {
+            id: "s-caption-s-text-6d03f8d2-6308-49fe-93aa-c42953d3cd15",
+            sequenceType: "standalone",
+            contentType: "text",
+            sequenceDuration: 1,
+            effectiveDuration: 1,
+            startFrame: 105,
+            offset: 0,
           },
         ],
         isVisible: true,
@@ -567,7 +841,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
         isVisible: true,
       },
     },
-    layerOrder: ["L-CAPTION-1", "l-ac121030-0325-4cbd-b334-c4d91400fa51"],
+    layerOrder: ["L-CAPTION-1"],
     sequenceItems: {
       "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f": {
         id: "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f",
@@ -607,6 +881,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
         id: "L-CAPTION-1",
         type: "caption",
         layerId: "L-CAPTION-1",
+        // captions: CAPTION_DATA.captions,
         editableProps: {
           styles: {
             container: {
@@ -617,43 +892,435 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
           },
         },
         sequenceItems: {
-          "s-text-1": {
-            id: "s-text-1",
-            layerId: "L-CAPTION-1",
+          "s-caption-s-text-27e8de78-7098-479f-915b-7a29a9203d60": {
+            id: "s-caption-s-text-27e8de78-7098-479f-915b-7a29a9203d60",
             type: "text",
+            layerId: "layer-1",
             editableProps: {
-              text: "Your text",
+              text: "And",
               styles: {
                 container: {
                   justifyContent: "center",
                   alignItems: "center",
                 },
                 element: {
-                  objectFit: "contain",
-                  width: "100%",
-                  height: "100%",
                   color: "white",
+                  fontSize: "64px",
                 },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
               },
             },
           },
-          "s-text-2": {
-            id: "s-text-1",
-            layerId: "L-CAPTION-1",
+          "s-caption-s-text-f7365203-231c-406e-b403-3dcf44639ce5": {
+            id: "s-caption-s-text-f7365203-231c-406e-b403-3dcf44639ce5",
             type: "text",
+            layerId: "layer-1",
             editableProps: {
-              text: "Your text",
+              text: " when",
               styles: {
                 container: {
                   justifyContent: "center",
                   alignItems: "center",
                 },
                 element: {
-                  objectFit: "contain",
-                  width: "100%",
-                  height: "100%",
                   color: "white",
+                  fontSize: "64px",
                 },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-16031904-8119-463e-8325-b09f8f359b16": {
+            id: "s-caption-s-text-16031904-8119-463e-8325-b09f8f359b16",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " they",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-bc3b9146-fa62-4116-8bad-fb2cbe1bd17e": {
+            id: "s-caption-s-text-bc3b9146-fa62-4116-8bad-fb2cbe1bd17e",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " pulled",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-7f4e0e7f-0da5-49b4-891e-bae97dfc7185": {
+            id: "s-caption-s-text-7f4e0e7f-0da5-49b4-891e-bae97dfc7185",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " the",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-57989992-ba56-41b2-b06e-b842cde558af": {
+            id: "s-caption-s-text-57989992-ba56-41b2-b06e-b842cde558af",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " hood",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-5d60c534-cdcb-432c-be5e-02cc35b21008": {
+            id: "s-caption-s-text-5d60c534-cdcb-432c-be5e-02cc35b21008",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " off,",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-38aed57f-3e62-403f-99aa-e8bdefce7ce5": {
+            id: "s-caption-s-text-38aed57f-3e62-403f-99aa-e8bdefce7ce5",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " I",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-4156190a-f610-496c-b664-75211c224f72": {
+            id: "s-caption-s-text-4156190a-f610-496c-b664-75211c224f72",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " was",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-e1a6f844-37ee-4e36-97ee-9af60227c4f0": {
+            id: "s-caption-s-text-e1a6f844-37ee-4e36-97ee-9af60227c4f0",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " kneeling",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-6f6bc8b9-7b6b-47ff-85f2-2428d9df4804": {
+            id: "s-caption-s-text-6f6bc8b9-7b6b-47ff-85f2-2428d9df4804",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " in",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-33499c29-8550-4016-aa94-8a6b6c3eb262": {
+            id: "s-caption-s-text-33499c29-8550-4016-aa94-8a6b6c3eb262",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " front",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-116cc573-1314-4027-bc02-ed6c96206ae7": {
+            id: "s-caption-s-text-116cc573-1314-4027-bc02-ed6c96206ae7",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " of",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-75ff9b9d-c120-421e-9e45-ce61c45bbb51": {
+            id: "s-caption-s-text-75ff9b9d-c120-421e-9e45-ce61c45bbb51",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " an",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-9ee19540-7e68-48eb-b284-13481d700e80": {
+            id: "s-caption-s-text-9ee19540-7e68-48eb-b284-13481d700e80",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " open",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-a6d47c91-4775-4e7c-9d3b-6eec076f591d": {
+            id: "s-caption-s-text-a6d47c91-4775-4e7c-9d3b-6eec076f591d",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " grave",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-5c77e9b9-4038-4759-b031-2c8f750ae468": {
+            id: "s-caption-s-text-5c77e9b9-4038-4759-b031-2c8f750ae468",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " with",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          },
+          "s-caption-s-text-6d03f8d2-6308-49fe-93aa-c42953d3cd15": {
+            id: "s-caption-s-text-6d03f8d2-6308-49fe-93aa-c42953d3cd15",
+            type: "text",
+            layerId: "layer-1",
+            editableProps: {
+              text: " a",
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {
+                  color: "white",
+                  fontSize: "64px",
+                },
+              },
+              positionAndDimensions: {
+                top: 0,
+                left: 0,
+                width: 720,
+                height: 1080,
               },
             },
           },
@@ -695,134 +1362,3 @@ ADD ANIMATION :
 */
 
 // WHEEL feature REFERENCE : src/components/canvas.tsx
-
-export const CAPTION_DATA = {
-  captions: [
-    {
-      confidence: null,
-      endMs: 159.9999964237213,
-      startMs: 0,
-      text: "And",
-      timestampMs: 79.99999821186066,
-    },
-    {
-      confidence: null,
-      endMs: 280.0000011920929,
-      startMs: 159.9999964237213,
-      text: " when",
-      timestampMs: 219.9999988079071,
-    },
-    {
-      confidence: null,
-      endMs: 479.99998927116394,
-      startMs: 280.0000011920929,
-      text: " they",
-      timestampMs: 379.9999952316284,
-    },
-    {
-      confidence: null,
-      endMs: 680.0000071525574,
-      startMs: 479.99998927116394,
-      text: " pulled",
-      timestampMs: 579.9999982118607,
-    },
-    {
-      confidence: null,
-      endMs: 860.0000143051147,
-      startMs: 680.0000071525574,
-      text: " the",
-      timestampMs: 770.0000107288361,
-    },
-    {
-      confidence: null,
-      endMs: 1100.000023841858,
-      startMs: 860.0000143051147,
-      text: " hood",
-      timestampMs: 980.0000190734863,
-    },
-    {
-      confidence: null,
-      endMs: 1460.0000381469727,
-      startMs: 1100.000023841858,
-      text: " off,",
-      timestampMs: 1280.0000309944153,
-    },
-    {
-      confidence: null,
-      endMs: 1720.0000286102295,
-      startMs: 1720.0000286102295,
-      text: " I",
-      timestampMs: 1720.0000286102295,
-    },
-    {
-      confidence: null,
-      endMs: 1940.000057220459,
-      startMs: 1720.0000286102295,
-      text: " was",
-      timestampMs: 1830.0000429153442,
-    },
-    {
-      confidence: null,
-      endMs: 2299.999952316284,
-      startMs: 1940.000057220459,
-      text: " kneeling",
-      timestampMs: 2120.0000047683716,
-    },
-    {
-      confidence: null,
-      endMs: 2500,
-      startMs: 2299.999952316284,
-      text: " in",
-      timestampMs: 2399.999976158142,
-    },
-    {
-      confidence: null,
-      endMs: 2599.9999046325684,
-      startMs: 2500,
-      text: " front",
-      timestampMs: 2549.999952316284,
-    },
-    {
-      confidence: null,
-      endMs: 2720.0000286102295,
-      startMs: 2599.9999046325684,
-      text: " of",
-      timestampMs: 2659.999966621399,
-    },
-    {
-      confidence: null,
-      endMs: 2799.999952316284,
-      startMs: 2720.0000286102295,
-      text: " an",
-      timestampMs: 2759.999990463257,
-    },
-    {
-      confidence: null,
-      endMs: 3079.9999237060547,
-      startMs: 2799.999952316284,
-      text: " open",
-      timestampMs: 2939.9999380111694,
-    },
-    {
-      confidence: null,
-      endMs: 3380.000114440918,
-      startMs: 3079.9999237060547,
-      text: " grave",
-      timestampMs: 3230.0000190734863,
-    },
-    {
-      confidence: null,
-      endMs: 3500,
-      startMs: 3380.000114440918,
-      text: " with",
-      timestampMs: 3440.000057220459,
-    },
-    {
-      confidence: null,
-      endMs: 3500,
-      startMs: 3500,
-      text: " a",
-      timestampMs: 3500,
-    },
-  ],
-};

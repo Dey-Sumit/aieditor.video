@@ -73,10 +73,12 @@ export type FullSequenceContentType = {
       type: "div";
     }
   | {
-      type: "caption"; // array of text sequences
-      sequenceItems: Record<string, FullSequenceContentType>;
+      type: "caption";
+      sequenceItems: CaptionSequenceItemsType;
     }
 );
+
+export type CaptionSequenceItemsType = Record<string, FullSequenceContentType>;
 
 export type TextSequenceItemType = Extract<
   FullSequenceContentType,

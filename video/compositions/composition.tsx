@@ -87,20 +87,6 @@ const SequenceItemRenderer: React.FC<{
     }
   };
 
-  const CaptionRenderer = () => {
-    if (item.type !== "caption") {
-      return null;
-    }
-
-    return (
-      <div style={item.editableProps?.styles?.element}>
-        {Object.values(item.sequenceItems).map((sequenceItem) => (
-          <SequenceItemRenderer key={sequenceItem.id} item={sequenceItem} />
-        ))}
-      </div>
-    );
-  };
-
   return (
     <AbsoluteFill
       style={{
@@ -117,8 +103,12 @@ const RenderSequence: React.FC<{
   item: LiteSequenceItemType;
   sequenceItems: Record<string, StyledSequenceItem>;
 }> = ({ item, sequenceItems }) => {
+  console.log("RenderSequence", item, sequenceItems);
+
   if (item.sequenceType === "standalone") {
     const sequenceItem = sequenceItems[item.id];
+    console.log("sequenceItem", sequenceItem);
+
     return sequenceItem ? <SequenceItemRenderer item={sequenceItem} /> : null;
   }
 
@@ -161,8 +151,6 @@ const layerContainer: React.CSSProperties = {
 const NestedSequenceComposition = (
   props: NestedCompositionProjectType["props"],
 ) => {
-  console.log("props", props);
-
   const updatePositionAndDimensions = useVideoStore(
     (state) => state.updatePositionAndDimensions,
   );
@@ -206,20 +194,23 @@ const NestedSequenceComposition = (
   ); // Flatten all liteItems from all layers into a single array
 
   return (
-    <AbsoluteFill className="border" onPointerDown={onPointerDown}>
+    <AbsoluteFill className="border bg-black" onPointerDown={onPointerDown}>
       <AbsoluteFill className="font-serif" style={layerContainer}>
         {[...layerOrder].reverse().map((layerId) => {
           if (layers[layerId].layerType === "caption")
             return (
               <CaptionRenderer
                 layerId={layerId}
-                liteItems={layers[layerId].liteItems}
+                //@ts-ignore : i am done with this :(
                 sequenceItems={sequenceItems[layerId].sequenceItems}
+                liteItems={layers[layerId].liteItems}
               />
             );
           return (
             <TransitionSeries key={layerId} name={layerId} layout="none">
               {layers[layerId].liteItems.map((item) => {
+                console.log("item", item);
+
                 return (
                   <React.Fragment key={item.id}>
                     <TransitionSeries.Sequence
@@ -230,6 +221,9 @@ const NestedSequenceComposition = (
                     >
                       <RenderSequence
                         item={item}
+                        // sequenceItems={
+                        //   sequenceItems[layerId].
+                        // }
                         sequenceItems={sequenceItems}
                       />
                     </TransitionSeries.Sequence>
@@ -270,29 +264,25 @@ const CaptionRenderer = ({
   liteItems,
   layerId,
 }: {
+  layerId: string;
   sequenceItems: Record<string, StyledSequenceItem>;
   liteItems: LiteSequenceItemType[];
-  layerId: string;
 }) => {
-  console.log("CaptionRenderer", liteItems, sequenceItems);
-
   return (
     <TransitionSeries key={layerId} name={layerId} layout="none">
       {liteItems.map((item) => {
         const sequenceItem = sequenceItems[item.id];
 
         return (
-          <React.Fragment key={item.id}>
-            <TransitionSeries.Sequence
-              durationInFrames={30}
-              key={item.id}
-              name={item.id}
-              offset={item.offset}
-              className="bg-red-500/20 text-6xl font-bold text-white"
-            >
-              <SequenceItemRenderer item={sequenceItem} />
-            </TransitionSeries.Sequence>
-          </React.Fragment>
+          <TransitionSeries.Sequence
+            key={item.id}
+            durationInFrames={item.sequenceDuration}
+            name={item.id}
+            offset={item.offset}
+            layout="none"
+          >
+            <SequenceItemRenderer item={sequenceItem} />
+          </TransitionSeries.Sequence>
         );
       })}
     </TransitionSeries>

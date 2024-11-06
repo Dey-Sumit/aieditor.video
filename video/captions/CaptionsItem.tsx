@@ -1,5 +1,5 @@
+import { createTikTokStyleCaptions, type Caption } from "@remotion/captions";
 import React, { useMemo } from "react";
-import { createTikTokStyleCaptions } from "@remotion/captions";
 import { Sequence, useVideoConfig } from "remotion";
 import SubtitlePage from "./SubtitlePage";
 import { loadFont } from "./load-font";
@@ -8,12 +8,22 @@ const SWITCH_CAPTIONS_EVERY_MS = 1200;
 
 loadFont();
 
-export const CaptionsItem = ({ item }: { item: ItemType }) => {
+export const CaptionsItem = ({
+  item,
+}: {
+  item: {
+    captions: Caption[];
+    type: "captions";
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  };
+}) => {
   if (item.type !== "captions") {
     throw new Error("Item is not captions");
   }
-  console.log("CaptionsItem",item);
-  
+  console.log("CaptionsItem", item);
 
   const { fps } = useVideoConfig();
 
@@ -31,9 +41,7 @@ export const CaptionsItem = ({ item }: { item: ItemType }) => {
     captions: item.captions,
     combineTokensWithinMilliseconds: 200,
   });
-  console.log({pages});
-  
-
+  console.log({ pages });
 
   return (
     <div style={style} className="text-white">
@@ -42,7 +50,7 @@ export const CaptionsItem = ({ item }: { item: ItemType }) => {
         const subtitleStartFrame = (page.startMs / 1000) * fps;
         const subtitleEndFrame = Math.min(
           nextPage ? (nextPage.startMs / 1000) * fps : Infinity,
-          subtitleStartFrame + SWITCH_CAPTIONS_EVERY_MS
+          subtitleStartFrame + SWITCH_CAPTIONS_EVERY_MS,
         );
         const durationInFrames = subtitleEndFrame - subtitleStartFrame;
         if (durationInFrames <= 0) {
