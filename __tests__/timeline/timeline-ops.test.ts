@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react-hooks";
-import { TEST_CASE_PROJECT } from "~/data/nested-composition.data";
+import { EMPTY_PROJECT } from "~/data/nested-composition.data";
 import {
   useSeqItemResizeHandler,
   useSeqItemResizeValidation,
@@ -13,7 +13,7 @@ describe("timeline-ops", () => {
   const initializeStore = () => {
     const { result } = renderHook(() => useVideoStore());
     act(() => {
-      result.current.loadProject(TEST_CASE_PROJECT);
+      result.current.loadProject(EMPTY_PROJECT);
     });
     return result;
   };
@@ -142,7 +142,7 @@ describe("timeline-ops", () => {
     const initializeStore = () => {
       const { result } = renderHook(() => useVideoStore());
       act(() => {
-        result.current.loadProject(TEST_CASE_PROJECT);
+        result.current.loadProject(EMPTY_PROJECT);
       });
       return result;
     };

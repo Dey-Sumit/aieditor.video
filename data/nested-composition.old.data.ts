@@ -1,3 +1,4 @@
+//@ts-nocheck
 import type { NestedCompositionProjectType } from "~/types/timeline.types";
 
 // export const DUMMY_NESTED_PROJECT_WITH_END_SCREEN_PRESET_ADDED: NestedCompositionProjectType =

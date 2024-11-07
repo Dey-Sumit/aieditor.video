@@ -784,6 +784,7 @@ const useVideoStore = create<
             name: `Layer ${state.props.layerOrder.length + 1}`,
             liteItems: [],
             isVisible: true,
+            layerType: "normal",
           };
 
           let newLayerOrder = [...state.props.layerOrder];
@@ -1038,6 +1039,7 @@ const useVideoStore = create<
               name: `Captions for ${sequenceId}`,
               isVisible: true,
               liteItems: [],
+              layerType: "caption",
             };
 
             // Add the caption layer to state

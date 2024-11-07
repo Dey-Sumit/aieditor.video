@@ -14,6 +14,7 @@ const src =
 export default function Component() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedOption, setSelectedOption] = useState("entire");
+  //@ts-ignore
   const handleGenerateCaptionsNew = async () => {
     console.log("Generating captions ...");
 
@@ -39,17 +40,17 @@ export default function Component() {
     // const audio = await extractAudio(src);
   };
 
-  const getOptionLabel = (option: string) => {
-    switch (option) {
-      case "entire":
-        return "Entire Timeline";
-      case "selected-media":
-        return "Selected Media";
+  // const getOptionLabel = (option: string) => {
+  //   switch (option) {
+  //     case "entire":
+  //       return "Entire Timeline";
+  //     case "selected-media":
+  //       return "Selected Media";
 
-      default:
-        return option;
-    }
-  };
+  //     default:
+  //       return option;
+  //   }
+  // };
 
   const handleCaption = () => {
     getCaptions({

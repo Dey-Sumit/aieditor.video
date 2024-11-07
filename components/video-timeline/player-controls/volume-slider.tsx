@@ -31,23 +31,6 @@ export const VolumeSlider: React.FC<{
     };
   }, [playerRef]);
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> =
-    React.useCallback(
-      (evt) => {
-        if (!playerRef.current) {
-          return;
-        }
-
-        const newVolume = Number(evt.target.value);
-        if (newVolume > 0 && playerRef.current.isMuted()) {
-          playerRef.current.unmute();
-        }
-
-        playerRef.current.setVolume(newVolume);
-      },
-      [playerRef],
-    );
-
   return (
     // <input
     //   value={muted ? 0 : volume}

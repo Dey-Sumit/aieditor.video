@@ -1,6 +1,5 @@
 import { type ComponentProps } from "react";
 import { Rnd } from "react-rnd";
-import { useTimeline } from "~/context/useTimeline";
 import { cn } from "~/lib/utils";
 
 import {
@@ -10,10 +9,12 @@ import {
   Image,
   Video,
 } from "lucide-react";
+import { useCaptionEdit } from "~/context/caption-edit-context";
+import { useTimeline } from "~/context/useTimeline";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { useEditingStore } from "~/store/editing.store";
-import useVideoStore from "~/store/video.store";
 import type {
+  ContentType,
   LayerId,
   LiteSequenceItemType,
   LiteSequencePresetItemType,
@@ -22,16 +23,21 @@ import SequenceContextMenuWrapper from "../sequence-context-menu";
 /**
  * Map of item types to their corresponding CSS classes for styling.
  */
-export const ITEM_TYPE_TO_STYLES_MAP: Record<string, string> = {
+export const ITEM_TYPE_TO_STYLES_MAP: Record<ContentType | "preset", string> = {
   text: "bg-green-600/50 border-green-700 before:bg-green-700 after:bg-green-700  ",
   image:
     "bg-purple-600/50 border-purple-600 before:bg-purple-600 after:bg-purple-600",
   video: "bg-pink-600/50 border-pink-600 before:bg-pink-600 after:bg-pink-600",
   audio:
     "bg-orange-600/50 border-orange-600 before:bg-orange-600 after:bg-orange-600",
+  // TODO : remove this
   caption:
     "bg-green-600/50 border-green-600 before:bg-green-600 after:bg-green-600",
   preset: "bg-yellow-600/50 border-yellow-600  mouse-grab",
+  "caption-page":
+    " bg-green-600/50 border-green-600 before:bg-green-600 after:bg-green-600",
+  div: "",
+  dummy: "",
 };
 
 const {
@@ -47,7 +53,7 @@ const SequenceItem = ({
   layerId: LayerId;
   nextItemStartFrame: number | undefined;
 }) => {
-  // console.log("SequenceItem re-renders", item.id); // TODO : it should not re-render when item position change in canvas . It's a big performance issue
+  const { setView, setActiveCaptionData } = useCaptionEdit();
 
   const {
     throttledItemDrag,
@@ -55,13 +61,14 @@ const SequenceItem = ({
     setDraggingLayerId,
     itemResizeHandler,
   } = useTimeline();
+
   const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
   const activeSeqItem = useEditingStore((state) => state.activeSeqItem);
 
-  const orderedLayers = useVideoStore((state) => state.props.layerOrder);
+  const { visibleLayerOrder, view } = useCaptionEdit();
 
   /* The adjustment of the x position is to account for the transition duration.
-   -  without transition : seq1 0 to 120: duration 120 frames, seq2 120 to 210 : duration 90 frames
+   - without transition : seq1 0 to 120: duration 120 frames, seq2 120 to 210 : duration 90 frames
    - with transition of 30 frames : seq1 0 to (120+15 outgoing) 135: duration 135 frames, seq2 135(120+15 incoming) to 210 : duration 75 frames
   */
 
@@ -83,10 +90,10 @@ const SequenceItem = ({
     const centerY = d.y + TRACK_LAYER_HEIGHT_IN_PX / 2;
     const rawLayerIndex = centerY / TRACK_LAYER_HEIGHT_IN_PX;
     const snapLayerIndex = Math.floor(rawLayerIndex);
-    const newLayerId = orderedLayers[snapLayerIndex];
+    const newLayerId = visibleLayerOrder[snapLayerIndex];
 
     if (d.x !== x || layerId !== newLayerId)
-      throttledItemDrag(layerId, item.id, d.x, d.y);
+      throttledItemDrag(layerId, newLayerId, item.id, d.x, d.y);
 
     setDraggingLayerId(null);
   };
@@ -107,10 +114,11 @@ const SequenceItem = ({
     });
   };
 
-  const layerIndex = orderedLayers.indexOf(layerId);
+  const layerIndex = visibleLayerOrder.indexOf(layerId);
 
   return (
     <Rnd
+      id={`sequence-item-${item.id}`}
       key={item.id}
       bounds="parent"
       position={{
@@ -136,6 +144,13 @@ const SequenceItem = ({
         topLeft: false,
         topRight: false,
       }}
+      dragAxis={
+        item.sequenceType === "preset"
+          ? "both"
+          : item.contentType !== "caption-page"
+            ? "both"
+            : "x"
+      }
       onDragStop={onDragStop}
       onDragStart={onDragStart}
       onResizeStop={onResizeStop}
@@ -169,17 +184,30 @@ const SequenceItem = ({
             />
           ) : (
             <div className="flex h-full w-full flex-col">
-              {item.contentType === "video" && item.linkedCaptionLayerId && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    console.log("clicked...");
-                  }}
-                  className="h-6 w-full rounded-sm border-2 border-yellow-500 bg-yellow-300/50 hover:bg-opacity-90"
-                >
-                  <div className="h-full w-full rounded-none"></div>
-                </button>
-              )}
+              {item.contentType === "video" &&
+                view === "entire-timeline" &&
+                item.linkedCaptionLayerId && (
+                  <button
+                    id="caption-item-preview-item"
+                    // onClick={(e) => {
+                    //   e.stopPropagation();
+                    //   console.log("clicked...");
+                    // }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveCaptionData({
+                        videoLayerId: layerId,
+                        videoItemId: item.id,
+                        captionLayerId: item.linkedCaptionLayerId!,
+                        durationInFrames: item.sequenceDuration, // TODO : confirm if it's not effective duration
+                      });
+                      setView("caption-edit");
+                    }}
+                    className="h-6 w-full rounded-sm border-2 border-yellow-500 bg-yellow-300/50 hover:bg-opacity-90"
+                  >
+                    <div className="h-full w-full rounded-none"></div>
+                  </button>
+                )}
               <div
                 //   className="flex h-full w-full cursor-grab items-center justify-center"
                 className={cn(

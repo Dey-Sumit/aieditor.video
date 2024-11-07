@@ -281,6 +281,7 @@ export const useNewItemValidation = () => {
               effectiveDuration: duration,
               sequenceType: "standalone",
               startFrame,
+              linkedCaptionLayerId: null,
             },
             {
               type: "video",

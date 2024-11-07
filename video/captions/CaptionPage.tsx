@@ -8,8 +8,6 @@ import { TheBoldFont } from "./load-font";
 const fontFamily = TheBoldFont;
 console.log({ TheBoldFont });
 
-const container: React.CSSProperties = {};
-
 const DESIRED_FONT_SIZE = 100;
 const HIGHLIGHT_COLOR = "orange";
 // const HIGHLIGHT_COLOR = "#39E508";

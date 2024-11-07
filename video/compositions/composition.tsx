@@ -35,8 +35,6 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
 const SequenceItemRenderer: React.FC<{
   item: StyledSequenceItem;
 }> = ({ item }) => {
-  console.log("SequenceItemRenderer", item);
-
   if (item.type === "preset") {
     return null;
   }
@@ -286,7 +284,6 @@ const CaptionRenderer = ({
       <Series key={layerId}>
         {liteItems.map((item) => {
           const sequenceItem = sequenceItems[item.id];
-          console.log({ id: item.id });
 
           return (
             <Series.Sequence

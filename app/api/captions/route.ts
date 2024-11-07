@@ -3,8 +3,8 @@ import {
   openAiWhisperApiToCaptions,
 } from "@remotion/openai-whisper";
 import { NextRequest, NextResponse } from "next/server";
-import { OpenAI } from "openai";
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// import { OpenAI } from "openai";
+// const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: NextRequest) {
   try {
@@ -69,6 +69,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error("Error during transcription:", error);
-    return NextResponse.json({ status: "fail", error: error?.message });
+    return NextResponse.json({
+      status: "fail",
+      error: "Error during transcription",
+    });
   }
 }

@@ -10,7 +10,8 @@ import { PlayPauseButton } from "~/components/video-timeline/player-controls/pla
 import TimeDisplay from "~/components/video-timeline/player-controls/time-display";
 import { VolumeSlider } from "~/components/video-timeline/player-controls/volume-slider";
 import Toolbar from "~/components/video-timeline/toolbar";
-import VideoTimeline from "~/components/video-timeline/VideoTImeline";
+import VideoTimeline from "~/components/video-timeline/video-timeline";
+import { CaptionEditProvider } from "~/context/caption-edit-context";
 import { VideoTimelineProvider } from "~/context/useTimeline";
 import useVideoStore from "~/store/video.store";
 import { NestedCompositionPropsSchema } from "~/types/timeline.types";
@@ -34,22 +35,24 @@ const VideoAndTimeline = () => {
 
       {props && (
         <VideoTimelineProvider playerRef={playerRef}>
-          <VideoTimeline>
-            <Toolbar>
-              <div className="flex items-center space-x-3">
-                <PlayPauseButton playerRef={playerRef} />
-                <TimeDisplay
-                  playerRef={playerRef}
-                  fps={props.compositionMetaData.fps}
-                  durationInFrames={props.compositionMetaData.duration}
-                />
-                <MuteButton playerRef={playerRef} />
-                <VolumeSlider playerRef={playerRef} />
-                <PlayerFullscreen playerRef={playerRef} />
-                <Separator orientation="vertical" className="h-8" />
-              </div>
-            </Toolbar>
-          </VideoTimeline>
+          <CaptionEditProvider>
+            <VideoTimeline>
+              <Toolbar>
+                <div className="flex items-center space-x-3">
+                  <PlayPauseButton playerRef={playerRef} />
+                  <TimeDisplay
+                    playerRef={playerRef}
+                    fps={props.compositionMetaData.fps}
+                    durationInFrames={props.compositionMetaData.duration}
+                  />
+                  <MuteButton playerRef={playerRef} />
+                  <VolumeSlider playerRef={playerRef} />
+                  <PlayerFullscreen playerRef={playerRef} />
+                  <Separator orientation="vertical" className="h-8" />
+                </div>
+              </Toolbar>
+            </VideoTimeline>
+          </CaptionEditProvider>
         </VideoTimelineProvider>
       )}
     </>
@@ -61,7 +64,7 @@ const VideoPreview = ({
 }: {
   playerRef: React.RefObject<PlayerRef>;
 }) => {
-  const { props, updatePositionAndDimensions } = useVideoStore();
+  const { props } = useVideoStore();
 
   if (!props) {
     return <div>Loading project...</div>;

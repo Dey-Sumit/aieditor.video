@@ -2,23 +2,26 @@
 
 import useVideoStore from "~/store/video.store";
 
-const {
-  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
-} = LAYOUT;
-
 import { Reorder, useDragControls } from "framer-motion";
 import { EyeOff, GripVertical } from "lucide-react";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import type { LayerType } from "~/types/timeline.types";
 import LayerContentMenuWrapper from "../layer-context-menu-wrapper";
+import { filterCaptionLayers } from "./video-timeline";
 
 interface LayerItemProps {
   layer: LayerType;
   constraintsRef: React.RefObject<HTMLDivElement>;
 }
 
-const LayerItem: React.FC<LayerItemProps> = ({ layer, constraintsRef }) => {
+const {
+  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
+} = LAYOUT;
+const DraggableLayerItem: React.FC<LayerItemProps> = ({
+  layer,
+  constraintsRef,
+}) => {
   const controls = useDragControls();
 
   return (
@@ -63,18 +66,23 @@ const LayerStack: React.FC = () => {
 
   const constraintsRef = useRef(null);
 
+  const nonCaptionLayers = useMemo(
+    () => filterCaptionLayers(orderedLayers, layers),
+    [orderedLayers, layers],
+  );
+
   return (
     <Reorder.Group
       axis="y"
-      values={orderedLayers}
+      values={nonCaptionLayers}
       onReorder={(newLayerOrder) => {
         reorderLayers(newLayerOrder);
       }}
       className="relative"
       ref={constraintsRef}
     >
-      {orderedLayers.map((layerId) => (
-        <LayerItem
+      {nonCaptionLayers.map((layerId) => (
+        <DraggableLayerItem
           key={layerId}
           layer={layers[layerId]}
           constraintsRef={constraintsRef}

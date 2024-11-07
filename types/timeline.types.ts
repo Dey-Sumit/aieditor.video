@@ -145,7 +145,7 @@ export type ContentType =
 type StandaloneVideoAudioType = {
   sequenceType: "standalone";
   contentType: "video" | "audio";
-  linkedCaptionLayerId: string; // Optional caption layer ID
+  linkedCaptionLayerId: string | null; // Optional caption layer ID
 };
 
 type StandaloneOtherType = {
@@ -212,6 +212,7 @@ export type LayerType = {
   name: string;
   isVisible: boolean;
   liteItems: LiteSequenceItemType[];
+  layerType: "normal" | "caption";
 };
 
 export type NestedCompositionProjectType = {

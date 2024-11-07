@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
-import React from "react";
+import React, { useMemo } from "react";
 // import { useSequenceAddition } from "~/hooks/use-video-timeline";
+import { useCaptionEdit } from "~/context/caption-edit-context";
 import { useSequenceAddition } from "~/hooks/timeline/dom-layer/use-item-addition";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { selectLiteItems } from "~/store/reselector/video-store.reselector";
@@ -12,34 +13,47 @@ import SequenceItem from "./sequence-item";
 
 interface LayerProps {
   layerId: LayerId;
-  pixelsPerFrame: number;
 }
 const {
   TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
 } = LAYOUT;
-const Layer: React.FC<LayerProps> = React.memo(
-  ({ layerId, pixelsPerFrame }) => {
-    const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
 
-    return (
-      <>
-        {/* ----------------------------- Sequence Items ----------------------------- */}
-        {liteItems.map((item) => {
-          const nextItemStartFrame =
-            liteItems[liteItems.indexOf(item) + 1]?.startFrame; // TODO : can be optimized
-          return (
-            <SequenceItem
-              key={item.id}
-              item={item}
-              layerId={layerId}
-              nextItemStartFrame={nextItemStartFrame}
-            />
-          );
-        })}
-      </>
-    );
-  },
-);
+const Layer: React.FC<LayerProps> = React.memo(({ layerId }) => {
+  const { view, activeCaptionData } = useCaptionEdit();
+  const layer = useVideoStore((state) => state.props.layers[layerId]);
+  const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
+
+  // Filter items based on view and layer type
+  const visibleItems = useMemo(() => {
+    // If it's a normal layer and we're in caption-edit view
+    if (layer.layerType === "normal" && view === "caption-edit") {
+      // Only show the linked video/audio item
+      return liteItems.filter(
+        (item) => item.id === activeCaptionData?.videoItemId,
+      );
+    }
+
+    // For caption layers or regular timeline view, show all items
+    return liteItems;
+  }, [liteItems, layer.layerType, view, activeCaptionData?.videoItemId]);
+
+  return (
+    <>
+      {visibleItems.map((item) => {
+        const nextItemStartFrame =
+          visibleItems[visibleItems.indexOf(item) + 1]?.startFrame;
+        return (
+          <SequenceItem
+            key={item.id}
+            item={item}
+            layerId={layerId}
+            nextItemStartFrame={nextItemStartFrame}
+          />
+        );
+      })}
+    </>
+  );
+});
 
 export default Layer;
 

@@ -44,7 +44,7 @@ export const getCaptions = async ({
     // const audioBlob = new Blob([audioBuffer], { type: "audio/wav" });
 
     // Create FormData and append the audio file
-    const formData = new FormData();
+    // const formData = new FormData();
     // formData.append("file", audioBlob, "audio.wav"); // Adding the file with a custom name
 
     // Send the FormData to the backend

@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useCaptionEdit } from "~/context/caption-edit-context";
 import { useTimeline } from "~/context/useTimeline";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import useVideoStore from "~/store/video.store";
@@ -8,16 +9,22 @@ const { TIME_LAYER_RIGHT_OFFSET } = TIMELINE;
 
 const TimeLayer = () => {
   const { containerWidth, handleTimeLayerClick } = useTimeline();
+  const { view, activeCaptionData } = useCaptionEdit();
 
   const width = containerWidth - TIME_LAYER_RIGHT_OFFSET;
 
-  const durationInFrames = useVideoStore(
+  const compositionDurationInFrames = useVideoStore(
     (state) => state.props.compositionMetaData.duration,
   );
+
+  const timelineDurationInFrames =
+    view === "caption-edit" && activeCaptionData?.videoItemId
+      ? activeCaptionData.durationInFrames
+      : compositionDurationInFrames;
   const fps = useVideoStore((state) => state.props.compositionMetaData.fps);
 
   const timeMarkers = useMemo(() => {
-    const durationInSeconds = Math.ceil(durationInFrames / fps);
+    const durationInSeconds = Math.ceil(timelineDurationInFrames / fps);
     const minDesiredMarkers = 5;
     const maxDesiredMarkers = 20;
 
@@ -37,12 +44,12 @@ const TimeLayer = () => {
     for (let i = 0; i <= durationInSeconds; i += interval) {
       markers.push({
         time: i,
-        position: (i * fps * width) / durationInFrames,
+        position: (i * fps * width) / timelineDurationInFrames,
       });
     }
 
     return markers;
-  }, [durationInFrames, fps, width]);
+  }, [timelineDurationInFrames, fps, width]);
 
   const formatTime = (seconds: number) => {
     return `${seconds}s`;

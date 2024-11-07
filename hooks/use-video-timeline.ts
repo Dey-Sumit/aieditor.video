@@ -3,7 +3,6 @@ import { useCallback } from "react";
 import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
-import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
 import type {
   LayerId,
@@ -14,10 +13,6 @@ import { useSeqItemResizeHandler } from "./timeline/dom-layer/use-sequence-resiz
 import { useTimelineMetrics } from "./timeline/dom-layer/use-timeline-metrics";
 import { useTimelineSynchronization } from "./timeline/dom-layer/use-timeline-sync";
 
-const {
-  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
-} = LAYOUT;
-
 const SNAP_THRESHOLD = 10; // Define a threshold in frames for snapping
 
 const useItemDrag = (
@@ -25,7 +20,6 @@ const useItemDrag = (
   updateSequenceItemPositionInLayer: StoreType["updateSequenceItemPositionInLayer"],
 ) => {
   const layers = useVideoStore((store) => store.props.layers);
-  const orderedLayers = useVideoStore((store) => store.props.layerOrder);
   const checkCollisionAndSnap = (
     layerItems: LiteSequenceItemType[],
     itemId: string,
@@ -74,6 +68,7 @@ const useItemDrag = (
   const handleItemDrag = useCallback(
     (
       oldLayerId: LayerId,
+      newLayerId: LayerId,
       itemId: string,
       deltaPositionX: number,
       deltaPositionY: number,
@@ -85,11 +80,6 @@ const useItemDrag = (
         (liteItem) => liteItem.id === itemId,
       );
       if (!item) return;
-
-      const centerY = deltaPositionY + TRACK_LAYER_HEIGHT_IN_PX / 2;
-      const rawLayerIndex = centerY / TRACK_LAYER_HEIGHT_IN_PX;
-      const snapLayerIndex = Math.floor(rawLayerIndex);
-      const newLayerId = orderedLayers[snapLayerIndex];
 
       const isLayerChanged = newLayerId !== oldLayerId;
 
@@ -168,7 +158,7 @@ const useItemDrag = (
         });
       }
     },
-    [layers, pixelsPerFrame, updateSequenceItemPositionInLayer, orderedLayers],
+    [layers, pixelsPerFrame, updateSequenceItemPositionInLayer],
   );
 
   // Use a more aggressive throttle for drag operations
