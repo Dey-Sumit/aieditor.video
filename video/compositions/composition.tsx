@@ -42,8 +42,6 @@ const SequenceItemRenderer: React.FC<{
   }
 
   const renderContent = () => {
-    console.log("item", item);
-
     switch (item.type) {
       case "div":
         return <div style={item.editableProps?.styles?.element}></div>;
@@ -215,6 +213,7 @@ const NestedSequenceComposition = (
                 //@ts-ignore : i am done with this :(
                 sequenceItems={sequenceItems[layerId].sequenceItems}
                 liteItems={layers[layerId].liteItems}
+                containerEditableProps={sequenceItems[layerId].editableProps}
               />
             );
           return (
@@ -272,29 +271,36 @@ const CaptionRenderer = ({
   sequenceItems,
   liteItems,
   layerId,
+  containerEditableProps,
 }: {
   layerId: string;
   sequenceItems: Record<string, StyledSequenceItem>;
   liteItems: LiteSequenceItemType[];
+  containerEditableProps: StyledSequenceItem["editableProps"];
 }) => {
   return (
-    <Series key={layerId}>
-      {liteItems.map((item) => {
-        const sequenceItem = sequenceItems[item.id];
-        console.log({ id: item.id });
+    <AbsoluteFill
+      style={containerEditableProps.positionAndDimensions}
+      className="pointer-events-none"
+    >
+      <Series key={layerId}>
+        {liteItems.map((item) => {
+          const sequenceItem = sequenceItems[item.id];
+          console.log({ id: item.id });
 
-        return (
-          <Series.Sequence
-            key={item.id}
-            durationInFrames={item.sequenceDuration}
-            name={item.id}
-            offset={item.offset}
-            layout="none"
-          >
-            <SequenceItemRenderer item={sequenceItem} />
-          </Series.Sequence>
-        );
-      })}
-    </Series>
+          return (
+            <Series.Sequence
+              key={item.id}
+              durationInFrames={item.sequenceDuration}
+              name={item.id}
+              offset={item.offset}
+              layout="none"
+            >
+              <SequenceItemRenderer item={sequenceItem} />
+            </Series.Sequence>
+          );
+        })}
+      </Series>
+    </AbsoluteFill>
   );
 };

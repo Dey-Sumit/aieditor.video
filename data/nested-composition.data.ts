@@ -827,6 +827,12 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
             },
             element: {},
           },
+          positionAndDimensions: {
+            top: 300,
+            left: 0,
+            width: 720,
+            height: 1080,
+          },
         },
         sequenceItems: {
           "s-caption-s-text-67b3b4ed-10b4-4537-9372-01d6869ab70c": {
@@ -859,7 +865,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -896,7 +902,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -933,7 +939,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -965,7 +971,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -1002,7 +1008,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -1034,7 +1040,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -1066,7 +1072,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -1103,7 +1109,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -1140,7 +1146,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -1172,7 +1178,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,
@@ -1209,7 +1215,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
                 },
               },
               positionAndDimensions: {
-                top: 0,
+                top: 1,
                 left: 0,
                 width: 720,
                 height: 1080,

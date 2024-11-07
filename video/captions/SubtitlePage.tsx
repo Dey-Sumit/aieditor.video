@@ -1,11 +1,6 @@
 import { type TikTokPage } from "@remotion/captions";
 import React from "react";
-import {
-  AbsoluteFill,
-  spring,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
+import { spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { CaptionPage } from "./CaptionPage";
 import { loadFont } from "./load-font";
 loadFont();
@@ -26,13 +21,11 @@ const SubtitlePage: React.FC<{ page: TikTokPage; captionWidth: number }> = ({
   });
 
   return (
-    <AbsoluteFill>
-      <CaptionPage
-        captionWidth={captionWidth}
-        enterProgress={enter}
-        page={page}
-      />
-    </AbsoluteFill>
+    <CaptionPage
+      captionWidth={captionWidth}
+      enterProgress={enter}
+      page={page}
+    />
   );
 };
 
