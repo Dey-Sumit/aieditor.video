@@ -7,7 +7,8 @@ import {
   useVideoConfig,
 } from "remotion";
 import { CaptionPage } from "./CaptionPage";
-
+import { loadFont } from "./load-font";
+loadFont();
 const SubtitlePage: React.FC<{ page: TikTokPage; captionWidth: number }> = ({
   captionWidth,
   page,

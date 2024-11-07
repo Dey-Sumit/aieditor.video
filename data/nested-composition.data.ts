@@ -657,165 +657,102 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
         name: "Layer Caption",
         liteItems: [
           {
-            id: "s-caption-s-text-27e8de78-7098-479f-915b-7a29a9203d60",
+            id: "s-caption-s-text-67b3b4ed-10b4-4537-9372-01d6869ab70c",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 5,
-            effectiveDuration: 5,
+            contentType: "caption-page",
+            sequenceDuration: 8,
+            effectiveDuration: 8,
             startFrame: 0,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-f7365203-231c-406e-b403-3dcf44639ce5",
+            id: "s-caption-s-text-1273a58b-0383-4c75-b592-20f072d17835",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 3,
-            effectiveDuration: 3,
-            startFrame: 5,
-            offset: 0,
-          },
-          {
-            id: "s-caption-s-text-16031904-8119-463e-8325-b09f8f359b16",
-            sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 6,
-            effectiveDuration: 6,
+            contentType: "caption-page",
+            sequenceDuration: 12,
+            effectiveDuration: 12,
             startFrame: 8,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-bc3b9146-fa62-4116-8bad-fb2cbe1bd17e",
+            id: "s-caption-s-text-40516935-4dbb-4254-ae2c-c30f380d8942",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 6,
-            effectiveDuration: 6,
-            startFrame: 14,
-            offset: 0,
-          },
-          {
-            id: "s-caption-s-text-7f4e0e7f-0da5-49b4-891e-bae97dfc7185",
-            sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 6,
-            effectiveDuration: 6,
+            contentType: "caption-page",
+            sequenceDuration: 13,
+            effectiveDuration: 13,
             startFrame: 20,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-57989992-ba56-41b2-b06e-b842cde558af",
+            id: "s-caption-s-text-a03b2005-65c2-4239-97ad-e6bd68e3db5d",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 7,
-            effectiveDuration: 7,
-            startFrame: 26,
-            offset: 0,
-          },
-          {
-            id: "s-caption-s-text-5d60c534-cdcb-432c-be5e-02cc35b21008",
-            sequenceType: "standalone",
-            contentType: "text",
+            contentType: "caption-page",
             sequenceDuration: 11,
             effectiveDuration: 11,
             startFrame: 33,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-38aed57f-3e62-403f-99aa-e8bdefce7ce5",
+            id: "s-caption-s-text-991f4f47-6470-4e23-afbd-d55f3f9a8fe2",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 1,
-            effectiveDuration: 1,
+            contentType: "caption-page",
+            sequenceDuration: 6,
+            effectiveDuration: 6,
             startFrame: 52,
             offset: 8,
           },
           {
-            id: "s-caption-s-text-4156190a-f610-496c-b664-75211c224f72",
+            id: "s-caption-s-text-44c1abb9-e995-4121-9798-b542b44b003e",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 6,
-            effectiveDuration: 6,
-            startFrame: 52,
-            offset: 0,
-          },
-          {
-            id: "s-caption-s-text-e1a6f844-37ee-4e36-97ee-9af60227c4f0",
-            sequenceType: "standalone",
-            contentType: "text",
+            contentType: "caption-page",
             sequenceDuration: 11,
             effectiveDuration: 11,
             startFrame: 58,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-6f6bc8b9-7b6b-47ff-85f2-2428d9df4804",
+            id: "s-caption-s-text-3a37bcac-f5ab-4f25-8163-e2e96e1f81e5",
             sequenceType: "standalone",
-            contentType: "text",
+            contentType: "caption-page",
             sequenceDuration: 6,
             effectiveDuration: 6,
             startFrame: 69,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-33499c29-8550-4016-aa94-8a6b6c3eb262",
+            id: "s-caption-s-text-72451dcc-ebf5-4b7d-a0bf-6ac99daa8272",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 3,
-            effectiveDuration: 3,
+            contentType: "caption-page",
+            sequenceDuration: 7,
+            effectiveDuration: 7,
             startFrame: 75,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-116cc573-1314-4027-bc02-ed6c96206ae7",
+            id: "s-caption-s-text-c4cb998d-57dc-4a23-a6a4-8f2b3fbfc0e8",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 4,
-            effectiveDuration: 4,
-            startFrame: 78,
-            offset: 0,
-          },
-          {
-            id: "s-caption-s-text-75ff9b9d-c120-421e-9e45-ce61c45bbb51",
-            sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 2,
-            effectiveDuration: 2,
+            contentType: "caption-page",
+            sequenceDuration: 10,
+            effectiveDuration: 10,
             startFrame: 82,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-9ee19540-7e68-48eb-b284-13481d700e80",
+            id: "s-caption-s-text-9f24fbc6-f771-49ec-b0cb-6005d34ea47c",
             sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 8,
-            effectiveDuration: 8,
-            startFrame: 84,
-            offset: 0,
-          },
-          {
-            id: "s-caption-s-text-a6d47c91-4775-4e7c-9d3b-6eec076f591d",
-            sequenceType: "standalone",
-            contentType: "text",
+            contentType: "caption-page",
             sequenceDuration: 9,
             effectiveDuration: 9,
             startFrame: 92,
             offset: 0,
           },
           {
-            id: "s-caption-s-text-5c77e9b9-4038-4759-b031-2c8f750ae468",
+            id: "s-caption-s-text-fc89c5d3-95bd-44b6-ad15-371aa3538e3a",
             sequenceType: "standalone",
-            contentType: "text",
+            contentType: "caption-page",
             sequenceDuration: 4,
             effectiveDuration: 4,
             startFrame: 101,
-            offset: 0,
-          },
-          {
-            id: "s-caption-s-text-6d03f8d2-6308-49fe-93aa-c42953d3cd15",
-            sequenceType: "standalone",
-            contentType: "text",
-            sequenceDuration: 1,
-            effectiveDuration: 1,
-            startFrame: 105,
             offset: 0,
           },
         ],
@@ -841,7 +778,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
         isVisible: true,
       },
     },
-    layerOrder: ["L-CAPTION-1"],
+    layerOrder: ["L-CAPTION-1", "l-ac121030-0325-4cbd-b334-c4d91400fa51"],
     sequenceItems: {
       "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f": {
         id: "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f",
@@ -872,7 +809,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
             height: 1080,
           },
           videoUrl:
-            "https://video-editor-user-upload-assets.s3.ap-south-1.amazonaws.com/Sumit%27s%20Video%20-%20Oct%2026%2C%202024.mp4?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEHwaCmFwLXNvdXRoLTEiRzBFAiEAzQ060Guqnj%2B4jW0XnM6LH5ZLSXoB7DCTqvwE70UnkUACIE9ER3Q6nFU34QX0PiBUXJGlnnlS%2BtpIU3QlRLAKF0zBKtQDCPX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMDU4MjY0MjUyMzcxIgw%2FugWXO4ts3dN6w1UqqAPcZoPjLSoCtg2iTCW5pVREunskpfX0ws%2FylpnDDIxWyhVaJDOGWZYHp%2F10IMdDBDc6dA%2BrSE03zG2YNchRNpDUewTLhDz12jgxVMzMQ2W2CUcqcxh%2BLgyfx44alTGL6XT1ILKY9NArmdSEDX1tnK5yLY6UmQ7URkotDdOrjcwgKDo4yW3DoFc5OdCDhchSVHCdpxAQA0BJQOCyAUiPCtcQQSKrBFTxZu2tzhsJ%2BJCqlpRA37FLc8lWdN%2FhcBa1cD%2Fa%2F6Nu4EmCZFfneB1CPWTxAc5eQRGbaqKFICLSlr48U%2BH%2BmXkGPn6CNW8SG1b7aqI%2B%2B2x3TjYqtS3WGj1noWXsXOPBdWEXE1lPsNqpjhXUeFOOfDf2EXKzsNQx9Rd1Gg6gKPq48wSSL5lLWvdo4XbX09%2Ffy64fktQud2Gh6kUVSSYrsP%2Fc1tW%2FhRWWr0mLMIpSo5qdFtWr1ACcVNvNYipZge5xd%2Fax3zJ7M1q9JbqCVKJQ1oB8NZINpCkC9jdbUiBJxnPR3L2PT1sSrlEX8W2JuyQ6FnZk0EJVvUDfTtLlTnRzgbBQ5fd%2FMLjYpLkGOuQCW1kPRoVDIU6gqOolizkG1ynSTnnY5xn6nz8rciJmLWT9GBj4qQU4MxPW4l5UV%2B9PnWbJoSDjO%2FYuk0D3JBIMSiZ59GyKT6zExEUAvdATeLor1sU78WVM7VSlqFrRcDl7qHPDZ2SOCHO%2FN6UcvyYAX49yPPfn0tKBb294GLqeYGyXJY09Q1Rh2Ag9q%2FSzUzUY7rCJyQIGlcBMbK5rfnFUqxVqQoGhrijqUzgt26M2F4hGU5IrxWovx5DX5fBA9c%2B09Oj7bXcnQ6h6mZr3AJej2fgs%2BgPJJgQdxEbY7%2Fi88ge9W2bfMi%2FK2TKltMah90j8ssZx7009U1Yh2Vlk4iqx2LKuFn9QkGlPpwO1nzH7D4yiZl%2B2lTdL4iOpL9ul8y3E5B%2F9C2as9Hz459ZG6SvPl%2BuWn0Zmd4L6uZjaKuBu1fOlNj5Oik6Zd8bg81HObXjXMPZPys%2FxIc6y5DZ4PY1x8HN6tu4%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ3EGR57J2VEONAXS%2F20241104%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20241104T202043Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=b9eec8a41513e36eb72df8380ed3e27b0a0cb5ad9cedc75758dde6e934dfabcf",
+            "https://no-protection-bucket.s3.us-east-1.amazonaws.com/Sumit%27s%20Video%20-%20Oct%2026%2C%202024.mp4?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDgJeUPzJfCFn8SRdLY0W%2FTiqEJ9lgTJCLSMN%2FlqTEi4gIhAJTpcwUwAHq4%2B39VvaL1XVCRfhJD3liZs%2Ff6ZIFIFpM%2BKssDCE0QABoMMDU4MjY0MjUyMzcxIgz6GmR0MiG0uTKTRXEqqANI7HtbItR5PFypVmQr68am7OGnGH%2FGDQRFTeVU84vF1fAYAC034y0tS%2BcJfvttoFWyc8tbgdk6Mg5M9MkRKrN671T5P%2F2%2FJhtgUJkLmzqldvIQfsvUP4kCPyX%2B8bEPwzeAJoijKrAFPUHlJwG62XgwEvcI8pon8X8EYcJXsz2S3fgmwJ3A2E44xz9FDbrDK8CWABIhPLSFzcI9M3QY7RiyVTjcpxTVnsCIlFS9TLYrVWfXGEZJAC5LY0%2BMIvcVUBm6zEch81GXLdfx5jK9h8Ov8PFMoZIQKVMiBXcZmGDuQmtgoNx0iMxD0W%2Bm3wVNk4ZjIXade8LeWfgEBnl7rs%2FAPQGy5xQKmrE9xpMjJz30STotXsGku%2BtYHzYQDKdb0waLcRBh3yDwSxwBbeWCxdK3v%2Fmd9VTo6FQPWCLo953bfLgatAGSFUP55RW8cjgAWoac%2BjDB75gCD4MBGqNkK1w%2F5weTtRHBXTx0hfRzbjar766LdKol7MzYdDfHfC68MjbZ3PU5poMBahwuBjwRBhmwIfBqDxJMjC%2BeP62xw9YBcRxqJsMbyfoeMPa1tLkGOuMCKRBzd8ryYc10TVr6JO2lOvMzdRYKPVs5pcq828FreXQozlm9fselo0V3N%2BsmsWiFG6aUqIJdv89CzOTK1QYTh7svaSUeR%2F0IHSr4XA5rTC1mF4N5MIXRFBUF2BcMBp%2FstQmP4Y%2Bt57kctgkwDEPoEYLRRufSqGw5z%2BH7xmA8%2BqV3EhLWOJRonReFDCufd5wFI4iI%2FXb4Xt83eIHh4V%2BG%2FInd7GlqfxomsOOf6%2FZtxs4St7gcV5wwOfNM4SzYmEuon5wxlcfyAPfcNQbQUoyw8i3lFsfK%2B207yMUEAtBDMQ6p1Y5HaK%2BrgIHckWkyZekGuwkEZM%2BiPQkta0KiTGfxOuYw4%2B1edrbwF46L3B%2BJ33AEz02HjRvAunSHJjvhuw5mbTEjwxn%2Bo2AM3vpBUGOYoRMR1hSy3y%2BwpVIacmi5y6kfBXp2EmUv6ZR7%2FwyanusybBUqj44CMX4MXWZ3gLsGG3XEIQ%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ3EGR57JT3JMTLHZ%2F20241107%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241107T200001Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=f3add3134b96a7f8a55b3dde35e7cc71d6d7565825effbef5dbe834ac634828d",
         },
       },
 
@@ -892,12 +829,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
           },
         },
         sequenceItems: {
-          "s-caption-s-text-27e8de78-7098-479f-915b-7a29a9203d60": {
-            id: "s-caption-s-text-27e8de78-7098-479f-915b-7a29a9203d60",
-            type: "text",
+          "s-caption-s-text-67b3b4ed-10b4-4537-9372-01d6869ab70c": {
+            id: "s-caption-s-text-67b3b4ed-10b4-4537-9372-01d6869ab70c",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: "And",
+              text: "And when",
+              startMs: 0,
+              tokens: [
+                {
+                  text: "And",
+                  fromMs: 0,
+                  toMs: 159.9999964237213,
+                },
+                {
+                  text: " when",
+                  fromMs: 159.9999964237213,
+                  toMs: 280.0000011920929,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -916,12 +866,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-f7365203-231c-406e-b403-3dcf44639ce5": {
-            id: "s-caption-s-text-f7365203-231c-406e-b403-3dcf44639ce5",
-            type: "text",
+          "s-caption-s-text-1273a58b-0383-4c75-b592-20f072d17835": {
+            id: "s-caption-s-text-1273a58b-0383-4c75-b592-20f072d17835",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " when",
+              text: "they pulled",
+              startMs: 280.0000011920929,
+              tokens: [
+                {
+                  text: "they",
+                  fromMs: 280.0000011920929,
+                  toMs: 479.99998927116394,
+                },
+                {
+                  text: " pulled",
+                  fromMs: 479.99998927116394,
+                  toMs: 680.0000071525574,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -940,12 +903,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-16031904-8119-463e-8325-b09f8f359b16": {
-            id: "s-caption-s-text-16031904-8119-463e-8325-b09f8f359b16",
-            type: "text",
+          "s-caption-s-text-40516935-4dbb-4254-ae2c-c30f380d8942": {
+            id: "s-caption-s-text-40516935-4dbb-4254-ae2c-c30f380d8942",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " they",
+              text: "the hood",
+              startMs: 680.0000071525574,
+              tokens: [
+                {
+                  text: "the",
+                  fromMs: 680.0000071525574,
+                  toMs: 860.0000143051147,
+                },
+                {
+                  text: " hood",
+                  fromMs: 860.0000143051147,
+                  toMs: 1100.000023841858,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -964,12 +940,20 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-bc3b9146-fa62-4116-8bad-fb2cbe1bd17e": {
-            id: "s-caption-s-text-bc3b9146-fa62-4116-8bad-fb2cbe1bd17e",
-            type: "text",
+          "s-caption-s-text-a03b2005-65c2-4239-97ad-e6bd68e3db5d": {
+            id: "s-caption-s-text-a03b2005-65c2-4239-97ad-e6bd68e3db5d",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " pulled",
+              text: "off,",
+              startMs: 1100.000023841858,
+              tokens: [
+                {
+                  text: "off,",
+                  fromMs: 1100.000023841858,
+                  toMs: 1460.0000381469727,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -988,12 +972,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-7f4e0e7f-0da5-49b4-891e-bae97dfc7185": {
-            id: "s-caption-s-text-7f4e0e7f-0da5-49b4-891e-bae97dfc7185",
-            type: "text",
+          "s-caption-s-text-991f4f47-6470-4e23-afbd-d55f3f9a8fe2": {
+            id: "s-caption-s-text-991f4f47-6470-4e23-afbd-d55f3f9a8fe2",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " the",
+              text: "I was",
+              startMs: 1720.0000286102295,
+              tokens: [
+                {
+                  text: "I",
+                  fromMs: 1720.0000286102295,
+                  toMs: 1720.0000286102295,
+                },
+                {
+                  text: " was",
+                  fromMs: 1720.0000286102295,
+                  toMs: 1940.000057220459,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -1012,12 +1009,20 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-57989992-ba56-41b2-b06e-b842cde558af": {
-            id: "s-caption-s-text-57989992-ba56-41b2-b06e-b842cde558af",
-            type: "text",
+          "s-caption-s-text-44c1abb9-e995-4121-9798-b542b44b003e": {
+            id: "s-caption-s-text-44c1abb9-e995-4121-9798-b542b44b003e",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " hood",
+              text: "kneeling",
+              startMs: 1940.000057220459,
+              tokens: [
+                {
+                  text: "kneeling",
+                  fromMs: 1940.000057220459,
+                  toMs: 2299.999952316284,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -1036,12 +1041,20 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-5d60c534-cdcb-432c-be5e-02cc35b21008": {
-            id: "s-caption-s-text-5d60c534-cdcb-432c-be5e-02cc35b21008",
-            type: "text",
+          "s-caption-s-text-3a37bcac-f5ab-4f25-8163-e2e96e1f81e5": {
+            id: "s-caption-s-text-3a37bcac-f5ab-4f25-8163-e2e96e1f81e5",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " off,",
+              text: "in",
+              startMs: 2299.999952316284,
+              tokens: [
+                {
+                  text: "in",
+                  fromMs: 2299.999952316284,
+                  toMs: 2500,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -1060,12 +1073,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-38aed57f-3e62-403f-99aa-e8bdefce7ce5": {
-            id: "s-caption-s-text-38aed57f-3e62-403f-99aa-e8bdefce7ce5",
-            type: "text",
+          "s-caption-s-text-72451dcc-ebf5-4b7d-a0bf-6ac99daa8272": {
+            id: "s-caption-s-text-72451dcc-ebf5-4b7d-a0bf-6ac99daa8272",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " I",
+              text: "front of",
+              startMs: 2500,
+              tokens: [
+                {
+                  text: "front",
+                  fromMs: 2500,
+                  toMs: 2599.9999046325684,
+                },
+                {
+                  text: " of",
+                  fromMs: 2599.9999046325684,
+                  toMs: 2720.0000286102295,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -1084,12 +1110,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-4156190a-f610-496c-b664-75211c224f72": {
-            id: "s-caption-s-text-4156190a-f610-496c-b664-75211c224f72",
-            type: "text",
+          "s-caption-s-text-c4cb998d-57dc-4a23-a6a4-8f2b3fbfc0e8": {
+            id: "s-caption-s-text-c4cb998d-57dc-4a23-a6a4-8f2b3fbfc0e8",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " was",
+              text: "an open",
+              startMs: 2720.0000286102295,
+              tokens: [
+                {
+                  text: "an",
+                  fromMs: 2720.0000286102295,
+                  toMs: 2799.999952316284,
+                },
+                {
+                  text: " open",
+                  fromMs: 2799.999952316284,
+                  toMs: 3079.9999237060547,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -1108,12 +1147,20 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-e1a6f844-37ee-4e36-97ee-9af60227c4f0": {
-            id: "s-caption-s-text-e1a6f844-37ee-4e36-97ee-9af60227c4f0",
-            type: "text",
+          "s-caption-s-text-9f24fbc6-f771-49ec-b0cb-6005d34ea47c": {
+            id: "s-caption-s-text-9f24fbc6-f771-49ec-b0cb-6005d34ea47c",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " kneeling",
+              text: "grave",
+              startMs: 3079.9999237060547,
+              tokens: [
+                {
+                  text: "grave",
+                  fromMs: 3079.9999237060547,
+                  toMs: 3380.000114440918,
+                },
+              ],
               styles: {
                 container: {
                   justifyContent: "center",
@@ -1132,180 +1179,25 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
               },
             },
           },
-          "s-caption-s-text-6f6bc8b9-7b6b-47ff-85f2-2428d9df4804": {
-            id: "s-caption-s-text-6f6bc8b9-7b6b-47ff-85f2-2428d9df4804",
-            type: "text",
+          "s-caption-s-text-fc89c5d3-95bd-44b6-ad15-371aa3538e3a": {
+            id: "s-caption-s-text-fc89c5d3-95bd-44b6-ad15-371aa3538e3a",
+            type: "caption-page",
             layerId: "layer-1",
             editableProps: {
-              text: " in",
-              styles: {
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
+              text: "with a",
+              startMs: 3380.000114440918,
+              tokens: [
+                {
+                  text: "with",
+                  fromMs: 3380.000114440918,
+                  toMs: 3500,
                 },
-                element: {
-                  color: "white",
-                  fontSize: "64px",
+                {
+                  text: " a",
+                  fromMs: 3500,
+                  toMs: 3500,
                 },
-              },
-              positionAndDimensions: {
-                top: 0,
-                left: 0,
-                width: 720,
-                height: 1080,
-              },
-            },
-          },
-          "s-caption-s-text-33499c29-8550-4016-aa94-8a6b6c3eb262": {
-            id: "s-caption-s-text-33499c29-8550-4016-aa94-8a6b6c3eb262",
-            type: "text",
-            layerId: "layer-1",
-            editableProps: {
-              text: " front",
-              styles: {
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                element: {
-                  color: "white",
-                  fontSize: "64px",
-                },
-              },
-              positionAndDimensions: {
-                top: 0,
-                left: 0,
-                width: 720,
-                height: 1080,
-              },
-            },
-          },
-          "s-caption-s-text-116cc573-1314-4027-bc02-ed6c96206ae7": {
-            id: "s-caption-s-text-116cc573-1314-4027-bc02-ed6c96206ae7",
-            type: "text",
-            layerId: "layer-1",
-            editableProps: {
-              text: " of",
-              styles: {
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                element: {
-                  color: "white",
-                  fontSize: "64px",
-                },
-              },
-              positionAndDimensions: {
-                top: 0,
-                left: 0,
-                width: 720,
-                height: 1080,
-              },
-            },
-          },
-          "s-caption-s-text-75ff9b9d-c120-421e-9e45-ce61c45bbb51": {
-            id: "s-caption-s-text-75ff9b9d-c120-421e-9e45-ce61c45bbb51",
-            type: "text",
-            layerId: "layer-1",
-            editableProps: {
-              text: " an",
-              styles: {
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                element: {
-                  color: "white",
-                  fontSize: "64px",
-                },
-              },
-              positionAndDimensions: {
-                top: 0,
-                left: 0,
-                width: 720,
-                height: 1080,
-              },
-            },
-          },
-          "s-caption-s-text-9ee19540-7e68-48eb-b284-13481d700e80": {
-            id: "s-caption-s-text-9ee19540-7e68-48eb-b284-13481d700e80",
-            type: "text",
-            layerId: "layer-1",
-            editableProps: {
-              text: " open",
-              styles: {
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                element: {
-                  color: "white",
-                  fontSize: "64px",
-                },
-              },
-              positionAndDimensions: {
-                top: 0,
-                left: 0,
-                width: 720,
-                height: 1080,
-              },
-            },
-          },
-          "s-caption-s-text-a6d47c91-4775-4e7c-9d3b-6eec076f591d": {
-            id: "s-caption-s-text-a6d47c91-4775-4e7c-9d3b-6eec076f591d",
-            type: "text",
-            layerId: "layer-1",
-            editableProps: {
-              text: " grave",
-              styles: {
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                element: {
-                  color: "white",
-                  fontSize: "64px",
-                },
-              },
-              positionAndDimensions: {
-                top: 0,
-                left: 0,
-                width: 720,
-                height: 1080,
-              },
-            },
-          },
-          "s-caption-s-text-5c77e9b9-4038-4759-b031-2c8f750ae468": {
-            id: "s-caption-s-text-5c77e9b9-4038-4759-b031-2c8f750ae468",
-            type: "text",
-            layerId: "layer-1",
-            editableProps: {
-              text: " with",
-              styles: {
-                container: {
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-                element: {
-                  color: "white",
-                  fontSize: "64px",
-                },
-              },
-              positionAndDimensions: {
-                top: 0,
-                left: 0,
-                width: 720,
-                height: 1080,
-              },
-            },
-          },
-          "s-caption-s-text-6d03f8d2-6308-49fe-93aa-c42953d3cd15": {
-            id: "s-caption-s-text-6d03f8d2-6308-49fe-93aa-c42953d3cd15",
-            type: "text",
-            layerId: "layer-1",
-            editableProps: {
-              text: " a",
+              ],
               styles: {
                 container: {
                   justifyContent: "center",

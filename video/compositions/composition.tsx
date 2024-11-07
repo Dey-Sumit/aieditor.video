@@ -5,6 +5,7 @@ import {
   getRemotionEnvironment,
   Img,
   OffthreadVideo,
+  Series,
 } from "remotion";
 
 import { slide } from "@remotion/transitions/slide";
@@ -18,6 +19,7 @@ import type {
   NestedCompositionProjectType,
   StyledSequenceItem,
 } from "~/types/timeline.types";
+import SubtitlePage from "../captions/SubtitlePage";
 
 // TODO : use this
 export const SafeHTMLRenderer = ({ html }: { html: string }) => {
@@ -81,6 +83,19 @@ const SequenceItemRenderer: React.FC<{
             endAt={item.editableProps.videoEndsAtInFrames}
           />
         );
+      case "caption-page":
+        return (
+          <SubtitlePage
+            captionWidth={
+              item.editableProps.positionAndDimensions?.width || 720
+            }
+            page={{
+              startMs: item.editableProps.startMs,
+              text: item.editableProps.text,
+              tokens: item.editableProps.tokens,
+            }}
+          />
+        );
 
       default:
         return null;
@@ -103,11 +118,8 @@ const RenderSequence: React.FC<{
   item: LiteSequenceItemType;
   sequenceItems: Record<string, StyledSequenceItem>;
 }> = ({ item, sequenceItems }) => {
-  console.log("RenderSequence", item, sequenceItems);
-
   if (item.sequenceType === "standalone") {
     const sequenceItem = sequenceItems[item.id];
-    console.log("sequenceItem", sequenceItem);
 
     return sequenceItem ? <SequenceItemRenderer item={sequenceItem} /> : null;
   }
@@ -116,7 +128,6 @@ const RenderSequence: React.FC<{
     const presetSequenceItem = sequenceItems[item.id] as StyledSequenceItem & {
       type: "preset";
     };
-    console.log({ sequenceItems, item });
 
     if (!presetSequenceItem) {
       console.log("null");
@@ -209,8 +220,6 @@ const NestedSequenceComposition = (
           return (
             <TransitionSeries key={layerId} name={layerId} layout="none">
               {layers[layerId].liteItems.map((item) => {
-                console.log("item", item);
-
                 return (
                   <React.Fragment key={item.id}>
                     <TransitionSeries.Sequence
@@ -269,12 +278,13 @@ const CaptionRenderer = ({
   liteItems: LiteSequenceItemType[];
 }) => {
   return (
-    <TransitionSeries key={layerId} name={layerId} layout="none">
+    <Series key={layerId}>
       {liteItems.map((item) => {
         const sequenceItem = sequenceItems[item.id];
+        console.log({ id: item.id });
 
         return (
-          <TransitionSeries.Sequence
+          <Series.Sequence
             key={item.id}
             durationInFrames={item.sequenceDuration}
             name={item.id}
@@ -282,9 +292,9 @@ const CaptionRenderer = ({
             layout="none"
           >
             <SequenceItemRenderer item={sequenceItem} />
-          </TransitionSeries.Sequence>
+          </Series.Sequence>
         );
       })}
-    </TransitionSeries>
+    </Series>
   );
 };

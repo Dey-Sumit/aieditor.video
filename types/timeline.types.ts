@@ -76,6 +76,18 @@ export type FullSequenceContentType = {
       type: "caption";
       sequenceItems: CaptionSequenceItemsType;
     }
+  | {
+      type: "caption-page";
+      editableProps: {
+        text: string;
+        startMs: number;
+        tokens: Array<{
+          text: string;
+          fromMs: number;
+          toMs: number;
+        }>;
+      };
+    }
 );
 
 export type CaptionSequenceItemsType = Record<string, FullSequenceContentType>;
@@ -127,7 +139,8 @@ export type ContentType =
   | "video"
   | "audio"
   | "div"
-  | "caption";
+  | "caption"
+  | "caption-page";
 
 type StandaloneVideoAudioType = {
   sequenceType: "standalone";

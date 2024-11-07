@@ -1,4 +1,4 @@
-import type { Caption } from "@remotion/captions";
+import { createTikTokStyleCaptions, type Caption } from "@remotion/captions";
 import type {
   FullSequenceContentType,
   LiteSequenceItemType,
@@ -21,7 +21,7 @@ const msToFrames = (ms: number, fps: number): number => {
   return Math.round((ms / 1000) * fps);
 };
 
-export const processCaptions = ({
+export const processCaptionsLite = ({
   captions,
   fps,
   layerId,
@@ -73,6 +73,80 @@ export const processCaptions = ({
           top: 0,
           left: 0,
           width: 720, // These should probably come from params
+          height: 1080,
+        },
+      },
+    };
+  });
+
+  return { liteItems, sequenceItems };
+};
+export const processCaptions = ({
+  captions,
+  fps,
+  layerId,
+}: ProcessCaptionsParams): ProcessCaptionsResult => {
+  const liteItems: LiteSequenceItemType[] = [];
+  const sequenceItems: Record<string, FullSequenceContentType> = {};
+
+  // First create TikTok style pages
+  const { pages } = createTikTokStyleCaptions({
+    captions,
+    combineTokensWithinMilliseconds: 200,
+  });
+
+  // Now process pages instead of raw captions
+  pages.forEach((page, index) => {
+    const id = `s-caption-${genId("s", "text")}`;
+    const startFrame = msToFrames(page.startMs, fps);
+
+    // Get end time from last token
+    const lastToken = page.tokens[page.tokens.length - 1];
+    const endFrame = msToFrames(lastToken.toMs, fps);
+    const duration = endFrame - startFrame;
+
+    // Rest of the liteItem creation remains similar...
+    const prevItem = liteItems[index - 1];
+    const offset = prevItem
+      ? startFrame - (prevItem.startFrame + prevItem.effectiveDuration)
+      : startFrame;
+
+    const liteItem: LiteSequenceItemType = {
+      id,
+      sequenceType: "standalone",
+      contentType: "caption-page",
+      sequenceDuration: duration,
+      effectiveDuration: duration,
+      startFrame,
+      offset,
+    };
+
+    liteItems.push(liteItem);
+
+    // Add token info to sequenceItems
+    sequenceItems[id] = {
+      id,
+      type: "caption-page",
+      layerId,
+      editableProps: {
+        text: page.text,
+        // Store timing info for highlighting
+        startMs: page.startMs,
+        tokens: page.tokens,
+        styles: {
+          container: {
+            justifyContent: "center",
+            alignItems: "center",
+          },
+          element: {
+            color: "white",
+            fontSize: "64px",
+          },
+        },
+        positionAndDimensions: {
+          top: 0,
+          left: 0,
+          width: 720,
           height: 1080,
         },
       },
