@@ -1,12 +1,11 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { useCaptionEdit } from "~/context/caption-edit-context";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import type { LayerType } from "~/types/timeline.types";
 
 import { useTimeline } from "~/context/useTimeline";
-import CaptionEditView from "../layout/editor-new/captione-editor-view";
+import CaptionEditView from "../layout/editor-new/caption-editor-view";
 import TimeLayer from "../time-layer";
 import { Button } from "../ui/button";
 import Layer, { HoverLayer } from "./layer";
@@ -34,8 +33,7 @@ export const filterCaptionLayers = (
 };
 
 const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
-  const { containerRef } = useTimeline();
-  const { view, setView } = useCaptionEdit();
+  const { containerRef, view, setView } = useTimeline();
   // Filter out caption layers
 
   return (
@@ -107,9 +105,7 @@ const TimelineLayers = ({
 }: {
   containerRef: React.RefObject<HTMLDivElement>;
 }) => {
-  const { pixelsPerFrame } = useTimeline();
-
-  const { visibleLayerOrder } = useCaptionEdit();
+  const { pixelsPerFrame, visibleLayerOrder } = useTimeline();
 
   return (
     <div className="flex overflow-y-auto" id="layerContainer">

@@ -11,7 +11,6 @@ import TimeDisplay from "~/components/video-timeline/player-controls/time-displa
 import { VolumeSlider } from "~/components/video-timeline/player-controls/volume-slider";
 import Toolbar from "~/components/video-timeline/toolbar";
 import VideoTimeline from "~/components/video-timeline/video-timeline";
-import { CaptionEditProvider } from "~/context/caption-edit-context";
 import { VideoTimelineProvider } from "~/context/useTimeline";
 import useVideoStore from "~/store/video.store";
 import { NestedCompositionPropsSchema } from "~/types/timeline.types";
@@ -25,7 +24,7 @@ const VideoAndTimeline = () => {
     <>
       <div className="relative h-full">
         {/* <DragAndDropDemo /> */}
-        <VideoPreview playerRef={playerRef} />
+        <CompositionPreview playerRef={playerRef} />
         {/* 
         <div className="absolute left-96 top-96 h-96 w-96 border-2">
           <Button onClick={() => playerRef.current?.play()}>Play</Button>
@@ -35,7 +34,7 @@ const VideoAndTimeline = () => {
 
       {props && (
         <VideoTimelineProvider playerRef={playerRef}>
-          <CaptionEditProvider>
+          <>
             <VideoTimeline>
               <Toolbar>
                 <div className="flex items-center space-x-3">
@@ -52,14 +51,14 @@ const VideoAndTimeline = () => {
                 </div>
               </Toolbar>
             </VideoTimeline>
-          </CaptionEditProvider>
+          </>
         </VideoTimelineProvider>
       )}
     </>
   );
 };
 
-const VideoPreview = ({
+const CompositionPreview = ({
   playerRef,
 }: {
   playerRef: React.RefObject<PlayerRef>;

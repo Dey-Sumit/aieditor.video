@@ -1,16 +1,57 @@
 import type { PlayerRef } from "@remotion/player";
-import React, { createContext, useContext, useState } from "react";
-import { useVideoTimeline } from "~/hooks/use-video-timeline";
+import React, { createContext, useContext, useMemo, useState } from "react";
+import { useSeqItemResizeHandler } from "~/hooks/timeline/dom-layer/use-sequence-resize";
+import { useTimelineMetrics } from "~/hooks/timeline/dom-layer/use-timeline-metrics";
+import { useTimelineSynchronization } from "~/hooks/timeline/dom-layer/use-timeline-sync";
+import { useCurrentPlayerFrame } from "~/hooks/use-current-player-frame";
+import { useItemDrag } from "~/hooks/use-video-timeline";
+import useVideoStore from "~/store/video.store";
 import type { LayerId } from "~/types/timeline.types";
 
-const VideoTimelineContext = createContext<
-  ReturnType<typeof useVideoTimeline> & {
-    draggingLayerId: LayerId | null;
-    setDraggingLayerId: (layerId: LayerId | null) => void;
-  }
->(null as any);
+type CaptionData = {
+  videoLayerId: string;
+  videoItemId: string;
+  captionLayerId: string;
+  durationInFrames: number;
+} | null;
 
-export const useTimeline = () => useContext(VideoTimelineContext);
+type TimelineView = "caption-edit" | "entire-timeline";
+
+// Extract types from the hooks/functions
+type TimelineMetrics = ReturnType<typeof useTimelineMetrics>;
+type TimelineSynchronization = ReturnType<typeof useTimelineSynchronization>;
+type ItemDragHandler = ReturnType<typeof useItemDrag>;
+type SeqItemResizeHandler = ReturnType<typeof useSeqItemResizeHandler>;
+
+type Values = {
+  playheadPosition: TimelineSynchronization["playheadPosition"];
+  containerWidth: TimelineMetrics["containerWidth"];
+  containerRef: TimelineMetrics["containerRef"];
+  pixelsPerFrame: TimelineMetrics["pixelsPerFrame"];
+  throttledItemDrag: ItemDragHandler;
+  itemResizeHandler: SeqItemResizeHandler;
+  handlePlayheadDrag: TimelineSynchronization["handlePlayheadDrag"];
+  handleTimeLayerClick: TimelineSynchronization["handleTimeLayerClick"];
+  currentFrame: number;
+  draggingLayerId: LayerId | null;
+  setDraggingLayerId: (layerId: LayerId | null) => void;
+  // Caption edit values
+  view: TimelineView;
+  setView: (view: TimelineView) => void;
+  activeCaptionData: CaptionData;
+  setActiveCaptionData: (data: CaptionData) => void;
+  visibleLayerOrder: string[];
+};
+
+const VideoTimelineContext = createContext<Values>(null as any);
+
+export const useTimeline = () => {
+  const context = useContext(VideoTimelineContext);
+  if (!context) {
+    throw new Error("useTimeline must be used within VideoTimelineProvider");
+  }
+  return context;
+};
 
 export const VideoTimelineProvider = ({
   children,
@@ -19,13 +60,82 @@ export const VideoTimelineProvider = ({
   children: React.ReactNode;
   playerRef: React.RefObject<PlayerRef>;
 }) => {
+  // Original timeline state
   const [draggingLayerId, setDraggingLayerId] = useState<LayerId | null>(null);
 
-  const timelineValue = useVideoTimeline(playerRef);
+  // Caption edit state
+  const [view, setView] = useState<TimelineView>("entire-timeline");
+  const [activeCaptionData, setActiveCaptionData] = useState<CaptionData>(null);
+
+  const props = useVideoStore((store) => store.props);
+  const orderedLayers = useVideoStore((store) => store.props.layerOrder);
+  const layers = useVideoStore((store) => store.props.layers);
+
+  const updateSequenceItemPositionInLayer = useVideoStore(
+    (store) => store.updateSequenceItemPositionInLayer,
+  );
+
+  const {
+    compositionMetaData: { duration: durationInFrames },
+  } = props!;
+
+  const currentFrame = useCurrentPlayerFrame(playerRef);
+
+  const {
+    containerRef,
+    containerWidth,
+    frameToPixels,
+    pixelsToFrame,
+    pixelsPerFrame,
+  } = useTimelineMetrics({ durationInFrames });
+
+  const { playheadPosition, handlePlayheadDrag, handleTimeLayerClick } =
+    useTimelineSynchronization({
+      containerWidth,
+      frameToPixels,
+      pixelsToFrame,
+      playerRef,
+      currentFrame,
+    });
+
+  const throttledItemDrag = useItemDrag(
+    pixelsPerFrame,
+    updateSequenceItemPositionInLayer,
+  );
+
+  const itemResizeHandler = useSeqItemResizeHandler(pixelsPerFrame);
+
+  // Calculate visible layers based on view
+  const visibleLayerOrder = useMemo(() => {
+    if (view === "caption-edit" && activeCaptionData) {
+      return [activeCaptionData.captionLayerId, activeCaptionData.videoLayerId];
+    }
+
+    // Filter out caption layers for timeline view
+    return orderedLayers.filter(
+      (layerId) => layers[layerId].layerType !== "caption",
+    );
+  }, [view, activeCaptionData, orderedLayers, layers]);
+
   const value = {
-    ...timelineValue,
+    // Original timeline values
+    playheadPosition,
+    containerWidth,
+    containerRef,
+    pixelsPerFrame,
+    throttledItemDrag,
+    itemResizeHandler,
+    handlePlayheadDrag,
+    handleTimeLayerClick,
+    currentFrame,
     draggingLayerId,
     setDraggingLayerId,
+    // Caption edit values
+    view,
+    setView,
+    activeCaptionData,
+    setActiveCaptionData,
+    visibleLayerOrder,
   };
 
   return (

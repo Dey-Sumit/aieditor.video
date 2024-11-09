@@ -1,6 +1,5 @@
 import { GripVertical } from "lucide-react";
 import Layer, { HoverLayer } from "~/components/video-timeline/layer";
-import { useCaptionEdit } from "~/context/caption-edit-context";
 import { useTimeline } from "~/context/useTimeline";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
@@ -10,15 +9,13 @@ const {
   TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX, LAYER_NAME_STACK_WIDTH },
 } = LAYOUT;
 
-// components/caption-edit-view.tsx
 const CaptionEditView = ({
   containerRef,
 }: {
   containerRef: React.RefObject<HTMLDivElement>;
 }) => {
-  const { visibleLayerOrder } = useCaptionEdit();
-  const { activeCaptionData } = useCaptionEdit();
-  const { pixelsPerFrame } = useTimeline();
+  const { pixelsPerFrame, visibleLayerOrder, activeCaptionData } =
+    useTimeline();
 
   // Get just the specific video item and its layer
   const videoLayer = useVideoStore(

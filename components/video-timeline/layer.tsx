@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { useMemo } from "react";
 // import { useSequenceAddition } from "~/hooks/use-video-timeline";
-import { useCaptionEdit } from "~/context/caption-edit-context";
+import { useTimeline } from "~/context/useTimeline";
 import { useSequenceAddition } from "~/hooks/timeline/dom-layer/use-item-addition";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { selectLiteItems } from "~/store/reselector/video-store.reselector";
@@ -19,7 +19,7 @@ const {
 } = LAYOUT;
 
 const Layer: React.FC<LayerProps> = React.memo(({ layerId }) => {
-  const { view, activeCaptionData } = useCaptionEdit();
+  const { view, activeCaptionData } = useTimeline();
   const layer = useVideoStore((state) => state.props.layers[layerId]);
   const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
 

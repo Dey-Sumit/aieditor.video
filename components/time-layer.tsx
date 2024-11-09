@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { useCaptionEdit } from "~/context/caption-edit-context";
 import { useTimeline } from "~/context/useTimeline";
 import { TIMELINE } from "~/lib/constants/timeline.constants";
 import useVideoStore from "~/store/video.store";
@@ -8,8 +7,8 @@ import PlayHead from "./video-timeline/playhead";
 const { TIME_LAYER_RIGHT_OFFSET } = TIMELINE;
 
 const TimeLayer = () => {
-  const { containerWidth, handleTimeLayerClick } = useTimeline();
-  const { view, activeCaptionData } = useCaptionEdit();
+  const { containerWidth, handleTimeLayerClick, view, activeCaptionData } =
+    useTimeline();
 
   const width = containerWidth - TIME_LAYER_RIGHT_OFFSET;
 

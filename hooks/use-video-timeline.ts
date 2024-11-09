@@ -1,6 +1,4 @@
-import { type PlayerRef } from "@remotion/player";
 import { useCallback } from "react";
-import { useCurrentPlayerFrame } from "./use-current-player-frame";
 import useThrottle from "./use-throttle";
 
 import useVideoStore from "~/store/video.store";
@@ -9,13 +7,10 @@ import type {
   LiteSequenceItemType,
   StoreType,
 } from "~/types/timeline.types";
-import { useSeqItemResizeHandler } from "./timeline/dom-layer/use-sequence-resize";
-import { useTimelineMetrics } from "./timeline/dom-layer/use-timeline-metrics";
-import { useTimelineSynchronization } from "./timeline/dom-layer/use-timeline-sync";
 
 const SNAP_THRESHOLD = 10; // Define a threshold in frames for snapping
 
-const useItemDrag = (
+export const useItemDrag = (
   pixelsPerFrame: number,
   updateSequenceItemPositionInLayer: StoreType["updateSequenceItemPositionInLayer"],
 ) => {
@@ -164,56 +159,3 @@ const useItemDrag = (
   // Use a more aggressive throttle for drag operations
   return useThrottle(handleItemDrag, 50);
 };
-
-export function useVideoTimeline(playerRef: React.RefObject<PlayerRef>) {
-  const props = useVideoStore((store) => store.props);
-
-  const updateSequenceItemPositionInLayer = useVideoStore(
-    (store) => store.updateSequenceItemPositionInLayer,
-  );
-
-  const {
-    compositionMetaData: { duration: durationInFrames },
-  } = props!;
-
-  const currentFrame = useCurrentPlayerFrame(playerRef);
-
-  const {
-    containerRef,
-    containerWidth,
-    frameToPixels,
-    pixelsToFrame,
-    pixelsPerFrame,
-    // TODO :
-    /* setTimelineZoom,
-    zoom, */
-  } = useTimelineMetrics({ durationInFrames });
-
-  const { playheadPosition, handlePlayheadDrag, handleTimeLayerClick } =
-    useTimelineSynchronization({
-      containerWidth,
-      frameToPixels,
-      pixelsToFrame,
-      playerRef,
-      currentFrame,
-    });
-
-  const throttledItemDrag = useItemDrag(
-    pixelsPerFrame,
-    updateSequenceItemPositionInLayer,
-  );
-
-  const itemResizeHandler = useSeqItemResizeHandler(pixelsPerFrame);
-
-  return {
-    playheadPosition,
-    containerWidth,
-    containerRef,
-    pixelsPerFrame,
-    throttledItemDrag,
-    itemResizeHandler,
-    handlePlayheadDrag,
-    handleTimeLayerClick,
-    currentFrame,
-  };
-}

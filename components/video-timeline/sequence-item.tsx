@@ -9,7 +9,6 @@ import {
   Image,
   Video,
 } from "lucide-react";
-import { useCaptionEdit } from "~/context/caption-edit-context";
 import { useTimeline } from "~/context/useTimeline";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { useEditingStore } from "~/store/editing.store";
@@ -53,19 +52,19 @@ const SequenceItem = ({
   layerId: LayerId;
   nextItemStartFrame: number | undefined;
 }) => {
-  const { setView, setActiveCaptionData } = useCaptionEdit();
-
   const {
     throttledItemDrag,
     pixelsPerFrame,
     setDraggingLayerId,
     itemResizeHandler,
+    setView,
+    setActiveCaptionData,
+    visibleLayerOrder,
+    view,
   } = useTimeline();
 
   const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
   const activeSeqItem = useEditingStore((state) => state.activeSeqItem);
-
-  const { visibleLayerOrder, view } = useCaptionEdit();
 
   /* The adjustment of the x position is to account for the transition duration.
    - without transition : seq1 0 to 120: duration 120 frames, seq2 120 to 210 : duration 90 frames
