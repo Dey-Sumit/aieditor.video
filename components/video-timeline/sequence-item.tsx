@@ -194,6 +194,7 @@ const SequenceItem = ({
                     // }}
                     onClick={(e) => {
                       e.stopPropagation();
+                      setActiveSeqItem(layerId, item.id, "caption");
                       setActiveCaptionData({
                         videoLayerId: layerId,
                         videoItemId: item.id,

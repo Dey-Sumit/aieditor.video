@@ -2,6 +2,7 @@
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
+import SequenceItemEditorCaption from "./sequence-item-editor.caption";
 import SequenceItemEditorImage from "./sequence-item-editor.image";
 import SequenceItemEditorText from "./sequence-item-editor.text";
 
@@ -31,6 +32,7 @@ const SequenceItemEditorRenderer = () => {
         <SequenceItemEditorText key={activeSeqItem.itemId} />
       )}
       {activeSeqItem?.itemType === "image" && <SequenceItemEditorImage />}
+      {activeSeqItem?.itemType === "caption" && <SequenceItemEditorCaption />}
     </section>
   );
 };
