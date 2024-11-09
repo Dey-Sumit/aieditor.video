@@ -1,13 +1,12 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { MoveLeft } from "lucide-react";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import type { LayerType } from "~/types/timeline.types";
 
 import { useTimeline } from "~/context/useTimeline";
 import CaptionEditView from "../layout/editor-new/caption-editor-view";
 import TimeLayer from "../time-layer";
-import { Button } from "../ui/button";
 import Layer, { HoverLayer } from "./layer";
 import LayerNamesStack from "./layer-names-stack";
 import LayerToolbar from "./layer-toolbar";
@@ -22,7 +21,6 @@ const {
   },
 } = LAYOUT;
 
-// utils/layer.utils.ts
 export const filterCaptionLayers = (
   orderedLayers: string[],
   layers: Record<string, LayerType>,
@@ -34,7 +32,6 @@ export const filterCaptionLayers = (
 
 const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
   const { containerRef, view, setView } = useTimeline();
-  // Filter out caption layers
 
   return (
     <section
@@ -62,19 +59,15 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
               {view === "entire-timeline" ? (
                 <LayerToolbar />
               ) : (
-                <div>
-                  <Button
-                    onClick={() => {
-                      setView("entire-timeline");
-                    }}
-                    size="sm"
-                    variant="ghost"
-                    className="flex items-center space-x-1 rounded-none p-1"
-                  >
-                    <ArrowLeft size={16} />
-                    <span className="text-xs">Back To Timeline</span>
-                  </Button>
-                </div>
+                <button
+                  onClick={() => {
+                    setView("entire-timeline");
+                  }}
+                  className="flex h-full w-full items-center justify-center space-x-1 p-2 text-sm text-orange-500"
+                >
+                  <MoveLeft size={14} className="" />
+                  <span className="">Timeline</span>
+                </button>
               )}
             </div>
 
