@@ -50,7 +50,11 @@ function SequenceContextMenuWrapper({
 
   const handleDeleteSeqItem = () => {
     removeSequenceItemFromLayer(layerId, itemId);
-    if (activeSeqItem && activeSeqItem.itemId === itemId) {
+    if (
+      activeSeqItem &&
+      activeSeqItem.itemId === itemId &&
+      activeSeqItem.itemType !== "caption-page"
+    ) {
       clearActiveSeqItem();
     }
   };
