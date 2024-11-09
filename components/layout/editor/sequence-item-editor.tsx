@@ -32,7 +32,10 @@ const SequenceItemEditorRenderer = () => {
         <SequenceItemEditorText key={activeSeqItem.itemId} />
       )}
       {activeSeqItem?.itemType === "image" && <SequenceItemEditorImage />}
-      {activeSeqItem?.itemType === "caption" && <SequenceItemEditorCaption />}
+      {(activeSeqItem?.itemType === "caption" ||
+        activeSeqItem?.parentItemType === "caption") && (
+        <SequenceItemEditorCaption />
+      )}
     </section>
   );
 };

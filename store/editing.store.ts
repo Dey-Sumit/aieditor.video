@@ -3,12 +3,12 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import type { ContentType, LayerId } from "~/types/timeline.types";
 
-
 interface EditingState {
   activeSeqItem: {
     layerId: LayerId;
     itemId: string;
     itemType: ContentType;
+    parentItemType?: "caption" | null;
   } | null;
   selectedContentType: ContentType;
   draggingItemIdInPlayer: string | null;
@@ -19,6 +19,7 @@ interface EditingActions {
     layerId: LayerId,
     itemId: string,
     itemType: string,
+    parentItemType?: "caption",
   ) => void;
   clearActiveSeqItem: () => void;
   setSelectedContentType: (type: ContentType) => void;
@@ -36,10 +37,10 @@ export const useEditingStore = create<
       activeSeqItem: null,
       selectedContentType: "image",
       draggingItemIdInPlayer: null,
-      setActiveSeqItem: (layerId, itemId, itemType) => {
+      setActiveSeqItem: (layerId, itemId, itemType, parentItemType) => {
         set((state) => {
           // @ts-ignore : // TODO fix this
-          state.activeSeqItem = { layerId, itemId, itemType };
+          state.activeSeqItem = { layerId, itemId, itemType, parentItemType };
         });
       },
 
