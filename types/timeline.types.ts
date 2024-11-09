@@ -374,6 +374,7 @@ export type StoreActions = {
     layerId: LayerId,
     updates: Partial<Pick<LayerType, "name" | "isVisible">>,
   ) => void;
+
   splitSequenceItem: (
     layerId: LayerId,
     itemId: string,
@@ -394,6 +395,11 @@ export type StoreActions = {
     captionLayerPayload?: {
       captions: []; // Empty array for now, can be expanded later
     },
+  ) => void;
+  updateCaptionText: (
+    layerId: string,
+    sequenceId: string,
+    newText: string,
   ) => void;
 };
 

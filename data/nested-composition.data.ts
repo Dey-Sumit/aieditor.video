@@ -838,7 +838,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
           "s-caption-s-text-67b3b4ed-10b4-4537-9372-01d6869ab70c": {
             id: "s-caption-s-text-67b3b4ed-10b4-4537-9372-01d6869ab70c",
             type: "caption-page",
-            layerId: "layer-1",
+            layerId: "layer-1", // TODO : this data is not needed.
             editableProps: {
               text: "And when",
               startMs: 0,

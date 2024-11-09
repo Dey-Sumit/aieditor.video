@@ -22,6 +22,89 @@ import {
 import { toast } from "sonner";
 import { EMPTY_PROJECT } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
+type Token = {
+  text: string;
+  fromMs: number;
+  toMs: number;
+};
+
+type EditableProps = {
+  text: string;
+  startMs: number;
+  tokens: Token[];
+};
+
+const getWordBoundaries = (
+  text: string,
+): { start: number; end: number; hasSpacePrefix: boolean }[] => {
+  const words: { start: number; end: number; hasSpacePrefix: boolean }[] = [];
+  let inWord = false;
+  let start = 0;
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === " ") {
+      if (inWord) {
+        words.push({ start, end: i, hasSpacePrefix: text[start - 1] === " " });
+        inWord = false;
+      }
+    } else {
+      if (!inWord) {
+        start = i;
+        inWord = true;
+      }
+    }
+  }
+
+  if (inWord) {
+    words.push({
+      start,
+      end: text.length,
+      hasSpacePrefix: text[start - 1] === " ",
+    });
+  }
+
+  return words;
+};
+
+const updateTokens = (oldProps: EditableProps, newText: string): Token[] => {
+  const oldTokens = oldProps.tokens;
+  const newTokens: Token[] = [];
+
+  // Get word boundaries for the new text
+  const words = getWordBoundaries(newText);
+
+  words.forEach((word, index) => {
+    const oldToken = oldTokens[index];
+    if (!oldToken) {
+      // Handle new words (should not happen in your case)
+      const lastToken = newTokens[newTokens.length - 1];
+      const averageDuration = 200; // default duration
+
+      newTokens.push({
+        text: word.hasSpacePrefix
+          ? " " + newText.slice(word.start, word.end)
+          : newText.slice(word.start, word.end),
+        fromMs: lastToken ? lastToken.toMs : oldProps.startMs,
+        toMs: lastToken
+          ? lastToken.toMs + averageDuration
+          : oldProps.startMs + averageDuration,
+      });
+    } else {
+      // Preserve timing but update text
+      const wordText = newText.slice(word.start, word.end);
+      const hasSpacePrefix =
+        oldToken.text.startsWith(" ") || word.hasSpacePrefix;
+
+      newTokens.push({
+        text: hasSpacePrefix ? " " + wordText : wordText,
+        fromMs: oldToken.fromMs,
+        toMs: oldToken.toMs,
+      });
+    }
+  });
+
+  return newTokens;
+};
 
 /**
  * Custom hook for managing video store state.
@@ -1096,6 +1179,31 @@ const useVideoStore = create<
           console.log(
             `Updated position and dimensions for item ${itemId} in layer ${layerId}:`,
           );
+        });
+      },
+      updateCaptionText: (
+        layerId: string,
+        sequenceId: string,
+        newText: string,
+      ) => {
+        set((state) => {
+          console.log({ newText });
+
+          const item =
+            state.props.sequenceItems[layerId].sequenceItems[sequenceId];
+          if (!item || item.type !== "caption-page") {
+            console.warn(
+              `caption-page item ${sequenceId} not found in layer ${layerId}`,
+            );
+            return;
+          }
+
+          // Update text and recalculate tokens
+          const updatedTokens = updateTokens(item.editableProps, newText);
+          console.log({ updatedTokens });
+
+          item.editableProps.text = newText;
+          item.editableProps.tokens = updatedTokens;
         });
       },
     })),

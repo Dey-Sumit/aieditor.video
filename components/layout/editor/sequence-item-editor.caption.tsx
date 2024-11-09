@@ -1,7 +1,7 @@
 "use client";
 
 import { MergeIcon, MoreVertical, Trash } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -10,108 +10,30 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
-
-interface SubtitleEntry {
-  id: string;
-  startTime: string;
-  endTime: string;
-  text: string;
-}
+import { useEditingStore } from "~/store/editing.store";
+import useVideoStore from "~/store/video.store";
 
 export default function SequenceItemEditorCaption() {
-  const [subtitles, setSubtitles] = useState<SubtitleEntry[]>([
-    {
-      id: "1",
-      startTime: "00:00:00",
-      endTime: "00:00:02",
-      text: "I was attacked.",
-    },
-    {
-      id: "2",
-      startTime: "00:00:02",
-      endTime: "00:00:04",
-      text: "And when they",
-    },
-    {
-      id: "3",
-      startTime: "00:00:04",
-      endTime: "00:00:06",
-      text: "pulled the hood",
-    },
-    { id: "4", startTime: "00:00:06", endTime: "00:00:08", text: "off, I was" },
-    {
-      id: "5",
-      startTime: "00:00:08",
-      endTime: "00:00:10",
-      text: "kneeling in",
-    },
-    {
-      id: "1",
-      startTime: "00:00:00",
-      endTime: "00:00:02",
-      text: "I was attacked.",
-    },
-    {
-      id: "2",
-      startTime: "00:00:02",
-      endTime: "00:00:04",
-      text: "And when they",
-    },
-    {
-      id: "3",
-      startTime: "00:00:04",
-      endTime: "00:00:06",
-      text: "pulled the hood",
-    },
-    { id: "4", startTime: "00:00:06", endTime: "00:00:08", text: "off, I was" },
-    {
-      id: "5",
-      startTime: "00:00:08",
-      endTime: "00:00:10",
-      text: "kneeling in",
-    },
-  ]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
+  const layers = useVideoStore((store) => store.props.layers);
+  const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
+  const updateCaptionText = useVideoStore((store) => store.updateCaptionText);
+
+  // Get the caption layer which contains ordered liteItems
+  const captionLayer = layers[activeSeqItemLite.layerId];
+  console.log({ captionLayer });
+
+  // Get the main caption sequence item that contains all the text data
+  const mainCaptionItem = sequenceItems[activeSeqItemLite.layerId];
+  console.log({ mainCaptionItem });
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  useEffect(() => {
-    inputRefs.current = inputRefs.current.slice(0, subtitles.length);
-  }, [subtitles]);
+  const handleTextChange = (id, newText: string) => {
+    console.log({ newText });
 
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  const handleFocus = (id: string) => {
-    setActiveId(id);
-  };
-
-  const handleBlur = () => {
-    setActiveId(null);
-  };
-
-  const handleDelete = (id: string) => {
-    setSubtitles(subtitles.filter((subtitle) => subtitle.id !== id));
-  };
-
-  const handleMerge = (id: string) => {
-    const currentIndex = subtitles.findIndex((subtitle) => subtitle.id === id);
-    if (currentIndex < subtitles.length - 1) {
-      const newSubtitles = [...subtitles];
-      newSubtitles[currentIndex] = {
-        ...newSubtitles[currentIndex],
-        endTime: newSubtitles[currentIndex + 1].endTime,
-        text: `${newSubtitles[currentIndex].text} ${newSubtitles[currentIndex + 1].text}`,
-      };
-      newSubtitles.splice(currentIndex + 1, 1);
-      setSubtitles(newSubtitles);
-    }
-  };
-
-  const handleTextChange = (id: string, newText: string) => {
-    setSubtitles(
-      subtitles.map((subtitle) =>
-        subtitle.id === id ? { ...subtitle, text: newText } : subtitle,
-      ),
-    );
+    updateCaptionText(activeSeqItemLite.layerId, id, newText);
   };
 
   const handleKeyDown = (
@@ -127,7 +49,40 @@ export default function SequenceItemEditorCaption() {
     }
   };
 
-  const handleSave = () => {};
+  const handleFocus = (id: string) => {
+    setActiveId(id);
+  };
+
+  const handleBlur = () => {
+    setActiveId(null);
+  };
+
+  const frameToTimestamp = (frame: number) => {
+    const fps = 30; // Get this from your composition metadata if needed
+    const totalSeconds = frame / fps;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0",
+    )}`;
+  };
+
+  const handleMerge = (currentIndex: number) => {
+    if (currentIndex < captionLayer.liteItems.length - 1) {
+      // Implement merge logic using your store update function
+      console.log("Merge functionality to be implemented");
+    }
+  };
+
+  const handleDelete = (pageId: string) => {
+    // Implement delete logic using your store update function
+    console.log("Delete functionality to be implemented");
+  };
+
+  const handleSave = () => {
+    // Additional save logic if needed
+  };
 
   return (
     <>
@@ -141,57 +96,66 @@ export default function SequenceItemEditorCaption() {
       </div>
 
       <div className="max-h-[500px] space-y-2 overflow-y-auto pt-4">
-        {subtitles.map((subtitle, index) => (
-          <div
-            key={subtitle.id}
-            onFocus={() => handleFocus(subtitle.id)}
-            onBlur={handleBlur}
-            className={`group relative flex items-start justify-between space-x-4 border-l-2 py-2 transition-colors duration-200 ${
-              activeId === subtitle.id
-                ? "border-orange-700"
-                : "border-transparent hover:border-muted-foreground"
-            }`}
-            onClick={() => inputRefs.current[index]?.focus()}
-          >
-            <div className="flex-1 space-y-1 pl-4">
-              <div className="flex space-x-1 text-xs text-muted-foreground">
-                <span>{subtitle.startTime}</span>
-                <span>→</span>
-                <span>{subtitle.endTime}</span>
+        {captionLayer.liteItems.map((liteItem, index) => {
+          const captionText =
+            mainCaptionItem.sequenceItems[liteItem.id].editableProps;
+
+          return (
+            <div
+              key={liteItem.id}
+              className={`group relative flex items-start justify-between space-x-4 border-l-2 py-2 transition-colors duration-200 ${
+                activeId === liteItem.id
+                  ? "border-orange-700"
+                  : "border-transparent hover:border-muted-foreground"
+              }`}
+              onClick={() => inputRefs.current[index]?.focus()}
+            >
+              <div className="flex-1 space-y-1 pl-4">
+                <div className="flex space-x-1 text-xs text-muted-foreground">
+                  <span>{frameToTimestamp(liteItem.startFrame)}</span>
+                  <span>→</span>
+                  <span>
+                    {frameToTimestamp(
+                      liteItem.startFrame + liteItem.sequenceDuration,
+                    )}
+                  </span>
+                </div>
+                <Input
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  value={captionText.text}
+                  onChange={(e) =>
+                    handleTextChange(liteItem.id, e.target.value)
+                  }
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  onFocus={() => handleFocus(liteItem.id)}
+                  onBlur={handleBlur}
+                  className="h-auto bg-background p-2 text-base shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
               </div>
-              <Input
-                ref={(el) => (inputRefs.current[index] = el)}
-                value={subtitle.text}
-                onChange={(e) => handleTextChange(subtitle.id, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                onFocus={() => handleFocus(subtitle.id)}
-                onBlur={handleBlur}
-                className="h-auto bg-background p-2 text-base shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreVertical className="h-4 w-4" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => handleMerge(index)}>
+                    <MergeIcon className="mr-2 h-4 w-4" />
+                    Merge with next
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleDelete(liteItem.id)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash className="mr-2 h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVertical className="h-4 w-4" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleMerge(subtitle.id)}>
-                  <MergeIcon className="mr-2 h-4 w-4" />
-                  Merge with next
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => handleDelete(subtitle.id)}
-                  className="text-destructive focus:text-destructive"
-                >
-                  <Trash className="mr-2 h-4 w-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );

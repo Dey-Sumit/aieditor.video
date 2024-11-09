@@ -168,6 +168,11 @@ const SequenceItem = ({
           className="relative flex h-full w-full items-center justify-center truncate px-0 text-[10px] font-medium text-white"
           onClick={(e) => {
             e.stopPropagation();
+            // if (
+            //   item.sequenceType === "standalone" &&
+            //   item.contentType === "caption-page"
+            // )
+            //   return;
             setActiveSeqItem(
               layerId,
               item.id,
@@ -194,7 +199,11 @@ const SequenceItem = ({
                     // }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setActiveSeqItem(layerId, item.id, "caption");
+                      setActiveSeqItem(
+                        item.linkedCaptionLayerId!,
+                        item.id,
+                        "caption",
+                      );
                       setActiveCaptionData({
                         videoLayerId: layerId,
                         videoItemId: item.id,

@@ -3,15 +3,14 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import type { ContentType, LayerId } from "~/types/timeline.types";
 
-type SelectedContentType = ContentType;
 
 interface EditingState {
   activeSeqItem: {
     layerId: LayerId;
     itemId: string;
-    itemType: SelectedContentType;
+    itemType: ContentType;
   } | null;
-  selectedContentType: SelectedContentType;
+  selectedContentType: ContentType;
   draggingItemIdInPlayer: string | null;
 }
 
@@ -22,7 +21,7 @@ interface EditingActions {
     itemType: string,
   ) => void;
   clearActiveSeqItem: () => void;
-  setSelectedContentType: (type: SelectedContentType) => void;
+  setSelectedContentType: (type: ContentType) => void;
   setDraggingItemIdInPlayer: (itemId: string | null) => void;
 }
 
