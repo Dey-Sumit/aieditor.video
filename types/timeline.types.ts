@@ -401,6 +401,15 @@ export type StoreActions = {
     sequenceId: string,
     newText: string,
   ) => void;
+  addFreshCaptionsToMedia: (
+    linkedMediaLayerId: string,
+    mediaId: string,
+    captionLayerId: string,
+    data: {
+      liteItems: LiteSequenceItemType[];
+      sequenceItems: Record<string, FullSequenceContentType>;
+    },
+  ) => void;
 };
 
 export type NestedCompositionPropsType = NestedCompositionProjectType["props"];

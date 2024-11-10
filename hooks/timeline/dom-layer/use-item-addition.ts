@@ -162,7 +162,7 @@ export const useNewItemValidation = () => {
 
   // const addPresetToLayer = useVideoStore((state) => state.addPresetToLayer);
   const VIDEO_URL =
-    "https://video-editor-user-upload-assets.s3.ap-south-1.amazonaws.com/better-call-saul-360p-with-audio.mp4?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFcaCmFwLXNvdXRoLTEiSDBGAiEAsFUEpVdT0meu%2Bdu%2Fglwf7jVT7RdPZEwZeaWpIYhJGZYCIQDx7flC8JbjduvFpWMvbi0t3xpBq1G1MAkdnjjLOjEyASrtAgjA%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDA1ODI2NDI1MjM3MSIMTjK1NTk%2FEjc7vbSbKsECYCClfeXH35nKX6kZAngXIK9TGZ%2B2OVEiAFdIXJNtWZrrENoBfjPs2sTIf69cs5SFf3w6i7Klu1ms3CowpEzJVU9dqSUzaJJc%2BQ6TTIS0YvSbgQXzB1Du05rY5jKB5VrjyfxguVOUMiskYI6Ey5nDHfwL1LTRBuFZER6bcT2lbCKgNZw%2BKogcW00vwqVLELA3dhTfbEYHASJPfzvXhX0eRcvX%2FaCCogV3WJE6KYMNBCLgTANpJefVlKFYOGgqzVvO7vmR%2Fk%2BLnkL3WMhlneLDLn8GI8muQBCIy1fiEpq0JDWGFZmISXAcgr6BEecKbw5FYED7wP1rybD7iyUZ8DmEtLc%2Bt%2BXU9rkkuo5WqAW5as%2BXQ9VKT0rFzJSHA5n3i37vu%2F750qFoj7pa7iRy9SoJhOcVRlxtW%2FRxbuQneuTZ2MtqMI6T5LgGOrICjxcngERxWe9uwrA0IDVbW9zKLrGlffyEK09pqrkrXkakecjO3KohEJVwup6NlA5sepsVyitw0DcE5ravJQW2VSZbrHUW33qahNU%2FfWgSt1dQZAnYDoFnbb8JDJBFnYLg7FBq1c%2BsQjXlXD3Fw%2B59aTdb6Xe1kcVg7wEi1Ylmtb2m9AKLXOC0ouN02CL22Ma9UMJJFbxDZy5f9xduJmIIOH5yNS39Qdh%2BHxlkiVbFmCHkngerjt3bxgIvfPCDw8y9P4ViDhkGiArpE%2BmSSHq%2F0uAi4Za7kxXrDqA8Q9ezby5SMkJW%2FP8hs3tsddcyGLGly6KvHPsF1CD5VHiw0iKLwF29XTTF9akvLVP2NQjfAGpwPvyZyBxQMgOnoZUmoepfGsaZ%2FQLZkw7xopHYv4b4AhoO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241023T144607Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIAQ3EGR57J6USMW655%2F20241023%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=9f8621b40d90257bdf308cf9d8258059870593553d1fce2dd85d309e1cc0a779";
+    "https://no-protection-bucket.s3.us-east-1.amazonaws.com/saul%20cropped.mp4?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEO7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQCtrRnOuNxfuVcZ8p0puOvHIT2k74xPdWQxfcaPH5FW1gIhANMWewvmme6uRFITOM5G3w8QVoi1HsTXTewJPwZP3jElKssDCHYQABoMMDU4MjY0MjUyMzcxIgwheqq8q6DA3XCP5XkqqAPnQDgd9EJjVXIXytHtRbP%2BYWoqCdKAAxZfz97Slumy0kRgxu8mzGTqF8WGOZNYjVopq3yY0%2B1DkeK3SuVW0RXLmeLDKc%2B6whNtC9AybjUbsOmSfdAoveMrjO0Lo2t4ZLNU6J8Ahe2%2BqTgJxZZCRblCswlOicuajGOkr%2Fi931Ig6N%2Fgt4YUaBIs%2FCdATxcAlipFPHNHgG4kMhFxSmq1L63QrJqsjwO3IMx%2FMOpuXeVIy5DCHWYnvbaxj2M6YR1IWpfvEPI7A%2F4ZQnB6Wmgb%2F4YNOYmrzwN8Tvl%2Bx%2Bc1jby79jyEhZ8JYwM%2FefXqk7N9YahEeb431p3%2FgdrLGzGfWGy3FulLl%2BNNZYRvw6LDXgkFlPWwnLhzD8jg9auQhYdY4fO3%2BgD4zFKSKbnhdcLxNP6qbmG9OxMFU4B3bUfUpT%2BfAM6aG%2F06%2BV8BfKhMY%2FUUPO5fS9xBEaB7oGTeqqNy3oUJ5josNGlIhhwlChOpyQIQWoWAYoNh6rCHbIgVno3Hs5%2Bq4nnDFv8njBJ%2F7u7%2FSfkrrdI%2B0fyraJRVSqvtiCJphCBnlLwChl6IMMS8vbkGOuMCZM0tAJl5DePvXxK02s2AKN3EGPfBSbMz%2BHnADV29RkyrJ37KOKL%2Fzq%2F53jFU6KmBWtjbDogS1CMtm%2FlOTqlmLTzLeBtsnD5x%2BP40PDuAXV9%2F4Fza4NAgcSzM00xWULYLkeBCWNBNkBvJQe05B5B5Ou13UBCEY59oY3AJltg42XnRlyKCRG4IROEUn45LIk1Jy0FEAu0TwURWbK%2BJyngDFcrmd51gv6SN4NQ0S1HCvfzOYbFraruzlXqNyHrUvyI8Qwz2T%2FUq9eV%2BTPV5yPZH9%2BYK5yxC3Dk4dEutZn2m8p2QwI1V3tFpXF5XcnTpexq2ett9UxvQjRF8TlUW61U2w1S%2FFSVGcYMKD%2BBR4AI%2B%2FEbgFHXsuHUyjK9UacT5PuANmQ82AsTjFlmanTdqQb6qXu5NNTpoqZ38LvjMQIsOR0fcDuui97Ca1H%2Bb3Tx95MwK99z7k%2FIJUmC2rpEt5tSFhOWs7Q%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ3EGR57JW26NVJNZ%2F20241109%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241109T131318Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=59e9e04025106558bee24eaeb19b9a98c8318691628490fdf311647fc8f0c956";
 
   return useCallback(
     async (newItemData: {
@@ -277,8 +277,8 @@ export const useNewItemValidation = () => {
               contentType,
               id: newItemId,
               offset,
-              sequenceDuration: duration,
-              effectiveDuration: duration,
+              sequenceDuration: data.durationInSeconds * 30,
+              effectiveDuration: data.durationInSeconds * 30,
               sequenceType: "standalone",
               startFrame,
               linkedCaptionLayerId: null,
@@ -286,7 +286,7 @@ export const useNewItemValidation = () => {
             {
               type: "video",
               editableProps: {
-                videoEndsAtInFrames: duration,
+                videoEndsAtInFrames: data.durationInSeconds * 30,
                 videoStartsFromInFrames: 0,
                 styles: {
                   container: {

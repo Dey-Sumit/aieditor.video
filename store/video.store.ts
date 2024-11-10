@@ -20,7 +20,7 @@ import {
 } from "../utils/timeline.utils";
 
 import { toast } from "sonner";
-import { EMPTY_PROJECT } from "~/data/nested-composition.data";
+import { EMPTY_PROJECT_EMPTY } from "~/data/nested-composition.data";
 import { genId } from "~/utils/misc.utils";
 type Token = {
   text: string;
@@ -117,7 +117,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...EMPTY_PROJECT,
+      ...EMPTY_PROJECT_EMPTY,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {
@@ -1181,6 +1181,7 @@ const useVideoStore = create<
           );
         });
       },
+
       updateCaptionText: (
         layerId: string,
         sequenceId: string,
@@ -1206,7 +1207,92 @@ const useVideoStore = create<
           item.editableProps.tokens = updatedTokens;
         });
       },
+
+      addFreshCaptionsToMedia: (
+        linkedMediaLayerId,
+        mediaId,
+        newCaptionLayerId,
+        { liteItems, sequenceItems },
+      ) => {
+        set((state) => {
+          const newCaptionLayer: LayerType = {
+            id: newCaptionLayerId,
+            name: `Captions for ${mediaId}`,
+            isVisible: true,
+            liteItems: liteItems,
+            layerType: "caption",
+          };
+
+          // Add the caption layer to state
+          state.props.layers[newCaptionLayerId] = newCaptionLayer;
+
+          // Add the caption layer to the layer order
+          state.props.layerOrder.unshift(newCaptionLayerId);
+
+          // Update the media liteitem item with the caption layer reference
+          // find the mediaId using the mediaLayerId and link it
+          const mediaLayer = state.props.layers[linkedMediaLayerId];
+          if (!mediaLayer) {
+            console.warn(`Layer ${linkedMediaLayerId} not found`);
+            return;
+          }
+
+          // Find the lite item
+          const mediaItemIndex = mediaLayer.liteItems.findIndex(
+            (item) => item.id === mediaId,
+          );
+          if (mediaItemIndex === -1) {
+            console.warn(
+              `Media item ${mediaId} not found in layer ${linkedMediaLayerId}`,
+            );
+            return;
+          }
+
+          const mediaItem = mediaLayer.liteItems[mediaItemIndex];
+
+          // Check if it's a video or audio item
+          if (
+            mediaItem.sequenceType === "standalone" &&
+            (mediaItem.contentType === "video" ||
+              mediaItem.contentType === "audio")
+          ) {
+            // Update the media item with the caption layer reference
+            mediaItem.linkedCaptionLayerId = newCaptionLayerId;
+          } else {
+            console.warn(`Item ${mediaId} is not a video or audio item`);
+          }
+
+          // add sequenceItems to the state
+
+          state.props.sequenceItems[newCaptionLayerId] = {
+            type: "caption",
+            id: newCaptionLayerId,
+            layerId: newCaptionLayerId,
+            sequenceItems,
+            editableProps: {
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {},
+              },
+              positionAndDimensions: {
+                top: 300,
+                left: 0,
+                width: 720,
+                height: 1080,
+              },
+            },
+          };
+
+          console.log(
+            `Added caption layer ${newCaptionLayerId} to media item ${mediaId}`,
+          );
+        });
+      },
     })),
+
     {
       name: "VideoStore",
     },

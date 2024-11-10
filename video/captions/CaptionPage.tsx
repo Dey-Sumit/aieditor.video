@@ -8,7 +8,7 @@ import { TheBoldFont } from "./load-font";
 const fontFamily = TheBoldFont;
 console.log({ TheBoldFont });
 
-const DESIRED_FONT_SIZE = 100;
+const DESIRED_FONT_SIZE = 80;
 const HIGHLIGHT_COLOR = "orange";
 // const HIGHLIGHT_COLOR = "#39E508";
 

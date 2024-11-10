@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Extractor</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Audio Extractor</h1>
+        
+        <div class="input-section">
+            <input type="file" id="videoFile" accept="video/*">
+            
+            <div class="time-inputs">
+                <div class="input-group">
+                    <label>Start Time:</label>
+                    <input type="text" id="startTime" placeholder="00:00" value="00:00">
+                </div>
+                
+                <div class="input-group">
+                    <label>End Time:</label>
+                    <input type="text" id="endTime" placeholder="00:10" value="00:10">
+                </div>
+            </div>
+
+            <button id="extractButton">Extract Audio</button>
+        </div>
+
+        <div class="preview-section">
+            <div class="preview-box">
+                <h3>Original Video:</h3>
+                <video id="videoPreview" controls width="100%"></video>
+            </div>
+
+            <div class="preview-box">
+                <h3>Extracted Audio:</h3>
+                <audio id="audioPreview" controls></audio>
+                <button id="downloadBtn" class="download-button hidden">Download Audio</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load your JavaScript files -->
+    <script src="scripts/audioExtractor.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
