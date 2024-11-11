@@ -10,9 +10,8 @@ import TimeLayer from "../time-layer";
 import Layer, { HoverLayer } from "./layer";
 import LayerNamesStack from "./layer-names-stack";
 import LayerToolbar from "./layer-toolbar";
-const {
-  TIMELINE: { PLAY_HEAD_WIDTH_IN_PX },
-} = LAYOUT;
+import { PlayHead2 } from "./playhead";
+
 const {
   SIDE_NAVBAR_WIDTH,
   TIMELINE: {
@@ -33,16 +32,9 @@ export const filterCaptionLayers = (
 };
 
 const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
-  const {
-    containerRef,
-    visibleLayerOrder,
-    pixelsPerFrame,
-    view,
-    setView,
-    totalTimelineWidth,
-  } = useTimeline();
+  const { containerRef, visibleLayerOrder, pixelsPerFrame, view, setView } =
+    useTimeline();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  console.log({ totalTimelineWidth });
 
   return (
     <section
@@ -54,18 +46,18 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
 
       {/* TIMELINE BODY STARTS */}
       <div
-        // ref={scrollContainerRef}
         className="scrollbar-thumb-rounded-full relative flex overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400/30 hover:scrollbar-thumb-gray-900/80"
         style={{
           height: "12rem",
         }}
+        ref={scrollContainerRef}
       >
         {/* ------------------------- Layers section starts ------------------------  */}
 
         {/* ------------------------------ Left Section -----------------------------  */}
         <div className="sticky left-0 z-50">
           <div
-            className="sticky left-0 top-0 z-30 border-b border-r bg-green-900"
+            className="sticky left-0 top-0 z-30 border-b border-r border-t bg-black"
             style={{
               height: TRACK_LAYER_HEIGHT,
               width: LAYER_NAME_STACK_WIDTH,
@@ -96,18 +88,16 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
 
-        {/* <div className="w-10 shrink-0 bg-blue-700"></div> */}
-
         {/* ------------------------------ Right Section -----------------------------  */}
         <div
-          className="w-max flex-1 border"
+          className="w-max flex-1"
           ref={containerRef}
           style={{
             height: (visibleLayerOrder.length + 1) * TRACK_LAYER_HEIGHT_IN_PX,
           }}
         >
           <div
-            className="sticky top-0 z-10 flex-1 border-b bg-yellow-400"
+            className="sticky top-0 z-10 flex-1 border-b"
             style={{
               height: TRACK_LAYER_HEIGHT,
             }}
@@ -138,11 +128,13 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
               <Layer key={layerId} layerId={layerId} />
             ))}
           </div>
-          {/* </div> */}
 
           {/* ------------------------- PlayHead --------------------------  */}
 
-          {/* <PlayHead2 scrollContainerRef={scrollContainerRef} /> */}
+          <PlayHead2
+            scrollContainerRef={scrollContainerRef}
+            trackLayerCount={visibleLayerOrder.length}
+          />
         </div>
       </div>
     </section>

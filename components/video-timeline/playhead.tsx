@@ -69,21 +69,23 @@ export default PlayHead;
 interface PlayHeadProps {
   scrollContainerRef: RefObject<HTMLDivElement>;
   initialTop?: number;
-  layers?: number;
+  trackLayerCount?: number;
   trackHeight?: string;
 }
 
+const {
+  TIMELINE: { TRACK_LAYER_HEIGHT_IN_PX },
+} = LAYOUT;
+
 const PlayHead2: React.FC<PlayHeadProps> = ({
   scrollContainerRef,
-  initialTop = 8,
-  layers = 10,
-  trackHeight = "2.1rem",
+  initialTop = 12,
+  trackLayerCount: layers = 7,
 }) => {
-  // Constants
-  const REM_TO_PX_RATIO = 16;
-  const THROTTLE_MS = 16;
+  const THROTTLE_MS = 0;
   const PLAYHEAD_WIDTH = 1;
-  const PLAYHEAD_HEIGHT = 200;
+  const PLAYHEAD_HEIGHT = 100 * TRACK_LAYER_HEIGHT_IN_PX;
+  console.log({ PLAYHEAD_HEIGHT });
 
   const [scrollTop, setScrollTop] = useState<number>(initialTop);
 
@@ -94,10 +96,11 @@ const PlayHead2: React.FC<PlayHeadProps> = ({
   const maxScroll = useCallback(() => {
     if (!scrollContainerRef.current) return 0;
     const containerHeight = scrollContainerRef.current.clientHeight;
-    const contentHeight =
-      parseFloat(trackHeight) * REM_TO_PX_RATIO * (layers + 1);
+    console.log({ containerHeight });
+
+    const contentHeight = TRACK_LAYER_HEIGHT_IN_PX * (layers + 1);
     return Math.max(0, contentHeight - containerHeight);
-  }, [layers, trackHeight, scrollContainerRef]);
+  }, [layers, scrollContainerRef]);
 
   /**
    * Update playhead position based on current scroll position
@@ -106,6 +109,7 @@ const PlayHead2: React.FC<PlayHeadProps> = ({
   const updateScrollPosition = useCallback(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
+    console.log({ maxScroll: maxScroll() });
 
     const currentScroll = Math.min(container.scrollTop, maxScroll());
     setScrollTop(initialTop + currentScroll);
@@ -123,6 +127,7 @@ const PlayHead2: React.FC<PlayHeadProps> = ({
     return () =>
       container.removeEventListener("scroll", throttledScrollHandler);
   }, [throttledScrollHandler, scrollContainerRef]);
+  console.log({ scrollTop });
 
   return (
     <Rnd
@@ -130,7 +135,7 @@ const PlayHead2: React.FC<PlayHeadProps> = ({
         x: 0,
         y: 0,
         width: PLAYHEAD_WIDTH,
-        height: PLAYHEAD_HEIGHT,
+        height: 180,
       }}
       dragAxis="x"
       bounds="parent"
