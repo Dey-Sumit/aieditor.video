@@ -207,6 +207,7 @@ const NestedSequenceComposition = (
           if (layers[layerId].layerType === "caption")
             return (
               <CaptionRenderer
+                key={layerId}
                 layerId={layerId}
                 //@ts-ignore : i am done with this :(
                 sequenceItems={sequenceItems[layerId].sequenceItems}

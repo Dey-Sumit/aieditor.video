@@ -158,7 +158,7 @@ const TimeLayer = () => {
   return (
     <div
       onClick={handleTimeLayerClick}
-      className="-bg-gray-300 relative h-full border-t text-[8px] text-gray-300"
+      className="relative h-full border-t bg-black text-[8px] text-gray-300"
       style={{
         width: totalWidth,
       }}

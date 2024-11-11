@@ -4,9 +4,8 @@ import { LAYOUT } from "~/lib/constants/layout.constants";
 import type { LayerType } from "~/types/timeline.types";
 
 import { MoveLeft } from "lucide-react";
-import { useCallback } from "react";
+import { useRef } from "react";
 import { useTimeline } from "~/context/useTimeline";
-import CaptionEditView from "../layout/editor-new/caption-editor-view";
 import TimeLayer from "../time-layer";
 import Layer, { HoverLayer } from "./layer";
 import LayerNamesStack from "./layer-names-stack";
@@ -34,6 +33,123 @@ export const filterCaptionLayers = (
 };
 
 const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
+  const {
+    containerRef,
+    visibleLayerOrder,
+    pixelsPerFrame,
+    view,
+    setView,
+    totalTimelineWidth,
+  } = useTimeline();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  console.log({ totalTimelineWidth });
+
+  return (
+    <section
+      className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
+      style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_CONTAINER_HEIGHT }}
+    >
+      {/* -------------------------TOOL BAR------------------------  */}
+      {children}
+
+      {/* TIMELINE BODY STARTS */}
+      <div
+        // ref={scrollContainerRef}
+        className="scrollbar-thumb-rounded-full relative flex overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400/30 hover:scrollbar-thumb-gray-900/80"
+        style={{
+          height: "12rem",
+        }}
+      >
+        {/* ------------------------- Layers section starts ------------------------  */}
+
+        {/* ------------------------------ Left Section -----------------------------  */}
+        <div className="sticky left-0 z-50">
+          <div
+            className="sticky left-0 top-0 z-30 border-b border-r bg-green-900"
+            style={{
+              height: TRACK_LAYER_HEIGHT,
+              width: LAYER_NAME_STACK_WIDTH,
+            }}
+          >
+            {view === "entire-timeline" ? (
+              <LayerToolbar />
+            ) : (
+              <button
+                onClick={() => {
+                  setView("entire-timeline");
+                }}
+                className="flex h-full w-full items-center justify-center space-x-1 p-2 text-sm text-orange-500"
+              >
+                <MoveLeft size={14} className="" />
+                <span className="">Timeline</span>
+              </button>
+            )}
+          </div>
+
+          <div
+            className="h-fit divide-y divide-gray-800 border-r bg-black"
+            style={{
+              width: LAYER_NAME_STACK_WIDTH,
+            }}
+          >
+            <LayerNamesStack />
+          </div>
+        </div>
+
+        {/* <div className="w-10 shrink-0 bg-blue-700"></div> */}
+
+        {/* ------------------------------ Right Section -----------------------------  */}
+        <div
+          className="w-max flex-1 border"
+          ref={containerRef}
+          style={{
+            height: (visibleLayerOrder.length + 1) * TRACK_LAYER_HEIGHT_IN_PX,
+          }}
+        >
+          <div
+            className="sticky top-0 z-10 flex-1 border-b bg-yellow-400"
+            style={{
+              height: TRACK_LAYER_HEIGHT,
+            }}
+          >
+            <TimeLayer />
+          </div>
+
+          <div className="relative flex-1">
+            <div className="absolute inset-0">
+              {visibleLayerOrder.map((layerId) => (
+                <div
+                  key={layerId}
+                  className="relative border-b"
+                  style={{
+                    height: TRACK_LAYER_HEIGHT_IN_PX,
+                  }}
+                >
+                  <HoverLayer
+                    key={layerId}
+                    layerId={layerId}
+                    pixelsPerFrame={pixelsPerFrame}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {visibleLayerOrder.map((layerId) => (
+              <Layer key={layerId} layerId={layerId} />
+            ))}
+          </div>
+          {/* </div> */}
+
+          {/* ------------------------- PlayHead --------------------------  */}
+
+          {/* <PlayHead2 scrollContainerRef={scrollContainerRef} /> */}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const VideoTimeline1 = ({ children }: { children: React.ReactNode }) => {
   const { containerRef, view, setView, totalTimelineWidth } = useTimeline();
   return (
     <section
@@ -44,7 +160,9 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
         {/* -------------------------TOOL BAR------------------------  */}
         {children}
       </div>
-      <div className="relative flex flex-1 flex-col">
+
+      {/* TIMELINE BODY STARTS */}
+      <div className="flex flex-col">
         <div
           className="flex"
           style={{
@@ -94,89 +212,84 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
         {/* ------------------------- Layers section starts ------------------------  */}
-        {view === "caption-edit" ? (
-          <CaptionEditView containerRef={containerRef} />
-        ) : (
-          <TimelineLayers containerRef={containerRef} />
-        )}
       </div>
     </section>
   );
 };
 
-const _VideoTimeline = ({ children }: { children: React.ReactNode }) => {
-  const { containerRef, view, setView, totalTimelineWidth } = useTimeline();
+// const _VideoTimeline = ({ children }: { children: React.ReactNode }) => {
+//   const { containerRef, view, setView, totalTimelineWidth } = useTimeline();
 
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    if (e.ctrlKey || e.metaKey) {
-      e.preventDefault();
-      // handleWheelZoom(e);
-    }
-  }, []);
+//   const handleWheel = useCallback((e: React.WheelEvent) => {
+//     if (e.ctrlKey || e.metaKey) {
+//       e.preventDefault();
+//       // handleWheelZoom(e);
+//     }
+//   }, []);
 
-  return (
-    <section
-      className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
-      style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_CONTAINER_HEIGHT }}
-    >
-      <div className="flex h-full flex-col">
-        {/* ------------------------- Sticky(absolute) section starts ------------------------  */}
-        <div className="w-full border-b">
-          {/* -------------------------TOOL BAR------------------------  */}
-          {children}
+//   return (
+//     <section
+//       className="pattern-bg-black-orchid fixed bottom-0 right-0 border-t"
+//       style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_CONTAINER_HEIGHT }}
+//     >
+//       <div className="flex h-full flex-col">
+//         {/* ------------------------- Sticky(absolute) section starts ------------------------  */}
+//         <div className="w-full border-b">
+//           {/* -------------------------TOOL BAR------------------------  */}
+//           {children}
 
-          {/* ------------------------- TIME LAYER ------------------------  */}
-          <div
-            className="flex"
-            style={{
-              height: TRACK_LAYER_HEIGHT,
-            }}
-          >
-            {/* Fixed left sidebar */}
-            <div
-              className="flex-shrink-0 divide-y divide-gray-800 border-r border-t"
-              style={{
-                width: LAYER_NAME_STACK_WIDTH,
-              }}
-            >
-              {view === "entire-timeline" ? (
-                <LayerToolbar />
-              ) : (
-                <button
-                  onClick={() => {
-                    setView("entire-timeline");
-                  }}
-                  className="flex h-full w-full items-center justify-center space-x-1 p-2 text-sm text-orange-500"
-                >
-                  <MoveLeft size={14} className="" />
-                  <span className="">Timeline</span>
-                </button>
-              )}
-            </div>
+//           {/* ------------------------- TIME LAYER ------------------------  */}
+//           <div
+//             className="flex"
+//             style={{
+//               height: TRACK_LAYER_HEIGHT,
+//             }}
+//           >
+//             {/* Fixed left sidebar */}
+//             <div
+//               className="flex-shrink-0 divide-y divide-gray-800 border-r border-t"
+//               style={{
+//                 width: LAYER_NAME_STACK_WIDTH,
+//               }}
+//             >
+//               {view === "entire-timeline" ? (
+//                 <LayerToolbar />
+//               ) : (
+//                 <button
+//                   onClick={() => {
+//                     setView("entire-timeline");
+//                   }}
+//                   className="flex h-full w-full items-center justify-center space-x-1 p-2 text-sm text-orange-500"
+//                 >
+//                   <MoveLeft size={14} className="" />
+//                   <span className="">Timeline</span>
+//                 </button>
+//               )}
+//             </div>
 
-            {/* Scrollable right section */}
-            <div
-              ref={containerRef}
-              className="flex-1 -overflow-x-auto -overscroll-contain bg-red-500 scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600"
-              onWheel={handleWheel}
-            >
-              <TimeLayer />
-            </div>
-          </div>
-        </div>
+//             {/* Scrollable right section */}
+//             <div
+//               ref={containerRef}
+//               className="flex-1 bg-red-500 scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600"
+//               onWheel={handleWheel}
+//             >
+//               <TimeLayer />
+//             </div>
+//           </div>
+//         </div>
 
-        {/* ------------------------- Sticky(absolute) section ends ------------------------  */}
+//         {/* ------------------------- Sticky(absolute) section ends ------------------------  */}
 
-        {/* ------------------------- Layers section starts ------------------------  */}
-        {view === "caption-edit" ? (
-          <CaptionEditView containerRef={containerRef} />
-        ) : (
-          <TimelineLayers containerRef={containerRef} />
-        )}
-      </div>
-    </section>
-  );
-};
+//         {/* ------------------------- Layers section starts ------------------------  */}
+//         {view === "caption-edit" ? (
+//           <CaptionEditView containerRef={containerRef} />
+//         ) : (
+//           <TimelineLayers containerRef={containerRef} />
+//         )}
+//       </div>
+//     </section>
+//   );
+// };
 
 export default VideoTimeline;
 

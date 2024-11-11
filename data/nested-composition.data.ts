@@ -1445,38 +1445,38 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
     },
     layerOrder: ["L-CAPTION-1", "l-ac121030-0325-4cbd-b334-c4d91400fa51"],
     sequenceItems: {
-      "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f": {
-        id: "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f",
-        layerId: "l-ac121030-0325-4cbd-b334-c4d91400fa51",
-        type: "video",
-        animations: [],
-        totalVideoDurationInFrames: 150,
-        editableProps: {
-          videoEndsAtInFrames: 150,
-          videoStartsFromInFrames: 0,
-          styles: {
-            container: {
-              width: "100%",
-              height: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            element: {
-              width: "100%",
-              height: "100%",
-            },
-            overlay: {},
-          },
-          positionAndDimensions: {
-            top: 0,
-            left: 0,
-            width: 720,
-            height: 1080,
-          },
-          videoUrl:
-            "https://no-protection-bucket.s3.us-east-1.amazonaws.com/Sumit%27s%20Video%20-%20Oct%2026%2C%202024.mp4?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDgJeUPzJfCFn8SRdLY0W%2FTiqEJ9lgTJCLSMN%2FlqTEi4gIhAJTpcwUwAHq4%2B39VvaL1XVCRfhJD3liZs%2Ff6ZIFIFpM%2BKssDCE0QABoMMDU4MjY0MjUyMzcxIgz6GmR0MiG0uTKTRXEqqANI7HtbItR5PFypVmQr68am7OGnGH%2FGDQRFTeVU84vF1fAYAC034y0tS%2BcJfvttoFWyc8tbgdk6Mg5M9MkRKrN671T5P%2F2%2FJhtgUJkLmzqldvIQfsvUP4kCPyX%2B8bEPwzeAJoijKrAFPUHlJwG62XgwEvcI8pon8X8EYcJXsz2S3fgmwJ3A2E44xz9FDbrDK8CWABIhPLSFzcI9M3QY7RiyVTjcpxTVnsCIlFS9TLYrVWfXGEZJAC5LY0%2BMIvcVUBm6zEch81GXLdfx5jK9h8Ov8PFMoZIQKVMiBXcZmGDuQmtgoNx0iMxD0W%2Bm3wVNk4ZjIXade8LeWfgEBnl7rs%2FAPQGy5xQKmrE9xpMjJz30STotXsGku%2BtYHzYQDKdb0waLcRBh3yDwSxwBbeWCxdK3v%2Fmd9VTo6FQPWCLo953bfLgatAGSFUP55RW8cjgAWoac%2BjDB75gCD4MBGqNkK1w%2F5weTtRHBXTx0hfRzbjar766LdKol7MzYdDfHfC68MjbZ3PU5poMBahwuBjwRBhmwIfBqDxJMjC%2BeP62xw9YBcRxqJsMbyfoeMPa1tLkGOuMCKRBzd8ryYc10TVr6JO2lOvMzdRYKPVs5pcq828FreXQozlm9fselo0V3N%2BsmsWiFG6aUqIJdv89CzOTK1QYTh7svaSUeR%2F0IHSr4XA5rTC1mF4N5MIXRFBUF2BcMBp%2FstQmP4Y%2Bt57kctgkwDEPoEYLRRufSqGw5z%2BH7xmA8%2BqV3EhLWOJRonReFDCufd5wFI4iI%2FXb4Xt83eIHh4V%2BG%2FInd7GlqfxomsOOf6%2FZtxs4St7gcV5wwOfNM4SzYmEuon5wxlcfyAPfcNQbQUoyw8i3lFsfK%2B207yMUEAtBDMQ6p1Y5HaK%2BrgIHckWkyZekGuwkEZM%2BiPQkta0KiTGfxOuYw4%2B1edrbwF46L3B%2BJ33AEz02HjRvAunSHJjvhuw5mbTEjwxn%2Bo2AM3vpBUGOYoRMR1hSy3y%2BwpVIacmi5y6kfBXp2EmUv6ZR7%2FwyanusybBUqj44CMX4MXWZ3gLsGG3XEIQ%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ3EGR57JT3JMTLHZ%2F20241107%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241107T200001Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=f3add3134b96a7f8a55b3dde35e7cc71d6d7565825effbef5dbe834ac634828d",
-        },
-      },
+      // "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f": {
+      //   id: "s-video-20821ae9-e158-4a0e-ac4a-a40cfb975f1f",
+      //   layerId: "l-ac121030-0325-4cbd-b334-c4d91400fa51",
+      //   type: "video",
+      //   animations: [],
+      //   totalVideoDurationInFrames: 150,
+      //   editableProps: {
+      //     videoEndsAtInFrames: 150,
+      //     videoStartsFromInFrames: 0,
+      //     styles: {
+      //       container: {
+      //         width: "100%",
+      //         height: "100%",
+      //         justifyContent: "center",
+      //         alignItems: "center",
+      //       },
+      //       element: {
+      //         width: "100%",
+      //         height: "100%",
+      //       },
+      //       overlay: {},
+      //     },
+      //     positionAndDimensions: {
+      //       top: 0,
+      //       left: 0,
+      //       width: 720,
+      //       height: 1080,
+      //     },
+      //     videoUrl:
+      //       "https://no-protection-bucket.s3.us-east-1.amazonaws.com/Sumit%27s%20Video%20-%20Oct%2026%2C%202024.mp4?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDgJeUPzJfCFn8SRdLY0W%2FTiqEJ9lgTJCLSMN%2FlqTEi4gIhAJTpcwUwAHq4%2B39VvaL1XVCRfhJD3liZs%2Ff6ZIFIFpM%2BKssDCE0QABoMMDU4MjY0MjUyMzcxIgz6GmR0MiG0uTKTRXEqqANI7HtbItR5PFypVmQr68am7OGnGH%2FGDQRFTeVU84vF1fAYAC034y0tS%2BcJfvttoFWyc8tbgdk6Mg5M9MkRKrN671T5P%2F2%2FJhtgUJkLmzqldvIQfsvUP4kCPyX%2B8bEPwzeAJoijKrAFPUHlJwG62XgwEvcI8pon8X8EYcJXsz2S3fgmwJ3A2E44xz9FDbrDK8CWABIhPLSFzcI9M3QY7RiyVTjcpxTVnsCIlFS9TLYrVWfXGEZJAC5LY0%2BMIvcVUBm6zEch81GXLdfx5jK9h8Ov8PFMoZIQKVMiBXcZmGDuQmtgoNx0iMxD0W%2Bm3wVNk4ZjIXade8LeWfgEBnl7rs%2FAPQGy5xQKmrE9xpMjJz30STotXsGku%2BtYHzYQDKdb0waLcRBh3yDwSxwBbeWCxdK3v%2Fmd9VTo6FQPWCLo953bfLgatAGSFUP55RW8cjgAWoac%2BjDB75gCD4MBGqNkK1w%2F5weTtRHBXTx0hfRzbjar766LdKol7MzYdDfHfC68MjbZ3PU5poMBahwuBjwRBhmwIfBqDxJMjC%2BeP62xw9YBcRxqJsMbyfoeMPa1tLkGOuMCKRBzd8ryYc10TVr6JO2lOvMzdRYKPVs5pcq828FreXQozlm9fselo0V3N%2BsmsWiFG6aUqIJdv89CzOTK1QYTh7svaSUeR%2F0IHSr4XA5rTC1mF4N5MIXRFBUF2BcMBp%2FstQmP4Y%2Bt57kctgkwDEPoEYLRRufSqGw5z%2BH7xmA8%2BqV3EhLWOJRonReFDCufd5wFI4iI%2FXb4Xt83eIHh4V%2BG%2FInd7GlqfxomsOOf6%2FZtxs4St7gcV5wwOfNM4SzYmEuon5wxlcfyAPfcNQbQUoyw8i3lFsfK%2B207yMUEAtBDMQ6p1Y5HaK%2BrgIHckWkyZekGuwkEZM%2BiPQkta0KiTGfxOuYw4%2B1edrbwF46L3B%2BJ33AEz02HjRvAunSHJjvhuw5mbTEjwxn%2Bo2AM3vpBUGOYoRMR1hSy3y%2BwpVIacmi5y6kfBXp2EmUv6ZR7%2FwyanusybBUqj44CMX4MXWZ3gLsGG3XEIQ%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ3EGR57JT3JMTLHZ%2F20241107%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241107T200001Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=f3add3134b96a7f8a55b3dde35e7cc71d6d7565825effbef5dbe834ac634828d",
+      //   },
+      // },
 
       //! NOTE : SAME AS CAPTION LAYER ID, similar to preset nested seq items
       "L-CAPTION-1": {
