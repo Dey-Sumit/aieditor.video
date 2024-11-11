@@ -91,8 +91,6 @@ export default function CaptionGenerator() {
       </div>
 
       <div className="mx-auto w-full max-w-md space-y-6 p-4">
-        <h2 className="text-center text-2xl font-bold">Generate Captions</h2>
-
         <Button
           onClick={handleGenerateCaptions}
           disabled={isProcessing}
