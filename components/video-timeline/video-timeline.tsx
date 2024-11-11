@@ -1,16 +1,19 @@
 "use client";
 
-import { MoveLeft } from "lucide-react";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import type { LayerType } from "~/types/timeline.types";
 
+import { MoveLeft } from "lucide-react";
+import { useCallback } from "react";
 import { useTimeline } from "~/context/useTimeline";
 import CaptionEditView from "../layout/editor-new/caption-editor-view";
 import TimeLayer from "../time-layer";
 import Layer, { HoverLayer } from "./layer";
 import LayerNamesStack from "./layer-names-stack";
 import LayerToolbar from "./layer-toolbar";
-
+const {
+  TIMELINE: { PLAY_HEAD_WIDTH_IN_PX },
+} = LAYOUT;
 const {
   SIDE_NAVBAR_WIDTH,
   TIMELINE: {
@@ -31,7 +34,85 @@ export const filterCaptionLayers = (
 };
 
 const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
-  const { containerRef, view, setView } = useTimeline();
+  const { containerRef, view, setView, totalTimelineWidth } = useTimeline();
+  return (
+    <section
+      className="pattern-bg-black-orchid fixed bottom-0 right-0 flex flex-col border-t"
+      style={{ left: SIDE_NAVBAR_WIDTH, height: TIMELINE_CONTAINER_HEIGHT }}
+    >
+      <div className="w-full border-b">
+        {/* -------------------------TOOL BAR------------------------  */}
+        {children}
+      </div>
+      <div className="relative flex flex-1 flex-col">
+        <div
+          className="flex"
+          style={{
+            height: TRACK_LAYER_HEIGHT,
+          }}
+        >
+          {/* Fixed left sidebar */}
+          <div
+            className="flex-shrink-0 divide-y divide-gray-800 border-r border-t"
+            style={{
+              width: LAYER_NAME_STACK_WIDTH,
+            }}
+          >
+            {view === "entire-timeline" ? (
+              <LayerToolbar />
+            ) : (
+              <button
+                onClick={() => {
+                  setView("entire-timeline");
+                }}
+                className="flex h-full w-full items-center justify-center space-x-1 p-2 text-sm text-orange-500"
+              >
+                <MoveLeft size={14} className="" />
+                <span className="">Timeline</span>
+              </button>
+            )}
+          </div>
+          <div
+            className="relative flex flex-1 flex-col overflow-x-auto"
+            ref={containerRef}
+          >
+            <div
+              className="relative min-w-full"
+              style={{
+                width: totalTimelineWidth, // This should match TimeLayer's total width
+              }}
+            >
+              <div
+                className="sticky top-0 w-max"
+                style={{
+                  height: TRACK_LAYER_HEIGHT,
+                }}
+              >
+                <TimeLayer />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* ------------------------- Layers section starts ------------------------  */}
+        {view === "caption-edit" ? (
+          <CaptionEditView containerRef={containerRef} />
+        ) : (
+          <TimelineLayers containerRef={containerRef} />
+        )}
+      </div>
+    </section>
+  );
+};
+
+const _VideoTimeline = ({ children }: { children: React.ReactNode }) => {
+  const { containerRef, view, setView, totalTimelineWidth } = useTimeline();
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      // handleWheelZoom(e);
+    }
+  }, []);
 
   return (
     <section
@@ -43,6 +124,7 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
         <div className="w-full border-b">
           {/* -------------------------TOOL BAR------------------------  */}
           {children}
+
           {/* ------------------------- TIME LAYER ------------------------  */}
           <div
             className="flex"
@@ -50,6 +132,7 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
               height: TRACK_LAYER_HEIGHT,
             }}
           >
+            {/* Fixed left sidebar */}
             <div
               className="flex-shrink-0 divide-y divide-gray-800 border-r border-t"
               style={{
@@ -71,7 +154,14 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
               )}
             </div>
 
-            <TimeLayer />
+            {/* Scrollable right section */}
+            <div
+              ref={containerRef}
+              className="flex-1 -overflow-x-auto -overscroll-contain bg-red-500 scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600"
+              onWheel={handleWheel}
+            >
+              <TimeLayer />
+            </div>
           </div>
         </div>
 
@@ -83,8 +173,6 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
         ) : (
           <TimelineLayers containerRef={containerRef} />
         )}
-
-        {/* ------------------------- Layers section ends ------------------------  */}
       </div>
     </section>
   );

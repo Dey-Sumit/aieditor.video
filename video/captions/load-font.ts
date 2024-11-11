@@ -5,8 +5,6 @@ export const TheBoldFont = `TheBoldFont`;
 let loaded = false;
 
 export const loadFont = async (): Promise<void> => {
-  console.log("Loading font");
-
   if (loaded) {
     return Promise.resolve();
   }
@@ -23,7 +21,6 @@ export const loadFont = async (): Promise<void> => {
     TheBoldFont,
     `url('${staticFile("theboldfont.ttf")}') format('truetype')`,
   );
-  console.log({ font });
 
   await font.load();
   document.fonts.add(font);

@@ -23,7 +23,6 @@ export const CaptionsItem = ({
   if (item.type !== "captions") {
     throw new Error("Item is not captions");
   }
-  console.log("CaptionsItem", item);
 
   const { fps } = useVideoConfig();
 
@@ -41,7 +40,6 @@ export const CaptionsItem = ({
     captions: item.captions,
     combineTokensWithinMilliseconds: 200,
   });
-  console.log({ pages });
 
   return (
     <div style={style} className="text-white">

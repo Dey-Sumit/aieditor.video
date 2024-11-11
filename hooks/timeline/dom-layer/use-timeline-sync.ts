@@ -7,24 +7,25 @@ interface TimelineSyncProps {
   frameToPixels: (frame: number) => number;
   pixelsToFrame: (pixels: number) => number;
   containerWidth: number;
+  zoom: number; // Add zoom
 }
-
 export const useTimelineSynchronization = ({
   playerRef,
   currentFrame,
   frameToPixels,
   pixelsToFrame,
   containerWidth,
+  zoom,
 }: TimelineSyncProps) => {
+  // Remove scrollPosition from props
   const [playheadPosition, setPlayheadPosition] = useState({ x: 0, y: 0 });
 
-  // Update playhead position based on current frame
+  // Update position when frame changes
   useEffect(() => {
-    const newX = frameToPixels(currentFrame);
-    setPlayheadPosition({ x: newX, y: 0 });
+    const newPosition = frameToPixels(currentFrame);
+    setPlayheadPosition({ x: newPosition, y: 0 });
   }, [currentFrame, frameToPixels]);
 
-  // Seek to frame based on timeline position
   const seekToFrame = useCallback(
     (frame: number) => {
       if (playerRef.current) {
@@ -34,27 +35,30 @@ export const useTimelineSynchronization = ({
     [playerRef],
   );
 
-  // Handle playhead drag
   const handlePlayheadDrag = useCallback(
     (_e: any, d: { x: number; y: number }) => {
-      const newX = Math.max(0, Math.min(d.x, containerWidth));
-      setPlayheadPosition({ x: newX, y: 0 });
-      seekToFrame(pixelsToFrame(newX));
+      const totalWidth = containerWidth * zoom;
+      const boundedX = Math.max(0, Math.min(d.x, totalWidth));
+
+      setPlayheadPosition({ x: boundedX, y: 0 });
+      seekToFrame(pixelsToFrame(boundedX));
     },
-    [containerWidth, pixelsToFrame, seekToFrame],
+    [containerWidth, pixelsToFrame, seekToFrame, zoom],
   );
 
-  // Handle timeline click
   const handleTimeLayerClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      // TODO : Fix the optional chaining
       const containerRect = e.currentTarget?.getBoundingClientRect();
+      if (!containerRect) return;
+
       const clickX = e.clientX - containerRect.left;
-      const newX = Math.max(0, Math.min(clickX, containerWidth));
-      setPlayheadPosition({ x: newX, y: 0 });
-      seekToFrame(pixelsToFrame(newX));
+      const totalWidth = containerWidth * zoom;
+      const boundedX = Math.max(0, Math.min(clickX, totalWidth));
+
+      setPlayheadPosition({ x: boundedX, y: 0 });
+      seekToFrame(pixelsToFrame(boundedX));
     },
-    [containerWidth, pixelsToFrame, seekToFrame],
+    [containerWidth, pixelsToFrame, seekToFrame, zoom],
   );
 
   return {

@@ -41,6 +41,15 @@ type Values = {
   activeCaptionData: CaptionData;
   setActiveCaptionData: (data: CaptionData) => void;
   visibleLayerOrder: string[];
+
+  setTimelineZoom: TimelineMetrics["setTimelineZoom"];
+  handleZoomChange: TimelineMetrics["handleZoomChange"];
+  zoom: TimelineMetrics["zoom"];
+  scrollToFrame: TimelineMetrics["scrollToFrame"];
+  scrollPosition: TimelineMetrics["scrollPosition"];
+  totalTimelineWidth: TimelineMetrics["totalTimelineWidth"];
+  frameToPixels: TimelineMetrics["frameToPixels"];
+  pixelsToFrame: TimelineMetrics["pixelsToFrame"];
 };
 
 const VideoTimelineContext = createContext<Values>(null as any);
@@ -89,9 +98,15 @@ export const VideoTimelineProvider = ({
   const {
     containerRef,
     containerWidth,
+    pixelsPerFrame,
     frameToPixels,
     pixelsToFrame,
-    pixelsPerFrame,
+    setTimelineZoom,
+    handleZoomChange,
+    zoom,
+    scrollToFrame,
+    scrollPosition,
+    totalTimelineWidth,
   } = useTimelineMetrics({ durationInFrames });
 
   const { playheadPosition, handlePlayheadDrag, handleTimeLayerClick } =
@@ -101,6 +116,8 @@ export const VideoTimelineProvider = ({
       pixelsToFrame,
       playerRef,
       currentFrame,
+
+      zoom,
     });
 
   const throttledItemDrag = useItemDrag(
@@ -141,6 +158,14 @@ export const VideoTimelineProvider = ({
     activeCaptionData,
     setActiveCaptionData,
     visibleLayerOrder,
+    setTimelineZoom,
+    handleZoomChange,
+    zoom,
+    scrollToFrame,
+    scrollPosition,
+    totalTimelineWidth,
+    frameToPixels,
+    pixelsToFrame,
   };
 
   return (

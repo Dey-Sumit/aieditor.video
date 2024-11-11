@@ -25,6 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { useTimeline } from "~/context/useTimeline";
 
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
@@ -43,10 +44,16 @@ interface ToolbarCategory {
   items: ToolbarItem[];
 }
 
+// Add zoom constants
+const ZOOM_STEP = 1;
+const MAX_ZOOM = 5;
+const MIN_ZOOM = 1;
+
 const Toolbar = ({ children }: { children: React.ReactNode }) => {
   const setSelectedContentType = useEditingStore(
     (state) => state.setSelectedContentType,
   );
+  const { setTimelineZoom, zoom } = useTimeline();
   const selectedContentType = useEditingStore(
     (state) => state.selectedContentType,
   );
@@ -133,12 +140,18 @@ const Toolbar = ({ children }: { children: React.ReactNode }) => {
         {
           Icon: ZoomIn,
           label: "Zoom In",
-          onClick: () => console.log("Zoom In clicked"),
+          onClick: () => {
+            const newZoom = Math.min(zoom + ZOOM_STEP, MAX_ZOOM);
+            setTimelineZoom(newZoom);
+          },
         },
         {
           Icon: ZoomOut,
           label: "Zoom Out",
-          onClick: () => console.log("Zoom Out clicked"),
+          onClick: () => {
+            const newZoom = Math.max(zoom - ZOOM_STEP, MIN_ZOOM);
+            setTimelineZoom(newZoom);
+          },
         },
       ],
     },

@@ -81,7 +81,11 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+    require("tailwind-scrollbar"),
+  ],
   safelist: [
     // "text-blue-500",
     // "text-red-500",
