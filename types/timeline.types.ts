@@ -74,7 +74,7 @@ export type FullSequenceContentType = {
     }
   | {
       type: "caption";
-      sequenceItems: CaptionSequenceItemsType;
+      sequenceItems: Record<string, FullSequenceContentType>;
     }
   | {
       type: "caption-page";
@@ -90,7 +90,15 @@ export type FullSequenceContentType = {
     }
 );
 
-export type CaptionSequenceItemsType = Record<string, FullSequenceContentType>;
+export type CaptionSequenceItemType = Extract<
+  FullSequenceContentType,
+  { type: "caption" }
+>;
+
+export type CaptionPageSequenceItemType = Extract<
+  FullSequenceContentType,
+  { type: "caption-page" }
+>;
 
 export type TextSequenceItemType = Extract<
   FullSequenceContentType,
@@ -145,27 +153,13 @@ export type ContentType =
 type StandaloneVideoAudioType = {
   sequenceType: "standalone";
   contentType: "video" | "audio";
-  linkedCaptionLayerId: string | null; // Optional caption layer ID
+  linkedCaptionId: string | null;
+  linkedCaptionLayerId: string | null;
 };
 
 type StandaloneOtherType = {
   sequenceType: "standalone";
   contentType: Exclude<ContentType, "video" | "audio">;
-};
-
-type StandaloneCaptionType = {
-  sequenceType: "standalone";
-  contentType: "caption";
-  linkedVideoId: string;
-  //! THERE WILL NEVER BE A CAPTION PRESET, NEITHER IT WILL HAVE MULTIPLE LAYERS
-  //! IT WILL ALWAYS HAVE ONE LAYER BUT FOR THE sake of simplicity, we are keeping it same as preset
-  //! (you know nested sequence type of)
-  layers: {
-    [layerId: string]: {
-      liteItems: LiteSequenceItemType[];
-    };
-  };
-  layerOrder: string[];
 };
 
 type PresetType = {
@@ -177,6 +171,12 @@ type PresetType = {
     };
   };
   layerOrder: string[];
+};
+
+export type LiteItemCaptionType = {
+  sequenceType: "caption";
+
+  liteItems: LiteSequenceItemType[];
 };
 
 export type LiteSequenceItemType = {
@@ -198,8 +198,8 @@ export type LiteSequenceItemType = {
 } & (
   | StandaloneVideoAudioType
   | StandaloneOtherType
-  | StandaloneCaptionType
   | PresetType
+  | LiteItemCaptionType
 );
 
 export type LiteSequencePresetItemType = Extract<
@@ -396,11 +396,14 @@ export type StoreActions = {
       captions: []; // Empty array for now, can be expanded later
     },
   ) => void;
+
   updateCaptionText: (
     layerId: string,
-    sequenceId: string,
+    captionSequenceId: string,
+    captionPageSequenceId: string,
     newText: string,
   ) => void;
+
   addFreshCaptionsToMedia: (
     linkedMediaLayerId: string,
     mediaId: string,

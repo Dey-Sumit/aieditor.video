@@ -1,4 +1,8 @@
-import { createTikTokStyleCaptions, type Caption } from "@remotion/captions";
+import {
+  createTikTokStyleCaptions,
+  type Caption,
+  type TikTokToken,
+} from "@remotion/captions";
 import type {
   FullSequenceContentType,
   LiteSequenceItemType,
@@ -154,4 +158,85 @@ export const processCaptions = ({
   });
 
   return { liteItems, sequenceItems };
+};
+
+type EditableProps = {
+  text: string;
+  startMs: number;
+  tokens: TikTokToken[];
+};
+
+const getWordBoundaries = (
+  text: string,
+): { start: number; end: number; hasSpacePrefix: boolean }[] => {
+  const words: { start: number; end: number; hasSpacePrefix: boolean }[] = [];
+  let inWord = false;
+  let start = 0;
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === " ") {
+      if (inWord) {
+        words.push({ start, end: i, hasSpacePrefix: text[start - 1] === " " });
+        inWord = false;
+      }
+    } else {
+      if (!inWord) {
+        start = i;
+        inWord = true;
+      }
+    }
+  }
+
+  if (inWord) {
+    words.push({
+      start,
+      end: text.length,
+      hasSpacePrefix: text[start - 1] === " ",
+    });
+  }
+
+  return words;
+};
+
+export const updateTokens = (
+  oldProps: EditableProps,
+  newText: string,
+): TikTokToken[] => {
+  const oldTokens = oldProps.tokens;
+  const newTokens: TikTokToken[] = [];
+
+  // Get word boundaries for the new text
+  const words = getWordBoundaries(newText);
+
+  words.forEach((word, index) => {
+    const oldToken = oldTokens[index];
+    if (!oldToken) {
+      // Handle new words (should not happen in your case)
+      const lastToken = newTokens[newTokens.length - 1];
+      const averageDuration = 200; // default duration
+
+      newTokens.push({
+        text: word.hasSpacePrefix
+          ? " " + newText.slice(word.start, word.end)
+          : newText.slice(word.start, word.end),
+        fromMs: lastToken ? lastToken.toMs : oldProps.startMs,
+        toMs: lastToken
+          ? lastToken.toMs + averageDuration
+          : oldProps.startMs + averageDuration,
+      });
+    } else {
+      // Preserve timing but update text
+      const wordText = newText.slice(word.start, word.end);
+      const hasSpacePrefix =
+        oldToken.text.startsWith(" ") || word.hasSpacePrefix;
+
+      newTokens.push({
+        text: hasSpacePrefix ? " " + wordText : wordText,
+        fromMs: oldToken.fromMs,
+        toMs: oldToken.toMs,
+      });
+    }
+  });
+
+  return newTokens;
 };

@@ -49,7 +49,6 @@ export const useTimelineMetrics = ({
   }, []);
 
   const pixelsPerFrame = (containerWidth / durationInFrames) * zoom;
-  console.log({ containerWidth, durationInFrames, pixelsPerFrame });
 
   const frameToPixels = useCallback(
     (frame: number) => {

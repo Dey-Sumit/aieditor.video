@@ -12,28 +12,38 @@ import {
 import { Input } from "~/components/ui/input";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
+import type {
+  CaptionPageSequenceItemType,
+  CaptionSequenceItemType,
+} from "~/types/timeline.types";
 
 export default function SequenceItemEditorCaption() {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const activeSeqItemLite = useEditingStore((state) => state.activeSeqItem!);
+  const activeSeqItem = useEditingStore((state) => state.activeSeqItem!);
   const layers = useVideoStore((store) => store.props.layers);
   const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
+  console.log({ activeSeqItem });
+
   const updateCaptionText = useVideoStore((store) => store.updateCaptionText);
 
+  const captionSequenceItems = (
+    sequenceItems[activeSeqItem.itemId] as CaptionSequenceItemType
+  ).sequenceItems;
+
   // Get the caption layer which contains ordered liteItems
-  const captionLayer = layers[activeSeqItemLite.layerId];
-  console.log({ captionLayer });
+  const captionItem = layers[activeSeqItem.layerId].liteItems;
+  console.log({ captionItem });
 
   // Get the main caption sequence item that contains all the text data
-  const mainCaptionItem = sequenceItems[activeSeqItemLite.layerId];
+  const mainCaptionItem = sequenceItems[activeSeqItem.layerId];
   console.log({ mainCaptionItem });
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleTextChange = (id, newText: string) => {
+  const handleTextChange = (id: string, newText: string) => {
     console.log({ newText });
 
-    updateCaptionText(activeSeqItemLite.layerId, id, newText);
+    updateCaptionText(activeSeqItem.layerId, activeSeqItem.itemId, id, newText);
   };
 
   const handleKeyDown = (
@@ -69,7 +79,7 @@ export default function SequenceItemEditorCaption() {
   };
 
   const handleMerge = (currentIndex: number) => {
-    if (currentIndex < captionLayer.liteItems.length - 1) {
+    if (currentIndex < captionItem.length - 1) {
       // Implement merge logic using your store update function
       console.log("Merge functionality to be implemented");
     }
@@ -79,84 +89,72 @@ export default function SequenceItemEditorCaption() {
     // Implement delete logic using your store update function
     console.log("Delete functionality to be implemented");
   };
-
-  const handleSave = () => {
-    // Additional save logic if needed
-  };
+  console.log({ captionSequenceItems });
 
   return (
-    <>
-      <div className="sticky inset-x-0 top-0 flex h-12 items-center justify-end gap-2 p-2">
-        <Button variant="outline" size="sm">
-          Cancel
-        </Button>
-        <Button size="sm" variant="secondary" onClick={handleSave}>
-          Save
-        </Button>
-      </div>
+    <div className="max-h-[500px] space-y-2 overflow-y-auto pt-4">
+      {captionItem[0].liteItems.map((liteItem, index) => {
+        console.log({ liteItem });
 
-      <div className="max-h-[500px] space-y-2 overflow-y-auto pt-4">
-        {captionLayer.liteItems.map((liteItem, index) => {
-          const captionText =
-            mainCaptionItem.sequenceItems[liteItem.id].editableProps;
+        const captionText = (
+          captionSequenceItems[liteItem.id] as CaptionPageSequenceItemType
+        ).editableProps.text;
 
-          return (
-            <div
-              key={liteItem.id}
-              className={`group relative flex items-start justify-between space-x-4 border-l-2 py-2 transition-colors duration-200 ${
-                activeId === liteItem.id
-                  ? "border-orange-700"
-                  : "border-transparent hover:border-muted-foreground"
-              }`}
-              onClick={() => inputRefs.current[index]?.focus()}
-            >
-              <div className="flex-1 space-y-1 pl-4">
-                <div className="flex space-x-1 text-xs text-muted-foreground">
-                  <span>{frameToTimestamp(liteItem.startFrame)}</span>
-                  <span>→</span>
-                  <span>
-                    {frameToTimestamp(
-                      liteItem.startFrame + liteItem.sequenceDuration,
-                    )}
-                  </span>
-                </div>
-                <Input
-                  ref={(el) => (inputRefs.current[index] = el)}
-                  value={captionText.text}
-                  onChange={(e) =>
-                    handleTextChange(liteItem.id, e.target.value)
-                  }
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                  onFocus={() => handleFocus(liteItem.id)}
-                  onBlur={handleBlur}
-                  className="h-auto bg-background p-2 text-base shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
+        return (
+          <div
+            key={liteItem.id}
+            className={`group relative flex items-start justify-between space-x-4 border-l-2 py-2 transition-colors duration-200 ${
+              activeId === liteItem.id
+                ? "border-orange-700"
+                : "border-transparent hover:border-muted-foreground"
+            }`}
+            onClick={() => inputRefs.current[index]?.focus()}
+          >
+            <div className="flex-1 space-y-1 pl-4">
+              <div className="flex space-x-1 text-xs text-muted-foreground">
+                <span>{frameToTimestamp(liteItem.startFrame)}</span>
+                <span>→</span>
+                <span>
+                  {frameToTimestamp(
+                    liteItem.startFrame + liteItem.sequenceDuration,
+                  )}
+                </span>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <MoreVertical className="h-4 w-4" />
-                    <span className="sr-only">Open menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => handleMerge(index)}>
-                    <MergeIcon className="mr-2 h-4 w-4" />
-                    Merge with next
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleDelete(liteItem.id)}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <Trash className="mr-2 h-4 w-4" />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Input
+                //@ts-ignore
+                ref={(el) => (inputRefs.current[index] = el)}
+                value={captionText}
+                onChange={(e) => handleTextChange(liteItem.id, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                onFocus={() => handleFocus(liteItem.id)}
+                onBlur={handleBlur}
+                className="h-auto bg-background p-2 text-base shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              />
             </div>
-          );
-        })}
-      </div>
-    </>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleMerge(index)}>
+                  <MergeIcon className="mr-2 h-4 w-4" />
+                  Merge with next
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleDelete(liteItem.id)}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      })}
+    </div>
   );
 }

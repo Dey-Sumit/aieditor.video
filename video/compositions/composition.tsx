@@ -15,6 +15,7 @@ import { SortedOutlines } from "~/components/new-player/sorted-outlines";
 import useThrottle from "~/hooks/use-throttle";
 import useVideoStore from "~/store/video.store";
 import type {
+  LiteItemCaptionType,
   LiteSequenceItemType,
   NestedCompositionProjectType,
   StyledSequenceItem,
@@ -35,6 +36,8 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
 const SequenceItemRenderer: React.FC<{
   item: StyledSequenceItem;
 }> = ({ item }) => {
+  console.log("SequenceItemRenderer", item.type);
+
   if (item.type === "preset") {
     return null;
   }
@@ -204,17 +207,22 @@ const NestedSequenceComposition = (
     <AbsoluteFill className="border bg-black" onPointerDown={onPointerDown}>
       <AbsoluteFill className="font-serif" style={layerContainer}>
         {[...layerOrder].reverse().map((layerId) => {
-          if (layers[layerId].layerType === "caption")
+          if (layers[layerId].layerType === "caption") {
+            const captionId = layers[layerId].liteItems[0].id;
             return (
               <CaptionRenderer
                 key={layerId}
                 layerId={layerId}
                 //@ts-ignore : i am done with this :(
-                sequenceItems={sequenceItems[layerId].sequenceItems}
-                liteItems={layers[layerId].liteItems}
-                containerEditableProps={sequenceItems[layerId].editableProps}
+                sequenceItems={sequenceItems[captionId].sequenceItems}
+                liteItems={
+                  (layers[layerId].liteItems[0] as LiteItemCaptionType)
+                    .liteItems
+                }
+                containerEditableProps={sequenceItems[captionId].editableProps}
               />
             );
+          }
           return (
             <TransitionSeries key={layerId} name={layerId} layout="none">
               {layers[layerId].liteItems.map((item) => {

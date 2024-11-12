@@ -3,6 +3,7 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import type {
+  CaptionSequenceItemType,
   FullSequenceContentType,
   LayerId,
   LayerType,
@@ -21,90 +22,8 @@ import {
 
 import { toast } from "sonner";
 import { EMPTY_PROJECT_EMPTY } from "~/data/nested-composition.data";
+import { updateTokens } from "~/utils/captions.utils";
 import { genId } from "~/utils/misc.utils";
-type Token = {
-  text: string;
-  fromMs: number;
-  toMs: number;
-};
-
-type EditableProps = {
-  text: string;
-  startMs: number;
-  tokens: Token[];
-};
-
-const getWordBoundaries = (
-  text: string,
-): { start: number; end: number; hasSpacePrefix: boolean }[] => {
-  const words: { start: number; end: number; hasSpacePrefix: boolean }[] = [];
-  let inWord = false;
-  let start = 0;
-
-  for (let i = 0; i < text.length; i++) {
-    if (text[i] === " ") {
-      if (inWord) {
-        words.push({ start, end: i, hasSpacePrefix: text[start - 1] === " " });
-        inWord = false;
-      }
-    } else {
-      if (!inWord) {
-        start = i;
-        inWord = true;
-      }
-    }
-  }
-
-  if (inWord) {
-    words.push({
-      start,
-      end: text.length,
-      hasSpacePrefix: text[start - 1] === " ",
-    });
-  }
-
-  return words;
-};
-
-const updateTokens = (oldProps: EditableProps, newText: string): Token[] => {
-  const oldTokens = oldProps.tokens;
-  const newTokens: Token[] = [];
-
-  // Get word boundaries for the new text
-  const words = getWordBoundaries(newText);
-
-  words.forEach((word, index) => {
-    const oldToken = oldTokens[index];
-    if (!oldToken) {
-      // Handle new words (should not happen in your case)
-      const lastToken = newTokens[newTokens.length - 1];
-      const averageDuration = 200; // default duration
-
-      newTokens.push({
-        text: word.hasSpacePrefix
-          ? " " + newText.slice(word.start, word.end)
-          : newText.slice(word.start, word.end),
-        fromMs: lastToken ? lastToken.toMs : oldProps.startMs,
-        toMs: lastToken
-          ? lastToken.toMs + averageDuration
-          : oldProps.startMs + averageDuration,
-      });
-    } else {
-      // Preserve timing but update text
-      const wordText = newText.slice(word.start, word.end);
-      const hasSpacePrefix =
-        oldToken.text.startsWith(" ") || word.hasSpacePrefix;
-
-      newTokens.push({
-        text: hasSpacePrefix ? " " + wordText : wordText,
-        fromMs: oldToken.fromMs,
-        toMs: oldToken.toMs,
-      });
-    }
-  });
-
-  return newTokens;
-};
 
 /**
  * Custom hook for managing video store state.
@@ -1184,24 +1103,28 @@ const useVideoStore = create<
 
       updateCaptionText: (
         layerId: string,
-        sequenceId: string,
+        captionSequenceId: string,
+        captionPageSequenceId: string,
         newText: string,
       ) => {
         set((state) => {
           console.log({ newText });
 
-          const item =
-            state.props.sequenceItems[layerId].sequenceItems[sequenceId];
+          const item = (
+            state.props.sequenceItems[
+              captionSequenceId
+            ] as CaptionSequenceItemType
+          )?.sequenceItems[captionPageSequenceId];
+
           if (!item || item.type !== "caption-page") {
             console.warn(
-              `caption-page item ${sequenceId} not found in layer ${layerId}`,
+              `caption-page item ${captionSequenceId} not found in layer ${layerId}`,
             );
             return;
           }
 
           // Update text and recalculate tokens
           const updatedTokens = updateTokens(item.editableProps, newText);
-          console.log({ updatedTokens });
 
           item.editableProps.text = newText;
           item.editableProps.tokens = updatedTokens;
@@ -1215,11 +1138,22 @@ const useVideoStore = create<
         { liteItems, sequenceItems },
       ) => {
         set((state) => {
+          const captionId = `caption-${mediaId}-${Date.now()}`;
           const newCaptionLayer: LayerType = {
             id: newCaptionLayerId,
             name: `Captions for ${mediaId}`,
             isVisible: true,
-            liteItems: liteItems,
+            liteItems: [
+              {
+                sequenceType: "caption",
+                offset: 0,
+                startFrame: 0, // TODO : make this dynamic and correct
+                sequenceDuration: 150,
+                effectiveDuration: 150,
+                liteItems: liteItems,
+                id: captionId,
+              },
+            ],
             layerType: "caption",
           };
 
@@ -1258,15 +1192,16 @@ const useVideoStore = create<
           ) {
             // Update the media item with the caption layer reference
             mediaItem.linkedCaptionLayerId = newCaptionLayerId;
+            mediaItem.linkedCaptionId = captionId;
           } else {
             console.warn(`Item ${mediaId} is not a video or audio item`);
           }
 
           // add sequenceItems to the state
 
-          state.props.sequenceItems[newCaptionLayerId] = {
+          state.props.sequenceItems[captionId] = {
             type: "caption",
-            id: newCaptionLayerId,
+            id: captionId,
             layerId: newCaptionLayerId,
             sequenceItems,
             editableProps: {

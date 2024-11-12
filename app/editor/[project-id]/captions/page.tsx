@@ -18,11 +18,11 @@ type CaptionState = {
 // Mock API calls with delays
 const mockGenerateAndProcessCaptions = async () => {
   // First delay simulates caption generation
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 100));
   const captions = CAPTION_DATA.captions;
 
   // Second delay simulates processing
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 100));
   return processCaptions({
     captions,
     fps: 30,

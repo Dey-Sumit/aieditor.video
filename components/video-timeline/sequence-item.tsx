@@ -146,9 +146,11 @@ const SequenceItem = ({
       dragAxis={
         item.sequenceType === "preset"
           ? "both"
-          : item.contentType !== "caption-page"
-            ? "both"
-            : "x"
+          : item.sequenceType === "caption"
+            ? "none"
+            : item.contentType !== "caption-page"
+              ? "both"
+              : "x"
       }
       onDragStop={onDragStop}
       onDragStart={onDragStart}
@@ -162,7 +164,13 @@ const SequenceItem = ({
         itemId={item.id}
         transition={item.transition}
         startFrame={item.startFrame}
-        type={item.sequenceType === "preset" ? "preset" : item.contentType}
+        type={
+          item.sequenceType === "preset"
+            ? "preset"
+            : item.sequenceType === "caption"
+              ? item.sequenceType
+              : item.contentType
+        }
       >
         <div
           className="relative flex h-full w-full items-center justify-center truncate px-0 text-[10px] font-medium text-white"
@@ -172,7 +180,7 @@ const SequenceItem = ({
               item.sequenceType === "standalone" &&
               item.contentType === "caption-page"
             ) {
-              setActiveSeqItem(layerId, item.id, "caption-page", "caption"); //
+              setActiveSeqItem(layerId, item.id, "caption-page", "caption"); 
               return;
             }
             setActiveSeqItem(
@@ -188,24 +196,22 @@ const SequenceItem = ({
               layerId={layerId}
               pixelsPerFrame={pixelsPerFrame}
             />
-          ) : (
+          ) : item.sequenceType === "caption" ? null : (
             <div className="flex h-full w-full flex-col">
               {item.contentType === "video" &&
                 view === "entire-timeline" &&
                 item.linkedCaptionLayerId && (
                   <button
                     id="caption-item-preview-item"
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   console.log("clicked...");
-                    // }}
                     onClick={(e) => {
                       e.stopPropagation();
+
                       setActiveSeqItem(
                         item.linkedCaptionLayerId!,
-                        item.linkedCaptionLayerId!,
+                        item.linkedCaptionId!,
                         "caption",
                       );
+
                       setActiveCaptionData({
                         videoLayerId: layerId,
                         videoItemId: item.id,

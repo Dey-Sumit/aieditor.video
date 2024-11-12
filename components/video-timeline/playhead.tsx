@@ -101,7 +101,6 @@ const PlayHead2: React.FC<PlayHeadProps> = ({
   const maxScroll = useCallback(() => {
     if (!scrollContainerRef.current) return 0;
     const containerHeight = scrollContainerRef.current.clientHeight;
-    console.log({ containerHeight });
 
     const contentHeight = TRACK_LAYER_HEIGHT_IN_PX * (layers + 1);
     return Math.max(0, contentHeight - containerHeight);
@@ -114,7 +113,6 @@ const PlayHead2: React.FC<PlayHeadProps> = ({
   const updateScrollPosition = useCallback(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
-    console.log({ maxScroll: maxScroll() });
 
     const currentScroll = Math.min(container.scrollTop, maxScroll());
     setScrollTop(initialTop + currentScroll);
@@ -132,7 +130,6 @@ const PlayHead2: React.FC<PlayHeadProps> = ({
     return () =>
       container.removeEventListener("scroll", throttledScrollHandler);
   }, [throttledScrollHandler, scrollContainerRef]);
-  console.log({ scrollTop });
 
   return (
     <Rnd
