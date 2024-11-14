@@ -3,9 +3,10 @@
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import type { LayerType } from "~/types/timeline.types";
 
-import { MoveLeft } from "lucide-react";
+import { GripVertical, MoveLeft } from "lucide-react";
 import { useRef } from "react";
 import { useTimeline } from "~/context/useTimeline";
+import useVideoStore from "~/store/video.store";
 import TimeLayer from "../time-layer";
 import Layer, { HoverLayer } from "./layer";
 import LayerNamesStack from "./layer-names-stack";
@@ -32,8 +33,14 @@ export const filterCaptionLayers = (
 };
 
 const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
-  const { containerRef, visibleLayerOrder, pixelsPerFrame, view, setView } =
-    useTimeline();
+  const {
+    containerRef,
+    activeCaptionData,
+    visibleLayerOrder,
+    pixelsPerFrame,
+    view,
+    setView,
+  } = useTimeline();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -84,7 +91,14 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
               width: LAYER_NAME_STACK_WIDTH,
             }}
           >
-            <LayerNamesStack />
+            {view === "entire-timeline" ? (
+              <LayerNamesStack />
+            ) : (
+              <CaptionLayerStack
+                videoLayerId={activeCaptionData?.videoLayerId!}
+                captionLayerId={activeCaptionData?.captionLayerId!}
+              />
+            )}
           </div>
         </div>
         {/* <div className="w-0 bg-transparent"></div> */}
@@ -148,3 +162,47 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default VideoTimeline;
+
+const CaptionLayerStack: React.FC<{
+  videoLayerId: string;
+  captionLayerId: string;
+}> = ({ videoLayerId, captionLayerId }) => {
+  const layers = useVideoStore((state) => state.props.layers);
+
+  // Just the two layers we need
+  const visibleLayers = [captionLayerId, videoLayerId];
+
+  return (
+    <div className="relative">
+      {visibleLayers.map((layerId) => (
+        <LayerItem
+          key={layerId}
+          layer={layers[layerId]}
+
+          // Not passing constraintsRef since we don't need drag
+        />
+      ))}
+    </div>
+  );
+};
+
+const LayerItem = ({ layer }: { layer: LayerType }) => {
+  return (
+    <div
+      style={{
+        height: `${TRACK_LAYER_HEIGHT_IN_PX}px`,
+        width: "100%",
+      }}
+      className="border-b"
+    >
+      <div className="relative flex h-full w-full items-center px-1">
+        <div className="reorder-handle mr-2 cursor-move">
+          <GripVertical size={16} className="text-white/30" />
+        </div>
+        <span className="line-clamp-1 select-none text-xs capitalize">
+          {layer.name}
+        </span>
+      </div>
+    </div>
+  );
+};

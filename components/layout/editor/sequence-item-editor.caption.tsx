@@ -22,7 +22,6 @@ export default function SequenceItemEditorCaption() {
   const activeSeqItem = useEditingStore((state) => state.activeSeqItem!);
   const layers = useVideoStore((store) => store.props.layers);
   const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
-  console.log({ activeSeqItem });
 
   const updateCaptionText = useVideoStore((store) => store.updateCaptionText);
 
@@ -32,11 +31,9 @@ export default function SequenceItemEditorCaption() {
 
   // Get the caption layer which contains ordered liteItems
   const captionItem = layers[activeSeqItem.layerId].liteItems;
-  console.log({ captionItem });
 
   // Get the main caption sequence item that contains all the text data
   const mainCaptionItem = sequenceItems[activeSeqItem.layerId];
-  console.log({ mainCaptionItem });
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -94,8 +91,6 @@ export default function SequenceItemEditorCaption() {
   return (
     <div className="max-h-[500px] space-y-2 overflow-y-auto pt-4">
       {captionItem[0].liteItems.map((liteItem, index) => {
-        console.log({ liteItem });
-
         const captionText = (
           captionSequenceItems[liteItem.id] as CaptionPageSequenceItemType
         ).editableProps.text;

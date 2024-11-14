@@ -22,7 +22,9 @@ const Layer: React.FC<LayerProps> = React.memo(({ layerId }) => {
   const { view, activeCaptionData } = useTimeline();
   const layer = useVideoStore((state) => state.props.layers[layerId]);
   const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
-
+  if (layerId === "l-77881a30-d801-43b9-b94b-6f209d0adcc3") {
+    console.log({ liteItems });
+  }
   // Filter items based on view and layer type
   const visibleItems = useMemo(() => {
     // If it's a normal layer and we're in caption-edit view
@@ -36,6 +38,26 @@ const Layer: React.FC<LayerProps> = React.memo(({ layerId }) => {
     // For caption layers or regular timeline view, show all items
     return liteItems;
   }, [liteItems, layer.layerType, view, activeCaptionData?.videoItemId]);
+
+  if (layer.layerType === "caption") {
+    const captionPageItems = layer.liteItems[0].liteItems;
+    return (
+      <>
+        {captionPageItems.map((item) => {
+          const nextItemStartFrame =
+            captionPageItems[captionPageItems.indexOf(item) + 1]?.startFrame;
+          return (
+            <SequenceItem
+              key={item.id}
+              item={item}
+              layerId={layerId}
+              nextItemStartFrame={nextItemStartFrame}
+            />
+          );
+        })}
+      </>
+    );
+  }
 
   return (
     <>

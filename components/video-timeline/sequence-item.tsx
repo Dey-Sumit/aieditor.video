@@ -52,6 +52,8 @@ const SequenceItem = ({
   layerId: LayerId;
   nextItemStartFrame: number | undefined;
 }) => {
+  if (layerId === "l-77881a30-d801-43b9-b94b-6f209d0adcc3") console.log(item);
+
   const {
     throttledItemDrag,
     pixelsPerFrame,
@@ -180,7 +182,7 @@ const SequenceItem = ({
               item.sequenceType === "standalone" &&
               item.contentType === "caption-page"
             ) {
-              setActiveSeqItem(layerId, item.id, "caption-page", "caption"); 
+              setActiveSeqItem(layerId, item.id, "caption-page", "caption");
               return;
             }
             setActiveSeqItem(
