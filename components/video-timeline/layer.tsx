@@ -6,7 +6,10 @@ import { useSequenceAddition } from "~/hooks/timeline/dom-layer/use-item-additio
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { selectLiteItems } from "~/store/reselector/video-store.reselector";
 import useVideoStore from "~/store/video.store";
-import type { LayerId } from "~/types/timeline.types";
+import type {
+  LayerId,
+  LiteSequenceCaptionItemType,
+} from "~/types/timeline.types";
 import AddItemContextMenu from "./add-item-context-menu";
 import AddItemPlaceholder from "./add-item-placeholder";
 import SequenceItem from "./sequence-item";
@@ -38,7 +41,8 @@ const Layer: React.FC<LayerProps> = React.memo(({ layerId }) => {
   }, [liteItems, layer.layerType, view, activeCaptionData?.videoItemId]);
 
   if (layer.layerType === "caption") {
-    const captionPageItems = layer.liteItems[0].liteItems;
+    const captionPageItems = (layer.liteItems[0] as LiteSequenceCaptionItemType)
+      .liteItems;
     return (
       <>
         {captionPageItems.map((item) => {

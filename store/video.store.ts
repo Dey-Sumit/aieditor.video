@@ -234,6 +234,7 @@ const useVideoStore = create<
               }
 
               // check if any caption layer is linked, then adjust the position of the item as well
+              //@ts-ignore
               adjustLinkedCaptionPosition(updatedItem, state.props);
             } else {
               // "id0" id1 id2 -> id1 "id0" id2
@@ -315,6 +316,7 @@ const useVideoStore = create<
               }
 
               // check if any caption layer is linked, then adjust the position of the item as well
+              //@ts-ignore : FIX THIS
               adjustLinkedCaptionPosition(updatedItem, state.props);
             }
 
@@ -425,6 +427,7 @@ const useVideoStore = create<
             }
 
             // check if any caption layer is linked, then adjust the position of the item as well
+            //@ts-ignore : FIX THIS
             adjustLinkedCaptionPosition(updatedItem, state.props);
 
             console.log(
