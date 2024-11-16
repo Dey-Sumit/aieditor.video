@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import useVideoStore from "~/store/video.store";
 
 const TIME_PADDING = 0; // pixels padding on each side
@@ -17,11 +17,11 @@ const TimeLayer = () => {
     (state) => state.props.compositionMetaData.duration,
   );
 
-  const timelineDurationInFrames =
-    view === "caption-edit" && activeCaptionData?.videoItemId
-      ? activeCaptionData.durationInFrames
-      : compositionDurationInFrames;
-
+  // const timelineDurationInFrames =
+  //   view === "caption-edit" && activeCaptionData?.videoItemId
+  //     ? activeCaptionData.durationInFrames
+  //     : compositionDurationInFrames;
+  const timelineDurationInFrames = compositionDurationInFrames;
   const fps = useVideoStore((state) => state.props.compositionMetaData.fps);
 
   // Calculate the total width based on zoom

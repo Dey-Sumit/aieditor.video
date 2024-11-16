@@ -11,7 +11,7 @@ export const useTimelineMetrics = ({
   durationInFrames,
   initialZoom = 1,
   minZoom = 1, // Default min zoom
-  maxZoom = 5, // Default max zoom
+  maxZoom = 10, // Default max zoom
 }: TimelineMetricsOptions) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);

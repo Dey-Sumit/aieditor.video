@@ -1,7 +1,7 @@
 import { getVideoMetadata } from "@remotion/media-utils";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { staticFile } from "remotion";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import { PRESET_COLLECTION } from "~/data/preset.book";
 import useThrottle from "~/hooks/use-throttle";
 import { TIMELINE } from "~/lib/constants/timeline.constants";

@@ -9,7 +9,7 @@ import {
   Image,
   Video,
 } from "lucide-react";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import { useEditingStore } from "~/store/editing.store";
 import type {

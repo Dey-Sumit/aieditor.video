@@ -1,6 +1,6 @@
 import { type RefObject, useCallback, useEffect, useState } from "react";
 import { Rnd } from "react-rnd";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import useThrottle from "~/hooks/use-throttle";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 

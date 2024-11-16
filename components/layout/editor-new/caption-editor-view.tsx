@@ -1,6 +1,6 @@
 import { GripVertical } from "lucide-react";
 import Layer, { HoverLayer } from "~/components/video-timeline/layer";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import { LAYOUT } from "~/lib/constants/layout.constants";
 import useVideoStore from "~/store/video.store";
 import type { LayerType } from "~/types/timeline.types";

@@ -9,7 +9,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import { useEditingStore } from "~/store/editing.store";
 import useVideoStore from "~/store/video.store";
 import type {

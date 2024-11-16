@@ -25,7 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 
 import { cn } from "~/lib/utils";
 import { useEditingStore } from "~/store/editing.store";
@@ -46,7 +46,7 @@ interface ToolbarCategory {
 
 // Add zoom constants
 const ZOOM_STEP = 1;
-const MAX_ZOOM = 5;
+const MAX_ZOOM = 10;
 const MIN_ZOOM = 1;
 
 const Toolbar = ({ children }: { children: React.ReactNode }) => {

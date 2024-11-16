@@ -5,7 +5,7 @@ import type { LayerType } from "~/types/timeline.types";
 
 import { GripVertical, MoveLeft } from "lucide-react";
 import { useRef } from "react";
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import useVideoStore from "~/store/video.store";
 import TimeLayer from "../time-layer";
 import Layer, { HoverLayer } from "./layer";

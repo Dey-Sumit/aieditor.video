@@ -1,4 +1,4 @@
-import { useTimeline } from "~/context/useTimeline";
+import { useTimeline } from "~/context/video-timeline-context";
 import { useEditingStore } from "~/store/editing.store";
 import type { LayerId, LiteSequenceItemType } from "~/types/timeline.types";
 

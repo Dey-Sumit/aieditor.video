@@ -11,7 +11,7 @@ import TimeDisplay from "~/components/video-timeline/player-controls/time-displa
 import { VolumeSlider } from "~/components/video-timeline/player-controls/volume-slider";
 import Toolbar from "~/components/video-timeline/toolbar";
 import VideoTimeline from "~/components/video-timeline/video-timeline";
-import { VideoTimelineProvider } from "~/context/useTimeline";
+import { VideoTimelineProvider } from "~/context/video-timeline-context";
 import useVideoStore from "~/store/video.store";
 import { NestedCompositionPropsSchema } from "~/types/timeline.types";
 import NestedSequenceComposition from "~/video/compositions/composition";

@@ -308,8 +308,6 @@ const CaptionRenderer = ({
         >
           <Series key={layerId}>
             {liteItems.map((item) => {
-              console.log("CaptionRenderer", { item });
-
               const sequenceItem = captionPageSequenceItems[item.id];
 
               return (

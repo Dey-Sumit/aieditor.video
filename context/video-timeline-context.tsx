@@ -4,7 +4,7 @@ import { useSeqItemResizeHandler } from "~/hooks/timeline/dom-layer/use-sequence
 import { useTimelineMetrics } from "~/hooks/timeline/dom-layer/use-timeline-metrics";
 import { useTimelineSynchronization } from "~/hooks/timeline/dom-layer/use-timeline-sync";
 import { useCurrentPlayerFrame } from "~/hooks/use-current-player-frame";
-import { useItemDrag } from "~/hooks/use-video-timeline";
+import { useItemDrag } from "~/hooks/use-item-drag";
 import useVideoStore from "~/store/video.store";
 import type { LayerId } from "~/types/timeline.types";
 
@@ -90,10 +90,12 @@ export const VideoTimelineProvider = ({
 
   const currentFrame = useCurrentPlayerFrame(playerRef);
 
-  const durationInFrames =
-    view === "entire-timeline"
-      ? props!.compositionMetaData.duration
-      : activeCaptionData!.durationInFrames;
+  const durationInFrames = props!.compositionMetaData.duration;
+
+  // const durationInFrames =
+  //   view === "entire-timeline"
+  //     ? props!.compositionMetaData.duration
+  //     : activeCaptionData!.durationInFrames;
 
   const {
     containerRef,
