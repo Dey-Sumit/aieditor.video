@@ -21,7 +21,7 @@ import {
 } from "../utils/timeline.utils";
 
 import { toast } from "sonner";
-import { EMPTY_PROJECT_EMPTY } from "~/data/nested-composition.data";
+import { EMPTY_PROJECT_3 } from "~/data/nested-composition.data";
 import { updateTokens } from "~/utils/captions.utils";
 import { genId } from "~/utils/misc.utils";
 
@@ -36,7 +36,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...EMPTY_PROJECT_EMPTY,
+      ...EMPTY_PROJECT_3,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {

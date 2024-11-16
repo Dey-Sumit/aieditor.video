@@ -5652,6 +5652,23 @@ export const EMPTY_PROJECT_EMPTY: NestedCompositionProjectType = {
     transitions: {},
   },
 };
+export const EMPTY_PROJECT_3: NestedCompositionProjectType = {
+  id: "id-dummy",
+  title: "Dummy Project",
+  props: {
+    layers: {},
+    layerOrder: [],
+    sequenceItems: {},
+    compositionMetaData: {
+      width: 720,
+      height: 1080,
+      fps: 30,
+      duration: 1500,
+      compositionId: "new-dynamic-composition",
+    },
+    transitions: {},
+  },
+};
 /*
 
 

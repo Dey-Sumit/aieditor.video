@@ -1,6 +1,5 @@
 import { getVideoMetadata } from "@remotion/media-utils";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { staticFile } from "remotion";
 import { useTimeline } from "~/context/video-timeline-context";
 import { PRESET_COLLECTION } from "~/data/preset.book";
 import useThrottle from "~/hooks/use-throttle";
@@ -162,7 +161,9 @@ export const useNewItemValidation = () => {
   const setActiveSeqItem = useEditingStore((state) => state.setActiveSeqItem);
 
   // const addPresetToLayer = useVideoStore((state) => state.addPresetToLayer);
-  const VIDEO_URL = staticFile("sample-videos/saul-cropped.mp4");
+  const VIDEO_URL =
+    "https://video-editor-user-upload-assets.s3.ap-south-1.amazonaws.com/saul%20cropped.mp4?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCmFwLXNvdXRoLTEiRzBFAiBy3AR1pD8asFuyH%2BxmHlslJEdB4hcCl%2BQi8zWoTy1aPwIhAKwqz3CvR0yn6dHcVduyv314w4aNSXSt9lKMkaFmiy16KssDCC8QABoMMDU4MjY0MjUyMzcxIgz9GIpakb0q1dwcHD4qqAPRPBkQuCyVWtnlSundPCS5QeUq72V5WNFsP%2FnB2pIsi9w5vok1MtVq%2Bo6tvGIZHJ2zGBLUkRxqgLERpZbXEw9erb1550sQ23pOS%2B6p9T%2FBJGzKSdQTz2wmvcniM8p6ZVgZBEMb1vlfTsppMU09IPMVVT3rywuLxxHxBTuywlpWG%2FofyiUkLlZwVw2DWOfpTF0qsx6v%2BIo8LBIjoXxg57vJXobnjIJfYPoqp6mBJFyWOu5pDyC1eK8efU2ueED2ZKg7z91nMDP503XqOpm4p3EGSYjruVTWnhfQT%2FeLXszVeq%2BHk2F1aO052AmRd%2FbDvcw9LFFLtWSUwdiMpVcGW8OLK%2B%2F6NcPZ5BHuQpA2ZCawTUNxEfZslrV75ccLKONbsio8%2F%2BrVjlZKzQmZoKHqodxhXeATFwHRAJkAss6Xicx0tYruxo0wwd9mR3%2BBGziQKtIG4c9i8JOdIWsJ00eVrDWGPWzPlgRwHJI9ptg7IiOtBHlcL2z4FeB55ds%2FrQgTjpl7abSwZO69dX%2Fh8WAJ7dqfkSBmmxDpk2dduUUvYKStDOhjkILy6Y3MMMDB4rkGOuQC48RzLGor85K1gOIzs5bPH0WNFs%2F9wygMbth65ineWSLMj4UVerltU9AiOstBxQvYjoKPUMGAO3FLcHiTjGFZacqvqBICRJcA2FwxTE0mYmFDb13W0Ey29Zf9AynaYPiQ%2BjI6JqEWZc20a%2FV3AhxgbI8lDRHKMhihamlX32qYDxAWr%2B78uoxptJswYd83Df3u5zK9t4RBZGa%2FhULiZ1jiqJ9xXT6X1YM5mbKLNajBemWgI2HObL5Odn2QJGqe889e1OlS6xBulPqHSDC9T2CeUNPWiCpYb2BvVkKkZiVy%2F87xogsR2w2OflwyPJvPEHphfqUYUaTtVEKqqxbPDLHz85EQHEKHBlMl9N3VRtp84k%2FC9moP4%2FAG3nLf5DMxUNYDKho32ysbImOtyaTUctcla6WfGAZtgrb181DyvIgdOktVQt3qu3AIobIw4H41146cNZasdT6VYe93fip6EQQDhY6NY3Y%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ3EGR57JYCTNPWVJ%2F20241116%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20241116T134033Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=1ba9145b0ec46b51751bbf0452827ddc17c8daea77cea9213dd5cbd11963735b";
+  // const VIDEO_URL = staticFile("sample-videos/saul-cropped.mp4");
 
   return useCallback(
     async (newItemData: {
