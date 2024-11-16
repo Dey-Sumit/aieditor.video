@@ -8,7 +8,11 @@ interface EditingState {
     layerId: LayerId;
     itemId: string;
     itemType: ContentType;
-    parentItemType?: "caption" | null;
+    // parentItemType?: "caption" | null;
+    parentItem: {
+      itemType: "caption" | "preset";
+      captionItemId: string;
+    };
   } | null;
   selectedContentType: ContentType;
   draggingItemIdInPlayer: string | null;
@@ -19,7 +23,7 @@ interface EditingActions {
     layerId: LayerId,
     itemId: string,
     itemType: string,
-    parentItemType?: "caption",
+    parentItem?: { itemType: "caption" | "preset"; captionItemId: string },
   ) => void;
   clearActiveSeqItem: () => void;
   setSelectedContentType: (type: ContentType) => void;
@@ -37,10 +41,10 @@ export const useEditingStore = create<
       activeSeqItem: null,
       selectedContentType: "video",
       draggingItemIdInPlayer: null,
-      setActiveSeqItem: (layerId, itemId, itemType, parentItemType) => {
+      setActiveSeqItem: (layerId, itemId, itemType, parentItem) => {
         set((state) => {
           // @ts-ignore : // TODO fix this
-          state.activeSeqItem = { layerId, itemId, itemType, parentItemType };
+          state.activeSeqItem = { layerId, itemId, itemType, parentItem };
         });
       },
 

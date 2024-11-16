@@ -15,32 +15,36 @@ import useVideoStore from "~/store/video.store";
 import type {
   CaptionPageSequenceItemType,
   CaptionSequenceItemType,
+  LiteSequenceCaptionItemType,
 } from "~/types/timeline.types";
 
 export default function SequenceItemEditorCaption() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeSeqItem = useEditingStore((state) => state.activeSeqItem!);
+  console.log({ activeSeqItem });
+
+  const activeCaptionId =
+    activeSeqItem.itemType === "caption"
+      ? activeSeqItem.itemId
+      : activeSeqItem.parentItem.captionItemId;
+
   const layers = useVideoStore((store) => store.props.layers);
   const sequenceItems = useVideoStore((store) => store.props.sequenceItems);
 
   const updateCaptionText = useVideoStore((store) => store.updateCaptionText);
 
   const captionSequenceItems = (
-    sequenceItems[activeSeqItem.itemId] as CaptionSequenceItemType
+    sequenceItems[activeCaptionId] as CaptionSequenceItemType
   ).sequenceItems;
 
   // Get the caption layer which contains ordered liteItems
-  const captionItem = layers[activeSeqItem.layerId].liteItems;
-
-  // Get the main caption sequence item that contains all the text data
-  const mainCaptionItem = sequenceItems[activeSeqItem.layerId];
+  const captionItem = layers[activeSeqItem.layerId]
+    .liteItems[0] as LiteSequenceCaptionItemType;
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleTextChange = (id: string, newText: string) => {
-    console.log({ newText });
-
-    updateCaptionText(activeSeqItem.layerId, activeSeqItem.itemId, id, newText);
+    updateCaptionText(activeSeqItem.layerId, activeCaptionId, id, newText);
   };
 
   const handleKeyDown = (
@@ -76,10 +80,10 @@ export default function SequenceItemEditorCaption() {
   };
 
   const handleMerge = (currentIndex: number) => {
-    if (currentIndex < captionItem.length - 1) {
-      // Implement merge logic using your store update function
-      console.log("Merge functionality to be implemented");
-    }
+    // if (currentIndex < captionItem.length - 1) {
+    //   // Implement merge logic using your store update function
+    console.log("Merge functionality to be implemented");
+    // }
   };
 
   const handleDelete = (pageId: string) => {
@@ -90,7 +94,7 @@ export default function SequenceItemEditorCaption() {
 
   return (
     <div className="max-h-[500px] space-y-2 overflow-y-auto pt-4">
-      {captionItem[0].liteItems.map((liteItem, index) => {
+      {captionItem.liteItems.map((liteItem, index) => {
         const captionText = (
           captionSequenceItems[liteItem.id] as CaptionPageSequenceItemType
         ).editableProps.text;

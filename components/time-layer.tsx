@@ -7,8 +7,7 @@ const TimeLayer = () => {
   const {
     containerWidth,
     handleTimeLayerClick,
-    view,
-    activeCaptionData,
+
     zoom = 1, // Add zoom from context
     frameToPixels,
   } = useTimeline();
@@ -17,10 +16,6 @@ const TimeLayer = () => {
     (state) => state.props.compositionMetaData.duration,
   );
 
-  // const timelineDurationInFrames =
-  //   view === "caption-edit" && activeCaptionData?.videoItemId
-  //     ? activeCaptionData.durationInFrames
-  //     : compositionDurationInFrames;
   const timelineDurationInFrames = compositionDurationInFrames;
   const fps = useVideoStore((state) => state.props.compositionMetaData.fps);
 

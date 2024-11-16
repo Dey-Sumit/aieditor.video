@@ -84,18 +84,9 @@ export const VideoTimelineProvider = ({
     (store) => store.updateSequenceItemPositionInLayer,
   );
 
-  // const {
-  //   compositionMetaData: { duration: durationInFrames },
-  // } = props!;
-
   const currentFrame = useCurrentPlayerFrame(playerRef);
 
   const durationInFrames = props!.compositionMetaData.duration;
-
-  // const durationInFrames =
-  //   view === "entire-timeline"
-  //     ? props!.compositionMetaData.duration
-  //     : activeCaptionData!.durationInFrames;
 
   const {
     containerRef,
@@ -118,7 +109,6 @@ export const VideoTimelineProvider = ({
       pixelsToFrame,
       playerRef,
       currentFrame,
-
       zoom,
     });
 

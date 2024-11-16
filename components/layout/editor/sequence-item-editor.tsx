@@ -13,6 +13,7 @@ const {
 
 const SequenceItemEditorRenderer = () => {
   const activeSeqItem = useEditingStore((store) => store.activeSeqItem);
+  console.log({ activeSeqItem });
 
   // TODO : w-96? is it needed?
   return (
@@ -33,7 +34,7 @@ const SequenceItemEditorRenderer = () => {
       )}
       {activeSeqItem?.itemType === "image" && <SequenceItemEditorImage />}
       {(activeSeqItem?.itemType === "caption" ||
-        activeSeqItem?.parentItemType === "caption") && (
+        activeSeqItem?.parentItem?.itemType === "caption") && (
         <SequenceItemEditorCaption />
       )}
     </section>

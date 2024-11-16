@@ -37,8 +37,6 @@ export const SafeHTMLRenderer = ({ html }: { html: string }) => {
 const SequenceItemRenderer: React.FC<{
   item: StyledSequenceItem;
 }> = ({ item }) => {
-  console.log("SequenceItemRenderer", item.type);
-
   if (item.type === "preset") {
     return null;
   }
@@ -130,8 +128,6 @@ const RenderSequence: React.FC<{
     };
 
     if (!presetSequenceItem) {
-      console.log("null");
-
       return null;
     }
 

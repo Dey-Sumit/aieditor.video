@@ -74,13 +74,6 @@ const SequenceItem = ({
   const x =
     (item.startFrame + (item.transition?.incoming?.duration || 0)) *
     pixelsPerFrame;
-  // const x =
-  //   view === "caption-edit" &&
-  //   item.sequenceType === "standalone" &&
-  //   item.contentType === "video"
-  //     ? 0
-  //     : (item.startFrame + (item.transition?.incoming?.duration || 0)) *
-  //       pixelsPerFrame;
 
   const width =
     (item.sequenceDuration -
@@ -121,6 +114,7 @@ const SequenceItem = ({
   };
 
   const layerIndex = visibleLayerOrder.indexOf(layerId);
+  console.log("SequenceItem renders", item.id);
 
   return (
     <Rnd
@@ -187,14 +181,17 @@ const SequenceItem = ({
               item.sequenceType === "standalone" &&
               item.contentType === "caption-page"
             ) {
-              setActiveSeqItem(layerId, item.id, "caption-page", "caption");
+              setActiveSeqItem(layerId, item.id, "caption-page", {
+                captionItemId: activeSeqItem?.itemId!,
+                itemType: "caption",
+              });
               return;
             }
             setActiveSeqItem(
               layerId,
               item.id,
               item.sequenceType === "standalone" ? item.contentType : "preset",
-            ); // TODO : Fix this
+            );
           }}
         >
           {item.sequenceType === "preset" ? (
