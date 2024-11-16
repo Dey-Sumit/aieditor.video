@@ -1,4 +1,4 @@
-import { makeTransform, scale, translateY } from "@remotion/animation-utils";
+import { makeTransform, translateY } from "@remotion/animation-utils";
 import { type TikTokPage } from "@remotion/captions";
 import { fitText } from "@remotion/layout-utils";
 import React from "react";
@@ -7,7 +7,7 @@ import { TheBoldFont } from "./load-font";
 
 const fontFamily = TheBoldFont;
 
-const DESIRED_FONT_SIZE = 80;
+const DESIRED_FONT_SIZE = 60;
 const HIGHLIGHT_COLOR = "orange";
 // const HIGHLIGHT_COLOR = "#39E508";
 
@@ -41,10 +41,10 @@ export const CaptionPage: React.FC<{
         color: "white",
         WebkitTextStroke: "20px black",
         paintOrder: "stroke",
-        transform: makeTransform([
-          scale(interpolate(enterProgress, [0, 1], [0.8, 1])),
-          translateY(interpolate(enterProgress, [0, 1], [50, 0])),
-        ]),
+        // transform: makeTransform([
+        //   scale(interpolate(enterProgress, [0, 1], [0.8, 1])),
+        //   translateY(interpolate(enterProgress, [0, 1], [50, 0])),
+        // ]),
         fontFamily,
         textTransform: "uppercase",
         display: "flex",
@@ -54,36 +54,42 @@ export const CaptionPage: React.FC<{
         width: "100%",
       }}
     >
-      <span
-        style={{
-          transform: makeTransform([
-            scale(interpolate(enterProgress, [0, 1], [0.8, 1])),
-            translateY(interpolate(enterProgress, [0, 1], [50, 0])),
-          ]),
-        }}
-      >
-        {page.tokens.map((t) => {
-          const startRelativeToSequence = t.fromMs - page.startMs;
-          const endRelativeToSequence = t.toMs - page.startMs;
+      {page.tokens.map((t) => {
+        const startRelativeToSequence = t.fromMs - page.startMs;
+        const endRelativeToSequence = t.toMs - page.startMs;
 
-          const active =
-            startRelativeToSequence <= timeInMs &&
-            endRelativeToSequence > timeInMs;
+        const active =
+          startRelativeToSequence <= timeInMs &&
+          endRelativeToSequence > timeInMs;
 
-          return (
-            <span
-              key={t.fromMs + t.text}
-              style={{
-                display: "inline",
-                whiteSpace: "pre",
-                color: active ? HIGHLIGHT_COLOR : "white",
-              }}
-            >
-              {t.text}
-            </span>
-          );
-        })}
-      </span>
+        const wordEnterProgress = Math.min(
+          Math.max((timeInMs - startRelativeToSequence) / 100, 0),
+          1,
+        );
+
+        const transform = makeTransform([
+          translateY(interpolate(wordEnterProgress, [0, 1], [30, 0])),
+        ]);
+
+        const opacity = interpolate(wordEnterProgress, [0, 1], [0, 1]);
+
+        return (
+          <span
+            key={t.fromMs + t.text}
+            style={{
+              display: "inline",
+              whiteSpace: "pre",
+              color: active ? HIGHLIGHT_COLOR : "white",
+              opacity,
+              transform,
+              // transform: `translateY(${translateOffset}px)`,
+              // transition: "transform 0.3s ease-out",
+            }}
+          >
+            {t.text}
+          </span>
+        );
+      })}
     </div>
   );
 };

@@ -52,8 +52,6 @@ const SequenceItem = ({
   layerId: LayerId;
   nextItemStartFrame: number | undefined;
 }) => {
-  if (layerId === "l-77881a30-d801-43b9-b94b-6f209d0adcc3") console.log(item);
-
   const {
     throttledItemDrag,
     pixelsPerFrame,
@@ -76,6 +74,13 @@ const SequenceItem = ({
   const x =
     (item.startFrame + (item.transition?.incoming?.duration || 0)) *
     pixelsPerFrame;
+  // const x =
+  //   view === "caption-edit" &&
+  //   item.sequenceType === "standalone" &&
+  //   item.contentType === "video"
+  //     ? 0
+  //     : (item.startFrame + (item.transition?.incoming?.duration || 0)) *
+  //       pixelsPerFrame;
 
   const width =
     (item.sequenceDuration -

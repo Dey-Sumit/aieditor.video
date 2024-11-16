@@ -125,24 +125,25 @@ const VideoTimeline = ({ children }: { children: React.ReactNode }) => {
               height: visibleLayerOrder.length * TRACK_LAYER_HEIGHT_IN_PX,
             }}
           >
-            <div className="absolute inset-0">
-              {visibleLayerOrder.map((layerId) => (
-                <div
-                  key={layerId}
-                  className="relative border-b"
-                  style={{
-                    height: TRACK_LAYER_HEIGHT_IN_PX,
-                  }}
-                >
-                  <HoverLayer
+            {view === "entire-timeline" && (
+              <div className="absolute inset-0">
+                {visibleLayerOrder.map((layerId) => (
+                  <div
                     key={layerId}
-                    layerId={layerId}
-                    pixelsPerFrame={pixelsPerFrame}
-                  />
-                </div>
-              ))}
-            </div>
-
+                    className="relative border-b"
+                    style={{
+                      height: TRACK_LAYER_HEIGHT_IN_PX,
+                    }}
+                  >
+                    <HoverLayer
+                      key={layerId}
+                      layerId={layerId}
+                      pixelsPerFrame={pixelsPerFrame}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             {visibleLayerOrder.map((layerId) => (
               <Layer key={layerId} layerId={layerId} />
             ))}

@@ -232,6 +232,9 @@ const useVideoStore = create<
                   // updatedItem.startFrame = nextItem.startFrame;
                 }
               }
+
+              // check if any caption layer is linked, then adjust the position of the item as well
+              adjustLinkedCaptionPosition(updatedItem, state.props);
             } else {
               // "id0" id1 id2 -> id1 "id0" id2
               const nextItemOfPastIdx = layer.liteItems[pastIdx + 1];
@@ -310,6 +313,9 @@ const useVideoStore = create<
                   }
                 }
               }
+
+              // check if any caption layer is linked, then adjust the position of the item as well
+              adjustLinkedCaptionPosition(updatedItem, state.props);
             }
 
             // handle transitions
@@ -418,6 +424,9 @@ const useVideoStore = create<
               }
             }
 
+            // check if any caption layer is linked, then adjust the position of the item as well
+            adjustLinkedCaptionPosition(updatedItem, state.props);
+
             console.log(
               `Updated sequence item ${itemId} from layer ${oldLayerId} to ${newLayerId}`,
             );
@@ -503,13 +512,13 @@ const useVideoStore = create<
           );
           if (itemIndex === -1) return; // Exit if item not found
 
-          const item = layer.liteItems[itemIndex];
+          const updatedItem = layer.liteItems[itemIndex];
           const nextItem = layer.liteItems[itemIndex + 1];
 
           if (
             direction === "left" &&
-            item.sequenceType === "standalone" &&
-            item.contentType === "video"
+            updatedItem.sequenceType === "standalone" &&
+            updatedItem.contentType === "video"
           ) {
             const videoItem = state.props.sequenceItems[
               itemId
@@ -536,20 +545,20 @@ const useVideoStore = create<
 
           // Update startFrame and duration
           if (direction === "left") {
-            item.startFrame -= frameDelta;
-            item.offset -= frameDelta;
-            item.effectiveDuration += frameDelta;
-            item.sequenceDuration += frameDelta;
+            updatedItem.startFrame -= frameDelta;
+            updatedItem.offset -= frameDelta;
+            updatedItem.effectiveDuration += frameDelta;
+            updatedItem.sequenceDuration += frameDelta;
           } else {
             // direction === "right"
-            item.effectiveDuration += frameDelta;
-            item.sequenceDuration += frameDelta;
+            updatedItem.effectiveDuration += frameDelta;
+            updatedItem.sequenceDuration += frameDelta;
           }
 
           // Handle video specific updates
           if (
-            item.sequenceType === "standalone" &&
-            item.contentType === "video"
+            updatedItem.sequenceType === "standalone" &&
+            updatedItem.contentType === "video"
           ) {
             const videoItem = state.props.sequenceItems[
               itemId
@@ -566,8 +575,33 @@ const useVideoStore = create<
           // Update the next item's offset if it exists
           if (nextItem) {
             nextItem.offset =
-              nextItem.startFrame - (item.startFrame + item.effectiveDuration);
+              nextItem.startFrame -
+              (updatedItem.startFrame + updatedItem.effectiveDuration);
           }
+
+          if (
+            updatedItem.sequenceType === "standalone" &&
+            (updatedItem.contentType === "video" ||
+              updatedItem.contentType === "audio")
+          ) {
+            const linkedCaptionId = updatedItem.linkedCaptionId;
+            const linkedCaptionLayerId = updatedItem.linkedCaptionLayerId;
+            if (!linkedCaptionId || !linkedCaptionLayerId) return;
+            const linkedCaptionLayer = state.props.layers[linkedCaptionLayerId];
+            if (!linkedCaptionLayer) return;
+            const linkedCaptionItemIndex =
+              linkedCaptionLayer.liteItems.findIndex(
+                (item) => item.id === linkedCaptionId,
+              );
+            if (linkedCaptionItemIndex === -1) return;
+            const linkedCaptionItem =
+              linkedCaptionLayer.liteItems[linkedCaptionItemIndex];
+            linkedCaptionItem.startFrame = updatedItem.startFrame;
+            linkedCaptionItem.offset = updatedItem.offset;
+            linkedCaptionItem.sequenceDuration = updatedItem.sequenceDuration;
+            linkedCaptionItem.effectiveDuration = updatedItem.effectiveDuration;
+          }
+          // update the linked caption item's duration and startFrame,offset
 
           console.log(`Updated item ${itemId} in layer ${layerId}:`);
         });
@@ -1138,33 +1172,6 @@ const useVideoStore = create<
         { liteItems, sequenceItems },
       ) => {
         set((state) => {
-          const captionId = `caption-${mediaId}-${Date.now()}`;
-          const newCaptionLayer: LayerType = {
-            id: newCaptionLayerId,
-            name: `Captions for ${mediaId}`,
-            isVisible: true,
-            liteItems: [
-              {
-                sequenceType: "caption",
-                offset: 0,
-                startFrame: 0, // TODO : make this dynamic and correct
-                sequenceDuration: 150,
-                effectiveDuration: 150,
-                liteItems: liteItems,
-                id: captionId,
-              },
-            ],
-            layerType: "caption",
-          };
-
-          // Add the caption layer to state
-          state.props.layers[newCaptionLayerId] = newCaptionLayer;
-
-          // Add the caption layer to the layer order
-          state.props.layerOrder.unshift(newCaptionLayerId);
-
-          // Update the media liteitem item with the caption layer reference
-          // find the mediaId using the mediaLayerId and link it
           const mediaLayer = state.props.layers[linkedMediaLayerId];
           if (!mediaLayer) {
             console.warn(`Layer ${linkedMediaLayerId} not found`);
@@ -1183,6 +1190,34 @@ const useVideoStore = create<
           }
 
           const mediaItem = mediaLayer.liteItems[mediaItemIndex];
+
+          const captionId = `caption-${mediaId}-${Date.now()}`;
+          const newCaptionLayer: LayerType = {
+            id: newCaptionLayerId,
+            name: `Captions for ${mediaId}`,
+            isVisible: true,
+            liteItems: [
+              {
+                sequenceType: "caption",
+                offset: mediaItem.offset,
+                startFrame: mediaItem.startFrame,
+                sequenceDuration: mediaItem.sequenceDuration,
+                effectiveDuration: mediaItem.effectiveDuration,
+                liteItems: liteItems,
+                id: captionId,
+              },
+            ],
+            layerType: "caption",
+          };
+
+          // Add the caption layer to state
+          state.props.layers[newCaptionLayerId] = newCaptionLayer;
+
+          // Add the caption layer to the layer order
+          state.props.layerOrder.unshift(newCaptionLayerId);
+
+          // Update the media lite-item item with the caption layer reference
+          // find the mediaId using the mediaLayerId and link it
 
           // Check if it's a video or audio item
           if (
@@ -1235,3 +1270,36 @@ const useVideoStore = create<
 );
 
 export default useVideoStore;
+
+interface UpdatedItem {
+  sequenceType: string;
+  contentType: string;
+  linkedCaptionId?: string;
+  linkedCaptionLayerId?: string;
+  startFrame: number;
+  offset: number;
+}
+
+function adjustLinkedCaptionPosition(
+  updatedItem: UpdatedItem,
+  stateProps: StoreType["props"],
+): void {
+  if (
+    updatedItem.sequenceType === "standalone" &&
+    (updatedItem.contentType === "video" || updatedItem.contentType === "audio")
+  ) {
+    const linkedCaptionId = updatedItem.linkedCaptionId;
+    const linkedCaptionLayerId = updatedItem.linkedCaptionLayerId;
+    if (!linkedCaptionId || !linkedCaptionLayerId) return;
+    const linkedCaptionLayer = stateProps.layers[linkedCaptionLayerId];
+    if (!linkedCaptionLayer) return;
+    const linkedCaptionItemIndex = linkedCaptionLayer.liteItems.findIndex(
+      (item) => item.id === linkedCaptionId,
+    );
+    if (linkedCaptionItemIndex === -1) return;
+    const linkedCaptionItem =
+      linkedCaptionLayer.liteItems[linkedCaptionItemIndex];
+    linkedCaptionItem.startFrame = updatedItem.startFrame;
+    linkedCaptionItem.offset = updatedItem.offset;
+  }
+}

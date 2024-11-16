@@ -1913,6 +1913,7 @@ export const EMPTY_PROJECT: NestedCompositionProjectType = {
     transitions: {},
   },
 };
+
 export const EMPTY_PROJECT_EMPTY: NestedCompositionProjectType = {
   id: "id-dummy",
   title: "Dummy Project",
@@ -1945,10 +1946,10 @@ export const EMPTY_PROJECT_EMPTY: NestedCompositionProjectType = {
         liteItems: [
           {
             sequenceType: "caption",
-            offset: 0,
-            startFrame: 0,
-            sequenceDuration: 150,
-            effectiveDuration: 150,
+            offset: 10,
+            startFrame: 10,
+            sequenceDuration: 1399.5,
+            effectiveDuration: 1399.5,
             liteItems: [
               {
                 id: "s-caption-s-text-9a451d5f-458d-4ae4-943c-6c41ca72dab7",

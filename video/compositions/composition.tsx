@@ -15,7 +15,8 @@ import { SortedOutlines } from "~/components/new-player/sorted-outlines";
 import useThrottle from "~/hooks/use-throttle";
 import useVideoStore from "~/store/video.store";
 import type {
-  LiteItemCaptionType,
+  CaptionSequenceItemType,
+  LiteSequenceCaptionItemType,
   LiteSequenceItemType,
   NestedCompositionProjectType,
   StyledSequenceItem,
@@ -208,18 +209,22 @@ const NestedSequenceComposition = (
       <AbsoluteFill className="font-serif" style={layerContainer}>
         {[...layerOrder].reverse().map((layerId) => {
           if (layers[layerId].layerType === "caption") {
-            const captionId = layers[layerId].liteItems[0].id;
+            const captionLiteItem = layers[layerId]
+              .liteItems[0] as LiteSequenceCaptionItemType;
+            const captionItemId = captionLiteItem.id;
+            const captionSequenceItem = sequenceItems[
+              captionItemId
+            ] as CaptionSequenceItemType;
+            const captionPageSequenceItems = captionSequenceItem.sequenceItems;
             return (
               <CaptionRenderer
                 key={layerId}
                 layerId={layerId}
-                //@ts-ignore : i am done with this :(
-                sequenceItems={sequenceItems[captionId].sequenceItems}
-                liteItems={
-                  (layers[layerId].liteItems[0] as LiteItemCaptionType)
-                    .liteItems
-                }
-                containerEditableProps={sequenceItems[captionId].editableProps}
+                captionSequenceItem={captionSequenceItem}
+                captionPageSequenceItems={captionPageSequenceItems}
+                liteItems={captionLiteItem.liteItems}
+                captionLiteItem={captionLiteItem}
+                containerEditableProps={captionSequenceItem.editableProps}
               />
             );
           }
@@ -275,14 +280,18 @@ const NestedSequenceComposition = (
 export default NestedSequenceComposition;
 
 const CaptionRenderer = ({
-  sequenceItems,
-  liteItems,
   layerId,
+  captionSequenceItem,
+  captionPageSequenceItems,
+  liteItems,
+  captionLiteItem,
   containerEditableProps,
 }: {
   layerId: string;
-  sequenceItems: Record<string, StyledSequenceItem>;
+  captionSequenceItem: CaptionSequenceItemType;
+  captionPageSequenceItems: Record<string, StyledSequenceItem>;
   liteItems: LiteSequenceItemType[];
+  captionLiteItem: LiteSequenceCaptionItemType;
   containerEditableProps: StyledSequenceItem["editableProps"];
 }) => {
   return (
@@ -290,22 +299,33 @@ const CaptionRenderer = ({
       style={containerEditableProps.positionAndDimensions}
       className="pointer-events-none"
     >
-      <Series key={layerId}>
-        {liteItems.map((item) => {
-          const sequenceItem = sequenceItems[item.id];
+      <Series>
+        <Series.Sequence
+          durationInFrames={captionLiteItem.sequenceDuration}
+          name={captionLiteItem.id}
+          offset={captionLiteItem.offset}
+          layout="none"
+        >
+          <Series key={layerId}>
+            {liteItems.map((item) => {
+              console.log("CaptionRenderer", { item });
 
-          return (
-            <Series.Sequence
-              key={item.id}
-              durationInFrames={item.sequenceDuration}
-              name={item.id}
-              offset={item.offset}
-              layout="none"
-            >
-              <SequenceItemRenderer item={sequenceItem} />
-            </Series.Sequence>
-          );
-        })}
+              const sequenceItem = captionPageSequenceItems[item.id];
+
+              return (
+                <Series.Sequence
+                  key={item.id}
+                  durationInFrames={item.sequenceDuration}
+                  name={item.id}
+                  offset={item.offset}
+                  layout="none"
+                >
+                  <SequenceItemRenderer item={sequenceItem} />
+                </Series.Sequence>
+              );
+            })}
+          </Series>
+        </Series.Sequence>
       </Series>
     </AbsoluteFill>
   );

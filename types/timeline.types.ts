@@ -206,6 +206,10 @@ export type LiteSequencePresetItemType = Extract<
   LiteSequenceItemType,
   { sequenceType: "preset" }
 >;
+export type LiteSequenceCaptionItemType = Extract<
+  LiteSequenceItemType,
+  { sequenceType: "caption" }
+>;
 
 export type LayerType = {
   id: string;

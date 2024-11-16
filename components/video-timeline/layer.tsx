@@ -22,9 +22,7 @@ const Layer: React.FC<LayerProps> = React.memo(({ layerId }) => {
   const { view, activeCaptionData } = useTimeline();
   const layer = useVideoStore((state) => state.props.layers[layerId]);
   const liteItems = useVideoStore((state) => selectLiteItems(state, layerId));
-  if (layerId === "l-77881a30-d801-43b9-b94b-6f209d0adcc3") {
-    console.log({ liteItems });
-  }
+
   // Filter items based on view and layer type
   const visibleItems = useMemo(() => {
     // If it's a normal layer and we're in caption-edit view
