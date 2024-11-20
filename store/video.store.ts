@@ -21,7 +21,7 @@ import {
 } from "../utils/timeline.utils";
 
 import { toast } from "sonner";
-import { EMPTY_PROJECT_3 } from "~/data/nested-composition.data";
+import { EMPTY_PROJECT_4 } from "~/data/nested-composition.data";
 import { updateTokens } from "~/utils/captions.utils";
 import { genId } from "~/utils/misc.utils";
 
@@ -36,7 +36,7 @@ const useVideoStore = create<
 >(
   devtools(
     immer((set) => ({
-      ...EMPTY_PROJECT_3,
+      ...EMPTY_PROJECT_4,
 
       /* ------------------------------ Project level operations  ----------------------------- */
       loadProject: (project) => {
@@ -1262,6 +1262,117 @@ const useVideoStore = create<
           console.log(
             `Added caption layer ${newCaptionLayerId} to media item ${mediaId}`,
           );
+        });
+      },
+      addTextBehindImageOps: (
+        layerId,
+        originalImageId,
+        removedBackgroundLocalImageUrl,
+      ) => {
+        // we need to find the image data by it's id , duplicate all it's props from liteItems and sequenceItems and create a new Layer with the same data and add it to the layerOrder
+
+        set((state) => {
+          const imageLayer = state.props.layers[layerId];
+          if (!imageLayer) {
+            console.warn(`Layer ${layerId} not found`);
+            return;
+          }
+
+          // Find the lite item
+          const imageItemIndex = imageLayer.liteItems.findIndex(
+            (item) => item.id === originalImageId,
+          );
+          if (imageItemIndex === -1) {
+            console.warn(
+              `Image item ${originalImageId} not found in layer ${layerId}`,
+            );
+            return;
+          }
+
+          const imageItem = imageLayer.liteItems[imageItemIndex];
+          const newTextLayerId = genId("l");
+          const newTextId = genId("s", "text");
+          const newImageLayerId = genId("l");
+          const newImageId = genId("s", "image");
+          const newTextLayer: LayerType = {
+            id: newTextLayerId,
+            name: `Text for ${originalImageId}`,
+            isVisible: true,
+            liteItems: [
+              {
+                sequenceType: "standalone",
+                offset: imageItem.offset,
+                startFrame: imageItem.startFrame,
+                sequenceDuration: imageItem.sequenceDuration,
+                effectiveDuration: imageItem.effectiveDuration,
+                id: newTextId,
+                contentType: "text",
+              },
+            ],
+            layerType: "normal",
+          };
+
+          const newImageLayer: LayerType = {
+            id: newImageLayerId,
+            name: `Text for ${originalImageId}`,
+            isVisible: true,
+            liteItems: [
+              {
+                sequenceType: "standalone",
+                offset: imageItem.offset,
+                startFrame: imageItem.startFrame,
+                sequenceDuration: imageItem.sequenceDuration,
+                effectiveDuration: imageItem.effectiveDuration,
+                id: newImageId,
+                contentType: "image",
+              },
+            ],
+            layerType: "normal",
+          };
+
+          // Add the caption layer to state
+          state.props.layers[newTextLayerId] = newTextLayer;
+          state.props.layers[newImageLayerId] = newImageLayer;
+
+          // Add the caption layer to the layer order
+          state.props.layerOrder.unshift(newTextLayerId);
+          state.props.layerOrder.unshift(newImageLayerId);
+
+          // Update the media lite-item item with the caption layer reference
+          // find the mediaId using the mediaLayerId and link it
+
+          // add sequenceItems to the state
+
+          state.props.sequenceItems[newTextId] = {
+            type: "text",
+            id: newTextId,
+            layerId: newTextLayerId,
+            editableProps: {
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {},
+              },
+              text: "Hello World",
+            },
+          };
+          state.props.sequenceItems[newImageId] = {
+            type: "image",
+            id: newImageId,
+            layerId: newTextLayerId,
+            editableProps: {
+              styles: {
+                container: {
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+                element: {},
+              },
+              imageUrl: removedBackgroundLocalImageUrl,
+            },
+          };
         });
       },
     })),

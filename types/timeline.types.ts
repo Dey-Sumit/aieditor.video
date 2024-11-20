@@ -417,6 +417,11 @@ export type StoreActions = {
       sequenceItems: Record<string, FullSequenceContentType>;
     },
   ) => void;
+  addTextBehindImageOps: (
+    layerId: string,
+    imageId: string,
+    removedBackgroundLocalImageUrl: string,
+  ) => void;
 };
 
 export type NestedCompositionPropsType = NestedCompositionProjectType["props"];

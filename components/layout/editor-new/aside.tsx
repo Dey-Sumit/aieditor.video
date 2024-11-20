@@ -6,6 +6,7 @@ import {
   Settings2Icon,
   ShuffleIcon,
   SquareUserIcon,
+  Video,
   VideoIcon,
   WandIcon,
 } from "lucide-react";
@@ -114,6 +115,18 @@ const AsideNew = () => {
             className: cn("rounded-lg", activeTab === "captions" && "bg-muted"),
             onClick: () => {
               handleNavigation("captions");
+            },
+          }}
+        />
+        <TooltipButton
+          icon={<Video className="size-5" />}
+          toolTipContent="Tools"
+          buttonProps={{
+            size: "icon",
+            variant: "ghost",
+            className: cn("rounded-lg", activeTab === "tools" && "bg-muted"),
+            onClick: () => {
+              handleNavigation("tools");
             },
           }}
         />
