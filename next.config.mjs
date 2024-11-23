@@ -1,4 +1,7 @@
-const MillionLint = require("@million/lint");
+import { remarkCodeHike } from "@code-hike/mdx";
+import nextMDX from "@next/mdx";
+
+// const MillionLint = require("@million/lint");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -31,13 +34,15 @@ const withMDX = nextMDX({
   },
 });
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-});
+// const withBundleAnalyzer = require("@next/bundle-analyzer")({
+//   enabled: process.env.ANALYZE === "true",
+// });
 
-module.exports = withMDX(nextConfig);
+// module.exports = withMDX(nextConfig);
 
 // module.exports = MillionLint.next({
 //   enabled: true,
 //   rsc: true
 // })(withBundleAnalyzer(nextConfig));
+
+export default withMDX(nextConfig);

@@ -2,7 +2,11 @@
 
 import { compile, run } from "@mdx-js/mdx";
 import { Block, HighlightedCodeBlock, parseRoot } from "codehike/blocks";
-import { CodeHikeConfig, recmaCodeHike, remarkCodeHike } from "codehike/mdx";
+import {
+  type CodeHikeConfig,
+  recmaCodeHike,
+  remarkCodeHike,
+} from "codehike/mdx";
 import { useEffect, useState } from "react";
 import * as runtime from "react/jsx-runtime";
 import { z } from "zod";

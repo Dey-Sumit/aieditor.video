@@ -86,7 +86,7 @@ const CompositionPreview = ({
         autoPlay={false}
         loop
         initiallyMuted
-        errorFallback={errorFallback}
+        errorFallback={errorFallbackVideoPlayer}
         ref={playerRef}
         overflowVisible
         schema={NestedCompositionPropsSchema}
@@ -99,7 +99,7 @@ const CompositionPreview = ({
   );
 };
 
-const errorFallback: ErrorFallback = ({ error }) => {
+export const errorFallbackVideoPlayer: ErrorFallback = ({ error }) => {
   return (
     <AbsoluteFill className="flex items-center justify-center bg-yellow-700">
       Sorry about this! An error occurred: {error.message}

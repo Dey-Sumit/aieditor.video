@@ -1,11 +1,8 @@
-import { TransitionSeries, linearTiming } from "@remotion/transitions";
-import { slide } from "@remotion/transitions/slide";
-import { wipe } from "@remotion/transitions/wipe";
+import { TransitionSeries } from "@remotion/transitions";
 import { AbsoluteFill } from "remotion";
 
 import React from "react";
 import { CodeTransition } from "../code-transition/code";
-import { type Steps, transitionDurations } from "./code-transition-with-loader";
 
 function CodeTransitionComposition({ steps }: { steps: Steps }) {
   console.log({ steps });
@@ -37,7 +34,7 @@ function CodeTransitionComposition({ steps }: { steps: Steps }) {
                 />
               </TransitionSeries.Sequence>
 
-              {nextSceneTransition === "slide" && (
+              {/* {nextSceneTransition === "slide" && (
                 <TransitionSeries.Transition
                   timing={linearTiming({
                     durationInFrames: transitionDurations[nextSceneTransition],
@@ -46,15 +43,15 @@ function CodeTransitionComposition({ steps }: { steps: Steps }) {
                     direction: "from-bottom",
                   })}
                 />
-              )}
-              {nextSceneTransition === "wipe" && (
+              )} */}
+              {/* {nextSceneTransition === "wipe" && (
                 <TransitionSeries.Transition
                   timing={linearTiming({
                     durationInFrames: transitionDurations[nextSceneTransition],
                   })}
                   presentation={wipe()}
                 />
-              )}
+              )} */}
             </React.Fragment>
           );
         })}
