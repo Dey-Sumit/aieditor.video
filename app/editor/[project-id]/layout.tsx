@@ -1,6 +1,6 @@
 "use client"; // TODO : remove this line, bad for performance
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useState } from "react";
 import Dropzone from "~/components/dropzone";
 import AsideNew from "~/components/layout/editor-new/aside";
 import ProjectHeader from "~/components/layout/editor-new/project-header";
@@ -21,10 +21,47 @@ const {
 } = LAYOUT;
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const handleFilesDrop = (files: File[]) => {
-    // Handle the dropped files here
-    console.log("Dropped files:", files);
-    // You can now process these files, upload them, etc.
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async (file: File) => {
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          size: file.size,
+          contentType: file.type,
+        }),
+      });
+
+      const { presignedUrl, readUrl } = await response.json();
+
+      await fetch(presignedUrl, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      return readUrl;
+    } catch (error) {
+      console.error("Upload failed:", error);
+      throw error;
+    }
+  };
+
+  const handleFilesDrop = async (files: File[]) => {
+    setUploading(true);
+    try {
+      const uploadPromises = files.map(handleUpload);
+      const urls = await Promise.all(uploadPromises);
+      console.log("Uploaded URLs:", urls);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setUploading(false);
+    }
   };
   return (
     <div className="flex h-screen">

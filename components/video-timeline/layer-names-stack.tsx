@@ -59,7 +59,7 @@ const DraggableLayerItem: React.FC<LayerItemProps> = ({
   );
 };
 
-const LayerStack: React.FC = () => {
+const LayerStack: React.FC = React.memo(() => {
   const layers = useVideoStore((state) => state.props.layers);
   const orderedLayers = useVideoStore((state) => state.props.layerOrder);
   const reorderLayers = useVideoStore((state) => state.reorderLayers);
@@ -90,6 +90,6 @@ const LayerStack: React.FC = () => {
       ))}
     </Reorder.Group>
   );
-};
+});
 
 export default LayerStack;

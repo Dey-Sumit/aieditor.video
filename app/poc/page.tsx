@@ -94,7 +94,7 @@ const Page = () => {
               top: "16px",
             }}
           ></div> */}
-          <PlayHead2 scrollContainerRef={scrollContainerRef} />
+          {/* <PlayHead2 scrollContainerRef={scrollContainerRef} /> */}
         </div>
       </div>
     </section>

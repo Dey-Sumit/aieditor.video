@@ -19,7 +19,7 @@ const SequenceItemEditorRenderer = () => {
   return (
     <section
       className={cn(
-        "w-96 overflow-y-scroll overscroll-contain border-t",
+        "w-96 overflow-y-scroll overscroll-contain border-t px-2",
         "gradient-bg",
       )}
       style={{

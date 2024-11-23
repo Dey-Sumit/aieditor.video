@@ -6,8 +6,11 @@
     "name": "Sumit Dey"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.696.0",
+    "@aws-sdk/s3-request-presigner": "^3.696.0",
     "@hookform/resolvers": "^3.9.0",
     "@imgly/background-removal": "^1.5.5",
+    "@million/lint": "^1.0.12",
     "@monaco-editor/react": "^4.6.0",
     "@next/bundle-analyzer": "^14.2.15",
     "@pavlobu/zustand": "4.1.4-4",

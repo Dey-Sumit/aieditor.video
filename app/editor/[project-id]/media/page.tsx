@@ -1,13 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import axios from "axios";
-import {
-  AudioLinesIcon,
-  ImageIcon,
-  Music,
-  PlusIcon,
-  UploadIcon,
-  VideoIcon,
-} from "lucide-react";
+import { PlusIcon, UploadIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
@@ -36,19 +29,20 @@ interface PexelsResponse {
   videos?: PexelsMedia[];
 }
 
-const MediaItem: React.FC<{
-  item: PexelsMedia;
-  type: "image" | "video" | "audio" | "sound";
-}> = ({ item, type }) => {
-  const [isHovered, setIsHovered] = useState(false);
+// First, create a type for S3 assets
+type S3Asset = {
+  id: string;
+  url: string;
+  thumbnailUrl?: string;
+  type: "image" | "video";
+  lastModified: string;
+  size: number;
+};
 
-  const handleUse = () => {
-    console.log(
-      `Using ${type} with id: ${item.id}. src : `,
-      item,
-      item.src?.portrait,
-    );
-  };
+// Modify the MediaItem component to handle our new type
+const MediaItem: React.FC<{ item: S3Asset }> = ({ item }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
 
   return (
     <div
@@ -56,41 +50,43 @@ const MediaItem: React.FC<{
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* {type === "image" && (
-        <Image
-          src={item?.src?.medium}
-          alt={`Image ${item.id}`}
-          width={150}
-          height={150}
-          className="h-full w-full object-cover"
-        />
-      )} */}
-      {type === "video" && (
-        <video
-          src={
-            item.video_files?.find((file) => file.quality === "sd")?.link || ""
-          }
-          className="h-full w-full object-cover"
-          muted
-          loop
-          playsInline
-          onMouseEnter={(e) => e.currentTarget.play()}
-          onMouseLeave={(e) => e.currentTarget.pause()}
-        />
-      )}
-      {(type === "audio" || type === "sound") && (
-        <div className="flex h-full w-full items-center justify-center bg-gray-800">
-          {type === "audio" ? (
-            <AudioLinesIcon size={24} />
-          ) : (
-            <Music size={24} />
+      {item.type === "video" ? (
+        <>
+          {/* Thumbnail for video (hidden when video is playing) */}
+          {!isHovered && (
+            <img
+              src={item.thumbnailUrl}
+              alt={`Thumbnail ${item.id}`}
+              className="h-full w-full object-cover"
+              onLoad={() => setThumbnailLoaded(true)}
+            />
           )}
-        </div>
+          {/* Actual video (shown on hover) */}
+          <video
+            src={item.url}
+            className={`h-full w-full object-cover ${isHovered ? "block" : "hidden"}`}
+            muted
+            loop
+            playsInline
+            onMouseEnter={(e) => e.currentTarget.play()}
+            onMouseLeave={(e) => e.currentTarget.pause()}
+          />
+        </>
+      ) : (
+        // Image
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.url}
+          alt={`Image ${item.id}`}
+          className="h-full w-full object-cover"
+        />
       )}
+
+      {/* Hover overlay */}
       {isHovered && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50">
           <Button
-            onClick={handleUse}
+            onClick={() => console.log("Using asset:", item)}
             variant="secondary"
             size="sm"
             className="flex items-center gap-x-1 text-xs"
@@ -99,13 +95,17 @@ const MediaItem: React.FC<{
           </Button>
         </div>
       )}
+
+      {/* Optional: Show file size */}
+      <div className="absolute bottom-1 right-1 text-xs text-white/70">
+        {(item.size / (1024 * 1024)).toFixed(1)}MB
+      </div>
     </div>
   );
 };
-
 const MediaSection: React.FC<{
   title: string;
-  items: PexelsMedia[];
+  items: S3Asset[];
   type: "image" | "video" | "audio" | "sound";
   icon: React.ReactNode;
 }> = ({ title, items, type, icon }) => (
@@ -117,7 +117,7 @@ const MediaSection: React.FC<{
     <ScrollArea className="w-full whitespace-nowrap">
       <div className="flex w-max space-x-2">
         {items.map((item) => (
-          <MediaItem key={item.id} item={item} type={type} />
+          <MediaItem key={item.id} item={item} />
         ))}
       </div>
       <ScrollBar orientation="horizontal" />
@@ -126,51 +126,56 @@ const MediaSection: React.FC<{
 );
 
 const MediaLibrary: React.FC = () => {
-  const [myAssets, setMyAssets] = useState<PexelsMedia[]>([]);
-  const [cloudImages, setCloudImages] = useState<PexelsMedia[]>([]);
-  const [cloudVideos, setCloudVideos] = useState<PexelsMedia[]>([]);
-  // const [cloudAudios, setCloudAudios] = useState<PexelsMedia[]>([]);
-  // const [soundEffects, setSoundEffects] = useState<PexelsMedia[]>([]);
+  // const [cloudImages, setCloudImages] = useState<PexelsMedia[]>([]);
+  // const [cloudVideos, setCloudVideos] = useState<PexelsMedia[]>([]);
+  const [userUploadedAssets, setUserUploadedAssets] = useState<S3Asset[]>([]);
+  const fetchUserAssets = async () => {
+    try {
+      const response = await fetch("/api/assets");
+      const data = await response.json();
+
+      const formattedAssets: S3Asset[] = data.assets.map((asset: any) => {
+        const isVideo = asset.url.match(/\.(mp4|mov|webm)$/i);
+
+        return {
+          id: asset.key,
+          url: asset.url,
+          type: isVideo ? "video" : "image",
+          // For videos, we can generate thumbnail using the first frame
+          thumbnailUrl: isVideo ? `${asset.url}#t=0.1` : undefined,
+          lastModified: asset.lastModified,
+          size: asset.size,
+        };
+      });
+
+      setUserUploadedAssets(formattedAssets);
+    } catch (error) {
+      console.error("Error fetching user assets:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchMedia = async () => {
       try {
-        const [imagesResponse, videosResponse] = await Promise.all([
-          axios.get<PexelsResponse>(
-            "https://api.pexels.com/v1/curated?per_page=5&orientation=portrait",
-            {
-              headers: { Authorization: PEXELS_API_KEY },
-            },
-          ),
+        fetchUserAssets();
+        // const [imagesResponse, videosResponse] = await Promise.all([
+        //   axios.get<PexelsResponse>(
+        //     "https://api.pexels.com/v1/curated?per_page=5&orientation=portrait",
+        //     {
+        //       headers: { Authorization: PEXELS_API_KEY },
+        //     },
+        //   ),
 
-          axios.get<PexelsResponse>(
-            "https://api.pexels.com/videos/popular?per_page=5&orientation=portrait",
-            {
-              headers: { Authorization: PEXELS_API_KEY },
-            },
-          ),
-        ]);
+        //   axios.get<PexelsResponse>(
+        //     "https://api.pexels.com/videos/popular?per_page=5&orientation=portrait",
+        //     {
+        //       headers: { Authorization: PEXELS_API_KEY },
+        //     },
+        //   ),
+        // ]);
 
-        setCloudImages(imagesResponse.data.photos || []);
-        setCloudVideos(videosResponse.data.videos || []);
-
-        // Simulating audio data and sound effects (Pexels doesn't provide audio API)
-        /*     const simulatedAudios = Array(15)
-          .fill(null)
-          .map((_, index) => ({
-            id: index,
-            src: { medium: "" },
-          })); */
-        // setCloudAudios(simulatedAudios);
-        // setSoundEffects(simulatedAudios);
-
-        // Simulating my assets (mix of all types)
-        setMyAssets([
-          ...(imagesResponse.data.photos?.slice(0, 4) || []),
-          ...(videosResponse.data.videos?.slice(0, 4) || []),
-          // ...simulatedAudios.slice(0, 4),
-          // ...simulatedAudios.slice(0, 3),
-        ]);
+        // setCloudImages(imagesResponse.data.photos || []);
+        // setCloudVideos(videosResponse.data.videos || []);
       } catch (error) {
         console.error("Error fetching media:", error);
       }
@@ -199,12 +204,13 @@ const MediaLibrary: React.FC = () => {
       </div>
       <div className="flex flex-col gap-y-2">
         <MediaSection
-          title="Uploaded Assets"
-          items={myAssets}
+          title="User Uploaded Assets"
+          items={userUploadedAssets}
           type="image"
-          icon={<ImageIcon size={16} />}
+          icon={<UploadIcon size={16} />}
         />
-        <MediaSection
+
+        {/* <MediaSection
           title="Cloud Images"
           items={cloudImages}
           type="image"
@@ -215,7 +221,7 @@ const MediaLibrary: React.FC = () => {
           items={cloudVideos}
           type="video"
           icon={<VideoIcon size={16} />}
-        />
+        /> */}
         {/* <MediaSection
           title="Cloud Audios"
           items={cloudAudios}
