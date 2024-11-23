@@ -1,4 +1,4 @@
-import NewDynamicCompositionWithLoader from "./compositions/composition-with-loader";
+import NewDynamicCompositionWithLoader from "./compositions/code-transition-with-loader";
 
 export const RemotionRoot: React.FC = () => {
   return (
