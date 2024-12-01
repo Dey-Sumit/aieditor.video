@@ -1,4 +1,3 @@
-// hooks/useMdxProcessor.ts
 import { compile, run } from "@mdx-js/mdx";
 import { Block, HighlightedCodeBlock, parseRoot } from "codehike/blocks";
 import {
@@ -8,7 +7,7 @@ import {
 } from "codehike/mdx";
 import { useEffect } from "react";
 import { z } from "zod";
-import { useEditorStore } from "~/store/code-transition-editor.store";
+import { useCTEditorStore } from "~/store/code-transition-editor.store";
 import { TransitionType } from "~/types/code-transition-editor.store.types";
 
 const chConfig: CodeHikeConfig = {
@@ -18,7 +17,7 @@ const chConfig: CodeHikeConfig = {
 };
 
 export const useMdxProcessor = () => {
-  const { content, setSteps, setLoading, setError } = useEditorStore();
+  const { content, setSteps, setLoading, setError } = useCTEditorStore();
 
   useEffect(() => {
     let cancelled = false;
@@ -33,10 +32,8 @@ export const useMdxProcessor = () => {
           remarkPlugins: [[remarkCodeHike, chConfig]],
           recmaPlugins: [[recmaCodeHike, chConfig]],
         });
-        console.log("compiled", compiled);
 
         const result = await run(String(compiled), runtime);
-
         return { content: result.default, error: undefined };
       } catch (e) {
         return { content: undefined, error: e.message };
@@ -48,34 +45,44 @@ export const useMdxProcessor = () => {
 
       setLoading(true);
       try {
-        const { content: compiledContent, error } =
+        // First try to compile the MDX
+        const { content: compiledContent, error: compileError } =
           await compileAndRun(content);
 
-        if (error) throw new Error(error);
-        console.log("compiledContent", compiledContent);
+        if (compileError) throw new Error(compileError);
 
-        const { steps } = parseRoot(
-          compiledContent!,
-          Block.extend({
-            steps: z.array(
-              Block.extend({
-                code: HighlightedCodeBlock,
-                duration: z.string().transform((v) => parseInt(v, 10)),
-                fontUtils: z.string().optional(),
-                transition: TransitionType,
-              }),
-            ),
-          }),
-        );
+        // Then try to parse the compiled content
+        let parsedSteps;
+        try {
+          const { steps } = parseRoot(
+            compiledContent!,
+            Block.extend({
+              steps: z.array(
+                Block.extend({
+                  code: HighlightedCodeBlock,
+                  duration: z.string().transform((v) => parseInt(v, 10)),
+                  fontUtils: z.string().optional(),
+                  transition: TransitionType,
+                }),
+              ),
+            }),
+          );
+          parsedSteps = steps;
+          console.log("successfully parsed steps", steps);
+        } catch (parseError) {
+          // If there's a parsing error, throw it to be caught by the outer try-catch
+          throw new Error(`Parsing error: ${parseError.message}`);
+        }
 
-        if (!cancelled && currentEffectId === effectId) {
-          setSteps(steps);
+        // Only update states if we have valid parsed steps and the effect hasn't been cancelled
+        if (!cancelled && currentEffectId === effectId && parsedSteps) {
+          setSteps(parsedSteps);
           setError(null);
         }
       } catch (err) {
         if (!cancelled && currentEffectId === effectId) {
+          // Only set the error message, don't clear the steps
           setError(err.message);
-          setSteps([]);
         }
       } finally {
         if (!cancelled && currentEffectId === effectId) {

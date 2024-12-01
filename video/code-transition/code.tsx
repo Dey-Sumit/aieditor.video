@@ -1,15 +1,16 @@
 import { Pre, type HighlightedCode } from "codehike/code";
-
-import { loadFont } from "@remotion/google-fonts/RobotoMono";
-import { AbsoluteFill } from "remotion";
-import type { Steps } from "../Root";
+import { callout } from "./annotations/callout";
 import { mark } from "./annotations/mark";
 import {
   tokenTransitions,
   useTokenTransitions,
 } from "./annotations/token-transitions";
 
+import { loadFont } from "@remotion/google-fonts/RobotoMono";
+import type { Step } from "~/types/code-transition-editor.store.types";
+
 const { fontFamily } = loadFont();
+console.log({ fontFamily });
 
 type FontData = Pick<
   React.CSSProperties,
@@ -46,7 +47,7 @@ export function CodeTransition({
   newCode: HighlightedCode;
   durationInFrames?: number;
   disableTransition?: boolean;
-  step: Steps[number];
+  step: Step;
 }) {
   const { code, ref } = useTokenTransitions(
     disableTransition ? newCode : oldCode,
@@ -55,18 +56,24 @@ export function CodeTransition({
   );
 
   const fontData = getFontData(step.fontUtils || ""); // Output: { size: 26, fontFamily: 'Inter', fontWeight: 700 }
-  console.log({ fontData });
+  // console.log({ fontData });
 
   return (
-    <AbsoluteFill
+    <div
+      className="h-full w-full"
       style={{
         // backgroundColor: 'red',
-        lineHeight: 1.6,
-        fontFamily: "Roboto Mono",
-        fontSize: "32px",
+        lineHeight: 1.7,
+        // fontFamily: "Roboto Mono",
+        fontSize: "40px",
         fontWeight: 400,
         width: "100%",
         padding: "16px 42px",
+        //  fontFamily,
+        // fontFamily: "'Fira Code', monospace",
+        // fontFamily: "'Fira Code', 'JetBrains Mono', monospace",
+        // fontVariantLigatures: "common-ligatures",
+        // fontLigatures
         ...fontData,
       }}
       // className="p-10 text-3xl border border-gray-500"
@@ -75,16 +82,39 @@ export function CodeTransition({
       // }}
     >
       <div
+        className=""
         style={{
           textAlign: "center",
-          height: "1.5rem",
-          marginBottom: "60px",
+
           color: "#f1f1f1",
+          fontSize: "1.7rem",
+          fontFamily,
+          marginBottom: "1rem",
         }}
       >
         {newCode.meta}
       </div>
-      <Pre ref={ref} code={code} handlers={[tokenTransitions, mark]} />
-    </AbsoluteFill>
+      <Pre
+        ref={ref}
+        code={code}
+        handlers={[tokenTransitions, mark, callout]}
+        // style={{
+        //   fontFamily,
+        // }}
+        style={{
+          fontFamily,
+          //fontFamily: "'Fira Code', monospace",
+          fontFeatureSettings: '"liga" 1, "calt" 1',
+          WebkitFontFeatureSettings: '"liga" 1, "calt" 1',
+          fontVariantLigatures: "contextual",
+        }}
+        // className="subpixel-antialiased"
+      />
+    </div>
   );
 }
+
+// export async function MyCode({ codeblock }: { codeblock: RawCode }) {
+//   const highlighted = await highlight(codeblock, "github-dark");
+//   return <Pre code={highlighted} />;
+// }

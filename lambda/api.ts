@@ -1,12 +1,8 @@
 import type { RenderMediaOnLambdaOutput } from "@remotion/lambda/client";
 import { z } from "zod";
-import type { NestedCompositionPropsType } from "~/types/timeline.types";
+import type { CompositionMap } from "~/helpers/use-rendering";
 import type { ApiResponse } from "../helpers/api-response";
-import {
-  ProgressRequest,
-  type ProgressResponse,
-  RenderRequest,
-} from "../types/schema";
+import { ProgressRequest, type ProgressResponse } from "../types/schema";
 
 const makeRequest = async <Res>(
   endpoint: string,
@@ -27,17 +23,29 @@ const makeRequest = async <Res>(
   return json.data;
 };
 
-export const renderVideo = async ({
+export const renderVideo = async <T extends keyof CompositionMap>({
   id,
   inputProps,
 }: {
-  id: string;
-  inputProps: NestedCompositionPropsType;
+  id: T;
+  inputProps: CompositionMap[T];
 }) => {
-  const body: z.infer<typeof RenderRequest> = {
-    id,
-    inputProps,
-  };
+  // const body: z.infer<typeof RenderRequest> = {
+  //   id,
+  //   inputProps,
+  // };
+  let body: any;
+  if (id === "code-transition-composition") {
+    body = {
+      id: "code-transition-composition",
+      inputProps,
+    };
+  } else if (id === "new-dynamic-composition") {
+    body = {
+      id: "new-dynamic-composition",
+      inputProps,
+    };
+  }
 
   return makeRequest<RenderMediaOnLambdaOutput>("/api/lambda/render", body);
 };

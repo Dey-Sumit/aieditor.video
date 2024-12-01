@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import type { CodeTransitionCompositionProps } from "~/types/code-transition-editor.store.types";
 import { type NestedCompositionPropsType } from "~/types/timeline.types";
 import { getProgress, renderVideo } from "../lambda/api";
 
@@ -34,7 +35,17 @@ const wait = async (milliSeconds: number) => {
   });
 };
 
-export const useRendering = (id: string, inputProps: NestedCompositionPropsType) => {
+// Map ids to their prop types
+export type CompositionMap = {
+  "code-transition-composition": CodeTransitionCompositionProps;
+  "new-dynamic-composition": NestedCompositionPropsType;
+  // Add more mappings
+};
+
+export const useRendering = <T extends keyof CompositionMap>(
+  id: T,
+  inputProps: CompositionMap[T],
+) => {
   const [state, setState] = useState<State>({
     status: "init",
   });

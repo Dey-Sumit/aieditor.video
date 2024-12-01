@@ -1,61 +1,75 @@
-import { Block, HighlightedCodeBlock, parseRoot } from "codehike/blocks";
 import { Composition } from "remotion";
-import { z } from "zod";
-import { useEditorStore } from "~/store/code-transition-editor.store";
 // import Content from "../code-transition/contents/promise-all-polyfill.md";
+import type { EditorState } from "~/types/code-transition-editor.store.types";
 import CodeTransitionComposition from "./code-transition.composition";
 
-// const TransitionType = z.enum(["magic", "fade", "wipe", "slide", "none"]);
-
-// const { steps } = parseRoot(
-//   Content,
-//   Block.extend({
-//     steps: z.array(
-//       Block.extend({
-//         code: HighlightedCodeBlock,
-//         duration: z.string().transform((v) => parseInt(v, 10)),
-//         transition: TransitionType,
-//         fontUtils: z.string().optional(),
-//         // test: Block.optional(),
-//       }),
-//     ),
-//   }),
-// );
-
-// export type Steps = typeof steps;
-
-// export const transitionDurations: Record<
-//   z.infer<typeof TransitionType>,
-//   number
-// > = {
-//   magic: 0, // example duration, adjust as needed
-//   wipe: 30, // example duration, adjust as needed
-//   slide: 30, // example duration, adjust as needed
-//   none: 0, // assuming 'none' means no transition
-//   fade: 30,
-//   // add other transitions if needed
-// };
+const HARDCODED_STEPS: EditorState["steps"] = [
+  {
+    code: {
+      meta: "Example 1: All promises resolve",
+      value:
+        '\nconst user = {\n  name: "Lorem",\n  age: 26,\n}\n\nconsole.log(user)\n//           ^?\n',
+      lang: "typescript",
+      code: '\nconst user = {\n  name: "Lorem",\n  age: 26,\n}\n\nconsole.log(user)\n//           ^?\n',
+      tokens: [
+        "\n",
+        ["const", "#FF7B72"],
+        " ",
+        ["user", "#79C0FF"],
+        " ",
+        ["=", "#FF7B72"],
+        " ",
+        ["{", "#C9D1D9"],
+        "\n  ",
+        ["name:", "#C9D1D9"],
+        " ",
+        ['"Lorem"', "#A5D6FF"],
+        [",", "#C9D1D9"],
+        "\n  ",
+        ["age:", "#C9D1D9"],
+        " ",
+        ["26", "#79C0FF"],
+        [",", "#C9D1D9"],
+        "\n",
+        ["}", "#C9D1D9"],
+        "\n\n",
+        ["console.", "#C9D1D9"],
+        ["log", "#D2A8FF"],
+        ["(user)", "#C9D1D9"],
+        "\n",
+        ["//           ^?", "#8B949E"],
+        "\n",
+      ],
+      annotations: [],
+      themeName: "github-dark",
+      style: {
+        color: "#c9d1d9",
+        background: "#0d1117",
+        colorScheme: "dark",
+      },
+    },
+    duration: 180,
+    fontUtils: "",
+    transition: "magic",
+  },
+];
 
 export default function CodeTransitionCompositionLoader() {
-  const { steps } = useEditorStore();
-  const duration = steps.reduce((acc, step) => acc + step.duration, 0);
-
   return (
     <Composition
-      id="FinalCodeTransition"
+      id="code-transition-composition"
       component={CodeTransitionComposition}
-      defaultProps={{ steps }}
-      durationInFrames={duration}
+      defaultProps={{ steps: HARDCODED_STEPS }}
       fps={60}
       width={1920}
       height={1080}
       calculateMetadata={({ props }) => {
-        // const duration = props.steps.reduce((acc, step) => {
-        //   return acc + step.duration - transitionDurations[step.transition];
-        // }, 0);
+        const duration = props.steps.reduce((acc, step) => {
+          return acc + step.duration; // subtract the duration of the transition/2
+        }, 0);
 
         return {
-          durationInFrames: 1000,
+          durationInFrames: duration,
           width: 1920,
           height: 1080,
           fps: 60,

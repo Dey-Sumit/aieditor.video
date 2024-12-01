@@ -1,10 +1,18 @@
 import { z } from "zod";
+import { CodeTransitionCompositionPropsSchema } from "./code-transition-editor.store.types";
 import { NestedCompositionPropsSchema } from "./timeline.types";
 
-export const RenderRequest = z.object({
-  id: z.string(),
-  inputProps: NestedCompositionPropsSchema,
-});
+export const RenderRequest = z.discriminatedUnion("id", [
+  z.object({
+    id: z.literal("code-transition-composition"),
+    inputProps: CodeTransitionCompositionPropsSchema,
+  }),
+  z.object({
+    id: z.literal("new-dynamic-composition"),
+    inputProps: NestedCompositionPropsSchema,
+  }),
+  // Add more compositions as needed
+]);
 
 export const ProgressRequest = z.object({
   bucketName: z.string(),

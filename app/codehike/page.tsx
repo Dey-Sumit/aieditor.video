@@ -73,7 +73,7 @@ const LiveEditor = () => {
       setLoading(true);
       try {
         const { content, error } = await compileAndRun(mdxContent);
-        console.log("content", content);
+        // console.log("content", content);
 
         const { steps } = parseRoot(
           content!,
@@ -88,7 +88,7 @@ const LiveEditor = () => {
             ),
           }),
         );
-        console.log({ steps });
+        // console.log({ steps });
 
         // if (!cancelled && currentEffectId === effectId) {
         //   if (error) {

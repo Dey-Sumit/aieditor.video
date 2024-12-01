@@ -99,6 +99,9 @@
 }
 /* // TODO : download the image and also add a fallback bg color */
 @layer components{
+  .step-section {
+    @apply bg-red-950 
+  }
   .pattern-bg-asfalt{
    background-color: #000000;
 background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
@@ -157,6 +160,37 @@ p.is-empty {
     margin-left: auto;
 }
 
+/* 
+.monaco-editor .context-view.monaco-menu-container {
+  background-color: rgba(28, 28, 28, 0.95) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  padding: 4px !important;
+}
+
+.monaco-editor .monaco-menu .action-item {
+  color: #fff !important;
+  border-radius: 4px !important;
+  margin: 2px 4px !important;
+}
+
+.monaco-editor .monaco-menu .action-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.monaco-editor .monaco-menu .action-label {
+  padding: 6px 8px !important;
+  font-size: 13px !important;
+}
+
+.monaco-editor .monaco-menu .separator {
+  height: 1px !important;
+  margin: 4px 0 !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+} */
 
 .react-draggable > div > div:first-child {
   left: -2px !important;
@@ -164,4 +198,17 @@ p.is-empty {
 
 .react-draggable > div > div:nth-child(2) {
   right: -2px !important;
+}
+
+/* .step-section {
+  background-color: rgba(100, 100, 255, 0.05);
+} */
+
+
+
+
+
+.step-section-border {
+  /* border-left: 2px solid #4a4a8a;
+  margin-left: 3px; */
 }

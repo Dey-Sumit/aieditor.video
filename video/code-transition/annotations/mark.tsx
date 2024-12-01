@@ -1,57 +1,29 @@
 import { type AnnotationHandler, InnerLine } from "codehike/code";
 import { interpolate, interpolateColors, useCurrentFrame } from "remotion";
-/* export const mark: AnnotationHandler = {
-  name: "mark",
-  Inline: ({ children, annotation }) => {
-    const parts = annotation.query.split(" ")
-    console.log({ parts, annotation })
+import { z } from "zod";
 
-    const delay = +parts[0] || 80
-    const duration = +parts[1] || 20
-    const color = parts[2] || "rgba(236, 72, 153, 0.2)"
+const DEFAULT_COLOR = "rgba(236, 72, 153, 0.2)";
+const DEFAULT_BORDER_COLOR = "rgba(236, 72, 153, 1)";
 
-    const frame = useCurrentFrame()
-    const progress = interpolate(frame, [delay, delay + duration], [0, 1], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    })
+const colorSchema = z
+  .string()
+  .regex(/^(#|rgb|rgba|hsl|hsla)/)
+  .transform((color) => ({
+    background: color,
+    border: color.replace(/,[^,]*\)/, ",1)"), // Convert to solid color for border
+  }))
+  .catch({
+    background: DEFAULT_COLOR,
+    border: DEFAULT_BORDER_COLOR,
+  });
 
-    const backgroundColor = interpolateColors(
-      progress,
-      [0, 1],
-      ["rgba(0, 0, 0, 0)", color]
-    )
-
-    const borderColor = interpolateColors(
-      progress,
-      [0, 1],
-      ["rgba(236, 72, 153, 0)", "rgba(236, 72, 153, 1)"]
-    )
-    return (
-      <div
-        style={{
-          display: "inline-block",
-          backgroundColor,
-          borderRadius: 4,
-          padding: "0.25rem 1rem",
-          margin: "0 -.125rem",
-          border: `2px solid ${borderColor}`,
-        }}
-      >
-        {children}
-      </div>
-    )
-  },
-}
- */
 export const mark: AnnotationHandler = {
   name: "mark",
   AnnotatedLine: ({ annotation, ...props }) => {
     const parts = annotation.query.split(" ");
-
     const delay = +parts[0] || 80;
     const duration = +parts[1] || 20;
-    const color = parts[2] || "rgba(236, 72, 153, 0.2)";
+    const colors = colorSchema.parse(parts[2]);
 
     const frame = useCurrentFrame();
     const progress = interpolate(frame, [delay, delay + duration], [0, 1], {
@@ -62,15 +34,15 @@ export const mark: AnnotationHandler = {
     const backgroundColor = interpolateColors(
       progress,
       [0, 1],
-      ["rgba(0, 0, 0, 0)", color],
+      ["rgba(0, 0, 0, 0)", colors.background],
     );
 
     const borderColor = interpolateColors(
       progress,
       [0, 1],
-      ["rgba(236, 72, 153, 0)", "rgba(236, 72, 153, 1)"],
+      ["rgba(236, 72, 153, 0)", colors.border],
     );
-    // return <InnerLine merge={props} data-mark={true} />
+
     return (
       <div
         {...props}
@@ -91,10 +63,9 @@ export const mark: AnnotationHandler = {
   },
   Inline: ({ children, annotation }) => {
     const parts = annotation.query.split(" ");
-
     const delay = +parts[0] || 80;
     const duration = +parts[1] || 20;
-    const color = parts[2] || "rgba(236, 72, 153, 0.2)";
+    const colors = colorSchema.parse(parts[2]);
 
     const frame = useCurrentFrame();
     const progress = interpolate(frame, [delay, delay + duration], [0, 1], {
@@ -105,21 +76,22 @@ export const mark: AnnotationHandler = {
     const backgroundColor = interpolateColors(
       progress,
       [0, 1],
-      ["rgba(0, 0, 0, 0)", color],
+      ["rgba(0, 0, 0, 0)", colors.background],
     );
 
     const borderColor = interpolateColors(
       progress,
       [0, 1],
-      ["rgba(236, 72, 153, 0)", "rgba(236, 72, 153, 1)"],
+      ["rgba(236, 72, 153, 0)", colors.border],
     );
+
     return (
       <div
         style={{
           display: "inline-block",
           backgroundColor,
           borderRadius: 4,
-          padding: "0.25rem 1rem",
+          padding: "0.25rem 0.75rem",
           margin: "0 -.125rem",
           border: `2px solid ${borderColor}`,
         }}
